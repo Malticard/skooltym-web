@@ -205,17 +205,17 @@ List<Map<String, dynamic>> options = [
   },
   {
     "icon": "assets/icons/003-student.svg",
-    "title": "Add Student details",
+    "title": "Add Student",
     "page": const AddStudent()
   },
   {
     "icon": "assets/icons/002-add-group.svg",
-    "title": "Add Staff details",
+    "title": "Add Staff",
     "page": const AddStaff(),
   },
   {
     "icon": "assets/icons/guardian.svg",
-    "title": "Add Guardian details",
+    "title": "Add Guardian",
     "page": const AddGuardian(),
   },
   {
@@ -231,11 +231,10 @@ bool validateTextControllers(List<TextEditingController> controllers) {
   return ct.length < 1 ? true : false;
 }
 
-/**
- * show snackbar message
- * @param type = 'danger' | 'info' | warning
- * 
- *  */
+/// show snackbar message
+/// @param type = 'danger' | 'info' | warning
+///
+///
 void showMessage(
     {String type = 'info',
     String? msg,
@@ -371,9 +370,9 @@ Future<List<DropOffModel>> dropOffs() async {
   return dropOffModelFromJson(response.body);
   // return response;
 }
-/***
- * Dashboard cards
- */
+
+/// *
+/// Dashboard cards
 
 // fetch overtimes
 Future<List<OvertimeModel>> fetchOvertimeData() async {

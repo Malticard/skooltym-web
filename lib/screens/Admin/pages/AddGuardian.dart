@@ -109,32 +109,16 @@ class _AddGuardianState extends State<AddGuardian>
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BottomTopMoveAnimationView(
-          animationController: guardianAnimationController!,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CommonAppbarView(
-                titleText: "Add Guardian",
-                iconData: Icons.arrow_back,
-                onBackClick: () => Routes.popPage(context),
-              ),
-              Expanded(
-                child: CommonFormFields(
-                  padding: padding,
-                  formFields: _formFields,
-                  students: students,
-                  formControllers: _formControllers,
-                  buttonText: "Save Guardian Details",
-                  onSubmit: () => _addGuardian(),
-                  errorMsgs: errorFields,
-                ),
-              ),
-            ],
-          ),
-        ),
+    return BottomTopMoveAnimationView(
+      animationController: guardianAnimationController!,
+      child: CommonFormFields(
+        padding: padding,
+        formFields: _formFields,
+        students: students,
+        formControllers: _formControllers,
+        buttonText: "Save Guardian Details",
+        onSubmit: () => _addGuardian(),
+        errorMsgs: errorFields,
       ),
     );
   }

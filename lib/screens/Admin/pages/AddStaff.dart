@@ -91,63 +91,44 @@ class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
   List<String> errorFields = List.generate(formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BottomTopMoveAnimationView(
-          animationController: staffAnimationController!,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CommonAppbarView(
-                iconData: Icons.arrow_back,
-                titleText: "Add Staff Details",
-                onBackClick: () => Routes.popPage(context),
-              ),
-              Expanded(
-                child: CommonFormFields(
-                  padding: padding,
-                  formFields: formFields,
-                  numberOfDropDowns: 2,
-                  formControllers: _formControllers,
-                  buttonText: "Submit Staff Details",
-                  errorMsgs: errorFields,
-                  onSubmit: () {
-                    if (validateEmail(_formControllers[1].text, context) !=
-                            false &&
-                        validateTextControllers(_formControllers)) {
-                      if (_formControllers[6].text ==
-                          _formControllers[7].text) {
-                        // debugPrint("Result => $data");
-                        _handleFormUpload()
-                            .then(
-                              (value) => showSuccessDialog(
-                                  _formControllers[0].text.trim().split(" ")[1],
-                                  context),
-                            )
-                            .catchError(
-                              (onError) => () => showMessage(
-                                  context: context,
-                                  msg: 'An error occurred!! ',
-                                  type: 'danger'),
-                            )
-                            .whenComplete(() => showMessage(
-                                  context: context,
-                                  type: 'success',
-                                  msg: "Added new staff successfully",
-                                ));
-                      } else {
-                        setState(() {
-                          errorFields[6] = "Password mismatch";
-                        });
-                      }
-                    }
-                  },
-                  students: [],
-                ),
-              )
-            ],
-          ),
-        ),
+    return BottomTopMoveAnimationView(
+      animationController: staffAnimationController!,
+      child: CommonFormFields(
+        padding: padding,
+        formFields: formFields,
+        numberOfDropDowns: 2,
+        formControllers: _formControllers,
+        buttonText: "Submit Staff Details",
+        errorMsgs: errorFields,
+        onSubmit: () {
+          if (validateEmail(_formControllers[1].text, context) != false &&
+              validateTextControllers(_formControllers)) {
+            if (_formControllers[6].text == _formControllers[7].text) {
+              // debugPrint("Result => $data");
+              _handleFormUpload()
+                  .then(
+                    (value) => showSuccessDialog(
+                        _formControllers[0].text.trim().split(" ")[1], context),
+                  )
+                  .catchError(
+                    (onError) => () => showMessage(
+                        context: context,
+                        msg: 'An error occurred!! ',
+                        type: 'danger'),
+                  )
+                  .whenComplete(() => showMessage(
+                        context: context,
+                        type: 'success',
+                        msg: "Added new staff successfully",
+                      ));
+            } else {
+              setState(() {
+                errorFields[6] = "Password mismatch";
+              });
+            }
+          }
+        },
+        students: [],
       ),
     );
   }

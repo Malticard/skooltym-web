@@ -86,71 +86,50 @@ class _AddStudentState extends State<AddStudent> with TickerProviderStateMixin {
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BottomTopMoveAnimationView(
-          animationController: _studentAnimationController!,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CommonAppbarView(
-                titleText: "Add Student details",
-                iconData: Icons.arrow_back,
-                onBackClick: () => Routes.popPage(context),
-              ),
-              Expanded(
-                child: CommonFormFields(
-                  padding: _padding,
-                  formFields: _formFields,
-                  formControllers: _formControllers,
-                  buttonText: "Save Student Details",
-                  onSubmit: () {
-                    if (validateEmail(_formControllers[1].text, context) !=
-                        false) {
-                      showProgress(context);
-                      _handleStudentRegistration()
-                          .then(
-                            (value) {
-                              if (value.statusCode == 200) {
-                                Routes.popPage(context);
-                                showSuccessDialog(
-                                    _formControllers[0]
-                                        .text
-                                        .trim()
-                                        .split(" ")[1],
-                                    context);
-                              } else {
-                                showMessage(
-                                  msg:
-                                      "Failed to add student ${value.reasonPhrase}",
-                                  context: context,
-                                  type: "danger",
-                                );
-                              }
-                            },
-                          )
-                          .catchError(
-                            (onError) => () => showMessage(
-                                context: context,
-                                msg: 'An error occurred!! ',
-                                type: 'danger'),
-                          )
-                          .whenComplete(
-                            () => showMessage(
-                              context: context,
-                              type: 'success',
-                              msg: "Added new student successfully",
-                            ),
-                          );
+    return BottomTopMoveAnimationView(
+      animationController: _studentAnimationController!,
+      child: CommonFormFields(
+        padding: _padding,
+        formFields: _formFields,
+        formControllers: _formControllers,
+        buttonText: "Save Student Details",
+        onSubmit: () {
+          if (validateEmail(_formControllers[1].text, context) != false) {
+            showProgress(context);
+            _handleStudentRegistration()
+                .then(
+                  (value) {
+                    if (value.statusCode == 200) {
+                      Routes.popPage(context);
+                      showSuccessDialog(
+                          _formControllers[0].text.trim().split(" ")[1],
+                          context);
+                    } else {
+                      showMessage(
+                        msg: "Failed to add student ${value.reasonPhrase}",
+                        context: context,
+                        type: "danger",
+                      );
                     }
                   },
-                  errorMsgs: errorFields,
-                  students: [],
-                ),
-              )
-            ],
-          ),
-        ),
+                )
+                .catchError(
+                  (onError) => () => showMessage(
+                      context: context,
+                      msg: 'An error occurred!! ',
+                      type: 'danger'),
+                )
+                .whenComplete(
+                  () => showMessage(
+                    context: context,
+                    type: 'success',
+                    msg: "Added new student successfully",
+                  ),
+                );
+          }
+        },
+        errorMsgs: errorFields,
+        students: [],
       ),
     );
   }

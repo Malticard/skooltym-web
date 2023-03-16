@@ -65,7 +65,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
 
   ImageProvider<Object>? drawImage(String url) {
     if (url == '' || url == null || url.isEmpty) {
-      return AssetImage("assets/images/001-profile.png");
+      return const AssetImage("assets/icons/001-profile.png");
     } else {
       return FileImage(File(url));
     }
