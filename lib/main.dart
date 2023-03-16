@@ -21,9 +21,16 @@ void main() {
       ],
       child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          themeMode: theme.brightness == Brightness.light
+              ? ThemeMode.light
+              : ThemeMode.dark,
           theme: theme.copyWith(
-            textTheme:
-                GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+            textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
+                .apply(
+                    bodyColor: theme.brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white),
           ),
           initialRoute: Routes.home,
           routes: routes(context),

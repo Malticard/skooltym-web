@@ -160,6 +160,73 @@ bool validateEmail(String email, BuildContext context) {
   return isValid;
 }
 
+// build dashboard cards
+Widget _buildBody(BuildContext context) {
+  Size size = MediaQuery.of(context).size;
+  return SizedBox(
+    width: size.width,
+    child: FutureBuilder(
+        future: fetchDashboardMetaData(),
+        builder: (context, snapshot) {
+          var data = snapshot.data ?? [];
+          return snapshot.connectionState == ConnectionState.waiting
+              ? const Center(child: Loader(text: "Dashboard"))
+              : snapshot.hasData
+                  ? SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(
+                          data.length,
+                          (index) => SizedBox(
+                            width: size.width * 0.123,
+                            height: size.width * 0.123,
+                            child: DashboardCard(
+                              label: data[index]['label'],
+                              value: data[index]['value'],
+                              icon: data[index]['icon'],
+                              color: data[index]['color'],
+                              last_updated: data[index]['last_updated'],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: Text("No Data"),
+                    );
+        }),
+  );
+}
+
+// sidebar data
+List<Map<String, dynamic>> options = [
+  {
+    "icon": "assets/icons/menu_dashbord.svg",
+    "title": "Dashboard",
+    "page": const Dashboard()
+  },
+  {
+    "icon": "assets/icons/003-student.svg",
+    "title": "Add Student details",
+    "page": const AddStudent()
+  },
+  {
+    "icon": "assets/icons/002-add-group.svg",
+    "title": "Add Staff details",
+    "page": const AddStaff(),
+  },
+  {
+    "icon": "assets/images/guardian.svg",
+    "title": "Add Guardian details",
+    "page": const AddGuardian(),
+  },
+  {
+    "icon": "assets/icons/menu_setting.svg",
+    "title": "Settings",
+    "page": const Setting(),
+  }
+];
+
 // valid text controllers
 bool validateTextControllers(List<TextEditingController> controllers) {
   var ct = controllers.where((element) => element.text.isEmpty).toList();
@@ -190,7 +257,7 @@ void showMessage(
               : type == 'danger'
                   ? Colors.red[800]!.withOpacity(opacity)
                   : type == 'success'
-                      ? Color.fromARGB(255, 2, 104, 7)!.withOpacity(opacity)
+                      ? Color.fromARGB(255, 2, 104, 7).withOpacity(opacity)
                       : Colors.grey[600]!.withOpacity(opacity),
       duration: Duration(seconds: duration),
     ),

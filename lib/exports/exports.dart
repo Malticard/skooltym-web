@@ -121,6 +121,7 @@ export '/screens/Admin/Settings.dart';
 export '/screens/Admin/change_password.dart';
 export '/screens/Admin/pages/AccountProfile.dart';
 export '/screens/Admin/pages/AddGuardian.dart';
+export '/screens/Admin/pages/AddStudent.dart';
 export '/screens/Admin/pages/AddStaff.dart';
 export '/screens/Admin/settings/AppSettings.dart';
 export '/screens/Admin/settings/SystemSettings.dart';
