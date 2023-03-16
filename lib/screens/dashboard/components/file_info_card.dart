@@ -6,7 +6,7 @@ class FileInfoCard extends StatelessWidget {
     required this.info,
   }) : super(key: key);
 
-  final CloudStorageInfo info;
+  final info;
 
   @override
   Widget build(BuildContext context) {
@@ -28,35 +28,35 @@ class FileInfoCard extends StatelessWidget {
                 height: 40,
                 width: 40,
                 decoration: BoxDecoration(
-                  color: info.color!.withOpacity(0.1),
+                  color: info['color'].withOpacity(0.1),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: SvgPicture.asset(
-                  info.svgSrc!,
-                  color: info.color,
+                  info['icon'],
+                  color: info['color'],
                 ),
               ),
-              Icon(Icons.more_vert, color: Theme.of(context).backgroundColor)
+              // Icon(Icons.more_vert, color: Theme.of(context).backgroundColor)
             ],
           ),
           Text(
-            info.title!,
+            info['label'],
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           ProgressLine(
-            color: info.color,
-            percentage: info.percentage,
+            color: info['color'],
+            percentage: info['value'],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${info.numOfFiles} Files",
-                style: Theme.of(context).textTheme.caption,
+                "${info['value']} Records",
+                style: TextStyles(context).getBoldStyle(),
               ),
               Text(
-                info.totalStorage!,
+                info['last_updated'],
                 style: Theme.of(context).textTheme.caption,
               ),
             ],

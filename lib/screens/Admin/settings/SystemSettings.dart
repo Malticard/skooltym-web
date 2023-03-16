@@ -26,7 +26,7 @@ class _SystemSettingsState extends State<SystemSettings> {
     return Padding(
       padding: EdgeInsets.only(
           top: MediaQuery.of(context).size.width * 0.041,
-          bottom: MediaQuery.of(context).size.width * 0.1,
+          bottom: MediaQuery.of(context).size.width * 0.041,
           right: MediaQuery.of(context).size.width * 0.1,
           left: MediaQuery.of(context).size.width * 0.1),
       child: ListView(

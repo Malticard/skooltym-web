@@ -24,6 +24,16 @@ class Header extends StatelessWidget {
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
         const Expanded(child: SearchField()),
+        CommonButton(
+          width: 50,
+          buttonTextWidget: Icon(
+            Theme.of(context).brightness == Brightness.light
+                ? Icons.dark_mode
+                : Icons.light_mode,
+            color: Colors.white70,
+          ),
+          onTap: () => context.read<ThemeController>().toggleDarkLightTheme(),
+        ),
         const ProfileCard()
       ],
     );

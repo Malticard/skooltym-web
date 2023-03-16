@@ -8,6 +8,7 @@ class CommonButton extends StatelessWidget {
   final Color? textColor, backgroundColor;
   final bool? isClickable;
   final double height;
+  final double? width;
   final double radius;
   final bool enableBorder;
   const CommonButton({
@@ -20,6 +21,7 @@ class CommonButton extends StatelessWidget {
     this.padding,
     this.isClickable = true,
     this.radius = 24,
+    this.width,
     this.enableBorder = false,
     this.height = 48,
   }) : super(key: key);
@@ -32,7 +34,7 @@ class CommonButton extends StatelessWidget {
         isClickable: isClickable!,
         onClick: onTap ?? () {},
         child: SizedBox(
-          width: MediaQuery.of(context).size.width / 2,
+          width: width ?? MediaQuery.of(context).size.width / 2,
           height: height,
           child: Card(
             shape: RoundedRectangleBorder(

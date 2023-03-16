@@ -10,9 +10,9 @@ class Dashboard extends StatelessWidget {
         const MyFiles(),
         const SizedBox(height: defaultPadding),
         const RecentFiles(),
-        if (Responsive.isMobile(context))
-          const SizedBox(height: defaultPadding),
-        if (Responsive.isMobile(context)) const StarageDetails(),
+        // if (Responsive.isMobile(context))
+        //   const SizedBox(height: defaultPadding),
+        // if (Responsive.isMobile(context)) const StarageDetails(),
       ],
     );
   }

@@ -29,28 +29,30 @@ class _SettingState extends State<Setting> {
     },
     {"title": "About", "page": const About(), 'icon': SettingIcons.aboutIcon},
   ];
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      // crossAxisCount: Responsive.isMobile(context) ? 1 : 2,
+    return GridView.count(
+      crossAxisSpacing: defaultPadding,
+      mainAxisSpacing: defaultPadding,
+      childAspectRatio: Responsive.isMobile(context) ? 1.5 : 1.2,
+      crossAxisCount: Responsive.isMobile(context) ? 1 : 2,
       children: List.generate(
         pageDetails.length,
         (index) => SizedBox(
-          height: MediaQuery.of(context).size.width * 0.0345,
-          child: GridTile(
-            child: SettingCard(
-                color: Theme.of(context).canvasColor,
-                leading: SizedBox(
+          // height: MediaQuery.of(context).size.width * 0.0345,
+          child: SettingCard(
+              color: Theme.of(context).canvasColor,
+              leading: SizedBox(
+                width: MediaQuery.of(context).size.width / 4.5,
+                height: MediaQuery.of(context).size.width / 4.5,
+                child: Image.asset(
+                  pageDetails[index]['icon'],
                   width: MediaQuery.of(context).size.width / 4.5,
                   height: MediaQuery.of(context).size.width / 4.5,
-                  child: Image.asset(
-                    pageDetails[index]['icon'],
-                    width: MediaQuery.of(context).size.width / 4.5,
-                    height: MediaQuery.of(context).size.width / 4.5,
-                  ),
                 ),
-                titleText: pageDetails[index]['title']),
-          ),
+              ),
+              titleText: pageDetails[index]['title']),
         ),
       ),
     );

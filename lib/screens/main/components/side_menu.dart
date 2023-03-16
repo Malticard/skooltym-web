@@ -1,10 +1,16 @@
 import '/exports/exports.dart';
 
-class SideMenu extends StatelessWidget {
+class SideMenu extends StatefulWidget {
   const SideMenu({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<SideMenu> createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu> {
+  int selected = 0;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -18,9 +24,11 @@ class SideMenu extends StatelessWidget {
               children: List.generate(
                 options.length,
                 (index) => DrawerListTile(
+                  selected: selected == index,
                   title: options[index]['title'],
                   svgSrc: options[index]['icon'],
                   press: () {
+                    setState(() => selected = index);
                     // update page title
                     context
                         .read<TitleController>()
@@ -78,20 +86,26 @@ class SideMenu extends StatelessWidget {
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
     Key? key,
+    this.selected = false,
     // For selecting those three line once press "Command+D"
     required this.title,
     required this.svgSrc,
     required this.press,
   }) : super(key: key);
-
+  final bool selected;
   final String title, svgSrc;
   final VoidCallback press;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      selected: selected,
+      selectedTileColor: Colors.blueAccent.withOpacity(0.1),
       onTap: press,
-      horizontalTitleGap: 0.0,
+      shape: RoundedRectangleBorder(
+        side: selected ? BorderSide(color: Colors.white60) : BorderSide.none,
+      ),
+      horizontalTitleGap: 0.6,
       leading: SvgPicture.asset(
         svgSrc,
         // ignore: deprecated_member_use
@@ -102,7 +116,7 @@ class DrawerListTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.bodyText1,
+        style: TextStyles(context).getDescriptionStyle(),
       ),
     );
   }

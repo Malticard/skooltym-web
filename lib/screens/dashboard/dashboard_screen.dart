@@ -37,6 +37,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     BlocBuilder<WidgetController, Widget>(
                         builder: (context, child) {
                       return Expanded(
+                        flex: 5,
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width / 2,
                           height: MediaQuery.of(context).size.width / 2,

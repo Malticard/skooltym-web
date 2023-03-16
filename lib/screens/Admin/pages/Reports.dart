@@ -1,9 +1,28 @@
+// import 'package:flutter/src/animation/animation_controller.dart';
 import '/exports/exports.dart';
 
-class RecentFiles extends StatelessWidget {
-  const RecentFiles({
-    Key? key,
-  }) : super(key: key);
+class OvertimeReports extends StatefulWidget {
+  const OvertimeReports({super.key});
+
+  @override
+  State<OvertimeReports> createState() => _OvertimeReportsState();
+}
+
+class _OvertimeReportsState extends State<OvertimeReports>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +38,8 @@ class RecentFiles extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Recent Reports",
-            style: Theme.of(context).textTheme.subtitle1,
+            "Overtime",
+            style: TextStyles(context).getTitleStyle(),
           ),
           SizedBox(
             width: size.width,
@@ -49,28 +68,4 @@ class RecentFiles extends StatelessWidget {
       ),
     );
   }
-}
-
-DataRow recentFileDataRow(RecentFile fileInfo) {
-  return DataRow(
-    cells: [
-      DataCell(
-        Row(
-          children: [
-            SvgPicture.asset(
-              fileInfo.icon!,
-              height: 30,
-              width: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text(fileInfo.title!),
-            ),
-          ],
-        ),
-      ),
-      DataCell(Text(fileInfo.date!)),
-      DataCell(Text(fileInfo.size!)),
-    ],
-  );
 }

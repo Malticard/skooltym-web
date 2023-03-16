@@ -204,7 +204,7 @@ List<Map<String, dynamic>> options = [
     "page": const Dashboard()
   },
   {
-    "icon": "assets/icons/003-student.svg",
+    "icon": "assets/icons/student.svg",
     "title": "Add Student",
     "page": const AddStudent()
   },
@@ -219,14 +219,19 @@ List<Map<String, dynamic>> options = [
     "page": const AddGuardian(),
   },
   {
-    "title": "System Settings",
-    "page": const SystemSettings(),
-    'icon': "assets/icons/menu_setting.svg"
-  },
-  {
     "title": "Change Password",
     "page": const ChangePassword(),
     'icon': "assets/icons/password-reset.svg"
+  },
+  {
+    "title": "Overtime Reports",
+    "page": const OvertimeReports(),
+    'icon': "assets/icons/menu_store.svg"
+  },
+  {
+    "title": "System Settings",
+    "page": const SystemSettings(),
+    'icon': "assets/icons/menu_setting.svg"
   },
 ];
 

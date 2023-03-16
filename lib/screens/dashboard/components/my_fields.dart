@@ -13,41 +13,41 @@ class MyFiles extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "My Files",
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
+            // Text(
+            //   "My Files",
+            //   style: Theme.of(context).textTheme.subtitle1,
+            // ),
             Row(
               children: [
-                ElevatedButton.icon(
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: defaultPadding * 1.5,
-                      vertical: defaultPadding /
-                          (Responsive.isMobile(context) ? 2 : 1),
-                    ),
-                  ),
-                  onPressed: () {
-                    context.read<ThemeController>().toggleDarkLightTheme();
-                  },
-                  icon: const Icon(Icons.ac_unit_sharp),
-                  label: const Text("Change Theme"),
-                ),
+                //   ElevatedButton.icon(
+                //     style: TextButton.styleFrom(
+                //       padding: EdgeInsets.symmetric(
+                //         horizontal: defaultPadding * 1.5,
+                //         vertical: defaultPadding /
+                //             (Responsive.isMobile(context) ? 2 : 1),
+                //       ),
+                //     ),
+                //     onPressed: () {
+                //       context.read<ThemeController>().toggleDarkLightTheme();
+                //     },
+                //     icon: const Icon(Icons.ac_unit_sharp),
+                //     label: const Text("Change Theme"),
+                //   ),
                 const SizedBox(
                   width: 20,
                 ),
-                ElevatedButton.icon(
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: defaultPadding * 1.5,
-                      vertical: defaultPadding /
-                          (Responsive.isMobile(context) ? 2 : 1),
-                    ),
-                  ),
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
-                  label: const Text("Add New"),
-                ),
+                // ElevatedButton.icon(
+                //   style: TextButton.styleFrom(
+                //     padding: EdgeInsets.symmetric(
+                //       horizontal: defaultPadding * 1.5,
+                //       vertical: defaultPadding /
+                //           (Responsive.isMobile(context) ? 2 : 1),
+                //     ),
+                //   ),
+                //   onPressed: () {},
+                //   icon: const Icon(Icons.add),
+                //   label: const Text("Add New"),
+                // ),
               ],
             ),
           ],
@@ -80,17 +80,26 @@ class FileInfoCardGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: demoMyFiles.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        crossAxisSpacing: defaultPadding,
-        mainAxisSpacing: defaultPadding,
-        childAspectRatio: childAspectRatio,
-      ),
-      itemBuilder: (context, index) => FileInfoCard(info: demoMyFiles[index]),
-    );
+    return FutureBuilder(
+        future: fetchDashboardMetaData(),
+        builder: (context, snapshot) {
+          return snapshot.connectionState == ConnectionState.waiting
+              ? Loader(
+                  text: "Dashboard Data",
+                )
+              : GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: defaultPadding,
+                    mainAxisSpacing: defaultPadding,
+                    childAspectRatio: childAspectRatio,
+                  ),
+                  itemBuilder: (context, index) =>
+                      FileInfoCard(info: snapshot.data![index]),
+                );
+        });
   }
 }
