@@ -8,9 +8,9 @@ class ThemeController extends Cubit<ThemeData> {
   ThemeController() : super(_light);
 
   // light theme
-  static final _light = AppThemes.lightTheme;
+  static final _light = Themes.lightTheme;
   // dark theme
-  static final _dark = AppThemes.darkTheme;
+  static final _dark = Themes.darkTheme;
 
   /// Toggles the current brightness between light and dark.
   void toggleDarkLightTheme() =>

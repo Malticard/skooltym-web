@@ -6,7 +6,7 @@ class Routes {
   static const String network = '/network';
   // static const String o = '/n';
   static const String forgotPassword = '/forgotPassword';
-  static const String home = '/home';
+  static const String home = '/wksktyui';
   static const String changePassword = "/changePassword";
   static const String qrCode = "/home/staff/qrCode";
   static const String nfcView = "/home/staff/nfc";
@@ -51,13 +51,8 @@ class Routes {
 
 Map<String, Widget Function(BuildContext)> routes(BuildContext context) {
   return {
-    // Routes.login: (context) => LoginScreen(),
-    // Routes.forgotPassword: (context) => ForgotPassword(),
-    // Routes.changePassword: (context) => const ChangePassword(),
-    // Routes.home: (context) => Home(),
-    // Routes.qrCode: (context) => const QRScreen(),
-    // Routes.nfcView: (context) => const NFCScreen(),
-    // Routes.settings: (context) => const Setting(),
+    Routes.home: (context) => const MainScreen(),
+    Routes.settings: (context) => const Setting(),
     // Routes.profile: (context) => const AccountProfile(),
     // Routes.staffProfile: (context) => const StaffProfile(),
     // Routes.dashboard: (context) => const Dashboard(),

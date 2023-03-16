@@ -28,7 +28,7 @@ class MyFiles extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    AdaptiveTheme.of(context).toggleThemeMode();
+                    context.read<ThemeController>().toggleDarkLightTheme();
                   },
                   icon: const Icon(Icons.ac_unit_sharp),
                   label: const Text("Change Theme"),

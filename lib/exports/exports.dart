@@ -74,6 +74,7 @@ export 'package:flutter_spinkit/flutter_spinkit.dart';
 export 'package:animations/animations.dart';
 export 'package:syncfusion_flutter_sliders/sliders.dart';
 export 'package:http/http.dart';
+export 'package:currency_picker/currency_picker.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:file_picker/file_picker.dart';
 export 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -114,3 +115,23 @@ export '/controllers/OnlineCheckerController.dart';
 
 // themes
 export '/Themes/Themes.dart';
+
+// ----> Admin routes
+export '/screens/Admin/Settings.dart';
+export '/screens/Admin/change_password.dart';
+export '/screens/Admin/pages/AccountProfile.dart';
+export '/screens/Admin/pages/AddGuardian.dart';
+export '/screens/Admin/pages/AddStaff.dart';
+export '/screens/Admin/settings/AppSettings.dart';
+export '/screens/Admin/settings/SystemSettings.dart';
+export '/screens/Admin/settings/privacy_policy.dart';
+export '/screens/Admin/settings/about.dart';
+
+// --> admin widgets
+export '/screens/Admin/widgets/PopOptions.dart';
+export '/screens/Admin/widgets/IntervalSlider.dart';
+export '/screens/Admin/widgets/RateSlider.dart';
+export '/screens/Admin/widgets/PickUpAllowanceSlider.dart';
+export '/screens/Admin/widgets/DropOffAllowanceSlider.dart';
+export '/screens/Admin/widgets/DashboardCard.dart';
+// --------------------------------------------------------
