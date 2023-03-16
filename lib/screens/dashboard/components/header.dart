@@ -15,10 +15,12 @@ class Header extends StatelessWidget {
             onPressed: context.read<MainController>().controlMenu,
           ),
         if (!Responsive.isMobile(context))
-          Text(
-            "Dashboard",
-            style: Theme.of(context).textTheme.headline6,
-          ),
+          BlocBuilder<TitleController, String>(builder: (context, title) {
+            return Text(
+              title,
+              style: TextStyles(context).getTitleStyle(),
+            );
+          }),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
         const Expanded(child: SearchField()),

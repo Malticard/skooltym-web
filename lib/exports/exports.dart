@@ -111,6 +111,7 @@ export '/controllers/SchoolController.dart';
 export '/controllers/AllowOvertimeController.dart';
 export '/controllers/LightDarkController.dart';
 export '/controllers/StudentController.dart';
+export '/controllers/TitleController.dart';
 export '/controllers/OnlineCheckerController.dart';
 
 // themes

@@ -128,7 +128,6 @@ class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
             }
           }
         },
-        students: [],
       ),
     );
   }

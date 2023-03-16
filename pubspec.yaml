@@ -56,6 +56,37 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+# splash screen
+flutter_native_splash:
+
+  color: "#42a5f5"
+
+  image: assets/images/splash.png
+  web: true
+
+  image_web: assets/images/splash.png
+  #
+  # web_image_mode can be one of the following modes: center, contain, stretch, and cover.
+  web_image_mode: center
+
+  # android_screen_orientation: sensorLandscape
+  fullscreen: true
+
+# end of splash logic
+
+# app icon logic
+flutter_icons:
+  web:
+    generate: true
+    image_path: assets/icons/Icon-01.png
+  windows:
+    generate: true
+    image_path: assets/icons/Icon-01.png
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    remove_alpha_ios: true
+    image_path: assets/icons/Icon-01.png
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

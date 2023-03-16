@@ -26,6 +26,7 @@ void main() async {
         BlocProvider(create: (context) => LightDarkController()),
         BlocProvider(create: (context) => OnlineCheckerController()),
         BlocProvider(create: (context) => StudentController()),
+        BlocProvider(create: (context) => TitleController()),
       ],
       child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
         return MaterialApp(

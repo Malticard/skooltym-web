@@ -26,22 +26,22 @@ class SettingCard extends StatelessWidget {
     this.radius = 13,
     this.leading,
     this.trailTextSize,
-    this.icon = "",
+    this.icon = "assets/images/splash.png",
     this.subTextSize,
     this.titleTextSize,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       margin: padding ??
           const EdgeInsets.only(top: 0.0, left: 10.0, right: 10.0, bottom: 5.0),
-      elevation: 0,
-      shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
-      color: Theme.of(context).brightness == Brightness.light
-          ? color ?? Color.fromRGBO(246, 246, 246, 1)
-          : Theme.of(context).cardColor,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+        color: Theme.of(context).brightness == Brightness.light
+            ? color ?? const Color.fromRGBO(246, 246, 246, 1)
+            : Theme.of(context).cardColor,
+      ),
       child: ListTileTheme(
         contentPadding:
             const EdgeInsets.only(left: 3, top: 3, right: 4, bottom: 3),

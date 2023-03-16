@@ -13,14 +13,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Header(),
+          Padding(
+            padding: EdgeInsets.only(
+              top: size.width * 0.011,
+              left: size.width * 0.031,
+              right: size.width * 0.031,
+            ),
+            child: const Header(),
+          ),
           const SizedBox(height: defaultPadding),
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.only(
-                    top: size.width * 0.031,
+                    top: size.width * 0.011,
                     left: size.width * 0.061,
                     right: size.width * 0.061),
                 child: Row(

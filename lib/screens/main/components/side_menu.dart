@@ -20,9 +20,16 @@ class SideMenu extends StatelessWidget {
                 (index) => DrawerListTile(
                   title: options[index]['title'],
                   svgSrc: options[index]['icon'],
-                  press: () => context
-                      .read<WidgetController>()
-                      .pushWidget(options[index]['page']),
+                  press: () {
+                    // update page title
+                    context
+                        .read<TitleController>()
+                        .setTitle(options[index]['title']);
+                    // update rendered page
+                    context
+                        .read<WidgetController>()
+                        .pushWidget(options[index]['page']);
+                  },
                 ),
               ),
             ),

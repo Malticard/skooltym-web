@@ -209,7 +209,7 @@ List<Map<String, dynamic>> options = [
     "page": const AddStudent()
   },
   {
-    "icon": "assets/icons/002-add-group.svg",
+    "icon": "assets/icons/staff.svg",
     "title": "Add Staff",
     "page": const AddStaff(),
   },
@@ -219,10 +219,15 @@ List<Map<String, dynamic>> options = [
     "page": const AddGuardian(),
   },
   {
-    "icon": "assets/icons/menu_setting.svg",
-    "title": "Settings",
-    "page": const Setting(),
-  }
+    "title": "System Settings",
+    "page": const SystemSettings(),
+    'icon': "assets/icons/menu_setting.svg"
+  },
+  {
+    "title": "Change Password",
+    "page": const ChangePassword(),
+    'icon': "assets/icons/password-reset.svg"
+  },
 ];
 
 // valid text controllers

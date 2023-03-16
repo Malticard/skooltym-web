@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 class SettingIcons {
   static String p = "assets/icons/";
   static String appSetIcon = p + "005-app-development.png";
