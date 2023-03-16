@@ -161,7 +161,7 @@ bool validateEmail(String email, BuildContext context) {
 }
 
 // build dashboard cards
-Widget _buildBody(BuildContext context) {
+Widget buildBody(BuildContext context) {
   Size size = MediaQuery.of(context).size;
   return SizedBox(
     width: size.width,
@@ -172,26 +172,24 @@ Widget _buildBody(BuildContext context) {
           return snapshot.connectionState == ConnectionState.waiting
               ? const Center(child: Loader(text: "Dashboard"))
               : snapshot.hasData
-                  ? SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(
-                          data.length,
-                          (index) => SizedBox(
-                            width: size.width * 0.123,
-                            height: size.width * 0.123,
-                            child: DashboardCard(
-                              label: data[index]['label'],
-                              value: data[index]['value'],
-                              icon: data[index]['icon'],
-                              color: data[index]['color'],
-                              last_updated: data[index]['last_updated'],
-                            ),
+                  ? Flex(
+                      direction: Axis.horizontal,
+                      children: List.generate(
+                        data.length,
+                        (index) => SizedBox(
+                          width: size.width * 0.123,
+                          height: size.width * 0.123,
+                          child: DashboardCard(
+                            label: data[index]['label'],
+                            value: data[index]['value'],
+                            icon: data[index]['icon'],
+                            color: data[index]['color'],
+                            last_updated: data[index]['last_updated'],
                           ),
                         ),
                       ),
                     )
-                  : Center(
+                  : const Center(
                       child: Text("No Data"),
                     );
         }),
@@ -216,7 +214,7 @@ List<Map<String, dynamic>> options = [
     "page": const AddStaff(),
   },
   {
-    "icon": "assets/images/guardian.svg",
+    "icon": "assets/icons/guardian.svg",
     "title": "Add Guardian details",
     "page": const AddGuardian(),
   },

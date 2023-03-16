@@ -10,27 +10,7 @@ class Setting extends StatefulWidget {
   _SettingState createState() => _SettingState();
 }
 
-class _SettingState extends State<Setting> with SingleTickerProviderStateMixin {
-  AnimationController? settingsAnimationController;
-
-  @override
-  void initState() {
-    settingsAnimationController = AnimationController(
-      vsync: this,
-      value: 0,
-      duration: const Duration(milliseconds: 800),
-    );
-    settingsAnimationController!.forward();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    settingsAnimationController!.dispose();
-    super.dispose();
-  }
-
-// pages
+class _SettingState extends State<Setting> {
   List<Map<String, dynamic>> pageDetails = [
     {
       "title": "App Settings",
@@ -56,51 +36,34 @@ class _SettingState extends State<Setting> with SingleTickerProviderStateMixin {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BottomTopMoveAnimationView(
-          animationController: settingsAnimationController!,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CommonAppbarView(
-                iconData: Icons.arrow_back,
-                titleText: "Settings",
-                onBackClick: () => Routes.popPage(context),
-              ),
-              Expanded(
-                child: Column(
-                  children: List.generate(
-                    pageDetails.length,
-                    (index) => Card(
-                      margin: const EdgeInsets.only(
-                          top: 0.0, left: 15.0, right: 15.0, bottom: 0.0),
-                      elevation: 0,
-                      child: OpenContainer(
-                        closedColor: Theme.of(context).scaffoldBackgroundColor,
-                        closedElevation: 0,
-                        transitionType: ContainerTransitionType.fadeThrough,
-                        transitionDuration: const Duration(milliseconds: 800),
-                        openColor: Theme.of(context).scaffoldBackgroundColor,
-                        closedBuilder: (context, action) => SettingCard(
-                            leading: SizedBox(
-                              width: MediaQuery.of(context).size.width / 4.5,
-                              height: MediaQuery.of(context).size.width / 4.5,
-                              child: Image.asset(
-                                pageDetails[index]['icon'],
-                                width: MediaQuery.of(context).size.width / 4.5,
-                                height: MediaQuery.of(context).size.width / 4.5,
-                              ),
-                            ),
-                            titleText: pageDetails[index]['title']),
-                        openBuilder: (context, action) =>
-                            pageDetails[index]['page'],
-                      ),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 2,
+      child: Column(
+        children: List.generate(
+          pageDetails.length,
+          (index) => Card(
+            margin: const EdgeInsets.only(
+                top: 0.0, left: 15.0, right: 15.0, bottom: 0.0),
+            elevation: 0,
+            child: OpenContainer(
+              closedColor: Theme.of(context).scaffoldBackgroundColor,
+              closedElevation: 0,
+              transitionType: ContainerTransitionType.fadeThrough,
+              transitionDuration: const Duration(milliseconds: 800),
+              openColor: Theme.of(context).scaffoldBackgroundColor,
+              closedBuilder: (context, action) => SettingCard(
+                  leading: SizedBox(
+                    width: MediaQuery.of(context).size.width / 4.5,
+                    height: MediaQuery.of(context).size.width / 4.5,
+                    child: Image.asset(
+                      pageDetails[index]['icon'],
+                      width: MediaQuery.of(context).size.width / 4.5,
+                      height: MediaQuery.of(context).size.width / 4.5,
                     ),
                   ),
-                ),
-              )
-            ],
+                  titleText: pageDetails[index]['title']),
+              openBuilder: (context, action) => pageDetails[index]['page'],
+            ),
           ),
         ),
       ),

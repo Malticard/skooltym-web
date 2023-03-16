@@ -1,6 +1,14 @@
 import '/exports/exports.dart';
 
-void main() {
+void main() async {
+  // Obtain shared preferences.
+  WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
+  // );
+  Bloc.observer = const Observer();
+
+  final prefs = await SharedPreferences.getInstance();
   runApp(
     MultiProvider(
       providers: [
@@ -26,11 +34,15 @@ void main() {
               ? ThemeMode.light
               : ThemeMode.dark,
           theme: theme.copyWith(
-            textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
-                .apply(
-                    bodyColor: theme.brightness == Brightness.light
-                        ? Colors.black
-                        : Colors.white),
+            textTheme:
+                GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme).apply(
+              bodyColor: theme.brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white,
+              displayColor: theme.brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white,
+            ),
           ),
           initialRoute: Routes.home,
           routes: routes(context),

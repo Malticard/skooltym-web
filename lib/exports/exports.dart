@@ -127,6 +127,7 @@ export '/screens/Admin/settings/AppSettings.dart';
 export '/screens/Admin/settings/SystemSettings.dart';
 export '/screens/Admin/settings/privacy_policy.dart';
 export '/screens/Admin/settings/about.dart';
+export '/screens/Admin/dashboard.dart';
 
 // --> admin widgets
 export '/screens/Admin/widgets/PopOptions.dart';
