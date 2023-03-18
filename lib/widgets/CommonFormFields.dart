@@ -102,7 +102,10 @@ class _CommonFormFieldsState extends State<CommonFormFields>
             ),
             child: OutlinedButton(
               onPressed: () => _handleImageUpload(ind),
-              child: Text("Upload"),
+              child: Text(
+                "Upload",
+                style: TextStyles(context).getRegularStyle(),
+              ),
             ),
           ),
         ],
@@ -160,7 +163,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                               fieldColor: Theme.of(context).brightness ==
                                       Brightness.light
                                   ? Colors.white
-                                  : Colors.black26,
+                                  : Color.fromARGB(66, 75, 74, 74),
                               errorText: widget.errorMsgs[index - 1],
                               padding: widget.padding,
                               onChanged: (v) {
@@ -223,7 +226,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                   fieldColor: Theme.of(context).brightness ==
                                           Brightness.light
                                       ? Colors.white
-                                      : Colors.black26,
+                                      : Color.fromARGB(66, 75, 74, 74),
                                   errorText: widget.errorMsgs[index - 1],
                                   padding: widget.padding,
                                   isObscureText: widget.formFields[index - 1]
@@ -275,11 +278,13 @@ class _CommonFormFieldsState extends State<CommonFormFields>
     return widget.formEnabled
         ? Form(
             key: formKey,
-            child: ListView(
-              children: buildForm(),
+            child: Expanded(
+              child: Column(
+                children: buildForm(),
+              ),
             ),
           )
-        : SingleChildScrollView(
+        : Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: buildForm(),

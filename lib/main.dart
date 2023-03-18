@@ -45,9 +45,9 @@ void main() async {
                   : Colors.white,
             ),
           ),
-          initialRoute: prefs.get('roles') != null &&
-                  (prefs.get('roles') == 'admin' ||
-                      prefs.get('roles') == 'Finance')
+          initialRoute: prefs.get('schoolData') != null &&
+                  (prefs.get('role') == 'admin' ||
+                      prefs.get('role') == 'Finance')
               ? Routes.home
               : Routes.login,
           routes: routes(context),

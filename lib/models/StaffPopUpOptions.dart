@@ -12,6 +12,6 @@ class StaffPopUpOptions {
         icon: Icons.person_3_rounded,
         route: Routes.staffProfile),
     StaffPopUpOptions(
-        title: "Exit App", icon: Icons.exit_to_app_rounded, route: ""),
+        title: "Logout", icon: Icons.exit_to_app_rounded, route: ""),
   ];
 }

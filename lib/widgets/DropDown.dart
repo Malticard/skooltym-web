@@ -57,7 +57,9 @@ class _DropDownWidgetState extends State<DropDownWidget> {
             height: size.height / 20,
             // height: 48,
             child: Card(
-              color: Colors.white,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : Color.fromARGB(66, 75, 74, 74),
               borderOnForeground: false,
               shape: RoundedRectangleBorder(
                 side: BorderSide(color: Colors.grey, width: 0.5),

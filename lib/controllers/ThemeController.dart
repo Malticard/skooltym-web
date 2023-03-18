@@ -12,12 +12,8 @@ class ThemeController extends Cubit<ThemeData> {
   // dark theme
   static final _dark = AppThemes.darkTheme;
 
-  /// Toggles the current brightness between light and dark.
-  void toggleDarkLightTheme() =>
-      emit(state.brightness == Brightness.dark ? _light : _dark);
-
   // method to keep track of the current brightness between light and dark theme  using shared preferences
-  saveTheme() {
+  void saveTheme() {
     SharedPreferences.getInstance().then((prefs) {
       prefs.setBool(
           'darkTheme', state.brightness == Brightness.dark ? true : false);
@@ -35,5 +31,13 @@ class ThemeController extends Cubit<ThemeData> {
       }
     });
   }
+
+  /// Toggles the current brightness between light and dark.
+  void toggleDarkLightTheme() {
+    emit(state.brightness == Brightness.dark ? _light : _dark);
+// save the current theme
+    saveTheme();
+  }
+
   // method to keep track of the current theme
 }

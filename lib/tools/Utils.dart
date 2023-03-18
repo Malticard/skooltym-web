@@ -5,7 +5,7 @@ import '/exports/exports.dart';
 
 // login logic for the user
 loginUser(BuildContext context, String email, String password) async {
-  showProgress(context);
+  showProgress(context, msg: "Login in progress");
 
   Client().post(Uri.parse(AppUrls.login), body: {
     "staff_email": email,
@@ -270,7 +270,7 @@ void showMessage(
 }
 
 // show progress widget
-void showProgress(BuildContext context) {
+void showProgress(BuildContext context, {String? msg}) {
   showModal(
     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
     context: context,
@@ -290,7 +290,7 @@ void showProgress(BuildContext context) {
             space: 0.03,
           ),
           Text(
-            "Task in progress",
+            msg ?? "Task in progress",
             style: TextStyles(context)
                 .getRegularStyle()
                 .copyWith(color: Colors.white),

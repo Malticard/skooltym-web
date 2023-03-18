@@ -48,31 +48,51 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: defaultPadding),
-      padding: const EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-        vertical: defaultPadding / 2,
-      ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            "assets/images/profile_pic.png",
-            height: 38,
-          ),
-          if (!Responsive.isMobile(context))
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Angelina Jolie"),
+        margin: const EdgeInsets.only(left: defaultPadding),
+        padding: const EdgeInsets.symmetric(
+          horizontal: defaultPadding,
+          vertical: defaultPadding / 2,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          border: Border.all(color: Colors.white10),
+        ),
+        child: Row(
+          children: [
+            Image.asset(
+              "assets/images/profile_pic.png",
+              height: 38,
             ),
-          const Icon(Icons.keyboard_arrow_down),
-        ],
-      ),
-    );
+            if (!Responsive.isMobile(context))
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                child: Text(
+                    "${context.read<SchoolController>().state['fname']} ${context.read<SchoolController>().state['lname']}"),
+              ),
+            PopupMenuButton(
+              icon: const Icon(Icons.keyboard_arrow_down),
+              itemBuilder: (BuildContext context) {
+                return List.generate(
+                  StaffPopUpOptions.options.length,
+                  (index) => PopupMenuItem(
+                      child: ListTile(
+                    leading: Icon(StaffPopUpOptions.options[index].icon),
+                    title: Text(StaffPopUpOptions.options[index].title!),
+                    onTap: () {
+                      StaffPopUpOptions.options[index].title == 'Logout'
+                          ? Routes.logout(context)
+                          : context
+                              .read<WidgetController>()
+                              .pushWidget(AdminProfile());
+                      Navigator.pop(context);
+                    },
+                  )),
+                );
+              },
+            ),
+          ],
+        ));
   }
 }
 

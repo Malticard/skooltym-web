@@ -15,6 +15,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          //======= header section ========
           Padding(
             padding: EdgeInsets.only(
               top: size.width * 0.011,
@@ -24,6 +25,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: const Header(),
           ),
           const SizedBox(height: defaultPadding),
+          // ====== end of header section ======
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -31,6 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     top: size.width * 0.011,
                     left: size.width * 0.061,
                     right: size.width * 0.061),
+                // ======= body section =======
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -55,6 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     //   ),
                   ],
                 ),
+                // ====== end of body section ======
               ),
             ),
           )

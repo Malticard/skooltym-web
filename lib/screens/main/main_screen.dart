@@ -1,8 +1,19 @@
 import '/exports/exports.dart';
 import 'components/side_menu.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    context.read<ThemeController>().getTheme();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

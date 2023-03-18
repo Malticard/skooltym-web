@@ -38,6 +38,7 @@ export '/screens/dashboard/components/storage_details.dart';
 export '/screens/dashboard/components/storage_info_card.dart';
 export '/screens/main/main_screen.dart';
 export '/screens/Auth/login.dart';
+export '/screens/Auth/AdminProfile.dart';
 
 // global
 export '/global/index.dart';

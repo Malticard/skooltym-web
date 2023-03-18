@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // get saved appTheme
     context.read<ThemeController>().getTheme();
+
     super.initState();
   }
 
@@ -89,43 +90,69 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 desktop: Padding(
                   padding: EdgeInsets.only(
-                      top: size.width * 0.050, bottom: size.width * 0.05),
-                  child: GridView.count(
-                    reverse: true,
-                    crossAxisCount: 2,
+                      top: size.width * 0.030, bottom: size.width * 0.03),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: size.height * 0.3,
-                            bottom: size.height * 0.09,
-                            right: size.width / 15,
-                            left: size.width / 15),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(50),
-                                topRight: Radius.circular(50),
-                                bottomLeft: Radius.circular(50),
-                                bottomRight: Radius.circular(50),
+                      Expanded(
+                        flex: 5,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: size.width * 0.015,
                               ),
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.black26
-                                  : Colors.white.withOpacity(0.5)),
-                          child: _buildForm(),
+                              child: Text(
+                                "Welcome back",
+                                style: TextStyles(context)
+                                    .getTitleStyle()
+                                    .copyWith(
+                                      color: Colors.white,
+                                      fontSize: Responsive.isMobile(context)
+                                          ? 30
+                                          : 40,
+                                    ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: size.width * 0.0150,
+                                left: 60,
+                                right: 60,
+                              ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.43,
+                                child: SvgPicture.asset(
+                                  "assets/images/back2Skool.svg",
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: size.width * 0.10,
-                          left: 60,
-                          right: 60,
-                        ),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.43,
-                          child: SvgPicture.asset(
-                            "assets/images/back2Skool.svg",
+                      Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              right: size.width / 16,
+                              left: size.width / 16,
+                              bottom: size.width / 16,
+                              top: size.width / 16),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(50),
+                                  topRight: Radius.circular(50),
+                                  bottomLeft: Radius.circular(50),
+                                  bottomRight: Radius.circular(50),
+                                ),
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.black26
+                                    : Colors.white.withOpacity(1)),
+                            child: _buildForm(),
                           ),
                         ),
                       ),
@@ -171,6 +198,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
+            if (!Responsive.isMobile(context))
+              Padding(
+                padding: EdgeInsets.only(
+                  left: size.width * 0.030,
+                  right: size.width * 0.030,
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      "assets/images/malticard.png",
+                      width: 80,
+                      height: 80,
+                    ),
+                    Text(
+                      "Powered by Malticard",
+                      style: TextStyles(context).getBoldStyle().copyWith(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
