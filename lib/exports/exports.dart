@@ -3,6 +3,7 @@ export 'package:flutter/services.dart';
 export 'dart:async';
 export 'package:flutter/foundation.dart';
 export 'dart:io';
+export 'dart:convert';
 export 'package:flutter/material.dart';
 export 'package:google_fonts/google_fonts.dart';
 export 'package:adaptive_theme/adaptive_theme.dart';
@@ -36,6 +37,7 @@ export '/screens/dashboard/components/recent_files.dart';
 export '/screens/dashboard/components/storage_details.dart';
 export '/screens/dashboard/components/storage_info_card.dart';
 export '/screens/main/main_screen.dart';
+export '/screens/Auth/login.dart';
 
 // global
 export '/global/index.dart';

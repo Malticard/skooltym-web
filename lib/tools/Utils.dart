@@ -19,11 +19,9 @@ loginUser(BuildContext context, String email, String password) async {
       BlocProvider.of<SchoolController>(context).setSchoolData(data);
       Routes.namedRemovedUntilRoute(
         context,
-        data['role'] == 'Admin'
-            ? Routes.dashboard
-            : data['role'] == 'Teacher' || data['role'] == 'Staff'
-                ? Routes.home
-                : Routes.finance,
+        data['role'] == 'Admin' || data['role'] == 'Finance'
+            ? Routes.home
+            : Routes.login,
       );
       showMessage(
         context: context,

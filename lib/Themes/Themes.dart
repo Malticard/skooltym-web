@@ -1,6 +1,6 @@
 import '../exports/exports.dart';
 
-class Themes {
+class AppThemes {
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: creamColor,
     canvasColor: snowColor,

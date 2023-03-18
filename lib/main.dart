@@ -45,7 +45,11 @@ void main() async {
                   : Colors.white,
             ),
           ),
-          initialRoute: Routes.home,
+          initialRoute: prefs.get('roles') != null &&
+                  (prefs.get('roles') == 'admin' ||
+                      prefs.get('roles') == 'Finance')
+              ? Routes.home
+              : Routes.login,
           routes: routes(context),
         );
       }),

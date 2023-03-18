@@ -1,7 +1,7 @@
 import '/exports/exports.dart';
 
 class Routes {
-  static const String login = "/";
+  static const String login = "/userlogin";
   static const String onboardScreen = '/introductionScreen';
   static const String network = '/network';
   // static const String o = '/n';
@@ -52,14 +52,6 @@ class Routes {
 Map<String, Widget Function(BuildContext)> routes(BuildContext context) {
   return {
     Routes.home: (context) => const MainScreen(),
-    Routes.settings: (context) => const Setting(),
-    // Routes.profile: (context) => const AccountProfile(),
-    // Routes.staffProfile: (context) => const StaffProfile(),
-    // Routes.dashboard: (context) => const Dashboard(),
-    // Routes.newGuardian: (context) => const AddGuardian(),
-    // Routes.newStaff: (context) => const AddStaff(),
-    // Routes.newStudent: (context) => const AddStudent(),
-    // Routes.finance: (context) => Finance(),
-    // Routes.superAdminView: (context) => SuperAdminView()
+    Routes.login: (context) => LoginScreen(),
   };
 }
