@@ -1,10 +1,19 @@
 import '/exports/exports.dart';
 
-class RecentFiles extends StatelessWidget {
-  const RecentFiles({
+class Data_Table extends StatefulWidget {
+  final List<DataColumn>? columns;
+  final List<DataRow>? rows;
+  const Data_Table({
     Key? key,
+    this.columns,
+    this.rows,
   }) : super(key: key);
 
+  @override
+  State<Data_Table> createState() => _Data_TableState();
+}
+
+class _Data_TableState extends State<Data_Table> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

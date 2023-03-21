@@ -77,7 +77,6 @@ class _AddGuardianState extends State<AddGuardian>
   AnimationController? guardianAnimationController;
   final List<TextEditingController> _formControllers =
       List.generate(_formFields.length, (index) => TextEditingController());
-  List<Students> students = [];
   @override
   void initState() {
     guardianAnimationController = AnimationController(
@@ -109,10 +108,8 @@ class _AddGuardianState extends State<AddGuardian>
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    //
-    context.read<StudentController>().studentLists();
-    //
-    debugPrint("${context.read<StudentController>().state}");
+    context.read<MainController>().getAllStudents();
+    // List<Students> _students =
 
     Size size = MediaQuery.of(context).size;
     return BottomTopMoveAnimationView(
@@ -123,7 +120,7 @@ class _AddGuardianState extends State<AddGuardian>
         child: CommonFormFields(
           padding: padding,
           formFields: _formFields,
-          students: context.read<StudentController>().state,
+          students: context.read<MainController>().students,
           formControllers: _formControllers,
           buttonText: "Save Guardian Details",
           onSubmit: () => _addGuardian(),

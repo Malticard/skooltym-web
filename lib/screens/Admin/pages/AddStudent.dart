@@ -119,13 +119,14 @@ class _AddStudentState extends State<AddStudent> with TickerProviderStateMixin {
                       msg: 'An error occurred!! ',
                       type: 'danger'),
                 )
-                .whenComplete(
-                  () => showMessage(
+                .whenComplete(() {
+                  showMessage(
                     context: context,
                     type: 'success',
                     msg: "Added new student successfully",
-                  ),
-                );
+                  );
+                  _formControllers.forEach((v) => v.clear());
+                });
           }
         },
         errorMsgs: errorFields,

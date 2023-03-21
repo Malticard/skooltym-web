@@ -4,7 +4,7 @@ class StudentController extends Cubit<dynamic> {
   StudentController() : super(text);
   //
   static var text;
-  // ---------
+  // ---------> mkkk ---
   void trackStudent(String student) => emit(student);
 // -----
   //---> fetch available students

@@ -7,7 +7,7 @@ void main() async {
   //   SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
   // );
   Bloc.observer = const Observer();
-
+  var prefs = await SharedPreferences.getInstance();
   runApp(
     MultiProvider(
       providers: [
@@ -29,6 +29,8 @@ void main() async {
       child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
         // school data
         context.read<SchoolController>().getSchoolData();
+        //
+
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           themeMode: theme.brightness == Brightness.light
@@ -45,9 +47,9 @@ void main() async {
                   : Colors.white,
             ),
           ),
-          initialRoute: (context.read<SchoolController>().state['role'] ==
-                      'Admin' ||
-                  context.read<SchoolController>().state['role'] == 'Finance')
+          initialRoute: (prefs.getString('schoolData') != null &&
+                  (prefs.getString('role') == 'Admin' ||
+                      prefs.getString('role') == 'Finance'))
               ? Routes.home
               : Routes.login,
           routes: routes(context),

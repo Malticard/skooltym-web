@@ -37,8 +37,8 @@ loginUser(BuildContext context, String email, String password) async {
           type: 'danger');
     }
   }).whenComplete(() {});
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString('role', "${context.read<SchoolController>().state['role']}");
+  // final prefs = await SharedPreferences.getInstance();
+  // prefs.setString('role', "${context.read<SchoolController>().state['role']}");
 }
 
 // global functions
@@ -247,28 +247,43 @@ List<Map<String, dynamic>> options = [
   },
   {
     "icon": "assets/icons/student.svg",
-    "title": "Add Student",
+    "title": "Students",
     "page": const AddStudent()
   },
   {
     "icon": "assets/icons/staff.svg",
-    "title": "Add Staff",
+    "title": "Staffs",
     "page": const AddStaff(),
   },
   {
-    "icon": "assets/icons/guardian.svg",
-    "title": "Add Guardian",
+    "title": "Guardians",
+    "page": const ChangePassword(),
+    'icon': "assets/icons/guardian.svg"
+  },
+  {
+    "title": "Pending Overtimes",
+    "page": const ChangePassword(),
+    'icon': "assets/icons/menu_store.svg"
+  },
+  {
+    "icon": "assets/icons/menu_store.svg",
+    "title": "Cleared Overtimes",
     "page": const AddGuardian(),
+  },
+  {
+    "title": "Drop Offs",
+    "page": const OvertimeReports(),
+    'icon': "assets/icons/menu_tran.svg"
+  },
+  {
+    "title": "Pick Ups",
+    "page": const ChangePassword(),
+    'icon': "assets/icons/menu_tran.svg"
   },
   {
     "title": "Change Password",
     "page": const ChangePassword(),
     'icon': "assets/icons/password-reset.svg"
-  },
-  {
-    "title": "Overtime Reports",
-    "page": const OvertimeReports(),
-    'icon': "assets/icons/menu_store.svg"
   },
   {
     "title": "System Settings",

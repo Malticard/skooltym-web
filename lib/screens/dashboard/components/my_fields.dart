@@ -18,10 +18,10 @@ class _MyFilesState extends State<MyFiles> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Text(
-            //   "My Files",
-            //   style: Theme.of(context).textTheme.subtitle1,
-            // ),
+            Text(
+              "Stats",
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
             Row(
               children: [
                 //   ElevatedButton.icon(
@@ -41,18 +41,19 @@ class _MyFilesState extends State<MyFiles> {
                 const SizedBox(
                   width: 20,
                 ),
-                // ElevatedButton.icon(
-                //   style: TextButton.styleFrom(
-                //     padding: EdgeInsets.symmetric(
-                //       horizontal: defaultPadding * 1.5,
-                //       vertical: defaultPadding /
-                //           (Responsive.isMobile(context) ? 2 : 1),
-                //     ),
-                //   ),
-                //   onPressed: () {},
-                //   icon: const Icon(Icons.add),
-                //   label: const Text("Add New"),
-                // ),
+                ElevatedButton.icon(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: defaultPadding * 1.5,
+                      vertical: defaultPadding /
+                          (Responsive.isMobile(context) ? 2 : 1),
+                    ),
+                  ),
+                  onPressed: () =>
+                      context.read<WidgetController>().pushWidget(Dashboard()),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text("Refresh"),
+                ),
               ],
             ),
           ],
@@ -90,26 +91,19 @@ class FileInfoCardGridView extends StatefulWidget {
 class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: fetchDashboardMetaData(context),
-        builder: (context, snapshot) {
-          return snapshot.connectionState == ConnectionState.waiting
-              ? Loader(
-                  text: "Dashboard Data",
-                )
-              : GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: widget.crossAxisCount,
-                    crossAxisSpacing: defaultPadding,
-                    mainAxisSpacing: defaultPadding,
-                    childAspectRatio: widget.childAspectRatio,
-                  ),
-                  itemBuilder: (context, index) =>
-                      FileInfoCard(info: snapshot.data![index]),
-                );
-        });
+    context.read<MainController>().fetchUpdates(context);
+    var dash = context.read<MainController>().dashboardData;
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: dash.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: widget.crossAxisCount,
+        crossAxisSpacing: defaultPadding,
+        mainAxisSpacing: defaultPadding,
+        childAspectRatio: widget.childAspectRatio,
+      ),
+      itemBuilder: (context, index) => FileInfoCard(info: dash[index]),
+    );
   }
 }

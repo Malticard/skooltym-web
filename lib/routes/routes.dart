@@ -30,10 +30,14 @@ class Routes {
 
   static void logout(BuildContext context) {
     // clear all set data
-    SharedPreferences.getInstance().then((value) => value.clear());
-    //
-    showMessage(context: context, type: 'info', msg: 'Signed out successfully');
-    namedRemovedUntilRoute(context, login);
+    SharedPreferences.getInstance()
+        .then((value) => value.clear())
+        .whenComplete(() {
+      //
+      showMessage(
+          context: context, type: 'info', msg: 'Signed out successfully');
+      namedRemovedUntilRoute(context, login);
+    });
   }
 }
 
