@@ -52,6 +52,7 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   flutter_spinkit: ^5.1.0
   currency_picker: ^2.0.16
+  art_sweetalert: ^0.0.5
 
 dev_dependencies:
   flutter_test:

@@ -67,6 +67,50 @@ String greetUser() {
   return greet;
 }
 
+// dialog
+void showAppDialog(BuildContext context,
+    {String? title,
+    String? denyText,
+    String? confirmText,
+    bool showCancel = false,
+    String? successText,
+    String? errorText}) async {
+  ArtDialogResponse response = await ArtSweetAlert.show(
+      barrierDismissible: false,
+      context: context,
+      artDialogArgs: ArtDialogArgs(
+        showCancelBtn: true,
+        denyButtonText: denyText ?? "Don't save",
+        title: title ?? "Do you want to save the changes?",
+        confirmButtonText: confirmText ?? "Save",
+      ));
+
+  if (response.isTapConfirmButton) {
+    ArtSweetAlert.show(
+        context: context,
+        artDialogArgs: ArtDialogArgs(
+            type: ArtSweetAlertType.success, title: successText ?? "Saved!"));
+    return;
+  }
+  if (response.isTapCancelButton) {
+    ArtSweetAlert.show(
+      context: context,
+      artDialogArgs: ArtDialogArgs(
+          type: ArtSweetAlertType.success,
+          title: successText ?? "Operation cancel...."),
+    );
+  }
+
+  if (response.isTapDenyButton) {
+    ArtSweetAlert.show(
+        context: context,
+        artDialogArgs: ArtDialogArgs(
+            type: ArtSweetAlertType.info,
+            title: errorText ?? "Changes are not saved!"));
+    return;
+  }
+}
+
 // return students
 Future<List<Students>> fetchStudents() async {
   var res = await Client().get(Uri.parse(AppUrls.students));
@@ -97,7 +141,7 @@ void showSuccessDialog(String name, BuildContext context,
           onPressed: onPressed ??
               () {
                 Routes.popPage(context);
-                Routes.namedRoute(context, Routes.dashboard);
+                // Routes.namedRoute(context, Routes.dashboard);
               },
           child: Text("Okay"),
         )
@@ -240,7 +284,7 @@ List<Map<String, dynamic>> financeViews = [
     "page": const Dashboard()
   },
   {
-    "icon": "assets/icons/menu_dashbord.svg",
+    "icon": "assets/icons/menu_task.svg",
     "title": "Overtime",
     "page": const OvertimeReports()
   },

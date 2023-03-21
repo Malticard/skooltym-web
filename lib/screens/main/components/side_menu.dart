@@ -26,7 +26,18 @@ class _SideMenuState extends State<SideMenu> {
       child: Column(
         children: [
           DrawerHeader(
-            child: Image.asset("assets/images/logo.png"),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.08,
+              child: Column(
+                children: [
+                  Space(space: 0.04),
+                  Image.asset("assets/images/logo.png"),
+                  Space(),
+                  Text(
+                      "${context.read<SchoolController>().state['school_name']}")
+                ],
+              ),
+            ),
           ),
           Expanded(
             child: ListView(

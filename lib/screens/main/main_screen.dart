@@ -11,7 +11,10 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
+    // app theme state
     context.read<ThemeController>().getTheme();
+    // retrive session state
+    context.read<SchoolController>().getSchoolData();
     super.initState();
   }
 

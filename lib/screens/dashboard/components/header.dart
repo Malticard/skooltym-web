@@ -40,11 +40,16 @@ class Header extends StatelessWidget {
   }
 }
 
-class ProfileCard extends StatelessWidget {
+class ProfileCard extends StatefulWidget {
   const ProfileCard({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<ProfileCard> createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends State<ProfileCard> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -8,14 +8,11 @@ void main() async {
   // );
   Bloc.observer = const Observer();
 
-  final prefs = await SharedPreferences.getInstance();
   runApp(
     MultiProvider(
       providers: [
         BlocProvider(create: (context) => WidgetController()),
-        ChangeNotifierProvider(
-          create: (context) => MainController(),
-        ),
+        ChangeNotifierProvider(create: (context) => MainController()),
         BlocProvider(create: (context) => ThemeController()),
         BlocProvider(create: (context) => IntervalController()),
         BlocProvider(create: (context) => OvertimeRateController()),
@@ -27,8 +24,11 @@ void main() async {
         BlocProvider(create: (context) => OnlineCheckerController()),
         BlocProvider(create: (context) => StudentController()),
         BlocProvider(create: (context) => TitleController()),
+        BlocProvider(create: (context) => DashboardController()),
       ],
       child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
+        // school data
+        context.read<SchoolController>().getSchoolData();
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           themeMode: theme.brightness == Brightness.light
@@ -45,9 +45,9 @@ void main() async {
                   : Colors.white,
             ),
           ),
-          initialRoute: prefs.get('schoolData') != null &&
-                  (prefs.get('role') == 'admin' ||
-                      prefs.get('role') == 'Finance')
+          initialRoute: (context.read<SchoolController>().state['role'] ==
+                      'Admin' ||
+                  context.read<SchoolController>().state['role'] == 'Finance')
               ? Routes.home
               : Routes.login,
           routes: routes(context),

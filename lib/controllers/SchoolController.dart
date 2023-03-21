@@ -21,4 +21,8 @@ class SchoolController extends Cubit<Map<String, dynamic>> {
       }
     });
   }
+  // 
+  logout(){
+    SharedPreferences.getInstance().then((value) => value.clear());
+  }
 }

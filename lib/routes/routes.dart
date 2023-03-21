@@ -7,18 +7,6 @@ class Routes {
   // static const String o = '/n';
   static const String forgotPassword = '/forgotPassword';
   static const String home = '/wksktyui';
-  static const String changePassword = "/changePassword";
-  static const String qrCode = "/home/staff/qrCode";
-  static const String nfcView = "/home/staff/nfc";
-  static const String dashboard = "/dashboard";
-  static const String settings = "/dashboard/settings";
-  static const String profile = "/dashboard/profile";
-  static const String staffProfile = "/home/profile";
-  static const String newStaff = "/dashboard/add/staff";
-  static const String newStudent = "/dashboard/add/student";
-  static const String newGuardian = "/dashboard/add/guardian";
-  static const String finance = "/home/finance";
-  static const String superAdminView = "/sdfghjkd345673lddf";
 
   static void push(Widget widget, BuildContext context) {
     Navigator.of(context).push(
@@ -33,7 +21,7 @@ class Routes {
 
   static void namedRemovedUntilRoute(BuildContext context, String route) {
     debugPrint("moved $route");
-    Navigator.of(context).pushNamedAndRemoveUntil(route, (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(route, (_) => true);
   }
 
   static void popPage(BuildContext context) {
@@ -41,11 +29,11 @@ class Routes {
   }
 
   static void logout(BuildContext context) {
-    SharedPreferences.getInstance().then((value) {
-      value.clear();
-    }).whenComplete(() => showMessage(
-        context: context, type: 'info', msg: 'Signed out successfully'));
-    namedRemovedUntilRoute(context, login); // navigates back login screen
+    // clear all set data
+    SharedPreferences.getInstance().then((value) => value.clear());
+    //
+    showMessage(context: context, type: 'info', msg: 'Signed out successfully');
+    namedRemovedUntilRoute(context, login);
   }
 }
 

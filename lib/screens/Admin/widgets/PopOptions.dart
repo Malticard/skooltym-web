@@ -8,17 +8,16 @@ class PopOptions extends StatelessWidget {
     {
       "title": "Add new Staff",
       "icon": Icons.person_add_alt_1_rounded,
-      "route": Routes.newStaff,
     },
     {
       "title": "Add new Student",
       "icon": Icons.person_add_alt_1_rounded,
-      "route": Routes.newStudent,
+      // "route": Routes.newStudent,
     },
     {
       "title": "Add new Guardian",
       "icon": Icons.person_add_alt_1_rounded,
-      "route": Routes.newGuardian,
+      // "route": Routes.newGuardian,
     }
   ];
   @override

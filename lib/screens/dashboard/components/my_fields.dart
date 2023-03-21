@@ -1,10 +1,15 @@
 import '/exports/exports.dart';
 
-class MyFiles extends StatelessWidget {
+class MyFiles extends StatefulWidget {
   const MyFiles({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<MyFiles> createState() => _MyFilesState();
+}
+
+class _MyFilesState extends State<MyFiles> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;

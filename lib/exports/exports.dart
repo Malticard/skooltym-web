@@ -81,6 +81,7 @@ export 'package:currency_picker/currency_picker.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:file_picker/file_picker.dart';
 export 'package:internet_connection_checker/internet_connection_checker.dart';
+export 'package:art_sweetalert/art_sweetalert.dart';
 
 // models
 export '/models/PopUpOptions.dart';
@@ -116,6 +117,8 @@ export '/controllers/LightDarkController.dart';
 export '/controllers/StudentController.dart';
 export '/controllers/TitleController.dart';
 export '/controllers/OnlineCheckerController.dart';
+export '/controllers/DashboardController.dart';
+export '/controllers/OvertimeController.dart';
 
 // themes
 export '/Themes/Themes.dart';

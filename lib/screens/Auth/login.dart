@@ -22,13 +22,18 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // get saved appTheme
     context.read<ThemeController>().getTheme();
-
+    // retrive app state
+    context.read<SchoolController>().getSchoolData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    // check is app state is still intact.
+    if (context.read<SchoolController>().state['role'] != null) {
+      Routes.namedRemovedUntilRoute(context, Routes.home);
+    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark

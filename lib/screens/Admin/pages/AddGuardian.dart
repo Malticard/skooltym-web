@@ -86,7 +86,7 @@ class _AddGuardianState extends State<AddGuardian>
       duration: const Duration(milliseconds: 800),
     );
     guardianAnimationController!.forward();
-    fetchStudents().then((value) => setState(() => students = value));
+    // fetchStudents().then((value) => setState(() => students = value));
     super.initState();
   }
 
@@ -109,6 +109,11 @@ class _AddGuardianState extends State<AddGuardian>
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
+    //
+    context.read<StudentController>().studentLists();
+    //
+    debugPrint("${context.read<StudentController>().state}");
+
     Size size = MediaQuery.of(context).size;
     return BottomTopMoveAnimationView(
       animationController: guardianAnimationController!,
@@ -118,7 +123,7 @@ class _AddGuardianState extends State<AddGuardian>
         child: CommonFormFields(
           padding: padding,
           formFields: _formFields,
-          students: students,
+          students: context.read<StudentController>().state,
           formControllers: _formControllers,
           buttonText: "Save Guardian Details",
           onSubmit: () => _addGuardian(),
@@ -130,9 +135,8 @@ class _AddGuardianState extends State<AddGuardian>
 
 // adding guardian
   void _addGuardian() {
-    if (validateEmail(_formControllers[1].text, context) != false &&
-        validateTextControllers(_formControllers)) {
-      showProgress(context);
+    if (validateEmail(_formControllers[1].text, context) != false) {
+      showProgress(context, msg: "Adding new guardian in progress");
       _handleGuardian()
           .then((value) {
             print("Status code ${value.statusCode}");
