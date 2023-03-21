@@ -10,6 +10,15 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
+  var store;
+  @override
+  void initState() {
+    store = context.read<SchoolController>().state['role'] == 'Admin'
+        ? options
+        : financeViews;
+    super.initState();
+  }
+
   int selected = 0;
   @override
   Widget build(BuildContext context) {
@@ -22,21 +31,21 @@ class _SideMenuState extends State<SideMenu> {
           Expanded(
             child: ListView(
               children: List.generate(
-                options.length,
+                store.length,
                 (index) => DrawerListTile(
                   selected: selected == index,
-                  title: options[index]['title'],
-                  svgSrc: options[index]['icon'],
+                  title: store[index]['title'],
+                  svgSrc: store[index]['icon'],
                   press: () {
                     setState(() => selected = index);
                     // update page title
                     context
                         .read<TitleController>()
-                        .setTitle(options[index]['title']);
+                        .setTitle(store[index]['title']);
                     // update rendered page
                     context
                         .read<WidgetController>()
-                        .pushWidget(options[index]['page']);
+                        .pushWidget(store[index]['page']);
                   },
                 ),
               ),

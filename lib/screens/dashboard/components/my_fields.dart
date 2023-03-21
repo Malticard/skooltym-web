@@ -68,7 +68,7 @@ class MyFiles extends StatelessWidget {
   }
 }
 
-class FileInfoCardGridView extends StatelessWidget {
+class FileInfoCardGridView extends StatefulWidget {
   const FileInfoCardGridView({
     Key? key,
     this.crossAxisCount = 4,
@@ -79,9 +79,14 @@ class FileInfoCardGridView extends StatelessWidget {
   final double childAspectRatio;
 
   @override
+  State<FileInfoCardGridView> createState() => _FileInfoCardGridViewState();
+}
+
+class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: fetchDashboardMetaData(),
+        future: fetchDashboardMetaData(context),
         builder: (context, snapshot) {
           return snapshot.connectionState == ConnectionState.waiting
               ? Loader(
@@ -92,10 +97,10 @@ class FileInfoCardGridView extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: snapshot.data!.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
+                    crossAxisCount: widget.crossAxisCount,
                     crossAxisSpacing: defaultPadding,
                     mainAxisSpacing: defaultPadding,
-                    childAspectRatio: childAspectRatio,
+                    childAspectRatio: widget.childAspectRatio,
                   ),
                   itemBuilder: (context, index) =>
                       FileInfoCard(info: snapshot.data![index]),

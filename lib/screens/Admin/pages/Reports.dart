@@ -38,7 +38,7 @@ class _OvertimeReportsState extends State<OvertimeReports>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Overtime",
+            "Overtime Report",
             style: TextStyles(context).getTitleStyle(),
           ),
           SizedBox(

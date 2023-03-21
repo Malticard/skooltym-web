@@ -159,40 +159,40 @@ bool validateEmail(String email, BuildContext context) {
 }
 
 // build dashboard cards
-Widget buildBody(BuildContext context) {
-  Size size = MediaQuery.of(context).size;
-  return SizedBox(
-    width: size.width,
-    child: FutureBuilder(
-        future: fetchDashboardMetaData(),
-        builder: (context, snapshot) {
-          var data = snapshot.data ?? [];
-          return snapshot.connectionState == ConnectionState.waiting
-              ? const Center(child: Loader(text: "Dashboard"))
-              : snapshot.hasData
-                  ? Flex(
-                      direction: Axis.horizontal,
-                      children: List.generate(
-                        data.length,
-                        (index) => SizedBox(
-                          width: size.width * 0.123,
-                          height: size.width * 0.123,
-                          child: DashboardCard(
-                            label: data[index]['label'],
-                            value: data[index]['value'],
-                            icon: data[index]['icon'],
-                            color: data[index]['color'],
-                            last_updated: data[index]['last_updated'],
-                          ),
-                        ),
-                      ),
-                    )
-                  : const Center(
-                      child: Text("No Data"),
-                    );
-        }),
-  );
-}
+// Widget buildBody(BuildContext context) {
+//   Size size = MediaQuery.of(context).size;
+//   return SizedBox(
+//     width: size.width,
+//     child: FutureBuilder(
+//         future: fetchDashboardMetaData(),
+//         builder: (context, snapshot) {
+//           var data = snapshot.data ?? [];
+//           return snapshot.connectionState == ConnectionState.waiting
+//               ? const Center(child: Loader(text: "Dashboard"))
+//               : snapshot.hasData
+//                   ? Flex(
+//                       direction: Axis.horizontal,
+//                       children: List.generate(
+//                         data.length,
+//                         (index) => SizedBox(
+//                           width: size.width * 0.123,
+//                           height: size.width * 0.123,
+//                           child: DashboardCard(
+//                             label: data[index]['label'],
+//                             value: data[index]['value'],
+//                             icon: data[index]['icon'],
+//                             color: data[index]['color'],
+//                             last_updated: data[index]['last_updated'],
+//                           ),
+//                         ),
+//                       ),
+//                     )
+//                   : const Center(
+//                       child: Text("No Data"),
+//                     );
+//         }),
+//   );
+// }
 
 // sidebar data
 List<Map<String, dynamic>> options = [
@@ -232,7 +232,19 @@ List<Map<String, dynamic>> options = [
     'icon': "assets/icons/menu_setting.svg"
   },
 ];
-
+// finance routes
+List<Map<String, dynamic>> financeViews = [
+  {
+    "icon": "assets/icons/menu_dashbord.svg",
+    "title": "Dashboard",
+    "page": const Dashboard()
+  },
+  {
+    "icon": "assets/icons/menu_dashbord.svg",
+    "title": "Overtime",
+    "page": const OvertimeReports()
+  },
+];
 // valid text controllers
 bool validateTextControllers(List<TextEditingController> controllers) {
   var ct = controllers.where((element) => element.text.isEmpty).toList();
@@ -401,7 +413,8 @@ String handSanIntervals() {
 }
 
 // fetch dashboard meta data
-Future<List<Map<String, dynamic>>> fetchDashboardMetaData() async {
+Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
+    BuildContext context) async {
   // get students total
   int students = await computeStudentsTotal();
   var drops = await dropOffs();
@@ -437,7 +450,25 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData() async {
       "last_updated": "14:45"
     },
   ];
-  return dashboardData;
+  List<Map<String, dynamic>> financeData = [
+    {
+      "label": "CLEARED OVERTIME",
+      "value": overtimes.length,
+      "icon": "assets/icons/005-overtime.svg",
+      'color': Color.fromARGB(255, 50, 66, 95),
+      "last_updated": "14:45"
+    },
+    {
+      "label": "PENDING OVERTIME",
+      "value": overtimes.length,
+      "icon": "assets/icons/005-overtime.svg",
+      'color': Color.fromARGB(255, 50, 66, 95),
+      "last_updated": "14:45"
+    },
+  ];
+  return context.read<SchoolController>().state['role'] == 'Admin'
+      ? dashboardData
+      : financeData;
 }
 
 // logic to fetch a specific guardian from the scanners
