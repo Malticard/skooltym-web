@@ -48,27 +48,40 @@ class _CommonFormFieldsState extends State<CommonFormFields>
     // _controller = AnimationController(vsync: this,);
   }
 
-  String? _imageBytes;
+  var _cropController = CropController();
+  var _imageBytes;
   _handleImageUpload(int a) async {
-    var file = await FilePicker.platform.pickFiles(
-      dialogTitle: "Upload Picture",
+    FilePicker.platform.pickFiles(
+      dialogTitle: "${widget.formFields[a]['title']}",
       type: FileType.custom,
       allowedExtensions: ['jpg', 'png,', 'jpeg'],
-    );
-    // widget.formControllers[a].text = = file!.files.first.path;
-    setState(() {
-      _imageBytes = file!.files.first.path!;
-      widget.formControllers[a].text = _imageBytes!;
+    ).then((value) {
+      var file = value;
+
+      showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          child: CropSample(
+            image: File(file!.files.first.path!).readAsBytesSync(),
+            controller: _cropController,
+            onCrop: (v) {
+              setState(() {
+                _imageBytes = v;
+              });
+              //
+            },
+          ),
+        ),
+      );
     });
-    // debugPrint("File: ${file!.files.first}");
+    // widget.formControllers[a].text = = file!.files.first.pat
   }
 
-  ImageProvider<Object>? drawImage(String url) {
-    if (url == '' || url == null || url.isEmpty) {
+  ImageProvider<Object>? drawImage(var url) {
+    if (url == null || url.isEmpty) {
       return const AssetImage("assets/icons/001-profile.png");
-    } else {
-      return FileImage(File(url));
     }
+    return MemoryImage(url);
   }
 
   String drop = '';

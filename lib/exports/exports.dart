@@ -7,6 +7,7 @@ export 'dart:convert';
 export 'package:flutter/material.dart';
 export 'package:google_fonts/google_fonts.dart';
 export 'package:adaptive_theme/adaptive_theme.dart';
+export 'dart:typed_data';
 
 // constants
 export '/constants/constants.dart';
@@ -32,6 +33,7 @@ export '/screens/dashboard/dashboard_screen.dart';
 export '/screens/dashboard/components/chart.dart';
 export '/screens/dashboard/components/file_info_card.dart';
 export '/screens/dashboard/components/header.dart';
+export '/screens/Admin/pages/CroppingView.dart';
 export '/screens/dashboard/components/my_fields.dart';
 export '/screens/dashboard/components/recent_files.dart';
 export '/screens/dashboard/components/storage_details.dart';
@@ -77,6 +79,7 @@ export 'package:flutter_spinkit/flutter_spinkit.dart';
 export 'package:animations/animations.dart';
 export 'package:syncfusion_flutter_sliders/sliders.dart';
 export 'package:http/http.dart';
+export 'package:crop_your_image/crop_your_image.dart';
 export 'package:currency_picker/currency_picker.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:file_picker/file_picker.dart';

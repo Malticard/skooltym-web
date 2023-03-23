@@ -144,6 +144,7 @@ class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
 
   Future<StreamedResponse> _handleFormUpload() async {
     String uri = _formControllers[3].text.trim();
+
     //
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStaff));
     // =============================== form fields =======================
@@ -155,12 +156,15 @@ class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
         _formControllers[0].text.trim().split(" ")[1];
     request.fields['staff_contact'] = _formControllers[2].text;
     request.fields['staff_email'] = _formControllers[1].text.trim();
+    // --------------------------- form files ---------------------------
     request.fields['staff_role'] =
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
+    //
     request.files.add(MultipartFile('staff_profile_pic',
         File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
+    //
     request.fields['staff_password'] = _formControllers[6].text.trim();
     request.fields['staff_key[key]'] = "";
     // ===================================================================

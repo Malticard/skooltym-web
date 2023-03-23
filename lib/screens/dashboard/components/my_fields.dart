@@ -91,7 +91,7 @@ class FileInfoCardGridView extends StatefulWidget {
 class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   @override
   Widget build(BuildContext context) {
-    context.read<MainController>().fetchUpdates(context);
+    Provider.of<MainController>(context, listen: true).fetchUpdates(context);
     var dash = context.read<MainController>().dashboardData;
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),

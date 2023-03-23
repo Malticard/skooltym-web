@@ -173,8 +173,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                          top: size.height * 0.053,
-                          bottom: size.height * 0.053,
+                          top: size.height * 0.13,
+                          bottom: size.height * 0.13,
                           right: size.width / 17,
                           left: size.width / 17,
                         ),
