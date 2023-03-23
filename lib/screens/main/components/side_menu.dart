@@ -23,6 +23,7 @@ class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      key: context.read<MainController>().scaffoldKey,
       child: Column(
         children: [
           DrawerHeader(

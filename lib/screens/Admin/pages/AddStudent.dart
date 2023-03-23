@@ -14,22 +14,22 @@ class AddStudent extends StatefulWidget {
 // form data
 final List<Map<String, dynamic>> _formFields = [
   {
-    "title": "Full Name *",
+    "title": "Firstname *",
     "hint": "e.g John",
+    "password": false,
+    'icon': Icons.person_outlined
+  },
+  {
+    "title": "Lastname *",
+    "hint": "e.g Doe",
     "password": false,
     'icon': Icons.person_2_outlined
   },
   {
-    "title": "Email*",
-    "hint": "e.g example@gmail.com",
+    "title": "Othername*",
+    "hint": "e.g Paul",
     "password": false,
-    'icon': Icons.email_outlined
-  },
-  {
-    "title": "Phone*",
-    "hint": "e.g 07xxxx-xx",
-    "password": false,
-    'icon': Icons.phone_outlined
+    'icon': Icons.person_3_outlined
   },
   {'title': 'Student Profile', 'profile': 5},
   {

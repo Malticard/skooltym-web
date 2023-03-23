@@ -105,41 +105,7 @@ class _OvertimeReportsState extends State<OvertimeReports>
         DataCell(Text(fileInfo.size!)),
         DataCell(Text("Pending")),
         if (context.read<SchoolController>().state['role'] == 'Finance')
-          DataCell(buildActionButtons(i)),
-      ],
-    );
-  }
-
-  // build Action Buttons
-  Widget buildActionButtons(int id) {
-    return Row(
-      children: [
-        TextButton(
-          onPressed: () {},
-          child: Icon(
-            Icons.edit,
-            color: Colors.white,
-          ),
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          ),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        TextButton(
-          onPressed: () {
-            showAppDialog(context,
-                title:
-                    "Are you sure you want to delete ${demoRecentFiles[id].title}?");
-          },
-          child: Icon(Icons.delete_outline_rounded, color: Colors.white),
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.red,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          ),
-        ),
+          DataCell(buildActionButtons("i", context)),
       ],
     );
   }

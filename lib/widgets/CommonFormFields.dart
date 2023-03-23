@@ -57,22 +57,29 @@ class _CommonFormFieldsState extends State<CommonFormFields>
       allowedExtensions: ['jpg', 'png,', 'jpeg'],
     ).then((value) {
       var file = value;
-
-      showDialog(
-        context: context,
-        builder: (context) => Dialog(
-          child: CropSample(
-            image: File(file!.files.first.path!).readAsBytesSync(),
-            controller: _cropController,
-            onCrop: (v) {
-              setState(() {
-                _imageBytes = v;
-              });
-              //
-            },
-          ),
-        ),
-      );
+      setState(() {
+        _imageBytes = File(file!.files.first.path!).readAsBytesSync();
+        widget.formControllers[a].text = file.files.first.path!;
+      });
+      // showDialog(
+      //   context: context,
+      //   builder: (context) => Dialog(
+      //     child: SizedBox(
+      //       // width: MediaQuery.of(context).size.width / 4,
+      //       // height: MediaQuery.of(context).size.width / 4,
+      //       child: CropSample(
+      //         image: File(file!.files.first.path!).readAsBytesSync(),
+      //         controller: _cropController,
+      //         onCrop: (v) {
+      //           setState(() {
+      //             _imageBytes = v;
+      //           });
+      //           //
+      //         },
+      //       ),
+      //     ),
+      //   ),
+      // );
     });
     // widget.formControllers[a].text = = file!.files.first.pat
   }

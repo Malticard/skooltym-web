@@ -90,8 +90,26 @@ class FileInfoCardGridView extends StatefulWidget {
 
 class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   @override
+  void initState() {
+    Provider.of<MainController>(context, listen: false).fetchUpdates(context);
+    super.initState();
+  }
+
+  //
+  @override
+  void didChangeDependencies() {
+    Provider.of<MainController>(context, listen: false).fetchUpdates(context);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    Provider.of<MainController>(context, listen: false).fetchUpdates(context);
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Provider.of<MainController>(context, listen: true).fetchUpdates(context);
     var dash = context.read<MainController>().dashboardData;
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
@@ -103,7 +121,13 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
         mainAxisSpacing: defaultPadding,
         childAspectRatio: widget.childAspectRatio,
       ),
-      itemBuilder: (context, index) => FileInfoCard(info: dash[index]),
+      itemBuilder: (context, index) => DashboardCard(
+        label: dash[index]['label'],
+        value: dash[index]['value'],
+        icon: dash[index]['icon'],
+        color: dash[index]['color'],
+        last_updated: dash[index]['last_updated'],
+      ), //FileInfoCard(info: dash[index]),
     );
   }
 }

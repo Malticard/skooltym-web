@@ -202,13 +202,46 @@ bool validateEmail(String email, BuildContext context) {
   return isValid;
 }
 
+// action buttos
+// build Action Buttons
+Widget buildActionButtons(String text, BuildContext context) {
+  return Row(
+    children: [
+      TextButton(
+        onPressed: () {},
+        child: Icon(
+          Icons.edit,
+          color: Colors.white,
+        ),
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.blue,
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        ),
+      ),
+      SizedBox(
+        width: 10,
+      ),
+      TextButton(
+        onPressed: () {
+          showAppDialog(context,
+              title: "Are you sure you want to delete $text?");
+        },
+        child: Icon(Icons.delete_outline_rounded, color: Colors.white),
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.red,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        ),
+      ),
+    ],
+  );
+}
 // build dashboard cards
 // Widget buildBody(BuildContext context) {
 //   Size size = MediaQuery.of(context).size;
 //   return SizedBox(
 //     width: size.width,
 //     child: FutureBuilder(
-//         future: fetchDashboardMetaData(),
+//         // future: fetchDashboardMetaData(),
 //         builder: (context, snapshot) {
 //           var data = snapshot.data ?? [];
 //           return snapshot.connectionState == ConnectionState.waiting
@@ -253,12 +286,17 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/staff.svg",
     "title": "Staffs",
-    "page": const AddStaff(),
+    "page": const Staff(),
   },
   {
     "title": "Guardians",
     "page": const ChangePassword(),
     'icon': "assets/icons/guardian.svg"
+  },
+  {
+    "icon": "assets/icons/staff.svg",
+    "title": "Classes",
+    "page": const Staff(),
   },
   {
     "title": "Pending Overtimes",

@@ -17,7 +17,9 @@ class DashboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: color,
+      color: Theme.of(context).brightness == Brightness.dark
+          ? color!.withOpacity(0.45)
+          : color,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -41,8 +43,8 @@ class DashboardCard extends StatelessWidget {
               child: SvgPicture.asset(
                 icon,
                 color: Colors.white60,
-                width: MediaQuery.of(context).size.width * 0.14,
-                height: MediaQuery.of(context).size.width * 0.14,
+                width: MediaQuery.of(context).size.width * 0.044,
+                height: MediaQuery.of(context).size.width * 0.044,
               ),
             ),
           ),

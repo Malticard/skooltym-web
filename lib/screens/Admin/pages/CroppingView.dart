@@ -3,7 +3,7 @@ import '/exports/exports.dart';
 class CropSample extends StatefulWidget {
   final Uint8List image;
   final CropController controller;
-  final void Function(Uint8List) onCrop;
+  final ValueChanged<Uint8List> onCrop;
   const CropSample(
       {Key? key,
       required this.image,
@@ -32,8 +32,8 @@ class _CropSampleState extends State<CropSample> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width,
-      height: size.height / 2,
+      width: size.width / 2,
+      height: size.width / 2,
       child: Center(
         child: Visibility(
           visible: !_isCropping,
@@ -47,43 +47,42 @@ class _CropSampleState extends State<CropSample> {
                     child: Stack(
                       children: [
                         if (widget.image.isNotEmpty) ...[
-                          Crop(
-                            controller: widget.controller,
-                            image: widget.image,
-                            onCropped: (croppedData) {
-                              setState(() {
-                                _croppedData = croppedData;
-                                _isCropping = false;
-                              });
-                            },
-                            withCircleUi: _isCircleUi,
-                            onStatusChanged: (status) => setState(() {
-                              _statusText = <CropStatus, String>{
-                                    CropStatus.nothing:
-                                        'Crop has no image data',
-                                    CropStatus.loading:
-                                        'Crop is now loading given image',
-                                    CropStatus.ready: 'Crop is now ready!',
-                                    CropStatus.cropping:
-                                        'Crop is now cropping image',
-                                  }[status] ??
-                                  '';
-                            }),
-                            initialSize: 0.5,
-                            maskColor: _isSumbnail ? Colors.white : null,
-                            cornerDotBuilder: (size, edgeAlignment) =>
-                                const SizedBox.shrink(),
-                            interactive: true,
-                            fixArea: true,
-                            radius: 20,
-                            initialAreaBuilder: (rect) {
-                              return Rect.fromLTRB(
-                                rect.left + 24,
-                                rect.top + 24,
-                                rect.right - 24,
-                                rect.bottom - 24,
-                              );
-                            },
+                          SizedBox(
+                            // width: MediaQuery.of(context).size.width / 4,
+                            // height: MediaQuery.of(context).size.width / 4,
+                            child: Crop(
+                              controller: widget.controller,
+                              image: widget.image,
+                              onCropped: widget.onCrop,
+                              withCircleUi: _isCircleUi,
+                              onStatusChanged: (status) => setState(() {
+                                _statusText = <CropStatus, String>{
+                                      CropStatus.nothing:
+                                          'Crop has no image data',
+                                      CropStatus.loading:
+                                          'Crop is now loading given image',
+                                      CropStatus.ready: 'Crop is now ready!',
+                                      CropStatus.cropping:
+                                          'Crop is now cropping image',
+                                    }[status] ??
+                                    '';
+                              }),
+                              initialSize: 0.5,
+                              maskColor: _isSumbnail ? Colors.white : null,
+                              cornerDotBuilder: (size, edgeAlignment) =>
+                                  const SizedBox.shrink(),
+                              interactive: true,
+                              fixArea: true,
+                              radius: 20,
+                              initialAreaBuilder: (rect) {
+                                return Rect.fromLTRB(
+                                  rect.left + 24,
+                                  rect.top + 24,
+                                  rect.right - 24,
+                                  rect.bottom - 24,
+                                );
+                              },
+                            ),
                           ),
                           IgnorePointer(
                             child: Padding(

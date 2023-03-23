@@ -14,7 +14,7 @@ class _DashboardState extends State<Dashboard> {
       children: [
         const MyFiles(),
         const SizedBox(height: defaultPadding),
-        const Data_Table(),
+        // const Data_Table(),
         // if (Responsive.isMobile(context))
         //   const SizedBox(height: defaultPadding),
         // if (Responsive.isMobile(context)) const StarageDetails(),

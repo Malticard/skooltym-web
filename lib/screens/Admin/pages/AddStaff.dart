@@ -50,22 +50,6 @@ class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
         "Finance",
       ]
     },
-    {
-      "title": "Password*",
-      "hint": "e.g *********",
-      "password": true,
-      'icon': Icons.lock_outline,
-      'enableSuffix': true,
-      'suffix': Icons.visibility_off,
-    },
-    {
-      "title": "Confirm Password*",
-      "hint": "e.g *********",
-      "password": true,
-      'icon': Icons.lock_outline,
-      'enableSuffix': true,
-      'suffix': Icons.visibility_off,
-    },
   ];
 
   @override
@@ -96,11 +80,7 @@ class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
     return BottomTopMoveAnimationView(
       animationController: staffAnimationController!,
       child: Padding(
-        padding: EdgeInsets.only(
-            left: size.width * 0.13,
-            // top: size.width * 0.03,
-            right: size.width * 0.13,
-            bottom: size.width * 0.02),
+        padding: padding,
         child: CommonFormFields(
           padding: padding,
           formFields: formFields,
@@ -165,7 +145,7 @@ class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
         File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
     //
-    request.fields['staff_password'] = _formControllers[6].text.trim();
+    request.fields['staff_password'] = "qwerty";
     request.fields['staff_key[key]'] = "";
     // ===================================================================
     var response = request.send();
