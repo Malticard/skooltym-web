@@ -1,4 +1,4 @@
-# skooltym_admin
+# Skooltym web version
 
 A new Flutter project.
 

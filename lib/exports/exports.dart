@@ -135,12 +135,16 @@ export '/screens/Admin/pages/AddGuardian.dart';
 export '/screens/Admin/pages/AddStudent.dart';
 export '/screens/Admin/pages/Reports.dart';
 export '/screens/Admin/pages/Staffs.dart';
+export '/screens/Admin/pages/Student.dart';
+export '/screens/Admin/pages/Classes.dart';
+export '/screens/Admin/pages/Guardians.dart';
 export '/screens/Admin/pages/AddStaff.dart';
+export '/screens/Admin/pages/AddClass.dart';
 export '/screens/Admin/settings/AppSettings.dart';
 export '/screens/Admin/settings/SystemSettings.dart';
 export '/screens/Admin/settings/privacy_policy.dart';
 export '/screens/Admin/settings/about.dart';
-export '../screens/dashboard/dashboard.dart';
+export '/screens/dashboard/dashboard.dart';
 
 // --> admin widgets
 export '/screens/Admin/widgets/PopOptions.dart';

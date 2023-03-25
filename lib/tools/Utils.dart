@@ -281,7 +281,7 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/student.svg",
     "title": "Students",
-    "page": const AddStudent()
+    "page": const ViewStudents()
   },
   {
     "icon": "assets/icons/staff.svg",
@@ -290,13 +290,13 @@ List<Map<String, dynamic>> options = [
   },
   {
     "title": "Guardians",
-    "page": const ChangePassword(),
+    "page": const ViewGuardians(),
     'icon': "assets/icons/guardian.svg"
   },
   {
     "icon": "assets/icons/staff.svg",
     "title": "Classes",
-    "page": const Staff(),
+    "page": const ViewClasses(),
   },
   {
     "title": "Pending Overtimes",
@@ -306,7 +306,7 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/menu_store.svg",
     "title": "Cleared Overtimes",
-    "page": const AddGuardian(),
+    "page": const OvertimeReports(),
   },
   {
     "title": "Drop Offs",
@@ -315,7 +315,7 @@ List<Map<String, dynamic>> options = [
   },
   {
     "title": "Pick Ups",
-    "page": const ChangePassword(),
+    "page": const OvertimeReports(),
     'icon': "assets/icons/menu_tran.svg"
   },
   {
@@ -563,7 +563,8 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "last_updated": "14:45"
     },
   ];
-  return context.watch<SchoolController>().state['role'] == 'Admin'
+  return Provider.of<SchoolController>(context, listen: false).state['role'] ==
+          'Admin'
       ? dashboardData
       : financeData;
 }

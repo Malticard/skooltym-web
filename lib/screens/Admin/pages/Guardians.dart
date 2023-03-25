@@ -2,14 +2,14 @@
 
 import '/exports/exports.dart';
 
-class Staff extends StatefulWidget {
-  const Staff({super.key});
+class ViewGuardians extends StatefulWidget {
+  const ViewGuardians({super.key});
 
   @override
-  State<Staff> createState() => _StaffState();
+  State<ViewGuardians> createState() => _ViewGuardiansState();
 }
 
-class _StaffState extends State<Staff> {
+class _ViewGuardiansState extends State<ViewGuardians> {
   @override
   void initState() {
     super.initState();
@@ -21,7 +21,7 @@ class _StaffState extends State<Staff> {
     super.didChangeDependencies();
   }
 
-  List<String> staffs = ["Staff Name", "Email", "Gender", "Actions"];
+  List<String> staffs = ["Guardian Name", "Address", "Gender", "Actions"];
   DataRow _dataRow(StaffModel staffModel, int i) {
     return DataRow(
       cells: [
@@ -62,13 +62,13 @@ class _StaffState extends State<Staff> {
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 4,
                             height: MediaQuery.of(context).size.width / 3,
-                            child: AddStaff(),
+                            child: AddGuardian(),
                           ),
                         );
                       });
                 },
                 icon: Icon(Icons.add),
-                label: Text("Add Staff"),
+                label: Text("Add Guardian"),
               ),
             ],
           ),

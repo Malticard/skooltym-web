@@ -8,8 +8,8 @@ class AddStaff extends StatefulWidget {
   State<AddStaff> createState() => _AddStaffState();
 }
 
-class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
-  AnimationController? staffAnimationController;
+class _AddStaffState extends State<AddStaff>  {
+
   // form details
   static final List<Map<String, dynamic>> formFields = [
     {
@@ -52,17 +52,7 @@ class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
     },
   ];
 
-  @override
-  void initState() {
-    staffAnimationController = AnimationController(
-      vsync: this,
-      value: 0,
-      duration: const Duration(milliseconds: 950),
-    );
-    staffAnimationController!.forward();
-    super.initState();
-  }
-
+  
   final List<TextEditingController> _formControllers =
       List.generate(formFields.length, (index) => TextEditingController());
 
@@ -77,54 +67,51 @@ class _AddStaffState extends State<AddStaff> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     //
     Size size = MediaQuery.of(context).size;
-    return BottomTopMoveAnimationView(
-      animationController: staffAnimationController!,
-      child: Padding(
+    return Padding(
+      padding: padding,
+      child: CommonFormFields(
         padding: padding,
-        child: CommonFormFields(
-          padding: padding,
-          formFields: formFields,
-          numberOfDropDowns: 2,
-          formControllers: _formControllers,
-          buttonText: "Submit Staff Details",
-          errorMsgs: errorFields,
-          onSubmit: () {
-            if (validateEmail(_formControllers[1].text, context) != false &&
-                validateTextControllers(_formControllers)) {
-              if (_formControllers[6].text == _formControllers[7].text) {
-                // debugPrint("Result => $data");
-                _handleFormUpload()
-                    .then(
-                      (value) => showSuccessDialog(
-                          _formControllers[0].text.trim().split(" ")[1],
-                          context),
-                    )
-                    .catchError(
-                      (onError) => () => showMessage(
-                          context: context,
-                          msg: 'An error occurred!! ',
-                          type: 'danger'),
-                    )
-                    .whenComplete(() => showMessage(
-                          context: context,
-                          type: 'success',
-                          msg: "Added new staff successfully",
-                        ));
-              } else {
-                setState(() {
-                  errorFields[6] = "Password mismatch";
-                });
-              }
+        formFields: formFields,
+        numberOfDropDowns: 2,
+        formControllers: _formControllers,
+        buttonText: "Submit Staff Details",
+        errorMsgs: errorFields,
+        onSubmit: () {
+          if (validateEmail(_formControllers[1].text, context) != false &&
+              validateTextControllers(_formControllers)) {
+            if (_formControllers[6].text == _formControllers[7].text) {
+              // debugPrint("Result => $data");
+              _handleFormUpload()
+                  .then(
+                    (value) => showSuccessDialog(
+                        _formControllers[0].text.trim().split(" ")[1],
+                        context),
+                  )
+                  .catchError(
+                    (onError) => () => showMessage(
+                        context: context,
+                        msg: 'An error occurred!! ',
+                        type: 'danger'),
+                  )
+                  .whenComplete(() => showMessage(
+                        context: context,
+                        type: 'success',
+                        msg: "Added new staff successfully",
+                      ));
+            } else {
+              setState(() {
+                errorFields[6] = "Password mismatch";
+              });
             }
-          },
-        ),
+          }
+        },
       ),
     );
   }
 
   Future<StreamedResponse> _handleFormUpload() async {
     String uri = _formControllers[3].text.trim();
-
+  debugPrint("handling form upload with $uri");
     //
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStaff));
     // =============================== form fields =======================

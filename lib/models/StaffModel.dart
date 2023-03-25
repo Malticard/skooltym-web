@@ -35,7 +35,7 @@ class StaffModel {
   final String staffSchool;
   final String staffFname;
   final String staffLname;
-  final int staffContact;
+  final String staffContact;
   final String staffEmail;
   final String staffRole;
   final String staffGender;

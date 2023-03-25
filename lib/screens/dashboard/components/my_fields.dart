@@ -91,7 +91,7 @@ class FileInfoCardGridView extends StatefulWidget {
 class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   @override
   void initState() {
-    context.watch<MainController>().fetchUpdates(context);
+    Provider.of<MainController>(context, listen: false).fetchUpdates(context);
     super.initState();
   }
 
