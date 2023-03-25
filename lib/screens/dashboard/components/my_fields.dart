@@ -50,7 +50,7 @@ class _MyFilesState extends State<MyFiles> {
                     ),
                   ),
                   onPressed: () =>
-                      context.read<WidgetController>().pushWidget(Dashboard()),
+                      context.watch<WidgetController>().pushWidget(Dashboard()),
                   icon: const Icon(Icons.refresh),
                   label: const Text("Refresh"),
                 ),
@@ -91,26 +91,19 @@ class FileInfoCardGridView extends StatefulWidget {
 class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   @override
   void initState() {
-    Provider.of<MainController>(context, listen: false).fetchUpdates(context);
+    context.watch<MainController>().fetchUpdates(context);
     super.initState();
-  }
-
-  //
-  @override
-  void didChangeDependencies() {
-    Provider.of<MainController>(context, listen: false).fetchUpdates(context);
-    super.didChangeDependencies();
   }
 
   @override
   void didUpdateWidget(oldWidget) {
-    Provider.of<MainController>(context, listen: false).fetchUpdates(context);
+    context.watch<MainController>().fetchUpdates(context);
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
-    var dash = context.read<MainController>().dashboardData;
+    var dash = context.watch<MainController>().dashboardData;
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,

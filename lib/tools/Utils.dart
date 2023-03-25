@@ -563,7 +563,7 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "last_updated": "14:45"
     },
   ];
-  return context.read<SchoolController>().state['role'] == 'Admin'
+  return context.watch<SchoolController>().state['role'] == 'Admin'
       ? dashboardData
       : financeData;
 }
