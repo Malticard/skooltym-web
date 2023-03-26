@@ -13,7 +13,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //======= header section ========
           Padding(

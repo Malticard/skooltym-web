@@ -1,14 +1,14 @@
 // import 'package:flutter/src/animation/animation_controller.dart';
 import '/exports/exports.dart';
 
-class OvertimeReports extends StatefulWidget {
-  const OvertimeReports({super.key});
+class ViewPickUps extends StatefulWidget {
+  const ViewPickUps({super.key});
 
   @override
-  State<OvertimeReports> createState() => _OvertimeReportsState();
+  State<ViewPickUps> createState() => _ViewPickUpsState();
 }
 
-class _OvertimeReportsState extends State<OvertimeReports>
+class _ViewPickUpsState extends State<ViewPickUps>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -22,6 +22,40 @@ class _OvertimeReportsState extends State<OvertimeReports>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  DataRow _dataRow(PickUpModel pickUp, int i) {
+    return DataRow(
+      cells: [
+        DataCell(
+          Row(
+            children: [
+              Image.asset(
+                StaffIcons.profile,
+                height: 45,
+                width: 45,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: Text(pickUp.studentName),
+              ),
+            ],
+          ),
+        ),
+
+        // DataCell(
+        //   Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+        //     child: Text(pickUp.studentName),
+        //   ),
+        // ),
+        DataCell(Text(pickUp.pickedBy)),
+        DataCell(Text(pickUp.pickUpTime)),
+        DataCell(Text(pickUp.authorizedBy)),
+        // DataCell(buildActionButtons(
+        //     "${dropOff.guardianFname} ${dropOff.guardianLname}", context)),
+      ],
+    );
   }
 
   @override
@@ -51,28 +85,22 @@ class _OvertimeReportsState extends State<OvertimeReports>
               minWidth: size.width * 0.06,
               columns: [
                 DataColumn(
-                  label: Text("Guardian Name"),
+                  label: Text("Student Name"),
                 ),
                 DataColumn(
-                  label: Text("Date"),
+                  label: Text("Class"),
                 ),
                 DataColumn(
-                  label: Text("Amount "),
+                  label: Text("Cleared by"),
                 ),
                 DataColumn(
-                  label: Text("Staff"),
+                  label: Text("Time Of PickOff"),
                 ),
-                DataColumn(
-                  label: Text("Status"),
-                ),
-                if (context.read<SchoolController>().state['role'] == 'Finance')
-                  DataColumn(
-                    label: Text("Action"),
-                  ),
               ],
               rows: List.generate(
                 demoRecentFiles.length,
-                (index) => overtimeDataRow(demoRecentFiles[index], index),
+                (index) => _dataRow(
+                    context.watch<MainController>().pickUpData[index], index),
               ),
             ),
           ),
@@ -103,9 +131,6 @@ class _OvertimeReportsState extends State<OvertimeReports>
         DataCell(Text(fileInfo.date!)),
         DataCell(Text(fileInfo.size!)),
         DataCell(Text(fileInfo.size!)),
-        DataCell(Text("Pending")),
-        if (context.read<SchoolController>().state['role'] == 'Finance')
-          DataCell(buildActionButtons("i", context)),
       ],
     );
   }

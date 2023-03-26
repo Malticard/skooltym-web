@@ -4,12 +4,14 @@ class Data_Table extends StatefulWidget {
   final List<DataColumn>? columns;
   final List<DataRow>? rows;
   final Widget? header;
+  final Widget? empty;
   final String? title;
   const Data_Table({
     Key? key,
     this.columns,
     this.header,
     this.title,
+    this.empty,
     this.rows,
   }) : super(key: key);
 
@@ -23,7 +25,7 @@ class _Data_TableState extends State<Data_Table> {
     Size size = MediaQuery.of(context).size;
 
     return Container(
-      height: size.width / 2,
+      height: size.width / 3,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: Theme.of(context).canvasColor,
@@ -43,8 +45,20 @@ class _Data_TableState extends State<Data_Table> {
               height: size.width / 4,
               child: DataTable2(
                 columnSpacing: defaultPadding,
-                minWidth: size.width * 0.06,
+                dividerThickness:
+                    1, // this one will be ignored if [border] is set above
+                bottomMargin: 10,
+                minWidth: 900,
+                sortColumnIndex: 2,
+                sortAscending: false,
+                sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
+                sortArrowAnimationDuration: const Duration(milliseconds: 500),
                 columns: widget.columns ?? [],
+                empty: widget.empty ?? Center(
+                    child: Container(
+                        padding: const EdgeInsets.all(20),
+                        color: Colors.grey[200],
+                        child: const NoDataWidget())),
                 rows: widget.rows ?? [],
               ),
             ),

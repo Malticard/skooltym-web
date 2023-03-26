@@ -139,6 +139,8 @@ export '/screens/Admin/pages/Student.dart';
 export '/screens/Admin/pages/Classes.dart';
 export '/screens/Admin/pages/Guardians.dart';
 export '/screens/Admin/pages/AddStaff.dart';
+export '/screens/Admin/pages/ViewDropOff.dart';
+export '/screens/Admin/pages/ViewPickUps.dart';
 export '/screens/Admin/pages/AddClass.dart';
 export '/screens/Admin/settings/AppSettings.dart';
 export '/screens/Admin/settings/SystemSettings.dart';

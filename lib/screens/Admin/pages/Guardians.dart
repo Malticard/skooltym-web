@@ -17,31 +17,31 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).staffUpdate();
+    Provider.of<MainController>(context).newGuardians();
     super.didChangeDependencies();
   }
 
   List<String> staffs = ["Guardian Name", "Address", "Gender", "Actions"];
-  DataRow _dataRow(StaffModel staffModel, int i) {
+  DataRow _dataRow(Guardians guardians, int i) {
     return DataRow(
       cells: [
         DataCell(
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Text(staffModel.staffFname),
+            child: Text(guardians.guardianFname),
           ),
         ),
-        DataCell(Text(staffModel.staffEmail)),
-        DataCell(Text(staffModel.staffGender)),
+        DataCell(Text(guardians.guardianEmail)),
+        DataCell(Text(guardians.guardianGender)),
         DataCell(buildActionButtons(
-            "${staffModel.staffFname} ${staffModel.staffLname}", context)),
+            "${guardians.guardianFname} ${guardians.guardianLname}", context)),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<MainController>(context).staffUpdate();
+    Provider.of<MainController>(context).newGuardians();
     return Center(
       child: Data_Table(
         header: Padding(
@@ -81,11 +81,14 @@ class _ViewGuardiansState extends State<ViewGuardians> {
             ),
           ),
         ),
-        rows: List.generate(
-          context.watch<MainController>().staffData.length,
-          (index) =>
-              _dataRow(context.watch<MainController>().staffData[index], index),
-        ),
+        empty: Text("No guardians registered yet.."),
+        rows: context.read<MainController>().guardians.length < 1
+            ? []
+            : List.generate(
+                context.watch<MainController>().guardians.length,
+                (index) => _dataRow(
+                    context.watch<MainController>().guardians[index], index),
+              ),
       ),
     );
   }

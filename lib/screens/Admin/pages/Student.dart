@@ -17,31 +17,33 @@ class _ViewStudentsState extends State<ViewStudents> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).staffUpdate();
+    Provider.of<MainController>(context).getAllStudents();
     super.didChangeDependencies();
   }
 
   List<String> staffs = ["Student Name", "Class", "Gender", "Actions"];
-  DataRow _dataRow(StaffModel staffModel, int i) {
+  DataRow _dataRow(StudentModel studentModel, int i) {
     return DataRow(
       cells: [
         DataCell(
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Text(staffModel.staffFname),
+            child: Text(
+                "${studentModel.studentFname} ${studentModel.studentLname}"),
           ),
         ),
-        DataCell(Text(staffModel.staffEmail)),
-        DataCell(Text(staffModel.staffGender)),
+        DataCell(Text(studentModel.studentClass)),
+        DataCell(Text(studentModel.studentGender)),
         DataCell(buildActionButtons(
-            "${staffModel.staffFname} ${staffModel.staffLname}", context)),
+            "${studentModel.studentFname} ${studentModel.studentLname}",
+            context)),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<MainController>(context).staffUpdate();
+    Provider.of<MainController>(context).getAllStudents();
     return Center(
       child: Data_Table(
         header: Padding(
@@ -61,7 +63,7 @@ class _ViewStudentsState extends State<ViewStudents> {
                         return Dialog(
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 3,
+                            height: MediaQuery.of(context).size.width / 2.6,
                             child: AddStudent(),
                           ),
                         );
@@ -82,9 +84,9 @@ class _ViewStudentsState extends State<ViewStudents> {
           ),
         ),
         rows: List.generate(
-          context.watch<MainController>().staffData.length,
+          context.watch<MainController>().students.length,
           (index) =>
-              _dataRow(context.watch<MainController>().staffData[index], index),
+              _dataRow(context.watch<MainController>().students[index], index),
         ),
       ),
     );

@@ -3,9 +3,11 @@
         "ARGB",
         "dashbord",
         "dropoff",
+        "fname",
         "Focuse",
         "prefs",
         "Starage",
-        "Sumbnail"
+        "Sumbnail",
+        "vsync"
     ]
 }

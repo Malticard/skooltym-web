@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // get saved appTheme
     context.read<ThemeController>().getTheme();
-
+    context.read<OnlineCheckerController>().checkOnline();
     super.initState();
   }
 
@@ -281,10 +281,15 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: padding.copyWith(left: 30, right: 30),
             buttonText: "Sign in", //AppLocalizations(context).of("login"),
             onTap: () {
+              // if (context.watch<OnlineCheckerController>().state == true) {
               if (_allValidation() && formKey.currentState!.validate()) {
                 loginUser(
                     context, _emailController.text, _passwordController.text);
               }
+              // } else {
+              //   showMessage(
+              //       context: context, msg: "Your offline..", type: 'warning');
+              // }
             },
           ),
           Space(

@@ -112,14 +112,14 @@ void showAppDialog(BuildContext context,
 }
 
 // return students
-Future<List<Students>> fetchStudents() async {
+Future<List<StudentModel>> fetchStudents() async {
   var res = await Client().get(Uri.parse(AppUrls.students));
-  return studentsFromJson(res.body);
+  return studentModelFromJson(res.body);
 }
 
-Future<Students> getSpecificStudent(String n) async {
+Future<StudentModel> getSpecificStudent(String n) async {
   var st = await fetchStudents();
-  return st.firstWhere((element) => element.name == n);
+  return st.firstWhere((element) => element.studentFname == n);
 }
 
 // show successDialog
@@ -300,7 +300,7 @@ List<Map<String, dynamic>> options = [
   },
   {
     "title": "Pending Overtimes",
-    "page": const ChangePassword(),
+    "page": const OvertimeReports(),
     'icon': "assets/icons/menu_store.svg"
   },
   {
@@ -310,12 +310,12 @@ List<Map<String, dynamic>> options = [
   },
   {
     "title": "Drop Offs",
-    "page": const OvertimeReports(),
+    "page": const ViewDropOffs(),
     'icon': "assets/icons/menu_tran.svg"
   },
   {
     "title": "Pick Ups",
-    "page": const OvertimeReports(),
+    "page": const ViewPickUps(),
     'icon': "assets/icons/menu_tran.svg"
   },
   {
@@ -577,7 +577,7 @@ Future<Map<String, dynamic>> fetchSpecificGuardian(String id) async {
 // get the coresponding student for this guardian
   var student =
       await Client().get(Uri.parse(AppUrls.getStudent + guardianData.student));
-  var studentData = studentModelFromJson(student.body);
+  var studentData = studentModelFromJson(student.body)[0];
   //  fetch the corresponding guardians or other guardians
   var otherGuardians = await Client()
       .get(Uri.parse(AppUrls.getOtherGaurdians + guardianData.student));

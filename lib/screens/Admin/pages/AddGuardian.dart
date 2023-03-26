@@ -108,16 +108,23 @@ class _AddGuardianState extends State<AddGuardian>
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    context.read<MainController>().getAllStudents();
+    context.watch<MainController>().getAllStudents();
     // List<Students> _students =
 
     Size size = MediaQuery.of(context).size;
     return BottomTopMoveAnimationView(
       animationController: guardianAnimationController!,
       child: Padding(
-        padding:
-            EdgeInsets.only(left: size.width * 0.10, right: size.width * 0.10),
-        child: CommonFormFields(
+        padding: padding,
+        child: //Expanded(
+            //child: SingleChildScrollView(
+            // child: Column(
+            //   children: [
+            //     Text(
+            //       "Capture Guardian Details",
+            //       style: TextStyles(context).getRegularStyle(),
+            //     ),
+            CommonFormFields(
           padding: padding,
           formFields: _formFields,
           students: context.read<MainController>().students,
@@ -126,6 +133,10 @@ class _AddGuardianState extends State<AddGuardian>
           onSubmit: () => _addGuardian(),
           errorMsgs: errorFields,
         ),
+        //     ],
+        //   ),
+        // ),
+        // ),
       ),
     );
   }

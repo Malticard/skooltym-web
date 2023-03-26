@@ -7,7 +7,7 @@ class CommonFormFields extends StatefulWidget {
   final List<Map<String, dynamic>> formFields;
   final List<String> errorMsgs;
   final List<TextEditingController> formControllers;
-  final List<Students>? students;
+  final List<StudentModel>? students;
   final int? numberOfDropDowns;
   final String buttonText;
   final VoidCallback? onSubmit;
@@ -229,7 +229,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                     widget.students!.length,
                                     (x) => DropdownMenuEntry<String>(
                                         label:
-                                            "${widget.students![x].student_fname} ${widget.students![x].student_lname}",
+                                            "${widget.students![x].studentFname} ${widget.students![x].studentLname}",
                                         value: "${widget.students![x].id}"),
                                   ),
                                 )
