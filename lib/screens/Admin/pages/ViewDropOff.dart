@@ -1,4 +1,3 @@
-// import 'package:flutter/src/animation/animation_controller.dart';
 import '/exports/exports.dart';
 
 class ViewDropOffs extends StatefulWidget {
@@ -49,18 +48,9 @@ class _ViewDropOffsState extends State<ViewDropOffs>
             ],
           ),
         ),
-
-        // DataCell(
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-        //     child: Text(dropOff.studentName),
-        //   ),
-        // ),
         DataCell(Text(dropOff.droppedBy)),
         DataCell(Text(dropOff.dropOffTime)),
         DataCell(Text(dropOff.authorizedBy)),
-        // DataCell(buildActionButtons(
-        //     "${dropOff.guardianFname} ${dropOff.guardianLname}", context)),
       ],
     );
   }
@@ -84,10 +74,8 @@ class _ViewDropOffsState extends State<ViewDropOffs>
           ),
           SizedBox(
             width: size.width,
-            height: size.width / 5,
-            child: DataTable2(
-              columnSpacing: defaultPadding,
-              minWidth: size.width * 0.06,
+            height: size.width / 3,
+            child: Data_Table(
               columns: [
                 DataColumn(
                   label: Text("Student Name"),
@@ -102,8 +90,10 @@ class _ViewDropOffsState extends State<ViewDropOffs>
                   label: Text("Time Of DropOff"),
                 ),
               ],
+              empty:  NoDataWidget(text:"No drop offs captured yet"),
+
               rows: List.generate(
-                demoRecentFiles.length,
+                context.watch<MainController>().dropOffData.length,
                 (index) => _dataRow(
                     context.watch<MainController>().dropOffData[index], index),
               ),
@@ -111,32 +101,6 @@ class _ViewDropOffsState extends State<ViewDropOffs>
           ),
         ],
       ),
-    );
-  }
-
-  // row data
-  DataRow overtimeDataRow(RecentFile fileInfo, int i) {
-    return DataRow(
-      cells: [
-        DataCell(
-          Row(
-            children: [
-              Image.asset(
-                StaffIcons.profile,
-                height: 45,
-                width: 45,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(fileInfo.title!),
-              ),
-            ],
-          ),
-        ),
-        DataCell(Text(fileInfo.date!)),
-        DataCell(Text(fileInfo.size!)),
-        DataCell(Text(fileInfo.size!)),
-      ],
     );
   }
 }

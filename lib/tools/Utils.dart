@@ -300,13 +300,13 @@ List<Map<String, dynamic>> options = [
   },
   {
     "title": "Pending Overtimes",
-    "page": const OvertimeReports(),
+    "page": const OvertimeReports(overtimeStatus: "Pending",),
     'icon': "assets/icons/menu_store.svg"
   },
   {
     "icon": "assets/icons/menu_store.svg",
     "title": "Cleared Overtimes",
-    "page": const OvertimeReports(),
+    "page": const OvertimeReports(overtimeStatus: "Cleared",),
   },
   {
     "title": "Drop Offs",

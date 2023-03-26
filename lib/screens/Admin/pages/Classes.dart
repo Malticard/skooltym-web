@@ -68,10 +68,13 @@ class _ViewClassesState extends State<ViewClasses> {
                       });
                 },
                 icon: Icon(Icons.add),
-                label: Text("Add Staff"),
+                label: Text("Add Class"),
               ),
             ],
           ),
+        ),
+        empty: Center(
+          child: Text("No Classes added yet"),
         ),
         columns: List.generate(
           staffs.length,

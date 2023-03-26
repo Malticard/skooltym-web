@@ -8,16 +8,17 @@ class MainController extends ChangeNotifier {
   List<PickUpModel> _picks = [];
   List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
-  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
-  List<Map<String, dynamic>> get dashboardData => _dashData;
 
+  List<OvertimeModel> _pendingOvertime = [];
 // getters
   List<StudentModel> get students => _students;
   List<StaffModel> get staffData => _availableStaff;
   List<Guardians> get guardians => _guardians;
   List<DropOffModel> get dropOffData => _drops;
   List<PickUpModel> get pickUpData => _picks;
-
+  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
+  List<Map<String, dynamic>> get dashboardData => _dashData;
+  List<OvertimeModel> get pendingOvertime => _pendingOvertime;
   void controlMenu() {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
       _scaffoldKey.currentState!.openDrawer();
@@ -72,4 +73,11 @@ class MainController extends ChangeNotifier {
       notifyListeners();
     });
   }
+//  fetch pending overtimes
+void fetchPendingOvertime(String status){
+  Client().get(Uri.parse(AppUrls.specficOvertime + status)).then((value) {
+    _pendingOvertime = overtimeModelFromJson(value.body);
+    notifyListeners();
+  });
+}
 }

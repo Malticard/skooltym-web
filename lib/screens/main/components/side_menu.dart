@@ -24,6 +24,8 @@ class _SideMenuState extends State<SideMenu> {
   Widget build(BuildContext context) {
     return Drawer(
       key: context.read<MainController>().scaffoldKey,
+      backgroundColor: Theme.of(context).brightness == Brightness
+          .light?Theme.of(context).primaryColor:Theme.of(context).canvasColor,
       child: Column(
         children: [
           DrawerHeader(

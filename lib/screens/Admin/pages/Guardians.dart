@@ -81,7 +81,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
             ),
           ),
         ),
-        empty: Text("No guardians registered yet.."),
+        empty: NoDataWidget(text:"No guardians registered yet.."),
         rows: context.read<MainController>().guardians.length < 1
             ? []
             : List.generate(

@@ -2,7 +2,8 @@
 import '/exports/exports.dart';
 
 class OvertimeReports extends StatefulWidget {
-  const OvertimeReports({super.key});
+  final String? overtimeStatus;
+  const OvertimeReports({super.key,this.overtimeStatus});
 
   @override
   State<OvertimeReports> createState() => _OvertimeReportsState();
@@ -25,9 +26,19 @@ class _OvertimeReportsState extends State<OvertimeReports>
   }
 
   @override
+  void didChangeDependencies() {
+    Provider.of<MainController>(context,listen: false).fetchPendingOvertime
+      (widget.overtimeStatus ?? "Pending");
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    //invoke new overtimes
+    Provider.of<MainController>(context,listen: false).fetchPendingOvertime
+      (widget.overtimeStatus ?? "Pending");
     return Container(
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
@@ -43,12 +54,9 @@ class _OvertimeReportsState extends State<OvertimeReports>
                 : "Overtimes pending",
             style: TextStyles(context).getTitleStyle(),
           ),
-          SizedBox(
-            width: size.width,
-            height: size.width / 5,
-            child: DataTable2(
-              columnSpacing: defaultPadding,
-              minWidth: size.width * 0.06,
+          Expanded(
+
+            child: Data_Table(
               columns: [
                 DataColumn(
                   label: Text("Guardian Name"),
@@ -63,16 +71,12 @@ class _OvertimeReportsState extends State<OvertimeReports>
                   label: Text("Staff"),
                 ),
                 DataColumn(
-                  label: Text("Status"),
-                ),
-                if (context.read<SchoolController>().state['role'] == 'Finance')
-                  DataColumn(
-                    label: Text("Action"),
-                  ),
+                  label: Text("Status"),),
               ],
               rows: List.generate(
-                demoRecentFiles.length,
-                (index) => overtimeDataRow(demoRecentFiles[index], index),
+                context.watch<MainController>().pendingOvertime.length,
+                (index) => overtimeDataRow(context.watch<MainController>().pendingOvertime
+                [index], index),
               ),
             ),
           ),
@@ -82,7 +86,7 @@ class _OvertimeReportsState extends State<OvertimeReports>
   }
 
   // row data
-  DataRow overtimeDataRow(RecentFile fileInfo, int i) {
+  DataRow overtimeDataRow(OvertimeModel overtimeModel, int i) {
     return DataRow(
       cells: [
         DataCell(
@@ -95,15 +99,15 @@ class _OvertimeReportsState extends State<OvertimeReports>
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(fileInfo.title!),
+                child: Text(overtimeModel.student),
               ),
             ],
           ),
         ),
-        DataCell(Text(fileInfo.date!)),
-        DataCell(Text(fileInfo.size!)),
-        DataCell(Text(fileInfo.size!)),
-        DataCell(Text("Pending")),
+        DataCell(Text(overtimeModel.createdAt.toString())),
+        DataCell(Text(overtimeModel.overtimeCharge.toString())),
+        DataCell(Text(overtimeModel.guardian)),
+        DataCell(Text(overtimeModel.status)),
         if (context.read<SchoolController>().state['role'] == 'Finance')
           DataCell(buildActionButtons("i", context)),
       ],

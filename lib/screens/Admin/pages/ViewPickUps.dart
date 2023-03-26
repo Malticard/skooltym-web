@@ -42,18 +42,9 @@ class _ViewPickUpsState extends State<ViewPickUps>
             ],
           ),
         ),
-
-        // DataCell(
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-        //     child: Text(pickUp.studentName),
-        //   ),
-        // ),
         DataCell(Text(pickUp.pickedBy)),
         DataCell(Text(pickUp.pickUpTime)),
         DataCell(Text(pickUp.authorizedBy)),
-        // DataCell(buildActionButtons(
-        //     "${dropOff.guardianFname} ${dropOff.guardianLname}", context)),
       ],
     );
   }
@@ -72,9 +63,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            context.read<SchoolController>().state['role'] == 'Admin'
-                ? "Reports"
-                : "Overtimes pending",
+            "Available PickUps",
             style: TextStyles(context).getTitleStyle(),
           ),
           SizedBox(
@@ -88,7 +77,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
                   label: Text("Student Name"),
                 ),
                 DataColumn(
-                  label: Text("Class"),
+                  label: Text("PickedUp By"),
                 ),
                 DataColumn(
                   label: Text("Cleared by"),
@@ -97,8 +86,9 @@ class _ViewPickUpsState extends State<ViewPickUps>
                   label: Text("Time Of PickOff"),
                 ),
               ],
+              empty: NoDataWidget(text: "No PickUps recorded..",),
               rows: List.generate(
-                demoRecentFiles.length,
+                context.watch<MainController>().pickUpData.length,
                 (index) => _dataRow(
                     context.watch<MainController>().pickUpData[index], index),
               ),
@@ -106,32 +96,6 @@ class _ViewPickUpsState extends State<ViewPickUps>
           ),
         ],
       ),
-    );
-  }
-
-  // row data
-  DataRow overtimeDataRow(RecentFile fileInfo, int i) {
-    return DataRow(
-      cells: [
-        DataCell(
-          Row(
-            children: [
-              Image.asset(
-                StaffIcons.profile,
-                height: 45,
-                width: 45,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(fileInfo.title!),
-              ),
-            ],
-          ),
-        ),
-        DataCell(Text(fileInfo.date!)),
-        DataCell(Text(fileInfo.size!)),
-        DataCell(Text(fileInfo.size!)),
-      ],
     );
   }
 }

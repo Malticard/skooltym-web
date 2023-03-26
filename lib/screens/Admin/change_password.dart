@@ -22,59 +22,69 @@ class _ChangePasswordState extends State<ChangePassword> {
           bottom:MediaQuery.of(context).size.width * 0.1,
           right: MediaQuery.of(context).size.width * 0.1,
           left: MediaQuery.of(context).size.width * 0.1),
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 16.0, bottom: 16.0, left: 24, right: 24),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    "Enter new password",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).disabledColor,
+      child: Card(
+        color: Theme.of(context).brightness == Brightness.light ? Theme.of
+          (context).scaffoldBackgroundColor: Theme.of(context).canvasColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 16.0, bottom: 16.0, left: 34, right: 34),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      "Enter new password",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).disabledColor,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          CommonTextField(
-            controller: _newController,
-            titleText: "New password",
-            padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
-            hintText: "************",
-            keyboardType: TextInputType.visiblePassword,
-            isObscureText: true,
-            onChanged: (String txt) {},
-            errorText: _errorNewPassword,
-          ),
-          CommonTextField(
-            controller: _confirmController,
-            titleText: "Confirm Password",
-            //AppLocalizations(context).of("confirm_password"),
-            padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
-            hintText: "*************",
-            keyboardType: TextInputType.visiblePassword,
-            isObscureText: true,
-            onChanged: (String txt) {},
-            errorText: _errorConfirmPassword,
-          ),
-          CommonButton(
-            padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
-            buttonText:
-                "Apply Changes", //AppLocalizations(context).of("Apply_text"),
-            onTap: () {
-              if (_allValidation()) {
-                Navigator.pop(context);
-              }
-            },
-          )
-        ],
+            Space(space: 0.06,),
+            CommonTextField(
+              controller: _newController,
+              titleText: "New password",
+              icon: Icons.lock_outline_rounded,
+              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
+              hintText: "************",
+              keyboardType: TextInputType.visiblePassword,
+              isObscureText: true,
+              onChanged: (String txt) {},
+              errorText: _errorNewPassword,
+            ),
+            CommonTextField(
+              controller: _confirmController,
+              icon: Icons.lock_outline_rounded,
+
+              titleText: "Confirm Password",
+              //AppLocalizations(context).of("confirm_password"),
+              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+              hintText: "*************",
+              keyboardType: TextInputType.visiblePassword,
+              isObscureText: true,
+              onChanged: (String txt) {},
+              errorText: _errorConfirmPassword,
+            ),
+            CommonButton(
+              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
+              buttonText:
+                  "Apply Changes", //AppLocalizations(context).of("Apply_text"),
+              onTap: () {
+                if (_allValidation()) {
+                  Navigator.pop(context);
+                }
+              },
+            )
+          ],
+        ),
       ),
     );
   }

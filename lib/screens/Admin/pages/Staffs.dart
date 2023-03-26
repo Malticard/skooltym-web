@@ -81,6 +81,7 @@ class _StaffState extends State<Staff> {
             ),
           ),
         ),
+        empty: NoDataWidget(text:"You currently have no staff records"),
         rows: List.generate(
           context.watch<MainController>().staffData.length,
           (index) =>

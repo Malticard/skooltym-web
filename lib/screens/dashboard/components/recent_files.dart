@@ -28,7 +28,10 @@ class _Data_TableState extends State<Data_Table> {
       height: size.width / 3,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
+        color:Theme.of(context).brightness == Brightness.light? Colors.white
+            :Theme.of
+          (context)
+          .canvasColor,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
@@ -39,7 +42,7 @@ class _Data_TableState extends State<Data_Table> {
                 widget.title ?? "",
                 style: Theme.of(context).textTheme.subtitle1,
               ),
-          SingleChildScrollView(
+          Expanded(
             child: SizedBox(
               width: size.width,
               height: size.width / 4,
@@ -54,11 +57,9 @@ class _Data_TableState extends State<Data_Table> {
                 sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
                 sortArrowAnimationDuration: const Duration(milliseconds: 500),
                 columns: widget.columns ?? [],
-                empty: widget.empty ?? Center(
-                    child: Container(
-                        padding: const EdgeInsets.all(20),
-                        color: Colors.grey[200],
-                        child: const NoDataWidget())),
+                empty: widget.empty ??
+                    Center(
+                        child: Text("There nothing here"),),
                 rows: widget.rows ?? [],
               ),
             ),
@@ -68,27 +69,3 @@ class _Data_TableState extends State<Data_Table> {
     );
   }
 }
-
-// DataRow recentFileDataRow(RecentFile fileInfo) {
-//   return DataRow(
-//     cells: [
-//       DataCell(
-//         Row(
-//           children: [
-//             SvgPicture.asset(
-//               fileInfo.icon!,
-//               height: 30,
-//               width: 30,
-//             ),
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-//               child: Text(fileInfo.title!),
-//             ),
-//           ],
-//         ),
-//       ),
-//       DataCell(Text(fileInfo.date!)),
-//       DataCell(Text(fileInfo.size!)),
-//     ],
-//   );
-// }

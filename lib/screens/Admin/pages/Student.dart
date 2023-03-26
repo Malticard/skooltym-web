@@ -75,6 +75,11 @@ class _ViewStudentsState extends State<ViewStudents> {
             ],
           ),
         ),
+        empty: NoDataWidget(
+          text: "No "
+              "Students added as "
+              "yet...",
+        ),
         columns: List.generate(
           staffs.length,
           (index) => DataColumn(

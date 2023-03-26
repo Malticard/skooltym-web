@@ -1,6 +1,6 @@
 class AppUrls {
   static String devURL =
-      "http://127.0.0.1:5059/"; //"http://13.127.169.59:5059/";
+      /*"http://127.0.0.1:5059/"; */ "http://13.127.169.59:5059/";
   //"https://skooltym-backend-production.up.railway.app/";
   static String imageUrl = "assets/images/";
   static String iconUrl = "assets/icons/";
@@ -28,6 +28,7 @@ class AppUrls {
   static String getPickUps = devURL + "get/pickup";
   static String getDropOffs = devURL + "get/dropoff";
   // fetch specific
+  static String specficOvertime = devURL + "speciic/overtime/";
   static String getGuardian = devURL + "specific/guardians/";
   static String getStudent = devURL + "specific/students/";
   static String pickUps = devURL + "specific/pickup/";
