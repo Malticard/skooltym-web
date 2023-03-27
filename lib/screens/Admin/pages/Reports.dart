@@ -3,7 +3,8 @@ import '/exports/exports.dart';
 
 class OvertimeReports extends StatefulWidget {
   final String? overtimeStatus;
-  const OvertimeReports({super.key,this.overtimeStatus});
+  final String? label;
+  const OvertimeReports({super.key,this.overtimeStatus,this.label});
 
   @override
   State<OvertimeReports> createState() => _OvertimeReportsState();
@@ -39,48 +40,46 @@ class _OvertimeReportsState extends State<OvertimeReports>
     //invoke new overtimes
     Provider.of<MainController>(context,listen: false).fetchPendingOvertime
       (widget.overtimeStatus ?? "Pending");
-    return Container(
-      padding: const EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.read<SchoolController>().state['role'] == 'Admin'
-                ? "Reports"
-                : "Overtimes pending",
-            style: TextStyles(context).getTitleStyle(),
+    return SizedBox(
+      width: size.width,
+      height: size.width / 2.5,
+      child: Data_Table(
+        header:   Text(
+          context.read<SchoolController>().state['role'] == 'Admin'
+              ? widget.label ?? "Reports"
+              : "Overtimes pending",
+          style: TextStyles(context).getTitleStyle(),
+        ),
+        columns: [
+          DataColumn(
+            label: Text("Student Name"),
           ),
-          Expanded(
-
-            child: Data_Table(
-              columns: [
-                DataColumn(
-                  label: Text("Guardian Name"),
-                ),
-                DataColumn(
-                  label: Text("Date"),
-                ),
-                DataColumn(
-                  label: Text("Amount "),
-                ),
-                DataColumn(
-                  label: Text("Staff"),
-                ),
-                DataColumn(
-                  label: Text("Status"),),
-              ],
-              rows: List.generate(
-                context.watch<MainController>().pendingOvertime.length,
-                (index) => overtimeDataRow(context.watch<MainController>().pendingOvertime
-                [index], index),
-              ),
-            ),
+          DataColumn(
+            label: Text("Date"),
           ),
+          DataColumn(
+            label: Text("Amount "),
+          ),
+          DataColumn(
+            label: Text("Staff"),
+          ),
+          DataColumn(
+            label: Text("Status"),),
+          if(context.read<SchoolController>().state['role'] == 'Finance')
+            DataColumn(
+              label: Text("Actions"),),
         ],
+        empty: SizedBox(
+          height:MediaQuery.of(context).size.width / 7,
+          child: NoDataWidget(text:"No ${widget.overtimeStatus} overtime "
+              "recorded "
+              ""),
+        ),
+        rows: List.generate(
+          context.watch<MainController>().pendingOvertime.length,
+          (index) => overtimeDataRow(context.watch<MainController>().pendingOvertime
+          [index], index),
+        ),
       ),
     );
   }

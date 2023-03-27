@@ -59,47 +59,35 @@ class _ViewDropOffsState extends State<ViewDropOffs>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Container(
-      padding: const EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Available Drops Recorded",
-            style: TextStyles(context).getTitleStyle(),
+    return SizedBox(
+      width: size.width,
+      height: size.width /2.5,
+      child: Data_Table(
+        header: Text(
+          "Available Drops Recorded",
+          style: TextStyles(context).getTitleStyle(),
+        ),
+        columns: [
+          DataColumn(
+            label: Text("Student Name"),
           ),
-          SizedBox(
-            width: size.width,
-            height: size.width / 3,
-            child: Data_Table(
-              columns: [
-                DataColumn(
-                  label: Text("Student Name"),
-                ),
-                DataColumn(
-                  label: Text("Dropped by"),
-                ),
-                DataColumn(
-                  label: Text("Cleared by"),
-                ),
-                DataColumn(
-                  label: Text("Time Of DropOff"),
-                ),
-              ],
-              empty:  NoDataWidget(text:"No drop offs captured yet"),
-
-              rows: List.generate(
-                context.watch<MainController>().dropOffData.length,
-                (index) => _dataRow(
-                    context.watch<MainController>().dropOffData[index], index),
-              ),
-            ),
+          DataColumn(
+            label: Text("Dropped by"),
+          ),
+          DataColumn(
+            label: Text("Cleared by"),
+          ),
+          DataColumn(
+            label: Text("Time Of DropOff"),
           ),
         ],
+        empty:  NoDataWidget(text:"No drop offs captured yet"),
+
+        rows: List.generate(
+          context.watch<MainController>().dropOffData.length,
+          (index) => _dataRow(
+              context.watch<MainController>().dropOffData[index], index),
+        ),
       ),
     );
   }

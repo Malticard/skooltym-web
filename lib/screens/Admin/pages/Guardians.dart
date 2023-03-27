@@ -42,7 +42,9 @@ class _ViewGuardiansState extends State<ViewGuardians> {
   @override
   Widget build(BuildContext context) {
     Provider.of<MainController>(context).newGuardians();
-    return Center(
+    Size size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: size.width / 2.5,
       child: Data_Table(
         header: Padding(
           padding: const EdgeInsets.all(10.0),

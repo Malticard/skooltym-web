@@ -43,8 +43,10 @@ class _ViewStudentsState extends State<ViewStudents> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     Provider.of<MainController>(context).getAllStudents();
-    return Center(
+    return SizedBox(
+      height: size.width / 2.5,
       child: Data_Table(
         header: Padding(
           padding: const EdgeInsets.all(10.0),

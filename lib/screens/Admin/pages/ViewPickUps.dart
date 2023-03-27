@@ -62,16 +62,15 @@ class _ViewPickUpsState extends State<ViewPickUps>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Available PickUps",
-            style: TextStyles(context).getTitleStyle(),
-          ),
+
           SizedBox(
             width: size.width,
-            height: size.width / 5,
-            child: DataTable2(
-              columnSpacing: defaultPadding,
-              minWidth: size.width * 0.06,
+            height: size.width / 2.5,
+            child: Data_Table(
+              header:  Text(
+                "Available PickUps",
+                style: TextStyles(context).getTitleStyle(),
+              ),
               columns: [
                 DataColumn(
                   label: Text("Student Name"),

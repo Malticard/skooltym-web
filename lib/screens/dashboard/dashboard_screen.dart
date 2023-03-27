@@ -13,7 +13,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Size size = MediaQuery.of(context).size;
     return Container(
       color: Theme.of(context).brightness == Brightness.light?Colors
-          .grey[300]:Theme.of(context).scaffoldBackgroundColor,
+          .grey[200]:Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         // mainAxisAlignment: MainAxisAlignment.center,
@@ -30,8 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: defaultPadding),
           // ====== end of header section ======
           Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
+            child: Padding(
                 padding: EdgeInsets.only(
                     top: size.width * 0.011,
                     left: size.width * 0.061,
@@ -46,8 +45,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         flex: 5,
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width / 2,
-                          height: MediaQuery.of(context).size.width / 2,
-                          child: child,
+                          height: MediaQuery.of(context).size.width / 2.4,
+                          child: SingleChildScrollView(child: child),
                         ),
                       );
                     }),
@@ -64,7 +63,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 // ====== end of body section ======
               ),
             ),
-          )
         ],
       ),
     );

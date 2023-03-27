@@ -14,7 +14,8 @@ class _DashboardState extends State<Dashboard> {
       children: [
         const MyFiles(),
         const SizedBox(height: defaultPadding),
-        // const Data_Table(),
+        const OvertimeReports(overtimeStatus: "Pending",label:"Pending "
+            "Overtime"),
         // if (Responsive.isMobile(context))
         //   const SizedBox(height: defaultPadding),
         // if (Responsive.isMobile(context)) const StarageDetails(),

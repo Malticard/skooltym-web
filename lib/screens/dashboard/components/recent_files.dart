@@ -20,12 +20,17 @@ class Data_Table extends StatefulWidget {
 }
 
 class _Data_TableState extends State<Data_Table> {
+  final RestorableInt _rowIndex = RestorableInt(0);
+  final RestorableInt _rowsPerPage =
+  RestorableInt(PaginatedDataTable.defaultRowsPerPage);
+  final RestorableBool _sortAscending = RestorableBool(true);
+  final RestorableIntN _sortColumnIndex = RestorableIntN(null);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return Container(
-      height: size.width / 3,
+      height: size.width / 2,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color:Theme.of(context).brightness == Brightness.light? Colors.white

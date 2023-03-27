@@ -18,10 +18,10 @@ class _MyFilesState extends State<MyFiles> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Stats",
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
+            // Text(
+            //   "Stats",
+            //   style: Theme.of(context).textTheme.subtitle1,
+            // ),
             Row(
               children: [
                 //   ElevatedButton.icon(
@@ -41,19 +41,19 @@ class _MyFilesState extends State<MyFiles> {
                 const SizedBox(
                   width: 20,
                 ),
-                ElevatedButton.icon(
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: defaultPadding * 1.5,
-                      vertical: defaultPadding /
-                          (Responsive.isMobile(context) ? 2 : 1),
-                    ),
-                  ),
-                  onPressed: () =>
-                      context.watch<WidgetController>().pushWidget(Dashboard()),
-                  icon: const Icon(Icons.refresh),
-                  label: const Text("Refresh"),
-                ),
+                // ElevatedButton.icon(
+                //   style: TextButton.styleFrom(
+                //     padding: EdgeInsets.symmetric(
+                //       horizontal: defaultPadding * 1.5,
+                //       vertical: defaultPadding /
+                //           (Responsive.isMobile(context) ? 2 : 1),
+                //     ),
+                //   ),
+                //   onPressed: () =>
+                //       context.watch<WidgetController>().pushWidget(Dashboard()),
+                //   icon: const Icon(Icons.refresh),
+                //   label: const Text("Refresh"),
+                // ),
               ],
             ),
           ],

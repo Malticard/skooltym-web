@@ -25,7 +25,8 @@ class _SideMenuState extends State<SideMenu> {
     return Drawer(
       key: context.read<MainController>().scaffoldKey,
       backgroundColor: Theme.of(context).brightness == Brightness
-          .light?Theme.of(context).primaryColor:Theme.of(context).canvasColor,
+          .light?Color.fromRGBO(6, 109, 161, 1.0) :Theme.of(context)
+          .canvasColor,
       child: Column(
         children: [
           DrawerHeader(
@@ -37,7 +38,9 @@ class _SideMenuState extends State<SideMenu> {
                   Image.asset("assets/images/logo.png"),
                   Space(),
                   Text(
-                      "${context.read<SchoolController>().state['school_name']}")
+                      "${context.read<SchoolController>()
+                          .state['schoolName']}",style:TextStyles(context)
+                      .getBoldStyle().copyWith(color:Colors.white),)
                 ],
               ),
             ),
@@ -133,12 +136,14 @@ class DrawerListTile extends StatelessWidget {
         // ignore: deprecated_member_use
         color: Theme.of(context).brightness == Brightness.dark
             ? Colors.white54
-            : Colors.black54,
+            : Colors.white,
         height: 18,
       ),
       title: Text(
         title,
-        style: TextStyles(context).getDescriptionStyle(),
+        style: TextStyles(context).getRegularStyle().copyWith(color:Theme.of
+          (context).brightness  == Brightness.light ? Colors.white : Colors
+            .white54),
       ),
     );
   }

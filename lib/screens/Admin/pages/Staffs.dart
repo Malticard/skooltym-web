@@ -41,8 +41,10 @@ class _StaffState extends State<Staff> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     Provider.of<MainController>(context).staffUpdate();
-    return Center(
+    return SizedBox(
+      height: size.width / 2.5,
       child: Data_Table(
         header: Padding(
           padding: const EdgeInsets.all(10.0),
