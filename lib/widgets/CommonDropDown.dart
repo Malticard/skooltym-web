@@ -63,7 +63,7 @@ class CommonDropDown extends StatelessWidget {
                     padding: MaterialStateProperty.all(
                         EdgeInsets.only(left: 24, right: 24)),
                     fixedSize: MaterialStateProperty.all(
-                      Size.fromWidth(MediaQuery.of(context).size.width),
+                      Size.fromWidth(MediaQuery.of(context).size.width /3),
                     ),
                   ),
                 ),

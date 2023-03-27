@@ -53,6 +53,11 @@ class _ViewStudentsState extends State<ViewStudents> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+
+              if(context.read<MainController>().students.length > 0)
+                Expanded(child: SizedBox(width:120,child: SearchField())),
+              if (!Responsive.isMobile(context))
+                Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
               Text(
                 "",
                 style: Theme.of(context).textTheme.subtitle1,

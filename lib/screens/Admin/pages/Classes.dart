@@ -14,10 +14,12 @@ class _ViewClassesState extends State<ViewClasses> {
   void initState() {
     super.initState();
   }
+  // late List<TextEditingController> _ctrl;
 
   @override
   void didChangeDependencies() {
     Provider.of<MainController>(context).staffUpdate();
+
     super.didChangeDependencies();
   }
 
@@ -38,6 +40,8 @@ class _ViewClassesState extends State<ViewClasses> {
       ],
     );
   }
+
+  List<String>? _stepText;
 
   int currentStep = 0;
   int _streams = 0;
@@ -60,18 +64,25 @@ class _ViewClassesState extends State<ViewClasses> {
     }
   }
 
+  int _index = 0;
+
   //form keys
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
+  //
+  List<TextEditingController> _ctrl =
+  List.generate(50, (n) =>
+  TextEditingController());
   @override
   Widget build(BuildContext context) {
-    //
-    List<TextEditingController> _controllers =
-    List.generate(_streams, (index) => TextEditingController());
+
+    // List<String> _list = List.generate(
+    //     context.read<StepperController>().state.fields!, (n) => "");
     //error streams
-    List<TextEditingController> _streamErrorControllers =
-    List.generate(_streams, (index) => TextEditingController());
+    List<TextEditingController> _streamErrorControllers = List.generate(
+        context.read<StepperController>().state.fields!,
+        (index) => TextEditingController());
     Provider.of<MainController>(context).staffUpdate();
     return Stepper(
       onStepTapped: (step) {
@@ -81,12 +92,13 @@ class _ViewClassesState extends State<ViewClasses> {
       },
       onStepCancel: () {
         setState(() {
+          _index = 0;
           currentStep > 0 ? currentStep -= 1 : currentStep = 0;
         });
       },
       onStepContinue: () {
         setState(() {
-          currentStep < 1 ? currentStep += 1 : currentStep = 0;
+          currentStep < 2 ? currentStep += 1 : currentStep = 0;
         });
       },
       currentStep: currentStep,
@@ -115,11 +127,12 @@ class _ViewClassesState extends State<ViewClasses> {
                       errorText: _errorController1.text,
                       hintText: "e.g grade 1",
                       validate: (valid) {
-                     setState((){
-                       _errorController1.text =  "The class field is required";
-                     });
-                          return null;
-  },
+                        setState(() {
+                          _errorController1.text =
+                              "The class field is required";
+                        });
+                        return null;
+                      },
                       titleText: "Class Nam"
                           "e",
                       padding: _padding,
@@ -170,29 +183,37 @@ class _ViewClassesState extends State<ViewClasses> {
                       hintText: "e.g 3",
                       errorText: _errorController2.text,
                       validate: (valid) {
-                        setState((){
-                          _errorController2.text = "The number of streams are required to continue ";
+                        setState(() {
+                          _errorController2.text =
+                              "The number of streams are required to continue ";
                         });
-                            return null;
-                      } ,
+                        return null;
+                      },
                       titleText: "How many streams do you want to add?",
                       padding: _padding,
                       icon: Icons.numbers_rounded,
                     ),
                     const SizedBox(height: defaultPadding),
                     CommonButton(
-                        buttonText: "Save changes",
-                        padding: _padding,
-                        onTap: () {
-                          if (_formKey2.currentState!.validate()) {
-                            setState(() {
-                              _streams = int.parse(_streamNoController.text);
-                              currentStep < 3
-                                  ? currentStep += 1
-                                  : currentStep = 0;
-                            });
-                          }
-                        }),
+                      buttonText: "Save changes",
+                      padding: _padding,
+                      onTap: () {
+                        if (_formKey2.currentState!.validate()) {
+                          setState(() {
+                            currentStep < 3
+                                ? currentStep += 1
+                                : currentStep = 0;
+                          });
+                          //
+                          BlocProvider.of<StepperController>(context)
+                              .updateCount(
+                            StepperModel(
+                                fields: int.parse(_streamNoController.text),
+                                text: []),
+                          );
+                        }
+                      },
+                    ),
                     const SizedBox(height: defaultPadding),
                   ],
                 ),
@@ -201,53 +222,73 @@ class _ViewClassesState extends State<ViewClasses> {
           ),
         ),
         Step(
-          state: assignState(index: 2),
+          state: _index == 3 ? assignState(index: 1) : assignState(index: 2),
           title: const Text("Attach streams to class"),
           content: Container(
             margin:
-            EdgeInsets.only(right: MediaQuery.of(context).size.width / 3),
+                EdgeInsets.only(right: MediaQuery.of(context).size.width / 3),
             padding: const EdgeInsets.all(defaultPadding),
             decoration: BoxDecoration(
               color: Theme.of(context).canvasColor,
               borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
-            child: Form(
-              key: _formKey3,
-              child: Column(
-                children: [
-                  ...List.generate(
-                    _streams,
-                    (index) => CommonTextField(
-                      hintText: "e.g ${index + 1}",
-                      errorText: _streamErrorControllers[index].text,
+            child: BlocBuilder<StepperController, StepperModel>(
+                builder: (context, inx) {
 
-                      validate: (valid) {
-                        setState(() {
-                          _streamErrorControllers[index].text =  "Stream "
-                              "field ${index + 1} is"
-                              " required to continue ";
-                        });
-                        return null;
-                      }
-                                                    ,
-                      controller: _controllers[index],
-                      titleText: "Stream ${index + 1}",
-                    ),
-                  ),
-                  const SizedBox(height: defaultPadding),
-                  CommonButton(
-                      buttonText: "Save changes",
-                      padding: _padding,
-                      onTap: () {
-                        if (_formKey3.currentState!.validate()) {
+              return Form(
+                key: _formKey3,
+                child: Column(
+                  children: [
+                    ...List.generate(
+                        inx.fields ?? 0,
+                      //  context.read<StepperController>().state.fields!,
+                        (index) => CommonTextField(
+                          hintText: "e.g ${index + 1}",
+                          errorText: _streamErrorControllers[index].text,
+                          controller: _ctrl[index],
+                          icon: Icons.home_work_outlined,
+                          validate: (valid) {
+                            setState(() {
+                              _streamErrorControllers[index].text = "Stream "
+                                  "field ${index + 1} is"
+                                  " required to continue ";
+                            });
+                            return null;
+                          },
+                          // controller: _controllers[index],
+                          titleText: "Stream ${index + 1}",
+                        ),
+                      ),
+
+                    const SizedBox(height: defaultPadding),
+                    CommonButton(
+                        buttonText: "Save changes",
+                        padding: _padding,
+                        onTap: () {
+
+                            _stepText = List.generate(context
+                                .read<StepperController>().state.fields!,
+                                    (index) => _ctrl[index].text);
+
+                          // }
+                          var data = {
+                            "class": _classController.text,
+                            "streams": _stepText,
+                          };
+                          debugPrint("Classes data => $data");
+
+                          // showContentDialog(jsonEncode(data), context);
+                          // if (_formKey3.currentState!.validate()) {
                           setState(() {
-                            currentStep = 3;
+                            _index = 3;
+                            //  data
                           });
-                        }
-                      })
-                ],
-              ),
-            ),
+                          // }
+                        })
+                  ],
+                ),
+              );
+            }),
           ),
         ),
       ],

@@ -67,9 +67,19 @@ class _ViewPickUpsState extends State<ViewPickUps>
             width: size.width,
             height: size.width / 2.5,
             child: Data_Table(
-              header:  Text(
-                "Available PickUps",
-                style: TextStyles(context).getTitleStyle(),
+              header:  Row(
+                children: [
+
+                  Text(
+                    "Available PickUps",
+                    style: TextStyles(context).getTitleStyle(),
+                  ),
+                  if (!Responsive.isMobile(context))
+                    Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                  if(context.watch<MainController>().pickUpData.length > 0)
+                    const Expanded(child: SearchField()),
+
+                ],
               ),
               columns: [
                 DataColumn(

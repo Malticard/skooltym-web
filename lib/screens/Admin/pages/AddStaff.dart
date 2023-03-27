@@ -77,9 +77,10 @@ class _AddStaffState extends State<AddStaff>  {
         buttonText: "Submit Staff Details",
         errorMsgs: errorFields,
         onSubmit: () {
-          if (validateEmail(_formControllers[1].text, context) != false &&
-              validateTextControllers(_formControllers)) {
-            if (_formControllers[6].text == _formControllers[7].text) {
+          //validateTextControllers(_formControllers)
+          if (validateEmail(_formControllers[1].text, context) != false
+              ) {
+
               // debugPrint("Result => $data");
               _handleFormUpload()
                   .then(
@@ -98,11 +99,7 @@ class _AddStaffState extends State<AddStaff>  {
                         type: 'success',
                         msg: "Added new staff successfully",
                       ));
-            } else {
-              setState(() {
-                errorFields[6] = "Password mismatch";
-              });
-            }
+
           }
         },
       ),
@@ -129,7 +126,7 @@ class _AddStaffState extends State<AddStaff>  {
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
     request.files.add(MultipartFile('staff_profile_pic',
-        File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
+        File(_formControllers[3].text.trim()).readAsBytes().asStream(), File(_formControllers[3].text.trim()).lengthSync(),
         filename: uri.split("/").last));
     //
     request.fields['staff_password'] = "qwerty";

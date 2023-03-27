@@ -25,6 +25,7 @@ void main() async {
         BlocProvider(create: (context) => StudentController()),
         BlocProvider(create: (context) => TitleController()),
         BlocProvider(create: (context) => DashboardController()),
+        BlocProvider(create: (context) => StepperController()),
       ],
       child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
         // school data

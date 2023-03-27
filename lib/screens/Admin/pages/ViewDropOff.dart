@@ -63,9 +63,17 @@ class _ViewDropOffsState extends State<ViewDropOffs>
       width: size.width,
       height: size.width /2.5,
       child: Data_Table(
-        header: Text(
-          "Available Drops Recorded",
-          style: TextStyles(context).getTitleStyle(),
+        header: Row(
+          children: [
+            Text(
+              "Available Drops Recorded",
+              style: TextStyles(context).getTitleStyle(),
+            ),
+            if (!Responsive.isMobile(context))
+              Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+            if(context.read<MainController>().dropOffData.length > 0)
+              Expanded(child: SearchField()),
+          ],
         ),
         columns: [
           DataColumn(

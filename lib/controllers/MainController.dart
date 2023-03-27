@@ -8,13 +8,14 @@ class MainController extends ChangeNotifier {
   List<PickUpModel> _picks = [];
   List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
-
+  int _stepCount = 0;
   List<OvertimeModel> _pendingOvertime = [];
 // getters
   List<StudentModel> get students => _students;
   List<StaffModel> get staffData => _availableStaff;
   List<Guardians> get guardians => _guardians;
   List<DropOffModel> get dropOffData => _drops;
+  int get stepCount => _stepCount;
   List<PickUpModel> get pickUpData => _picks;
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   List<Map<String, dynamic>> get dashboardData => _dashData;
@@ -79,5 +80,10 @@ void fetchPendingOvertime(String status){
     _pendingOvertime = overtimeModelFromJson(value.body);
     notifyListeners();
   });
+}
+// stepper text count
+void setTextCount(int value){
+    _stepCount = value;
+    notifyListeners();
 }
 }

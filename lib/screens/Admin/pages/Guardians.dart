@@ -51,10 +51,11 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+              if(context.watch<MainController>().guardians.length > 0)
+                 const Expanded(child: SearchField()),
+              if (!Responsive.isMobile(context))
+                Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+    SizedBox(),
               ElevatedButton.icon(
                 onPressed: () {
                   showDialog(
@@ -63,7 +64,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                         return Dialog(
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 3,
+                            height: MediaQuery.of(context).size.width / 2.1,
                             child: AddGuardian(),
                           ),
                         );

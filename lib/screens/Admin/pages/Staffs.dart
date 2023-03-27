@@ -51,6 +51,10 @@ class _StaffState extends State<Staff> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              if(context.watch<MainController>().staffData.length > 0)
+                 const Expanded(child: SearchField()),
+              if (!Responsive.isMobile(context))
+                Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
               Text(
                 "",
                 style: Theme.of(context).textTheme.subtitle1,

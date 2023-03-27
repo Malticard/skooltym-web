@@ -18,42 +18,14 @@ class _MyFilesState extends State<MyFiles> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Text(
-            //   "Stats",
-            //   style: Theme.of(context).textTheme.subtitle1,
-            // ),
+
             Row(
               children: [
-                //   ElevatedButton.icon(
-                //     style: TextButton.styleFrom(
-                //       padding: EdgeInsets.symmetric(
-                //         horizontal: defaultPadding * 1.5,
-                //         vertical: defaultPadding /
-                //             (Responsive.isMobile(context) ? 2 : 1),
-                //       ),
-                //     ),
-                //     onPressed: () {
-                //       context.read<ThemeController>().toggleDarkLightTheme();
-                //     },
-                //     icon: const Icon(Icons.ac_unit_sharp),
-                //     label: const Text("Change Theme"),
-                //   ),
+
                 const SizedBox(
                   width: 20,
                 ),
-                // ElevatedButton.icon(
-                //   style: TextButton.styleFrom(
-                //     padding: EdgeInsets.symmetric(
-                //       horizontal: defaultPadding * 1.5,
-                //       vertical: defaultPadding /
-                //           (Responsive.isMobile(context) ? 2 : 1),
-                //     ),
-                //   ),
-                //   onPressed: () =>
-                //       context.watch<WidgetController>().pushWidget(Dashboard()),
-                //   icon: const Icon(Icons.refresh),
-                //   label: const Text("Refresh"),
-                // ),
+
               ],
             ),
           ],

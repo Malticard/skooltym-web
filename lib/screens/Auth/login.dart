@@ -333,7 +333,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _errorEmail =
           "Email can't be empty"; //AppLocalizations(context).of('email_cannot_empty');
       isValid = false;
-    } else if (!Validator.validateEmail(_emailController.text.trim())) {
+    } else if (!Validator_.validateEmail(_emailController.text.trim())) {
       _errorEmail =
           "Provide a valid email"; //AppLocalizations(context).of('enter_valid_email');
       isValid = false;

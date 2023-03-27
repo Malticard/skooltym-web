@@ -184,7 +184,7 @@ bool validateEmail(String email, BuildContext context) {
     error = "Email can't be empty";
 
     isValid = false;
-  } else if (!Validator.validateEmail(email.trim())) {
+  } else if (!Validator_.validateEmail(email.trim())) {
     error = "Provide a valid email";
 
     isValid = false;
@@ -327,6 +327,10 @@ List<Map<String, dynamic>> options = [
     "title": "System Settings",
     "page": const SystemSettings(),
     'icon': "assets/icons/menu_setting.svg"
+  }, {
+    "title": "Test Widget",
+    "page": const TestWidget(),
+    'icon': "assets/icons/menu_setting.svg"
   },
 ];
 // finance routes
@@ -337,9 +341,14 @@ List<Map<String, dynamic>> financeViews = [
     "page": const Dashboard()
   },
   {
-    "icon": "assets/icons/menu_task.svg",
-    "title": "Overtime",
-    "page": const OvertimeReports()
+    "title": "Pending Overtimes",
+    "page": const OvertimeReports(overtimeStatus: "Pending",),
+    'icon': "assets/icons/menu_store.svg"
+  },
+  {
+    "icon": "assets/icons/menu_store.svg",
+    "title": "Cleared Overtimes",
+    "page": const OvertimeReports(overtimeStatus: "Cleared",),
   },
 ];
 // valid text controllers

@@ -85,7 +85,7 @@ export 'package:shared_preferences/shared_preferences.dart';
 export 'package:file_picker/file_picker.dart';
 export 'package:internet_connection_checker/internet_connection_checker.dart';
 export 'package:art_sweetalert/art_sweetalert.dart';
-
+export 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 // models
 export '/models/PopUpOptions.dart';
 export '/models/StaffPopUpOptions.dart';
@@ -93,6 +93,7 @@ export '/models/Roles.dart';
 export '/models/StaffModel.dart';
 export '/models/OvertimeModel.dart';
 export '/models/Students.dart';
+export '/models/StepperModel.dart';
 export '/models/StudentModel.dart';
 export '/models/Guardians.dart';
 export '/models/GuardianModel.dart';
@@ -123,6 +124,8 @@ export '/controllers/TitleController.dart';
 export '/controllers/OnlineCheckerController.dart';
 export '/controllers/DashboardController.dart';
 export '/controllers/OvertimeController.dart';
+export '/controllers/StepperController.dart';
+
 
 // themes
 export '/Themes/Themes.dart';
@@ -135,6 +138,7 @@ export '/screens/Admin/pages/AddGuardian.dart';
 export '/screens/Admin/pages/AddStudent.dart';
 export '/screens/Admin/pages/Reports.dart';
 export '/screens/Admin/pages/Staffs.dart';
+export '/screens/Admin/pages/Test.dart';
 export '/screens/Admin/pages/Student.dart';
 export '/screens/Admin/pages/Classes.dart';
 export '/screens/Admin/pages/Guardians.dart';
