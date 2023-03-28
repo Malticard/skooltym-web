@@ -29,8 +29,8 @@ void main() async {
       ],
       child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
         // school data
-        context.read<SchoolController>().getSchoolData();
-        //
+        // retrive app state
+        // BlocProvider.of<SchoolController>(context).getSchoolData();
 
         return MaterialApp(
           debugShowCheckedModeBanner: false,

@@ -32,20 +32,20 @@ class _SystemSettingsState extends State<SystemSettings> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width / 3,
           height: MediaQuery.of(context).size.width / 2.5,
-          child: GridView(
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: size.width < 650 ? 2 : 4,
-              crossAxisSpacing: defaultPadding,
-              mainAxisSpacing: defaultPadding,
-              childAspectRatio: Responsive.isMobile(context)
-                  ? size.width < 650 && size.width > 350
-                      ? 1.3
-                      : 1
-                  : size.width < 1400
-                      ? 1.1
-                      : 1.4,
-            ),
+          child: ListView(
+            // shrinkWrap: true,
+            // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //   crossAxisCount: size.width < 650 ? 2 : 4,
+            //   crossAxisSpacing: defaultPadding,
+            //   mainAxisSpacing: defaultPadding,
+            //   childAspectRatio: Responsive.isMobile(context)
+            //       ? size.width < 650 && size.width > 350
+            //           ? 1.3
+            //           : 1
+            //       : size.width < 1400
+            //           ? 1.1
+            //           : 1.4,
+            // ),
             children: [
               // set drop off time
               TapEffect(
@@ -159,18 +159,6 @@ class _SystemSettingsState extends State<SystemSettings> {
                       },
                     ),
                   ),
-                if (context.watch<AllowOvertimeController>().state == true)
-                  //  set report scheduling time
-                  TapEffect(
-                    onClick: () => setReportSchedule(),
-                    child: SettingCard(
-                      icon: (SettingIcons.rescheduleIcon),
-                      titleText: "Report Scheduling",
-                      subText:
-                          "Set the time when system should issue out reports",
-                      trailText: _scheduledTime,
-                    ),
-                  ),
               ],
               //  set overtime interval
               CommonButton(
@@ -188,6 +176,7 @@ class _SystemSettingsState extends State<SystemSettings> {
 
 // saving settings
   void saveSettings() async {
+
     Map<String, dynamic> results = {
       "school_id": "${context.read<SchoolController>().state["school"]}",
       "drop_off_start_time": drop_off_time_start,
@@ -196,10 +185,10 @@ class _SystemSettingsState extends State<SystemSettings> {
       "pick_up_end_time": pick_up_time_end,
       "drop_off_allowance": "${context.read<DropOffController>().state}",
       "pick_up_allowance": "${context.read<PickUpController>().state}",
-      "allow_overtime": "${context.read<AllowOvertimeController>().state}",
-      "overtime_rate": "${context.read<OvertimeRateController>().state}",
-      "overtime_currency": currencyCode,
-      "overtime_interval": "${context.read<IntervalController>().state}",
+      "allow_overtime": context.read<AllowOvertimeController>().state,
+      "overtime_rate": context.read<OvertimeRateController>().state,
+      "overtime_rate_currency": currencyCode,
+      // "overtime_interval": context.read<IntervalController>().state,
       "settings_key[key]": "0",
     };
 

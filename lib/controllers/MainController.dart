@@ -26,11 +26,16 @@ class MainController extends ChangeNotifier {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
       _scaffoldKey.currentState!.openDrawer();
     }
+    // dispose off the scaffold key
+
+    // _scaffoldKey.currentState!.dispose();
     // function to fetch updates for the dashboard
 
     // set dashData
   }
-
+  void disposeKey() {
+    _scaffoldKey.currentState!.dispose();
+  }
   void fetchUpdates(BuildContext context) {
     fetchDashboardMetaData(context).then((v) {
       _dashData = v;
