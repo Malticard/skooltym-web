@@ -9,6 +9,7 @@ class MainController extends ChangeNotifier {
   List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
   int _stepCount = 0;
+  List<dynamic> _multiselect = [];
   List<OvertimeModel> _pendingOvertime = [];
 // getters
   List<StudentModel> get students => _students;
@@ -20,15 +21,21 @@ class MainController extends ChangeNotifier {
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   List<Map<String, dynamic>> get dashboardData => _dashData;
   List<OvertimeModel> get pendingOvertime => _pendingOvertime;
+  List<dynamic> get multiselect => _multiselect;
   void controlMenu() {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
       _scaffoldKey.currentState!.openDrawer();
     }
+    // dispose off the scaffold key
+
+    // _scaffoldKey.currentState!.dispose();
     // function to fetch updates for the dashboard
 
     // set dashData
   }
-
+  void disposeKey() {
+    _scaffoldKey.currentState!.dispose();
+  }
   void fetchUpdates(BuildContext context) {
     fetchDashboardMetaData(context).then((v) {
       _dashData = v;
@@ -84,6 +91,11 @@ void fetchPendingOvertime(String status){
 // stepper text count
 void setTextCount(int value){
     _stepCount = value;
+    notifyListeners();
+}
+//
+void newSelection(List<dynamic> selection){
+    _multiselect = selection;
     notifyListeners();
 }
 }

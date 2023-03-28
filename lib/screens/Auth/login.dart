@@ -20,22 +20,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Client c = Client();
   @override
   void initState() {
-    // get saved appTheme
-    context.read<ThemeController>().getTheme();
-    context.read<OnlineCheckerController>().checkOnline();
     super.initState();
+    // // get saved appTheme
   }
 
   @override
   Widget build(BuildContext context) {
-    // retrive app state
-    context.read<SchoolController>().getSchoolData();
-    // get saved appTheme
+    context.watch<ThemeController>().getTheme();
+    context.watch<OnlineCheckerController>().checkOnline();
     Size size = MediaQuery.of(context).size;
-    // check is app state is still intact.
-    // if (context.read<SchoolController>().state['role'] != null) {
-    //   Routes.namedRemovedUntilRoute(context, Routes.home);
-    // }
 
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark
@@ -105,22 +98,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         flex: 5,
                         child: Column(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: size.width * 0.015,
+                            if (context
+                                    .read<SchoolController>()
+                                    .state['fname'] !=
+                                null)
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: size.width * 0.015,
+                                ),
+                                child: Text(
+                                  "Welcome back ${context.read<SchoolController>().state['fname']}",
+                                  style: TextStyles(context)
+                                      .getTitleStyle()
+                                      .copyWith(
+                                        color: Colors.white,
+                                        fontSize: Responsive.isMobile(context)
+                                            ? 30
+                                            : 40,
+                                      ),
+                                ),
                               ),
-                              child: Text(
-                                "Welcome back",
-                                style: TextStyles(context)
-                                    .getTitleStyle()
-                                    .copyWith(
-                                      color: Colors.white,
-                                      fontSize: Responsive.isMobile(context)
-                                          ? 30
-                                          : 40,
-                                    ),
-                              ),
-                            ),
                             Padding(
                               padding: EdgeInsets.only(
                                 top: size.width * 0.0150,

@@ -178,7 +178,8 @@ class _AddGuardianState extends State<AddGuardian>
       Uri.parse(AppUrls.addGuardian),
     );
 
-    request.fields['student'] = context.read<StudentController>().state;
+    request.fields['student'] = json.encode(context.watch()<MainController>()
+        .multiselect);
     request.fields['type'] = _formControllers[6].text.trim();
     request.fields['relationship'] = _formControllers[8].text.trim();
     request.fields['guardian_fname'] =

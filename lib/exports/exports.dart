@@ -62,6 +62,7 @@ export '/widgets/CommonTextField.dart';
 export '/widgets/CommonButton.dart';
 export '/widgets/CustomDialog.dart';
 export '/widgets/space.dart';
+export '/widgets/CommonMenuWidget.dart';
 export '/widgets/CommonAppBarView.dart';
 export '/widgets/BottomUpAnimation.dart';
 export '/widgets/LoaderWidget.dart';

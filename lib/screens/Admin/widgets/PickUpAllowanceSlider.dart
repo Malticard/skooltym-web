@@ -23,7 +23,7 @@ class _PickUpAllowanceSliderState extends State<PickUpAllowanceSlider> {
             children: [
               Text(
                 "Set Pick allowance time",
-                style: TextStyles(context).getRegularStyle(),
+                style: TextStyles(context).getTitleStyle(),
               ),
               const Space(space: 0.03),
               Padding(
