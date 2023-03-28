@@ -24,7 +24,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
             children: [
               Text(
                 "Set drop off allowance",
-                style: TextStyles(context).getRegularStyle(),
+                style: TextStyles(context).getTitleStyle(),
               ),
               const Space(space: 0.03),
               Padding(

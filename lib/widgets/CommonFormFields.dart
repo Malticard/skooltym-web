@@ -212,26 +212,25 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                           :
                           // dropdown menu
                           (widget.formFields[index - 1]['menu'] != null)
-                              ? CommonDropDown(
-                                  icon: widget.formFields[index - 1]['icon'],
-                                  controller: widget.formControllers[index - 1],
-                                  titleText: widget.formFields[index - 1]
+                              ? CommonMenuWidget(
+                                  fieldColor: Theme.of(context).brightness ==
+                                      Brightness.light
+                                      ? Colors.white
+                                      : Color.fromARGB(66, 75, 74, 74),
+                                  // controller: widget.formControllers[index - 1],
+                                  fieldText: widget.formFields[index - 1]
                                       ['title'],
-                                  hintText: widget.formFields[index - 1]
-                                      ['hint'],
+                                  hint: widget.formFields[index - 1]['hint'],
                                   padding: widget.padding,
-                                  onSelect: (v) {
-                                    context
-                                        .read<StudentController>()
-                                        .trackStudent(v);
+                                  onChange: (v) {
+
+                                    debugPrint("data => $v");
+                                    if(v != null){
+                                      Provider.of<MainController>(context)
+                                          .newSelection(v);
+                                    }
+
                                   },
-                                  entries: List.generate(
-                                    widget.students!.length,
-                                    (x) => DropdownMenuEntry<String>(
-                                        label:
-                                            "${widget.students![x].studentFname} ${widget.students![x].studentLname}",
-                                        value: "${widget.students![x].id}"),
-                                  ),
                                 )
                               :
                               // other fields

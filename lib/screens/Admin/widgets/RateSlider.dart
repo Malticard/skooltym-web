@@ -21,7 +21,7 @@ class _RateSliderState extends State<RateSlider> {
             children: [
               Text(
                 "Set Overtime rate",
-                style: TextStyles(context).getRegularStyle(),
+                style: TextStyles(context).getTitleStyle(),
               ),
               const Space(space: 0.03),
               Padding(
@@ -48,7 +48,8 @@ class _RateSliderState extends State<RateSlider> {
               const Space(space: 0.03),
               Text(
                 "Rate ${state.floor()}",
-                style: TextStyles(context).getDescriptionStyle(),
+                style: TextStyles(context).getBoldStyle().copyWith(fontSize:
+                20),
               ),
               const Space(space: 0.03),
               CommonButton(

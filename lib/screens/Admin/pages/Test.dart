@@ -17,6 +17,7 @@ class _TestWidgetState extends State<TestWidget> {
   var selected;
   @override
   Widget build(BuildContext context) {
+    context.watch<MainController>().getAllStudents();
     return Card(
       elevation: 0,
       color: widget.fieldColor,
@@ -39,7 +40,7 @@ class _TestWidgetState extends State<TestWidget> {
           right: 16,
         ),
         child: SizedBox(
-          width: 500,
+
           height: MediaQuery.of(context).size.height * 0.5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
