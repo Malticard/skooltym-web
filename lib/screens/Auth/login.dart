@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Client c = Client();
   @override
   void initState() {
-    context.watch<ThemeController>().getTheme();
+    context.read<ThemeController>().getTheme();
     // context.watch<OnlineCheckerController>().checkOnline();
     super.initState();
     // // get saved appTheme
