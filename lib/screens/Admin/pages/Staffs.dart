@@ -33,8 +33,31 @@ class _StaffState extends State<Staff> {
         ),
         DataCell(Text(staffModel.staffEmail)),
         DataCell(Text(staffModel.staffGender)),
-        DataCell(buildActionButtons(
-            "${staffModel.staffFname} ${staffModel.staffLname}", context)),
+        DataCell(buildActionButtons(context,(){
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    height: MediaQuery.of(context).size.width / 3,
+                    child: Center(child: Text("Edit Staff")),
+                  ),
+                );
+              });
+        },(){
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    height: MediaQuery.of(context).size.width / 3,
+                    child: Center(child: Text("Delete Staff"),),
+                  ),
+                );
+              });
+        })),
       ],
     );
   }

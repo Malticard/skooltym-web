@@ -108,7 +108,31 @@ class _OvertimeReportsState extends State<OvertimeReports>
         DataCell(Text(overtimeModel.guardian)),
         DataCell(Text(overtimeModel.status)),
         if (context.read<SchoolController>().state['role'] == 'Finance')
-          DataCell(buildActionButtons("i", context)),
+          DataCell(buildActionButtons(context,(){
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: MediaQuery.of(context).size.width / 3,
+                      child: Center(child: Text("Edit Staff")),
+                    ),
+                  );
+                });
+          },(){
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: MediaQuery.of(context).size.width / 3,
+                      child: Center(child: Text("Delete Staff"),),
+                    ),
+                  );
+                });
+          })),
       ],
     );
   }
