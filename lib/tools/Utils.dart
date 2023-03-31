@@ -204,11 +204,12 @@ bool validateEmail(String email, BuildContext context) {
 
 // action buttos
 // build Action Buttons
-Widget buildActionButtons(String text, BuildContext context) {
+Widget buildActionButtons(BuildContext context,VoidCallback
+edit,VoidCallback delete) {
   return Row(
     children: [
       TextButton(
-        onPressed: () {},
+        onPressed: edit,
         child: Icon(
           Icons.edit,
           color: Colors.white,
@@ -222,10 +223,12 @@ Widget buildActionButtons(String text, BuildContext context) {
         width: 10,
       ),
       TextButton(
-        onPressed: () {
-          showAppDialog(context,
-              title: "Are you sure you want to delete $text?");
-        },
+        onPressed: delete,
+        //     () {
+        //
+        //   showAppDialog(context,
+        //       title: "Are you sure you want to delete $text?");
+        // },
         child: Icon(Icons.delete_outline_rounded, color: Colors.white),
         style: TextButton.styleFrom(
           backgroundColor: Colors.red,

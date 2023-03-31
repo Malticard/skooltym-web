@@ -24,22 +24,22 @@ class _ViewClassesState extends State<ViewClasses> {
   }
 
   List<String> staffs = ["Student Name", "Class", "Gender", "Actions"];
-  DataRow _dataRow(StaffModel staffModel, int i) {
-    return DataRow(
-      cells: [
-        DataCell(
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Text(staffModel.staffFname),
-          ),
-        ),
-        DataCell(Text(staffModel.staffEmail)),
-        DataCell(Text(staffModel.staffGender)),
-        DataCell(buildActionButtons(
-            "${staffModel.staffFname} ${staffModel.staffLname}", context)),
-      ],
-    );
-  }
+  // DataRow _dataRow(StaffModel staffModel, int i) {
+  //   return DataRow(
+  //     cells: [
+  //       DataCell(
+  //         Padding(
+  //           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+  //           child: Text(staffModel.staffFname),
+  //         ),
+  //       ),
+  //       DataCell(Text(staffModel.staffEmail)),
+  //       DataCell(Text(staffModel.staffGender)),
+  //       DataCell(buildActionButtons(
+  //           "${staffModel.staffFname} ${staffModel.staffLname}", context)),
+  //     ],
+  //   );
+  // }
 
   List<String>? _stepText;
 

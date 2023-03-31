@@ -4,7 +4,7 @@ import '/exports/exports.dart';
 class OvertimeReports extends StatefulWidget {
   final String? overtimeStatus;
   final String? label;
-  const OvertimeReports({super.key,this.overtimeStatus,this.label});
+  const OvertimeReports({super.key, this.overtimeStatus, this.label});
 
   @override
   State<OvertimeReports> createState() => _OvertimeReportsState();
@@ -28,8 +28,8 @@ class _OvertimeReportsState extends State<OvertimeReports>
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context,listen: false).fetchPendingOvertime
-      (widget.overtimeStatus ?? "Pending");
+    Provider.of<MainController>(context, listen: false)
+        .fetchPendingOvertime(widget.overtimeStatus ?? "Pending");
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
@@ -38,13 +38,13 @@ class _OvertimeReportsState extends State<OvertimeReports>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     //invoke new overtimes
-    Provider.of<MainController>(context,listen: false).fetchPendingOvertime
-      (widget.overtimeStatus ?? "Pending");
+    Provider.of<MainController>(context, listen: false)
+        .fetchPendingOvertime(widget.overtimeStatus ?? "Pending");
     return SizedBox(
       width: size.width,
       height: size.width / 2.5,
       child: Data_Table(
-        header:   Text(
+        header: Text(
           context.read<SchoolController>().state['role'] == 'Admin'
               ? widget.label ?? "Reports"
               : "Overtimes pending",
@@ -55,30 +55,42 @@ class _OvertimeReportsState extends State<OvertimeReports>
             label: Text("Student Name"),
           ),
           DataColumn(
-            label: Text("Date"),
+            label: Text("Picked by"),
           ),
           DataColumn(
-            label: Text("Amount "),
+            label: Text("Standard PickUp time"),
           ),
           DataColumn(
-            label: Text("Staff"),
+            label: Text("Actual PickUp time"),
           ),
           DataColumn(
-            label: Text("Status"),),
-          if(context.read<SchoolController>().state['role'] == 'Finance')
+            label: Text("Authorized by"),
+          ),
+          DataColumn(
+            label: Text("Interval "),
+          ),
+          DataColumn(
+            label: Text("Overtime rate"),
+          ),
+          DataColumn(
+            label: Text("Overtime charge"),
+          ),
+          if (context.read<SchoolController>().state['role'] == 'Finance')
             DataColumn(
-              label: Text("Actions"),),
+              label: Text("Actions"),
+            ),
         ],
         empty: SizedBox(
-          height:MediaQuery.of(context).size.width / 7,
-          child: NoDataWidget(text:"No ${widget.overtimeStatus} overtime "
-              "recorded "
-              ""),
+          height: MediaQuery.of(context).size.width / 7,
+          child: NoDataWidget(
+              text: "No ${widget.overtimeStatus} overtime "
+                  "recorded "
+                  ""),
         ),
         rows: List.generate(
           context.watch<MainController>().pendingOvertime.length,
-          (index) => overtimeDataRow(context.watch<MainController>().pendingOvertime
-          [index], index),
+          (index) => overtimeDataRow(
+              context.watch<MainController>().pendingOvertime[index], index),
         ),
       ),
     );
@@ -106,10 +118,45 @@ class _OvertimeReportsState extends State<OvertimeReports>
         DataCell(Text(overtimeModel.createdAt.toString())),
         DataCell(Text(overtimeModel.overtimeCharge.toString())),
         DataCell(Text(overtimeModel.guardian)),
+        DataCell(Text(overtimeModel.guardian)),
+        DataCell(Text(overtimeModel.guardian)),
+        DataCell(Text(overtimeModel.guardian)),
+        DataCell(Text(overtimeModel.guardian)),
         DataCell(Text(overtimeModel.status)),
         if (context.read<SchoolController>().state['role'] == 'Finance')
-          DataCell(buildActionButtons("i", context)),
+          DataCell(buildActionButtons(context, () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: MediaQuery.of(context).size.width / 3,
+                      child: Center(child: Text("Edit Staff")),
+                    ),
+                  );
+                });
+          }, () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: MediaQuery.of(context).size.width / 3,
+                      child: Center(
+                        child: Text("Delete Staff"),
+                      ),
+                    ),
+                  );
+                });
+          })),
       ],
     );
+  }
+
+  _buildButton() {
+    return DataCell(ElevatedButton(onPressed: () {  },
+    child: Text("Clear"),),);
   }
 }

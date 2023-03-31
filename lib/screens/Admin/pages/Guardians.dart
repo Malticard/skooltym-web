@@ -33,8 +33,31 @@ class _ViewGuardiansState extends State<ViewGuardians> {
         ),
         DataCell(Text(guardians.guardianEmail)),
         DataCell(Text(guardians.guardianGender)),
-        DataCell(buildActionButtons(
-            "${guardians.guardianFname} ${guardians.guardianLname}", context)),
+        DataCell(buildActionButtons(context,(){
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    height: MediaQuery.of(context).size.width / 3,
+                    child: Center(child: Text("Edit Staff")),
+                  ),
+                );
+              });
+        },(){
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    height: MediaQuery.of(context).size.width / 3,
+                    child: Center(child: Text("Delete Staff"),),
+                  ),
+                );
+              });
+        },)),
       ],
     );
   }

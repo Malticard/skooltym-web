@@ -159,6 +159,22 @@ class _SystemSettingsState extends State<SystemSettings> {
                       },
                     ),
                   ),
+                   if (context.watch<AllowOvertimeController>().state == true)
+                  // set overtime interval
+                  TapEffect(
+                    onClick: () => setReportSchedule(),
+                    child: BlocBuilder<IntervalController, double>(
+                      builder: (context, state) {
+                        return SettingCard(
+                          icon: (SettingIcons.overtimeIntervalIcon),
+                          titleText: "Report schedule",
+                          subText:
+                              "Charge overtime every after this amount of minutes.",
+                          trailText: "${state.floor()} (mins)",
+                        );
+                      },
+                    ),
+                  ),
               ],
               //  set overtime interval
               CommonButton(

@@ -34,9 +34,33 @@ class _ViewStudentsState extends State<ViewStudents> {
         ),
         DataCell(Text(studentModel.studentClass)),
         DataCell(Text(studentModel.studentGender)),
-        DataCell(buildActionButtons(
-            "${studentModel.studentFname} ${studentModel.studentLname}",
-            context)),
+        DataCell(buildActionButtons(context, () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    height: MediaQuery.of(context).size.width / 3,
+                    child: Center(child: Text("Edit Student")),
+                  ),
+                );
+              });
+        }, () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    height: MediaQuery.of(context).size.width / 3,
+                    child: Center(
+                      child: Text("Delete Student"),
+                    ),
+                  ),
+                );
+              });
+        })),
       ],
     );
   }

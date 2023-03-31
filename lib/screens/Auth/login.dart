@@ -20,14 +20,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Client c = Client();
   @override
   void initState() {
+    context.read<ThemeController>().getTheme();
+    // context.watch<OnlineCheckerController>().checkOnline();
     super.initState();
     // // get saved appTheme
   }
 
   @override
   Widget build(BuildContext context) {
-    context.watch<ThemeController>().getTheme();
-    context.watch<OnlineCheckerController>().checkOnline();
+
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
