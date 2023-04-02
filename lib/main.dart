@@ -49,7 +49,7 @@ void main() async {
             ),
           ),
           initialRoute: (prefs.getString('schoolData') != null &&
-                  (prefs.getString('role') == 'Admin' ||
+                  (prefs.getString('role') == 'SuperAdmin' || prefs.getString('role') == 'Admin' ||
                       prefs.getString('role') == 'Finance'))
               ? Routes.home
               : Routes.login,

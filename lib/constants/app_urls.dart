@@ -1,11 +1,11 @@
 class AppUrls {
-  static String devURL = "http://127.0.0.1:5050/";
-  //  "http://13.127.169.59:5050/";//"http://127.0.0.1:5059/";
+  static String devURL = "http://13.127.169.59:5050/";
   //"https://skooltym-backend-production.up.railway.app/";
   static String imageUrl = "assets/images/";
   static String iconUrl = "assets/icons/";
   // post urls
   static String login = devURL + "post/login";
+  static String addClass = devURL + "/post/class/create";
   static String addStaff = devURL + "post/staff/create";
   static String addSchool = devURL + "post/schools/create";
   static String addStudent = devURL + "post/students/create";
@@ -34,5 +34,10 @@ class AppUrls {
   static String pickUps = devURL + "specific/pickup/";
   static String dropOffs = devURL + "specific/dropoff/";
   static String getOtherGaurdians = devURL + "specific/otherGuardians/";
+  // delete
+  static String deleteStaff = devURL + "delete/staff/";
+  static String deleteStudent = devURL + "delete/students/";
+  static String deleteGuardian = devURL + "delete/guardians/";
+
 }
-// constants
+

@@ -5,7 +5,7 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<DropOffModel> dropOffModelFromJson(String str) => List<DropOffModel>.from(json.decode(str).map((x) => DropOffModel.fromJson(x)));
+List<DropOffModel> dropOffModelFromJson(String str) => List<DropOffModel>.from(json.decode(str ?? "[]").map((x) => DropOffModel.fromJson(x)));
 
 String dropOffModelToJson(List<DropOffModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 

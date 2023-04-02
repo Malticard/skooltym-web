@@ -52,7 +52,7 @@ class StaffModel {
         staffSchool: json["staff_school"],
         staffFname: json["staff_fname"],
         staffLname: json["staff_lname"],
-        staffContact: json["staff_contact"],
+        staffContact: json["staff_contact"].toString(),
         staffEmail: json["staff_email"],
         staffRole: json["staff_role"],
         staffGender: json["staff_gender"],
@@ -60,7 +60,7 @@ class StaffModel {
         staffPassword: json["staff_password"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        staffNo: json["staff_no"],
+        staffNo: json["staff_no"] ?? 0,
         v: json["__v"],
       );
 

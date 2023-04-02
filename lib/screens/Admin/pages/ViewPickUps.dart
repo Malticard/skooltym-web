@@ -37,7 +37,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(pickUp.studentName),
+                child: Text(pickUp.studentName!),
               ),
             ],
           ),

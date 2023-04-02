@@ -13,7 +13,7 @@ class _SideMenuState extends State<SideMenu> {
   var store;
   @override
   void initState() {
-    store = context.read<SchoolController>().state['role'] == 'Admin'
+    store = context.read<SchoolController>().state['role'] == 'Admin' || context.read<SchoolController>().state['role'] == 'SuperAdmin'
         ? options
         : financeViews;
     super.initState();

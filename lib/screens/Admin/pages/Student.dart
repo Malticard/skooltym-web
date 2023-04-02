@@ -50,15 +50,7 @@ class _ViewStudentsState extends State<ViewStudents> {
           showDialog(
               context: context,
               builder: (context) {
-                return Dialog(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(
-                      child: Text("Delete Student"),
-                    ),
-                  ),
-                );
+                return CommonDelete(title: '${studentModel.studentFname} ${studentModel.studentLname}', url: AppUrls.deleteStudent + studentModel.id);
               });
         })),
       ],

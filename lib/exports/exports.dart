@@ -70,6 +70,7 @@ export '/widgets/CommonDropDown.dart';
 export '/widgets/CommonFormFields.dart';
 export '/widgets/SettingsCard.dart';
 export '/widgets/DropDown.dart';
+export '/widgets/CommonDelete.dart';
 export '/widgets/NoDataWidget.dart';
 //routes paths
 export '/routes/routes.dart';

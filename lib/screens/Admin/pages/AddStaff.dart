@@ -77,28 +77,30 @@ class _AddStaffState extends State<AddStaff>  {
         buttonText: "Submit Staff Details",
         errorMsgs: errorFields,
         onSubmit: () {
-          //validateTextControllers(_formControllers)
-          if (validateEmail(_formControllers[1].text, context) != false
-              ) {
 
-              // debugPrint("Result => $data");
-              _handleFormUpload()
+          if (validateEmail(_formControllers[1].text, context) != false) {
+            _handleFormUpload()
                   .then(
-                    (value) => showSuccessDialog(
-                        _formControllers[0].text.trim().split(" ")[1],
-                        context),
-                  )
-                  .catchError(
-                    (onError) => () => showMessage(
-                        context: context,
-                        msg: 'An error occurred!! ',
-                        type: 'danger'),
-                  )
-                  .whenComplete(() => showMessage(
-                        context: context,
-                        type: 'success',
-                        msg: "Added new staff successfully",
-                      ));
+                    (value) {
+                      if (value.statusCode == 200 || value.statusCode == 201) {
+                        showSuccessDialog(
+                            _formControllers[0].text.trim().split(" ")[1],
+                            context);
+                      //  bottom msg
+                        showMessage(
+                          context: context,
+                          type: 'success',
+                          msg: "Added new staff successfully",
+                        );
+                      //  end of bottom msg
+                      } else {
+                        showSuccessDialog(
+                            _formControllers[0].text.trim().split(" ")[1],
+                            context);
+                      }
+                    })
+
+                  .whenComplete(() => Routes.popPage(context));
 
           }
         },

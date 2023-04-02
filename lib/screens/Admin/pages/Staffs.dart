@@ -33,7 +33,7 @@ class _StaffState extends State<Staff> {
         ),
         DataCell(Text(staffModel.staffEmail)),
         DataCell(Text(staffModel.staffGender)),
-        DataCell(buildActionButtons(context,(){
+        DataCell(buildActionButtons(context, () {
           showDialog(
               context: context,
               builder: (context) {
@@ -45,17 +45,12 @@ class _StaffState extends State<Staff> {
                   ),
                 );
               });
-        },(){
+        }, () {
+          // delete functionality
           showDialog(
               context: context,
               builder: (context) {
-                return Dialog(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(child: Text("Delete Staff"),),
-                  ),
-                );
+            return CommonDelete(title: '${staffModel.staffFname} ${staffModel.staffLname}', url: AppUrls.deleteStaff + staffModel.id,);
               });
         })),
       ],
@@ -74,8 +69,8 @@ class _StaffState extends State<Staff> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if(context.watch<MainController>().staffData.length > 0)
-                 const Expanded(child: SearchField()),
+              if (context.watch<MainController>().staffData.length > 0)
+                const Expanded(child: SearchField()),
               if (!Responsive.isMobile(context))
                 Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
               Text(
@@ -110,7 +105,7 @@ class _StaffState extends State<Staff> {
             ),
           ),
         ),
-        empty: NoDataWidget(text:"You currently have no staff records"),
+        empty: NoDataWidget(text: "You currently have no staff records"),
         rows: List.generate(
           context.watch<MainController>().staffData.length,
           (index) =>

@@ -19,7 +19,7 @@ loginUser(BuildContext context, String email, String password) async {
       BlocProvider.of<SchoolController>(context).setSchoolData(data);
       Routes.namedRemovedUntilRoute(
         context,
-        data['role'] == 'Admin' || data['role'] == 'Finance'
+        data['role'] == 'Admin' ||  data['role'] == 'SuperAdmin' || data['role'] == 'Finance'
             ? Routes.home
             : Routes.login,
       );
@@ -202,7 +202,7 @@ bool validateEmail(String email, BuildContext context) {
   return isValid;
 }
 
-// action buttos
+// action buttons
 // build Action Buttons
 Widget buildActionButtons(BuildContext context,VoidCallback
 edit,VoidCallback delete) {
@@ -299,7 +299,7 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/staff.svg",
     "title": "Classes",
-    "page": const ViewClasses(),
+    "page": const AddClass(),
   },
   {
     "title": "Pending Overtimes",
@@ -504,9 +504,9 @@ Future<List<DropOffModel>> dropOffs() async {
 /// Dashboard cards
 
 // fetch overtimes
-Future<List<OvertimeModel>> fetchOvertimeData() async {
+Future<List<OvertimeModel>> fetchOvertimeData(String status) async {
   var response = await Client().get(Uri.parse(AppUrls.overtime));
-  return overtimeModelFromJson(response.body);
+  return overtimeModelFromJson(response.body).where((element) => element.status == status).toList();
   // return response;
 }
 
@@ -525,35 +525,37 @@ String handSanIntervals() {
 Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
     BuildContext context) async {
   // get students total
-  int students = await computeStudentsTotal();
-  var drops = await dropOffs();
-  var picks = await pickUps();
-  var overtimes = await fetchOvertimeData();
+  // int students = await computeStudentsTotal();
+  // // var drops = await dropOffs();
+  // var picks = await pickUps();
+  // var clearedOvertimes = await fetchOvertimeData("Cleared");
+  // var pendingOvertimes = await fetchOvertimeData("Pending");
+
   List<Map<String, dynamic>> dashboardData = [
     {
       "label": "DROP OFFS",
-      "value": drops.length,
+      "value": 0,//drops.length,
       "icon": "assets/icons/004-playtime.svg",
       'color': Color.fromARGB(255, 106, 108, 235),
       "last_updated": "14:45"
     },
     {
       "label": "PICK UPS",
-      "value": picks.length,
+      "value": 0,
       "icon": "assets/icons/009-student.svg",
       'color': Color.fromARGB(255, 181, 150, 253),
       "last_updated": "14:45"
     },
     {
-      "label": "TOTALS",
-      "value": students,
+      "label": "CLEARED OVERTIME",
+      "value": 0,
       "icon": "assets/icons/002-all.svg",
       'color': Color.fromARGB(255, 77, 154, 255),
       "last_updated": "14:45"
     },
     {
-      "label": "OVERTIME",
-      "value": overtimes.length,
+      "label": "PENDING OVERTIME",
+      "value": 0,//pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
@@ -562,21 +564,21 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
   List<Map<String, dynamic>> financeData = [
     {
       "label": "CLEARED OVERTIME",
-      "value": overtimes.length,
+      "value": 0,//clearedOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": overtimes.length,
+      "value": 0,//pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
   ];
   return Provider.of<SchoolController>(context, listen: false).state['role'] ==
-          'Admin'
+  'Admin' || Provider.of<SchoolController>(context, listen: false).state['role'] == 'SuperAdmin'
       ? dashboardData
       : financeData;
 }
@@ -643,7 +645,7 @@ registerDropOffOrPickUp(var data, BuildContext context) async {
 // determine overtime
 overtimes(BuildContext context) async {
   var checker = InternetConnectionChecker.createInstance();
-  String overtimeMsg = "";
+  // String overtimeMsg = "";
   checker.hasConnection.then((online) {
     context.read<OnlineCheckerController>().updateChecker(online);
   });
@@ -657,8 +659,8 @@ overtimes(BuildContext context) async {
       var overtimeStart = data['overtime_start'];
       var overtimeEnd = data['overtime_end'];
       var overtimeDuration = data['overtime_duration'];
-      var overtimeFee = data['overtime_fee'];
-      var overtimeMsg = data['overtime_msg'];
+      // var overtimeFee = data['overtime_fee'];
+      // var overtimeMsg = data['overtime_msg'];
       // check if overtime is enabled
       if (overtime) {
         // check if the time is between the overtime start and end
