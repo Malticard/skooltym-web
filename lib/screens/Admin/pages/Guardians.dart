@@ -49,13 +49,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           showDialog(
               context: context,
               builder: (context) {
-                return Dialog(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(child: Text("Delete Staff"),),
-                  ),
-                );
+                return CommonDelete(title: "${guardians.guardianFname} ${guardians.guardianLname}", url: AppUrls.deleteGuardian + guardians.id,);
               });
         },)),
       ],

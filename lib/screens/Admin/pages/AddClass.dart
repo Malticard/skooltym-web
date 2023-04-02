@@ -41,7 +41,7 @@ class _AddClassState extends State<AddClass> {
   //   );
   // }
 
-  List<String>? _stepText;
+  List<String> _stepText = <String>[];
 
   int currentStep = 0;
   int _streams = 0;
@@ -265,14 +265,15 @@ class _AddClassState extends State<AddClass> {
                                   .read<StepperController>().state.fields!,
                                       (index) => _ctrl[index].text);
                               // }
-                              var data = {
+                             Map<String,dynamic> data = {
                                 "class_name": _classController.text,
-                                "class_streams": _stepText,
+                                "class_streams": json.encode(_stepText),
                               };
                               debugPrint("Saved data $data");
+                              showProgress(context,msg: 'Adding class in progress');
                               // saving class data to db
                               Client().post(Uri.parse(AppUrls.addClass),body: data).then((value) {
-                                showProgress(context,msg: 'Adding class in progress');
+                                 debugPrint("Worked on data $data");
                                 if(value.statusCode == 200){
                                   Routes.popPage(context);
                                   showMessage(context: context,msg: "Class added successfully",type: 'success',duration: 6);
@@ -281,6 +282,13 @@ class _AddClassState extends State<AddClass> {
                                  Routes.popPage(context);
                                   showMessage(context: context,msg: 'Class not added',type: 'danger',duration: 6);
                                 }
+                              }).whenComplete(() {
+                                // when done clear the stepper fields
+                                _classController.clear();
+                                _streamNoController.clear();
+                                _ctrl.forEach((element) {
+                                  element.clear();
+                                });
                               });
                               // done saving class data to db
                               setState(() => _index = 3);
