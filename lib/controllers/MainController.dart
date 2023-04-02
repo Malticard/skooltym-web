@@ -8,9 +8,11 @@ class MainController extends ChangeNotifier {
   List<PickUpModel> _picks = [];
   List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
+  List<ClassModel> _classes = [];
   int _stepCount = 0;
   List<dynamic> _multiselect = [];
   List<OvertimeModel> _pendingOvertime = [];
+
 // getters
   List<StudentModel> get students => _students;
   List<StaffModel> get staffData => _availableStaff;
@@ -22,6 +24,9 @@ class MainController extends ChangeNotifier {
   List<Map<String, dynamic>> get dashboardData => _dashData;
   List<OvertimeModel> get pendingOvertime => _pendingOvertime;
   List<dynamic> get multiselect => _multiselect;
+  List<ClassModel> get classes => _classes;
+  // end of getters
+
   void controlMenu() {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
       _scaffoldKey.currentState!.openDrawer();
@@ -97,5 +102,14 @@ void setTextCount(int value){
 void newSelection(List<dynamic> selection){
     _multiselect = selection;
     notifyListeners();
+}
+// method to fetch available classes
+void fetchClasses(){
+  Client().get(Uri.parse(AppUrls.getClasses)).then((value) {
+    if(value.statusCode == 200){
+     _classes = classModelFromJson(value.body);
+      notifyListeners();
+    }
+  });
 }
 }

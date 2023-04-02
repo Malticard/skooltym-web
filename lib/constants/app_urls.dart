@@ -27,6 +27,7 @@ class AppUrls {
   static String getGuardians = devURL + "get/guardians";
   static String getPickUps = devURL + "get/pickup";
   static String getDropOffs = devURL + "get/dropoff";
+  static String getClasses = devURL + "get/class";
   // fetch specific
   static String specficOvertime = devURL + "speciic/overtime/";
   static String getGuardian = devURL + "specific/guardians/";
@@ -38,6 +39,9 @@ class AppUrls {
   static String deleteStaff = devURL + "delete/staff/";
   static String deleteStudent = devURL + "delete/students/";
   static String deleteGuardian = devURL + "delete/guardians/";
+  static String deletePickUp = devURL + "delete/pickup/";
+  static String deleteDropOff = devURL + "delete/dropoff/";
+  static String deleteClass = devURL + "delete/class/";
 
 }
 
