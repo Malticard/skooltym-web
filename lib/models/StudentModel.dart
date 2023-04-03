@@ -23,13 +23,15 @@ class StudentModel {
         required this.createdAt,
         required this.updatedAt,
         required this.studentNo,
+        required this.v,
+        required this.studentKey,
     });
 
     bool isComplete;
     String id;
     String studentFname;
     String studentLname;
-    int studentContact;
+    String studentContact;
     String studentEmail;
     String studentClass;
     String studentGender;
@@ -37,6 +39,8 @@ class StudentModel {
     DateTime createdAt;
     DateTime updatedAt;
     int studentNo;
+    int v;
+    List<dynamic> studentKey;
 
     factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
         isComplete: json["isComplete"],
@@ -51,6 +55,8 @@ class StudentModel {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         studentNo: json["student_no"],
+        v: json["__v"],
+        studentKey: List<dynamic>.from(json["student_key"].map((x) => x)),
     );
 
     Map<String, dynamic> toJson() => {
@@ -66,5 +72,7 @@ class StudentModel {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "student_no": studentNo,
+        "__v": v,
+        "student_key": List<dynamic>.from(studentKey.map((x) => x)),
     };
 }
