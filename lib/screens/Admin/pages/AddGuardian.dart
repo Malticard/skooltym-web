@@ -190,7 +190,7 @@ class _AddGuardianState extends State<AddGuardian>
     request.fields['guardian_email'] = _formControllers[1].text.trim();
     request.fields['guardian_gender'] = _formControllers[4].text.trim();
 
-    request.files.add(MultipartFile('guardian_profile_pic',
+    request.files.add(MultipartFile('image',
         File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
     request.fields['guardian_dateOfEntry'] = _formControllers[7].text.trim();

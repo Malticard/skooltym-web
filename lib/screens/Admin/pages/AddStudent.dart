@@ -122,14 +122,45 @@ class _AddStudentState extends State<AddStudent> {
   Future<StreamedResponse> _handleStudentRegistration() async {
     String uri = _formControllers[3].text;
     /**
-     *    school: req.body.school,
-                    student_fname: req.body.student_fname,
-                    student_lname: req.body.student_lname,
-                    student_contact: req.body.student_contact,
-                    student_email: req.body.student_email,
-                    student_class: req.body.student_class,
-                    student_gender: req.body.student_gender,
-                    student_profile_pic: req.file.path,
+     *     school: {
+        type: String,
+        required: true
+    },
+    student_fname: {
+        type: String,
+        required: true
+    },
+    student_lname: {
+        type: String,
+        required: true
+    },
+    other_name: {
+        type: String,
+        required: true
+    },
+    username: {
+        type: String,
+        required: true
+    },
+    student_class: {
+        type: String,
+        required: true
+    },
+    student_gender: {
+        type: String,
+        enum: ['Male', 'Female'],
+        default: 'Male',
+        required: true
+    },
+    student_profile_pic: {
+        type:String,
+        // required: true,
+        data: Buffer,
+        contentType: String
+    },
+  
+   
+    
                     student_key: req.body.student_key
      */
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStudent));
@@ -140,9 +171,9 @@ class _AddStudentState extends State<AddStudent> {
     request.fields['student_fname'] =
         _formControllers[0].text.trim().split(" ").first;
     request.fields['student_lname'] =
-        _formControllers[0].text.trim().split(" ").last;
-    request.fields['student_contact'] = _formControllers[2].text.trim();
-    request.fields['student_email'] = _formControllers[1].text.trim();
+        _formControllers[1].text.trim().split(" ").last;
+    request.fields['username'] = "${_formControllers[0].text.trim().split(" ").first}_256";//_formControllers[2].text.trim();
+    request.fields['other_name'] = _formControllers[2].text.trim();
     request.fields['student_class'] = _formControllers[5].text.trim();
     request.fields['student_gender'] = _formControllers[4].text.trim();
     //  ============================== student profile pic ============================
