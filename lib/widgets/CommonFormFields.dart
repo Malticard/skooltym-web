@@ -226,7 +226,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
 
                                     debugPrint("data => $v");
                                     if(v != null){
-                                      Provider.of<MainController>(context)
+                                      Provider.of<MainController>(context,listen:false)
                                           .newSelection(v);
                                     }
 

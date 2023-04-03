@@ -82,7 +82,9 @@ class _AddStaffState extends State<AddStaff>  {
             _handleFormUpload()
                   .then(
                     (value) {
+                      debugPrint("Staff data -> ${value.reasonPhrase}");
                       if (value.statusCode == 200 || value.statusCode == 201) {
+                         Routes.popPage(context);
                         showSuccessDialog(
                             _formControllers[0].text.trim().split(" ")[1],
                             context);
@@ -94,14 +96,18 @@ class _AddStaffState extends State<AddStaff>  {
                         );
                       //  end of bottom msg
                       } else {
-                        showSuccessDialog(
-                            _formControllers[0].text.trim().split(" ")[1],
-                            context);
+                        Routes.popPage(context);
+                         showMessage(
+                          context: context,
+                          type: 'danger',
+                          msg: "Error ${value.reasonPhrase}",
+                        );
+                        // showSuccessDialog(
+                        //     _formControllers[0].text.trim().split(" ")[1],
+                        //     context);
                       }
-                    })
-
-                  .whenComplete(() => Routes.popPage(context));
-
+                    });
+                  
           }
         },
       ),
@@ -127,7 +133,7 @@ class _AddStaffState extends State<AddStaff>  {
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
-    request.files.add(MultipartFile('staff_profile_pic',
+    request.files.add(MultipartFile('image',
         File(_formControllers[3].text.trim()).readAsBytes().asStream(), File(_formControllers[3].text.trim()).lengthSync(),
         filename: uri.split("/").last));
     //

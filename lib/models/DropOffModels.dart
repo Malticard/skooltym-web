@@ -38,11 +38,11 @@ class DropOffModel {
 
   factory DropOffModel.fromJson(Map<String, dynamic> json) => DropOffModel(
     id: json["_id"],
-    schoolName: json["school_name"],
-    studentName: json["student_name"],
-    dropOffTime: json["drop_off_time"],
-    droppedBy: json["dropped_by"],
-    authorizedBy: json["authorized_by"],
+    schoolName: json["school_name"] ?? "",
+    studentName: json["student_name"] ?? "",
+    dropOffTime: json["drop_off_time"] ?? "",
+    droppedBy: json["dropped_by"] ?? "",
+    authorizedBy: json["authorized_by"] ?? "",
     comments: json["comments"],
     dropoffKey: List<dynamic>.from(json["dropoff_key"].map((x) => x)),
     createdAt: DateTime.parse(json["createdAt"]),
