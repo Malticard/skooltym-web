@@ -147,7 +147,7 @@ class _AddStudentState extends State<AddStudent> {
     request.fields['student_gender'] = _formControllers[4].text.trim();
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
-    request.files.add(MultipartFile('student_profile_pic',
+    request.files.add(MultipartFile('image',
         File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
     //  ============================== student key ============================
