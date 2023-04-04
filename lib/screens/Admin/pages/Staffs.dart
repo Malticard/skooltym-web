@@ -17,7 +17,7 @@ class _StaffViewState extends State<StaffView> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).staffUpdate();
+    Provider.of<MainController>(context).staffUpdate(context);
     super.didChangeDependencies();
   }
 
@@ -39,9 +39,9 @@ class _StaffViewState extends State<StaffView> {
               builder: (context) {
                 return Dialog(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(child: Text("Edit Staff")),
+                         width: MediaQuery.of(context).size.width / 4,
+                            height: MediaQuery.of(context).size.width / 2.3,
+                    child: UpdateStaff(staff: staffModel),
                   ),
                 );
               });

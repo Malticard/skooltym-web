@@ -17,7 +17,7 @@ class _ViewStudentsState extends State<ViewStudents> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).getAllStudents();
+    Provider.of<MainController>(context).getAllStudents(context);
     super.didChangeDependencies();
   }
 
@@ -40,9 +40,9 @@ class _ViewStudentsState extends State<ViewStudents> {
               builder: (context) {
                 return Dialog(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(child: Text("Edit Student")),
+                    width: MediaQuery.of(context).size.width / 3.5,
+                            height: MediaQuery.of(context).size.width / 2,
+                    child: UpdateStudent(studentModel: studentModel),
                   ),
                 );
               });
@@ -60,7 +60,7 @@ class _ViewStudentsState extends State<ViewStudents> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Provider.of<MainController>(context).getAllStudents();
+    Provider.of<MainController>(context).getAllStudents(context);
     return SizedBox(
       height: size.width / 2.5,
       child: Data_Table(
@@ -85,8 +85,8 @@ class _ViewStudentsState extends State<ViewStudents> {
                       builder: (context) {
                         return Dialog(
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 2.6,
+                            width: MediaQuery.of(context).size.width / 3.5,
+                            height: MediaQuery.of(context).size.width / 2,
                             child: AddStudent(),
                           ),
                         );

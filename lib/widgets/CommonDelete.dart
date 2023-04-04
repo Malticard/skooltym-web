@@ -14,7 +14,7 @@ class _CommonDeleteState extends State<CommonDelete> {
     return  Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 4,
-        height: MediaQuery.of(context).size.width / 16,
+        height: MediaQuery.of(context).size.width / 14,
         child: Column(
           children: [
             Space(space: 0.02),

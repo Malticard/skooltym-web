@@ -16,18 +16,18 @@ class AppUrls {
   static String registerOvertime = devURL + "post/overtime/create";
   // static String registerOvertime = devURL + "post/overtime/create";
   // get urls
-  static String roles = devURL + "get/roles";
+  static String roles = devURL + "get/roles/";
   static String schools = devURL + "get/schools";
-  static String students = devURL + "get/students";
-  static String overtime = devURL + "get/overtime";
-  static String staff = devURL + "get/staff";
-  static String settings = devURL + "get/settings";
-  static String years = devURL + "get/years";
-  static String getStudents = devURL + "get/students";
-  static String getGuardians = devURL + "get/guardians";
-  static String getPickUps = devURL + "get/pickup";
-  static String getDropOffs = devURL + "get/dropoff";
-  static String getClasses = devURL + "get/class";
+  static String students = devURL + "get/students/";
+  static String overtime = devURL + "get/overtime/";
+  static String staff = devURL + "get/staff/";
+  static String settings = devURL + "get/settings/";
+  static String years = devURL + "get/years/";
+  static String getStudents = devURL + "get/students/";
+  static String getGuardians = devURL + "get/guardians/";
+  static String getPickUps = devURL + "get/pickup/";
+  static String getDropOffs = devURL + "get/dropoff/";
+  static String getClasses = devURL + "get/class/";
   // fetch specific
   static String specficOvertime = devURL + "specific/overtime/";
   static String getGuardian = devURL + "specific/guardians/";
@@ -42,6 +42,15 @@ class AppUrls {
   static String deletePickUp = devURL + "delete/pickup/";
   static String deleteDropOff = devURL + "delete/dropoff/";
   static String deleteClass = devURL + "delete/class/";
+  // update
+  static String updateStaff = devURL + "update/staff/";
+  static String updateStudent = devURL + "update/students/";
+  static String updateGuardian = devURL + "update/guardians/";
+  static String updatePickUp = devURL + "update/pickup/";
+  static String updateDropOff = devURL + "update/dropoff/";
+  static String updateClass = devURL + "update/class/";
+  static String updateSettings = devURL + "update/settings/";
+  static String updateOvertime = devURL + "update/overtime/";
 
 }
 

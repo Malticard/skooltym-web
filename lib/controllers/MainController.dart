@@ -49,39 +49,39 @@ class MainController extends ChangeNotifier {
   }
 
   // getting available students
-  void getAllStudents() {
-    fetchStudents().then((v) {
-      _students = v;
+  void getAllStudents(BuildContext context) {
+   Client().get(Uri.parse(AppUrls.students + context.read<SchoolController>().state['school'])).then((v) {
+      _students = studentModelFromJson(v.body);
       notifyListeners();
     });
   }
 
 // check for new entries of students
-  void staffUpdate() {
-    Client().get(Uri.parse(AppUrls.staff)).then((response) {
+  void staffUpdate(BuildContext context) {
+    Client().get(Uri.parse(AppUrls.staff + context.read<SchoolController>().state['school'])).then((response) {
       _availableStaff = staffModelFromJson(response.body);
       notifyListeners();
     });
   }
 
   // check new guardians
-  void newGuardians() {
-    Client().get(Uri.parse(AppUrls.getGuardians)).then((value) {
+  void newGuardians(BuildContext context) {
+    Client().get(Uri.parse(AppUrls.getGuardians + context.read<SchoolController>().state['school'])).then((value) {
       _guardians = guardiansFromJson(value.body);
       notifyListeners();
     });
   }
 
   // available picks and drops
-  availableDropOffs() {
-    dropOffs().then((drops) {
+  availableDropOffs(BuildContext context) {
+    dropOffs(context).then((drops) {
       _drops = drops;
       notifyListeners();
     });
   }
 
-  availablePickUps() {
-    pickUps().then((picks) {
+  availablePickUps(BuildContext context) {
+    pickUps(context).then((picks) {
       _picks = picks;
       notifyListeners();
     });

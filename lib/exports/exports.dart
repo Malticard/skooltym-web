@@ -143,7 +143,6 @@ export '/screens/Admin/pages/Reports.dart';
 export '/screens/Admin/pages/Staffs.dart';
 export '/screens/Admin/pages/Test.dart';
 export '/screens/Admin/pages/Student.dart';
-export '/screens/Admin/pages/Classes.dart';
 export '/screens/Admin/pages/Guardians.dart';
 export '/screens/Admin/pages/AddStaff.dart';
 export '/screens/Admin/pages/ViewDropOff.dart';
@@ -154,7 +153,10 @@ export '/screens/Admin/settings/SystemSettings.dart';
 export '/screens/Admin/settings/privacy_policy.dart';
 export '/screens/Admin/settings/about.dart';
 export '/screens/dashboard/dashboard.dart';
-
+// updates
+export '/screens/Admin/pages/update/UpdateStudent.dart';
+export '/screens/Admin/pages/update/UpdateStaff.dart';
+export '/screens/Admin/pages/update/UpdateGuardian.dart';
 // --> admin widgets
 export '/screens/Admin/widgets/PopOptions.dart';
 export '/screens/Admin/widgets/IntervalSlider.dart';

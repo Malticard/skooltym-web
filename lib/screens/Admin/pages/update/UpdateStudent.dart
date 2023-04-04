@@ -4,11 +4,12 @@ import 'dart:io';
 
 import '/exports/exports.dart';
 
-class AddStudent extends StatefulWidget {
-  const AddStudent({super.key});
+class UpdateStudent extends StatefulWidget {
+  final StudentModel studentModel;
+  const UpdateStudent({super.key, required this.studentModel});
 
   @override
-  State<AddStudent> createState() => _AddStudentState();
+  State<UpdateStudent> createState() => _UpdateStudentState();
 }
 
 // form data
@@ -41,12 +42,6 @@ final List<Map<String, dynamic>> _formFields = [
       "Female",
     ]
   },
-    {
-    "title": "Attach student responsible for*",
-    'icon': Icons.person_3_outlined,
-    "hint": "Select student",
-    "menu": [0],
-  },
   {
     "title": "Class*",
     "hint": "e.g grade 2",
@@ -55,10 +50,21 @@ final List<Map<String, dynamic>> _formFields = [
   },
 ];
 
-class _AddStudentState extends State<AddStudent> {
-  final List<TextEditingController> _formControllers =
-      List.generate(_formFields.length, (index) => TextEditingController());
-
+class _UpdateStudentState extends State<UpdateStudent> {
+  List<TextEditingController> _formControllers = <TextEditingController>[];
+  @override
+ void initState() { 
+  super.initState();
+   _formControllers = <TextEditingController>[
+    TextEditingController(text: widget.studentModel.studentFname),
+    TextEditingController(text:widget.studentModel.studentLname),
+    // TextEditingController(text:widget.studentModel.studentOthername),
+    TextEditingController(text: widget.studentModel.studentContact),
+    TextEditingController(text: ""),
+    TextEditingController(text: widget.studentModel.studentGender),
+    TextEditingController(text: widget.studentModel.studentClass),
+  ];
+}
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
@@ -169,11 +175,9 @@ class _AddStudentState extends State<AddStudent> {
     
                     student_key: req.body.student_key
      */
-    var request = MultipartRequest('POST', Uri.parse(AppUrls.addStudent));
+    var request = MultipartRequest('POST', Uri.parse(AppUrls.updateStudent));
     debugPrint("${request.headers}");
     //  ============================== student details ============================
-     request.fields['guardians'] = json.encode(context.watch()<MainController>()
-        .multiselect);
     request.fields['school'] =
         "${context.read<SchoolController>().state['school']}";
     request.fields['student_fname'] =
