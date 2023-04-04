@@ -33,7 +33,7 @@ class Guardians {
     String type;
     bool isComplete;
     String id;
-    Student student;
+    Student_ student;
     String relationship;
     String guardianFname;
     String guardianLname;
@@ -52,7 +52,7 @@ class Guardians {
         type: json["type"].toString(),
         isComplete: json["isComplete"],
         id: json["_id"],
-        student: Student.fromJson(json["student"] ?? {}),
+        student: Student_.fromJson(json["student"] ?? {}),
         relationship: json["relationship"],
         guardianFname: json["guardian_fname"],
         guardianLname: json["guardian_lname"],
@@ -109,8 +109,8 @@ class GuardianKey {
     };
 }
 
-class Student {
-    Student({
+class Student_ {
+    Student_({
         required this.studentFname,
         required this.studentLname,
     });
@@ -118,7 +118,7 @@ class Student {
     String studentFname;
     String studentLname;
 
-    factory Student.fromJson(Map<String, dynamic> json) => Student(
+    factory Student_.fromJson(Map<String, dynamic> json) => Student_(
         studentFname: json["student_fname"] ?? "",
         studentLname: json["student_lname"] ?? "",
     );

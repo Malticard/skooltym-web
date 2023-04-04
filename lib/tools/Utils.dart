@@ -289,7 +289,7 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/staff.svg",
     "title": "Staffs",
-    "page": const Staff(),
+    "page":  StaffView(),
   },
   {
     "title": "Guardians",
@@ -352,6 +352,20 @@ List<Map<String, dynamic>> financeViews = [
     "icon": "assets/icons/menu_store.svg",
     "title": "Cleared Overtimes",
     "page": const OvertimeReports(overtimeStatus: "Cleared",),
+  },
+];
+
+// malticard views
+List<Map<String, dynamic>> malticardViews = [
+  {
+    "icon": "assets/icons/menu_dashbord.svg",
+    "title": "Dashboard",
+    "page": const Dashboard()
+  },
+  {
+    "title": "Add School",
+    "page": const MalticardView(),
+    'icon': "assets/icons/menu_store.svg"
   },
 ];
 // valid text controllers
@@ -577,10 +591,20 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "last_updated": "14:45"
     },
   ];
+  List<Map<String, dynamic>> malticardData = [
+    {
+      "label": "SCHOOLS",
+      "value": 0,//pendingOvertimes.length,
+      "icon": "assets/icons/005-overtime.svg",
+      'color': Color.fromARGB(255, 50, 66, 95),
+      "last_updated": "14:45"
+    }
+  ];
   return Provider.of<SchoolController>(context, listen: false).state['role'] ==
   'Admin' || Provider.of<SchoolController>(context, listen: false).state['role'] == 'SuperAdmin'
       ? dashboardData
-      : financeData;
+      : Provider.of<SchoolController>(context, listen: false).state['role'] ==
+  'Finance'? financeData : malticardData;
 }
 
 // logic to fetch a specific guardian from the scanners

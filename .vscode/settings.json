@@ -5,10 +5,13 @@
         "dropoff",
         "fname",
         "Focuse",
+        "Lname",
         "Malticard",
         "prefs",
+        "specfic",
         "Starage",
         "Sumbnail",
+        "sweetalert",
         "vsync"
     ]
 }

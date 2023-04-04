@@ -2,14 +2,14 @@
 
 import '/exports/exports.dart';
 
-class Staff extends StatefulWidget {
-  const Staff({super.key});
+class StaffView extends StatefulWidget {
+  const StaffView({super.key});
 
   @override
-  State<Staff> createState() => _StaffState();
+  State<StaffView> createState() => _StaffViewState();
 }
 
-class _StaffState extends State<Staff> {
+class _StaffViewState extends State<StaffView> {
   @override
   void initState() {
     super.initState();
@@ -60,7 +60,7 @@ class _StaffState extends State<Staff> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Provider.of<MainController>(context).staffUpdate();
+    // Provider.of<MainController>(context).staffUpdate();
     return SizedBox(
       height: size.width / 2.5,
       child: Data_Table(
@@ -71,7 +71,9 @@ class _StaffState extends State<Staff> {
             children: [
               if (context.watch<MainController>().staffData.length > 0)
                  Expanded(child: SearchField(onChanged: (value){
-                    Provider.of<MainController>(context).searchStaff(value!);
+                  debugPrint("search value $value");
+                    context.read<MainController>().searchStaff(value!);
+                    debugPrint("search result ${context.read<MainController>().staffData[0].staffFname}");
                 },)),
               if (!Responsive.isMobile(context))
                 Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),

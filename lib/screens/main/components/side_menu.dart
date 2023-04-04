@@ -15,7 +15,7 @@ class _SideMenuState extends State<SideMenu> {
   void initState() {
     store = context.read<SchoolController>().state['role'] == 'Admin' || context.read<SchoolController>().state['role'] == 'SuperAdmin'
         ? options
-        : financeViews;
+        :context.read<SchoolController>().state['role'] == 'Finance'? financeViews :malticardViews;
     super.initState();
   }
 

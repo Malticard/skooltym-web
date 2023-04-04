@@ -4,7 +4,7 @@ class AppUrls {
   static String imageUrl = "assets/images/";
   static String iconUrl = "assets/icons/";
   // post urls
-  static String login = devURL + "post/login";
+  static String login = devURL + "post/staff-login";
   static String addClass = devURL + "post/class/create";
   static String addStaff = devURL + "post/staff/create";
   static String addSchool = devURL + "post/schools/create";
@@ -29,7 +29,7 @@ class AppUrls {
   static String getDropOffs = devURL + "get/dropoff";
   static String getClasses = devURL + "get/class";
   // fetch specific
-  static String specficOvertime = devURL + "speciic/overtime/";
+  static String specficOvertime = devURL + "specific/overtime/";
   static String getGuardian = devURL + "specific/guardians/";
   static String getStudent = devURL + "specific/students/";
   static String pickUps = devURL + "specific/pickup/";
