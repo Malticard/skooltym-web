@@ -163,3 +163,7 @@ export '/screens/Admin/widgets/PickUpAllowanceSlider.dart';
 export '/screens/Admin/widgets/DropOffAllowanceSlider.dart';
 export '/screens/Admin/widgets/DashboardCard.dart';
 // --------------------------------------------------------
+
+// ----> Malticard
+export '/screens/malticard/index.dart';
+// --------------------------------------------------------

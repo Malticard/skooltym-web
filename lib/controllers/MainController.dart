@@ -112,4 +112,14 @@ void fetchClasses(){
     }
   });
 }
+  // functtion to search for staff members by  either first name or last nam
+
+  void searchStaff(String value){
+    Client().get(Uri.parse(AppUrls.staff)).then((value) {
+      if(value.statusCode == 200){
+        _availableStaff = staffModelFromJson(value.body).where((element) => element.staffFname == value || element.staffLname == value).toList();
+        notifyListeners();
+      }
+    });
+  }
 }

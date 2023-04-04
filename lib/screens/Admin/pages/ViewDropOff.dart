@@ -43,14 +43,14 @@ class _ViewDropOffsState extends State<ViewDropOffs>
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(dropOff.studentName),
+                child: Text(dropOff.studentName ?? ""),
               ),
             ],
           ),
         ),
-        DataCell(Text(dropOff.droppedBy)),
-        DataCell(Text(dropOff.dropOffTime)),
-        DataCell(Text(dropOff.authorizedBy)),
+        DataCell(Text(dropOff.droppedBy.guardianFname)),
+        DataCell(Text(dropOff.dropOffTime )),
+        DataCell(Text(dropOff.authorizedBy ?? "Not Cleared")),
       ],
     );
   }

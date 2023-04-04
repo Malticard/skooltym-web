@@ -39,8 +39,10 @@ class _SideMenuState extends State<SideMenu> {
                   Space(),
                   Text(
                       "${context.read<SchoolController>()
-                          .state['schoolName']}",style:TextStyles(context)
-                      .getBoldStyle().copyWith(color:Colors.white),)
+                          .state['schoolName']}",
+                          overflow: TextOverflow.ellipsis,
+                          style:TextStyles(context)
+                      .getBoldStyle().copyWith(color:Colors.white,fontSize: 16),)
                 ],
               ),
             ),

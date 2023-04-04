@@ -70,7 +70,9 @@ class _StaffState extends State<Staff> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (context.watch<MainController>().staffData.length > 0)
-                const Expanded(child: SearchField()),
+                 Expanded(child: SearchField(onChanged: (value){
+                    Provider.of<MainController>(context).searchStaff(value!);
+                },)),
               if (!Responsive.isMobile(context))
                 Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
               Text(
@@ -85,7 +87,7 @@ class _StaffState extends State<Staff> {
                         return Dialog(
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 3,
+                            height: MediaQuery.of(context).size.width / 2.3,
                             child: AddStaff(),
                           ),
                         );

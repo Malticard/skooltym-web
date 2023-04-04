@@ -29,7 +29,7 @@ class StudentModel {
     String id;
     String studentFname;
     String studentLname;
-    int studentContact;
+    String studentContact;
     String studentEmail;
     String studentClass;
     String studentGender;
@@ -43,14 +43,14 @@ class StudentModel {
         id: json["_id"],
         studentFname: json["student_fname"],
         studentLname: json["student_lname"],
-        studentContact: json["student_contact"],
-        studentEmail: json["student_email"],
+        studentContact: json["student_contact"].toString(),
+        studentEmail: json["student_email"] ?? "",
         studentClass: json["student_class"],
         studentGender: json["student_gender"],
         studentProfilePic: json["student_profile_pic"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        studentNo: json["student_no"],
+        studentNo: json["student_no"] ?? 0,
     );
 
     Map<String, dynamic> toJson() => {

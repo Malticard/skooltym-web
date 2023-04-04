@@ -84,10 +84,6 @@ class _AddStaffState extends State<AddStaff>  {
                     (value) {
                       debugPrint("Staff data -> ${value.reasonPhrase}");
                       if (value.statusCode == 200 || value.statusCode == 201) {
-                         Routes.popPage(context);
-                        showSuccessDialog(
-                            _formControllers[0].text.trim().split(" ")[1],
-                            context);
                       //  bottom msg
                         showMessage(
                           context: context,
@@ -96,7 +92,7 @@ class _AddStaffState extends State<AddStaff>  {
                         );
                       //  end of bottom msg
                       } else {
-                        Routes.popPage(context);
+                  
                          showMessage(
                           context: context,
                           type: 'danger',
@@ -106,6 +102,11 @@ class _AddStaffState extends State<AddStaff>  {
                         //     _formControllers[0].text.trim().split(" ")[1],
                         //     context);
                       }
+                    }).whenComplete((){
+                        showSuccessDialog(
+                            _formControllers[0].text.trim().split(" ")[1],
+                            context);
+                            Routes.popPage(context);
                     });
                   
           }

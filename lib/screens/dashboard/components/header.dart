@@ -101,14 +101,21 @@ class _ProfileCardState extends State<ProfileCard> {
   }
 }
 
-class SearchField extends StatelessWidget {
+class SearchField extends StatefulWidget {
+  final ValueChanged<String?>? onChanged;
   const SearchField({
-    Key? key,
+    Key? key,  this.onChanged,
   }) : super(key: key);
 
   @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged:widget.onChanged ,
       decoration: InputDecoration(
         hintText: "Search",
         fillColor: Theme.of(context).canvasColor,
