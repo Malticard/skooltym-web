@@ -8,7 +8,7 @@ class MainController extends ChangeNotifier {
   List<PickUpModel> _picks = [];
   List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
-  List<ClassModel> _classes = [];
+  List<String> _classes = [];
   int _stepCount = 0;
   List<dynamic> _multiselect = [];
   List<OvertimeModel> _pendingOvertime = [];
@@ -24,7 +24,7 @@ class MainController extends ChangeNotifier {
   List<Map<String, dynamic>> get dashboardData => _dashData;
   List<OvertimeModel> get pendingOvertime => _pendingOvertime;
   List<dynamic> get multiselect => _multiselect;
-  List<ClassModel> get classes => _classes;
+  List<String> get classes => _classes;
   // end of getters
 
   void controlMenu() {
@@ -87,9 +87,10 @@ class MainController extends ChangeNotifier {
     });
   }
 //  fetch pending overtimes
-void fetchPendingOvertime(String status){
-  Client().get(Uri.parse(AppUrls.specficOvertime + status)).then((value) {
-    _pendingOvertime = overtimeModelFromJson(value.body);
+void fetchPendingOvertime(String status, BuildContext context) {
+  Client().get(Uri.parse(AppUrls.overtime + context.read<SchoolController>().state['school'])).then((value) {
+    debugPrint("Current overtime response => ${value.body}");
+    _pendingOvertime = overtimeModelFromJson((value.body)).where((element) => element.status == status).toList();
     notifyListeners();
   });
 }
@@ -100,6 +101,7 @@ void setTextCount(int value){
 }
 //
 void newSelection(List<dynamic> selection){
+  debugPrint("Selection => $selection");
     _multiselect = selection;
     notifyListeners();
 }

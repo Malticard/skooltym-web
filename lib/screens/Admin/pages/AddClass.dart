@@ -263,8 +263,9 @@ class _AddClassState extends State<AddClass> {
                                 setState(() => _index = 3);
                                 // }
                                 Map<String, dynamic> data = {
+                                  "school":context.read<SchoolController>().state['school'],
                                   "class_name": _classController.text,
-                                  "class_streams": json.encode(_stepText),
+                                  "class_streams": "${_stepText}",
                                 };
                                 debugPrint("Saved data $data");
                                 showProgress(context,
@@ -343,7 +344,7 @@ class _AddClassState extends State<AddClass> {
                       DataCell(Text(context
                           .watch<MainController>()
                           .classes[index]
-                          .className)),
+                          )),
                       DataCell(
                         Row(
                           children: [
@@ -358,12 +359,12 @@ class _AddClassState extends State<AddClass> {
                                   title: context
                                       .watch<MainController>()
                                       .classes[index]
-                                      .className,
+                                      ,
                                   url: AppUrls.deleteClass +
                                       context
                                           .watch<MainController>()
                                           .classes[index]
-                                          .id,
+                                          ,
                                 ),
                               ),
                               icon: Icon(Icons.delete),

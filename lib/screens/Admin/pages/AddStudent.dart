@@ -33,7 +33,7 @@ final List<Map<String, dynamic>> _formFields = [
   },
   {'title': 'Student Profile', 'profile': 5},
   {
-    "title": "Gender*",
+    "title": "Gender *",
     "hint": "Select gender",
     "data": [
       "Select gender",
@@ -42,13 +42,13 @@ final List<Map<String, dynamic>> _formFields = [
     ]
   },
     {
-    "title": "Attach student responsible for*",
+    "title": "Attach  guardian(s) *",
     'icon': Icons.person_3_outlined,
-    "hint": "Select student",
+    "hint": "Select guardian(s) *",
     "menu": [0],
   },
   {
-    "title": "Class*",
+    "title": "Class *",
     "hint": "e.g grade 2",
     "password": false,
     'icon': Icons.home_work_outlined
@@ -68,60 +68,58 @@ class _AddStudentState extends State<AddStudent> {
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Text("Add Student", style: TextStyles(context).getTitleStyle()),
-          SingleChildScrollView(
-            child: CommonFormFields(
-              padding: _padding,
-              formFields: _formFields,
-              formControllers: _formControllers,
-              buttonText: "Save Student Details",
-              onSubmit: () {
-                if (true) {
-                  showProgress(context);
-                  _handleStudentRegistration()
-                      .then(
-                        (value) {
-                          if (value.statusCode == 200) {
-                            Routes.popPage(context);
-                            showMessage(
-                              context: context,
-                              type: 'success',
-                              msg: "Added new student successfully",
-                            );
-                            _formControllers.forEach((v) => v.clear());
-                            showSuccessDialog(
-                                _formControllers[0].text.trim().split(" ")[1],
-                                context);
-                          } else {
-                            showMessage(
-                              msg:
-                                  "Failed to add student ${value.reasonPhrase}",
-                              context: context,
-                              type: "danger",
-                            );
-                          }
-                        },
-                      )
-                      .catchError(
-                        (onError) => () => showMessage(
+    return Column(
+      children: [
+        Text("Add Student", style: TextStyles(context).getTitleStyle()),
+        SingleChildScrollView(
+          child: CommonFormFields(
+            padding: _padding,
+            formFields: _formFields,
+            formControllers: _formControllers,
+            buttonText: "Save Student Details",
+            onSubmit: () {
+              if (true) {
+                showProgress(context);
+                _handleStudentRegistration()
+                    .then(
+                      (value) {
+                        if (value.statusCode == 200) {
+                          Routes.popPage(context);
+                          showMessage(
                             context: context,
-                            msg: 'An error occurred!! ',
-                            type: 'danger'),
-                      )
-                      .whenComplete(() {
-                        Routes.popPage(context);
-                      });
-                }
-              },
-              errorMsgs: errorFields,
-              students: [],
-            ),
+                            type: 'success',
+                            msg: "Added new student successfully",
+                          );
+                          _formControllers.forEach((v) => v.clear());
+                          showSuccessDialog(
+                              _formControllers[0].text.trim().split(" ")[1],
+                              context);
+                        } else {
+                          showMessage(
+                            msg:
+                                "Failed to add student ${value.reasonPhrase}",
+                            context: context,
+                            type: "danger",
+                          );
+                        }
+                      },
+                    )
+                    .catchError(
+                      (onError) => () => showMessage(
+                          context: context,
+                          msg: 'An error occurred!! ',
+                          type: 'danger'),
+                    )
+                    .whenComplete(() {
+                      Routes.popPage(context);
+                    });
+              }
+            },
+            errorMsgs: errorFields,
+            students: [],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -172,8 +170,7 @@ class _AddStudentState extends State<AddStudent> {
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStudent));
     debugPrint("${request.headers}");
     //  ============================== student details ============================
-     request.fields['guardians'] = json.encode(context.watch()<MainController>()
-        .multiselect);
+     request.fields['guardians'] = json.encode(context.watch()<MainController>().multiselect);
     request.fields['school'] =
         "${context.read<SchoolController>().state['school']}";
     request.fields['student_fname'] =

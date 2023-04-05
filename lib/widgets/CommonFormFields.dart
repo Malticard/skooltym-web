@@ -212,26 +212,28 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                           :
                           // dropdown menu
                           (widget.formFields[index - 1]['menu'] != null)
-                              ? CommonMenuWidget(
-                                  fieldColor: Theme.of(context).brightness ==
-                                      Brightness.light
-                                      ? Colors.white
-                                      : Color.fromARGB(66, 75, 74, 74),
-                                  // controller: widget.formControllers[index - 1],
-                                  fieldText: widget.formFields[index - 1]
-                                      ['title'],
-                                  hint: widget.formFields[index - 1]['hint'],
-                                  padding: widget.padding,
-                                  onChange: (v) {
-
-                                    debugPrint("data => $v");
-                                    if(v != null){
-                                      Provider.of<MainController>(context,listen:false)
-                                          .newSelection(v);
-                                    }
-
-                                  },
-                                )
+                              ? SingleChildScrollView(
+                                child: CommonMenuWidget(
+                                    fieldColor: Theme.of(context).brightness ==
+                                        Brightness.light
+                                        ? Colors.white
+                                        : Color.fromARGB(66, 75, 74, 74),
+                                    // controller: widget.formControllers[index - 1],
+                                    fieldText: widget.formFields[index - 1]
+                                        ['title'],
+                                    hint: widget.formFields[index - 1]['hint'],
+                                    padding: widget.padding,
+                                    onChange: (v) {
+                              
+                                      debugPrint("data => $v");
+                                      if(v != null){
+                                        Provider.of<MainController>(context,listen:false)
+                                            .newSelection(v);
+                                      }
+                              
+                                    },
+                                  ),
+                              )
                               :
                               // other fields
                               CommonTextField(

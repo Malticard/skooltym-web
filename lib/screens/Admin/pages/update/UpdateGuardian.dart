@@ -42,12 +42,6 @@ final List<Map<String, dynamic>> _formFields = [
     ]
   },
   {
-    "title": "Attach student responsible for*",
-    'icon': Icons.person_3_outlined,
-    "hint": "Select student",
-    "menu": [0],
-  },
-  {
     "title": "Type*",
     'icon': Icons.reduce_capacity_outlined,
     "hint": "eg Relationship type e.g Primary",
@@ -93,7 +87,6 @@ class _UpdateGuardianState extends State<UpdateGuardian>
       TextEditingController(text: widget.guardianModel.guardianContact.toString()),
       TextEditingController(text: ""),
       TextEditingController(text: widget.guardianModel.guardianGender),
-     TextEditingController(text: widget.guardianModel.student.toString()),
       TextEditingController(text: widget.guardianModel.relationship),
       TextEditingController(text: widget.guardianModel.type),
       TextEditingController(text: widget.guardianModel.guardianDateOfEntry.toString()),
@@ -191,8 +184,7 @@ class _UpdateGuardianState extends State<UpdateGuardian>
       Uri.parse(AppUrls.updateGuardian + "${widget.guardianModel.id}"),
     );
 
-    // request.fields['student'] = json.encode(context.watch()<MainController>()
-    //     .multiselect);
+    request.fields['school'] = context.read<SchoolController>().state['school'];
     request.fields['type'] = _formControllers[6].text.trim();
     request.fields['relationship'] = _formControllers[8].text.trim();
     request.fields['guardian_fname'] =

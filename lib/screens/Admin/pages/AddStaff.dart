@@ -63,7 +63,7 @@ class _AddStaffState extends State<AddStaff> {
   List<String> errorFields = List.generate(formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    //
+    // 0756598425
     Size size = MediaQuery.of(context).size;
     return Dialog(
       child: SizedBox(
@@ -80,8 +80,9 @@ class _AddStaffState extends State<AddStaff> {
             errorMsgs: errorFields,
             onSubmit: () {
               if (validateEmail(_formControllers[1].text, context) != false) {
-                _handleFormUpload().then((value) {
                   Routes.popPage(context);
+
+                _handleFormUpload().then((value) {
                   debugPrint("Staff data -> ${value.reasonPhrase}");
                   if (value.statusCode == 200 || value.statusCode == 201) {
                     //  bottom msg
@@ -90,22 +91,25 @@ class _AddStaffState extends State<AddStaff> {
                       type: 'success',
                       msg: "Added new staff successfully",
                     );
+
                     //  end of bottom msg
                   } else {
-                    // outes.popPage(context);
                     showMessage(
                       context: context,
                       type: 'danger',
                       msg: "Error ${value.reasonPhrase}",
                     );
+                    Routes.popPage(context);
+
                     // showSuccessDialog(
                     //     _formControllers[0].text.trim().split(" ")[1],
                     //     context);
                   }
-                }).whenComplete(() {
-                  showSuccessDialog(
+                    showSuccessDialog(
                       _formControllers[0].text.trim().split(" ")[1], context);
-                  Routes.popPage(context);
+                }).whenComplete(() {
+                
+                  // Routes.popPage(context);
                 });
               }
             },

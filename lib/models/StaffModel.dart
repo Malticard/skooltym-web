@@ -57,7 +57,7 @@ class StaffModel {
         staffRole: json["staff_role"],
         staffGender: json["staff_gender"],
         staffProfilePic: json["staff_profilePic"],
-        staffPassword: json["staff_password"],
+        staffPassword: json["staff_password"] ?? "",
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         staffNo: json["staff_no"] ?? 0,

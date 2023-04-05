@@ -98,7 +98,7 @@ class _AddGuardianState extends State<AddGuardian>
             students: context.watch<MainController>().students,
             formControllers: _formControllers,
             buttonText: "Save Guardian Details",
-            onSubmit: _addGuardian,
+            onSubmit:() =>  addGuardian(),
             errorMsgs: errorFields,
           ),
         ),
@@ -107,11 +107,11 @@ class _AddGuardianState extends State<AddGuardian>
   }
 
 // adding guardian
-  void _addGuardian() {
-    debugPrint("hey am here");
+  void addGuardian() {
     if (validateEmail(_formControllers[1].text, context) != false) {
+    debugPrint("hey am here");
      
-      _handleGuardian()
+      handleGuardian()
           .then((value) {
             debugPrint("Status code ${value.statusCode}");
             Routes.popPage(context);
@@ -133,16 +133,16 @@ class _AddGuardianState extends State<AddGuardian>
     }
   }
 
-  Future<StreamedResponse> _handleGuardian() {
+  Future<StreamedResponse> handleGuardian() {
     String uri = _formControllers[3].text.trim();
     //
     var request = MultipartRequest(
       'POST',
       Uri.parse(AppUrls.addGuardian),
     );
-
-    request.fields['type'] = _formControllers[6].text.trim();
-    request.fields['relationship'] = _formControllers[8].text.trim();
+    request.fields['school'] = context.read<SchoolController>().state['school'];
+    request.fields['type'] = _formControllers[5].text.trim();
+    request.fields['relationship'] = _formControllers[7].text.trim();
     request.fields['guardian_fname'] =
         _formControllers[0].text.trim().split(" ").first;
     request.fields['guardian_lname'] =
@@ -154,7 +154,7 @@ class _AddGuardianState extends State<AddGuardian>
     request.files.add(MultipartFile('image',
         File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
-    request.fields['guardian_dateOfEntry'] = _formControllers[7].text.trim();
+    request.fields['guardian_dateOfEntry'] = _formControllers[6].text.trim();
     request.fields['guardian_key[key]'] = "";
     var response = request.send();
      debugPrint("Status code ${response}");

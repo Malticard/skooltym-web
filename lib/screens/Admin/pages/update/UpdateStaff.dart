@@ -99,8 +99,9 @@ void initState() {
                         showMessage(
                           context: context,
                           type: 'success',
-                          msg: "Added new staff successfully",
+                          msg: "Updated staff successfully",
                         );
+                        Routes.popPage(context);
                       //  end of bottom msg
                       } else {
                   
@@ -113,11 +114,6 @@ void initState() {
                         //     _formControllers[0].text.trim().split(" ")[1],
                         //     context);
                       }
-                    }).whenComplete((){
-                        showSuccessDialog(
-                            _formControllers[0].text.trim().split(" ")[1],
-                            context);
-                            Routes.popPage(context);
                     });
                   
           }

@@ -26,7 +26,7 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
   var selected;
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents(context);
+    context.watch<MainController>().newGuardians(context);
     return Padding(
       padding: widget.padding,
       child: Column(
@@ -59,7 +59,7 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
               ),
               child: SizedBox(
                 child: CustomSearchableDropDown(
-                  items: context.watch<MainController>().students,
+                  items: context.watch<MainController>().guardians,
                   label: widget.hint,
                   multiSelectTag: 'Names',
                   multiSelectValuesAsWidget: true,
@@ -70,8 +70,8 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
                     child: Icon(Icons.search),
                   ),
                   dropDownMenuItems:
-                      context.watch<MainController>().students.map((item) {
-                    return "${item.studentFname} ${item.studentLname}";
+                      context.watch<MainController>().guardians.map((item) {
+                    return "${item.guardianFname} ${item.guardianLname}";
                   }).toList(),
                   onChanged: widget.onChange, //(value){
                   decoration:

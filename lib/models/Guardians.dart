@@ -11,11 +11,10 @@ String guardiansToJson(List<Guardians> data) => json.encode(List<dynamic>.from(d
 
 class Guardians {
     Guardians({
-        required this.type,
-        required this.isComplete,
         required this.id,
-        required this.student,
+        required this.school,
         required this.relationship,
+        required this.type,
         required this.guardianFname,
         required this.guardianLname,
         required this.guardianContact,
@@ -24,67 +23,64 @@ class Guardians {
         required this.guardianProfilePic,
         required this.guardianDateOfEntry,
         required this.guardianKey,
+        required this.isComplete,
         required this.createdAt,
         required this.updatedAt,
-        required this.guardianNo,
         required this.v,
     });
 
-    String type;
-    bool isComplete;
-    String id;
-    Student_ student;
-    String relationship;
-    String guardianFname;
-    String guardianLname;
-    int guardianContact;
-    String guardianEmail;
-    String guardianGender;
-    String guardianProfilePic;
-    DateTime guardianDateOfEntry;
-    List<GuardianKey> guardianKey;
-    DateTime createdAt;
-    DateTime updatedAt;
-    int guardianNo;
-    int v;
+    final String id;
+    final String school;
+    final String relationship;
+    final String type;
+    final String guardianFname;
+    final String guardianLname;
+    final int guardianContact;
+    final String guardianEmail;
+    final String guardianGender;
+    final String guardianProfilePic;
+    final String guardianDateOfEntry;
+    final List<GuardianKey> guardianKey;
+    final bool isComplete;
+    final DateTime createdAt;
+    final DateTime updatedAt;
+    final int v;
 
     factory Guardians.fromJson(Map<String, dynamic> json) => Guardians(
-        type: json["type"].toString(),
-        isComplete: json["isComplete"],
         id: json["_id"],
-        student: Student_.fromJson(json["student"] ?? {}),
+        school: json["school"],
         relationship: json["relationship"],
+        type: json["type"],
         guardianFname: json["guardian_fname"],
         guardianLname: json["guardian_lname"],
         guardianContact: json["guardian_contact"],
         guardianEmail: json["guardian_email"],
         guardianGender: json["guardian_gender"],
         guardianProfilePic: json["guardian_profile_pic"],
-        guardianDateOfEntry: DateTime.parse(json["guardian_dateOfEntry"]),
+        guardianDateOfEntry: json["guardian_dateOfEntry"],
         guardianKey: List<GuardianKey>.from(json["guardian_key"].map((x) => GuardianKey.fromJson(x))),
+        isComplete: json["isComplete"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        guardianNo: json["guardian_no"] ?? 0,
         v: json["__v"],
     );
 
     Map<String, dynamic> toJson() => {
-        "type": type,
-        "isComplete": isComplete,
         "_id": id,
-        "student": student.toJson(),
+        "school": school,
         "relationship": relationship,
+        "type": type,
         "guardian_fname": guardianFname,
         "guardian_lname": guardianLname,
         "guardian_contact": guardianContact,
         "guardian_email": guardianEmail,
         "guardian_gender": guardianGender,
         "guardian_profile_pic": guardianProfilePic,
-        "guardian_dateOfEntry": guardianDateOfEntry.toIso8601String(),
+        "guardian_dateOfEntry": guardianDateOfEntry,
         "guardian_key": List<dynamic>.from(guardianKey.map((x) => x.toJson())),
+        "isComplete": isComplete,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
-        "guardian_no": guardianNo,
         "__v": v,
     };
 }
@@ -95,8 +91,8 @@ class GuardianKey {
         required this.id,
     });
 
-    dynamic key;
-    String id;
+    final dynamic key;
+    final String id;
 
     factory GuardianKey.fromJson(Map<String, dynamic> json) => GuardianKey(
         key: json["key"],
@@ -106,25 +102,5 @@ class GuardianKey {
     Map<String, dynamic> toJson() => {
         "key": key,
         "_id": id,
-    };
-}
-
-class Student_ {
-    Student_({
-        required this.studentFname,
-        required this.studentLname,
-    });
-
-    String studentFname;
-    String studentLname;
-
-    factory Student_.fromJson(Map<String, dynamic> json) => Student_(
-        studentFname: json["student_fname"] ?? "",
-        studentLname: json["student_lname"] ?? "",
-    );
-
-    Map<String, dynamic> toJson() => {
-        "student_fname": studentFname,
-        "student_lname": studentLname,
     };
 }
