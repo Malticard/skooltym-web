@@ -28,8 +28,8 @@ class _OvertimeReportsState extends State<OvertimeReports>
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context, listen: false)
-        .fetchPendingOvertime(widget.overtimeStatus ?? "Pending");
+    // Provider.of<MainController>(context, listen: false)
+    //     .fetchPendingOvertime(widget.overtimeStatus ?? "Pending");
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
@@ -38,8 +38,8 @@ class _OvertimeReportsState extends State<OvertimeReports>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     //invoke new overtimes
-    Provider.of<MainController>(context, listen: false)
-        .fetchPendingOvertime(widget.overtimeStatus ?? "Pending");
+    // Provider.of<MainController>(context, listen: false)
+    //     .fetchPendingOvertime(widget.overtimeStatus ?? "Pending");
     return SizedBox(
       width: size.width,
       height: size.width / 2.5,
@@ -87,11 +87,12 @@ class _OvertimeReportsState extends State<OvertimeReports>
                   "recorded "
                   ""),
         ),
-        rows: List.generate(
-          context.watch<MainController>().pendingOvertime.length,
-          (index) => overtimeDataRow(
-              context.watch<MainController>().pendingOvertime[index], index),
-        ),
+        rows:[]
+        //  List.generate(
+        //   context.watch<MainController>().pendingOvertime.length,
+        //   (index) => overtimeDataRow(
+        //       context.watch<MainController>().pendingOvertime[index], index),
+        // ),
       ),
     );
   }

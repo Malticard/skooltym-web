@@ -23,6 +23,7 @@ class StudentModel {
         required this.createdAt,
         required this.updatedAt,
         required this.studentNo,
+      
     });
 
     bool isComplete;
@@ -37,6 +38,7 @@ class StudentModel {
     DateTime createdAt;
     DateTime updatedAt;
     int studentNo;
+
 
     factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
         isComplete: json["isComplete"],
@@ -66,5 +68,6 @@ class StudentModel {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "student_no": studentNo,
+        
     };
 }
