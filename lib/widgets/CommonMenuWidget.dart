@@ -26,14 +26,14 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
   var selected;
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents();
+    context.watch<MainController>().getAllStudents(context);
     return Padding(
       padding: widget.padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            widget.fieldText ?? "",
+            widget.fieldText,
             style: TextStyles(context).getDescriptionStyle(),
           ),
           Card(

@@ -2,14 +2,14 @@
 
 import '/exports/exports.dart';
 
-class Staff extends StatefulWidget {
-  const Staff({super.key});
+class StaffView extends StatefulWidget {
+  const StaffView({super.key});
 
   @override
-  State<Staff> createState() => _StaffState();
+  State<StaffView> createState() => _StaffViewState();
 }
 
-class _StaffState extends State<Staff> {
+class _StaffViewState extends State<StaffView> {
   @override
   void initState() {
     super.initState();
@@ -17,7 +17,7 @@ class _StaffState extends State<Staff> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).staffUpdate();
+    Provider.of<MainController>(context).staffUpdate(context);
     super.didChangeDependencies();
   }
 
@@ -39,9 +39,9 @@ class _StaffState extends State<Staff> {
               builder: (context) {
                 return Dialog(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(child: Text("Edit Staff")),
+                         width: MediaQuery.of(context).size.width / 4,
+                            height: MediaQuery.of(context).size.width / 2.3,
+                    child: UpdateStaff(staff: staffModel),
                   ),
                 );
               });
@@ -60,7 +60,7 @@ class _StaffState extends State<Staff> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Provider.of<MainController>(context).staffUpdate();
+    // Provider.of<MainController>(context).staffUpdate();
     return SizedBox(
       height: size.width / 2.5,
       child: Data_Table(
@@ -70,7 +70,11 @@ class _StaffState extends State<Staff> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (context.watch<MainController>().staffData.length > 0)
-                const Expanded(child: SearchField()),
+                 Expanded(child: SearchField(onChanged: (value){
+                  debugPrint("search value $value");
+                    context.read<MainController>().searchStaff(value!);
+                    debugPrint("search result ${context.read<MainController>().staffData[0].staffFname}");
+                },)),
               if (!Responsive.isMobile(context))
                 Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
               Text(
@@ -85,7 +89,7 @@ class _StaffState extends State<Staff> {
                         return Dialog(
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 3,
+                            height: MediaQuery.of(context).size.width / 2.3,
                             child: AddStaff(),
                           ),
                         );

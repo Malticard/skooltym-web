@@ -48,6 +48,7 @@ void main() async {
                   : Colors.white,
             ),
           ),
+          // initialRoute: Routes.malticard,
           initialRoute: (prefs.getString('schoolData') != null &&
                   (prefs.getString('role') == 'SuperAdmin' || prefs.getString('role') == 'Admin' ||
                       prefs.getString('role') == 'Finance'))

@@ -58,16 +58,16 @@ class _OvertimeReportsState extends State<OvertimeReports>
             label: Text("Picked by"),
           ),
           DataColumn(
-            label: Text("Standard PickUp time"),
+            label: Text("Standard PickUp"),
           ),
           DataColumn(
-            label: Text("Actual PickUp time"),
+            label: Text("Actual PickUp"),
           ),
           DataColumn(
             label: Text("Authorized by"),
           ),
           DataColumn(
-            label: Text("Interval "),
+            label: Text("Interval"),
           ),
           DataColumn(
             label: Text("Overtime rate"),
@@ -110,19 +110,19 @@ class _OvertimeReportsState extends State<OvertimeReports>
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(overtimeModel.student),
+                child: Text("${overtimeModel.student.studentFname} ${overtimeModel.student.studentLname}"),
               ),
             ],
           ),
         ),
-        DataCell(Text(overtimeModel.createdAt.toString())),
+        DataCell(Text("${overtimeModel.guardian.guardianFname} ${overtimeModel.guardian.guardianLname}")),
+        DataCell(Text(overtimeModel.settings.pickUpEndTime.toString())),
+        DataCell(Text(overtimeModel.settings.overtimeRate.toString())),
+        DataCell(Text("${overtimeModel.staff.staffFname} ${overtimeModel.staff.staffLname}")),
+        DataCell(Text(overtimeModel.settings.overtimeInterval.toString())),
+        DataCell(Text(overtimeModel.settings.overtimeRate.toString())),
         DataCell(Text(overtimeModel.overtimeCharge.toString())),
-        DataCell(Text(overtimeModel.guardian)),
-        DataCell(Text(overtimeModel.guardian)),
-        DataCell(Text(overtimeModel.guardian)),
-        DataCell(Text(overtimeModel.guardian)),
-        DataCell(Text(overtimeModel.guardian)),
-        DataCell(Text(overtimeModel.status)),
+        // DataCell(Text(overtimeModel.status)),
         if (context.read<SchoolController>().state['role'] == 'Finance')
           DataCell(buildActionButtons(context, () {
             showDialog(

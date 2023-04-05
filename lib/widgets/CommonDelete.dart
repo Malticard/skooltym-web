@@ -14,7 +14,7 @@ class _CommonDeleteState extends State<CommonDelete> {
     return  Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 4,
-        height: MediaQuery.of(context).size.width / 18,
+        height: MediaQuery.of(context).size.width / 14,
         child: Column(
           children: [
             Space(space: 0.02),
@@ -32,13 +32,13 @@ class _CommonDeleteState extends State<CommonDelete> {
                     TextButton(
                       onPressed: () {
                         Client().delete(Uri.parse(widget.url)).then((value) {
-                          Routes.popPage(context);
+                         
                           if(value.statusCode == 200 || value.statusCode == 201){
                             showMessage(context: context,type: 'success',msg: '${widget.title} removed successfully..');
                           } else{
-                            showMessage(context: context,msg: 'Error ${value.reasonPhrase}');
+                            showMessage(context: context,msg: 'Error ${value.reasonPhrase}',type: 'danger');
                           }
-                        });
+                        }).whenComplete(() =>  Routes.popPage(context));
                       },
                       child: Text(
                         "Yes",

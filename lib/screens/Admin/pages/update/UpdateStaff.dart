@@ -1,15 +1,28 @@
 import '/exports/exports.dart';
 // export 'package:flutter/cupertino.dart';
 
-class AddStaff extends StatefulWidget {
-  const AddStaff({super.key});
+class UpdateStaff extends StatefulWidget {
+  final StaffModel staff;
+  const UpdateStaff({super.key, required this.staff});
 
   @override
-  State<AddStaff> createState() => _AddStaffState();
+  State<UpdateStaff> createState() => _UpdateStaffState();
 }
 
-class _AddStaffState extends State<AddStaff>  {
-
+class _UpdateStaffState extends State<UpdateStaff>  {
+List<TextEditingController> _formControllers = <TextEditingController>[];
+@override
+void initState() { 
+  super.initState();
+   _formControllers = <TextEditingController>[
+    TextEditingController(text: "${widget.staff.staffFname} ${widget.staff.staffLname}"),
+    TextEditingController(text:widget.staff.staffEmail),
+    TextEditingController(text: widget.staff.staffContact),
+    TextEditingController(text: ""),
+    TextEditingController(text: widget.staff.staffGender),
+    TextEditingController(text: widget.staff.staffRole),
+  ];
+}
   // form details
   static final List<Map<String, dynamic>> formFields = [
     {
@@ -52,10 +65,7 @@ class _AddStaffState extends State<AddStaff>  {
     },
   ];
 
-  
-  final List<TextEditingController> _formControllers =
-      List.generate(formFields.length, (index) => TextEditingController());
-
+ 
   // overall form padding
   EdgeInsets padding =
       const EdgeInsets.only(left: 14, top: 0, right: 14, bottom: 5);
@@ -65,7 +75,8 @@ class _AddStaffState extends State<AddStaff>  {
   List<String> errorFields = List.generate(formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    //
+
+
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: padding,
@@ -119,7 +130,7 @@ class _AddStaffState extends State<AddStaff>  {
     String uri = _formControllers[3].text.trim();
   debugPrint("handling form upload with $uri");
     //
-    var request = MultipartRequest('POST', Uri.parse(AppUrls.addStaff));
+    var request = MultipartRequest('POST', Uri.parse(AppUrls.updateStaff + widget.staff.id));
     // =============================== form fields =======================
     request.fields['staff_school'] =
         "${context.read<SchoolController>().state['school']}";

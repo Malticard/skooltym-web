@@ -4,11 +4,12 @@ import 'dart:io';
 
 import '/exports/exports.dart';
 
-class AddGuardian extends StatefulWidget {
-  const AddGuardian({super.key});
+class UpdateGuardian extends StatefulWidget {
+  final Guardians guardianModel;
+  const UpdateGuardian({super.key, required this.guardianModel});
 
   @override
-  State<AddGuardian> createState() => _AddGuardianState();
+  State<UpdateGuardian> createState() => _UpdateGuardianState();
 }
 
 final List<Map<String, dynamic>> _formFields = [
@@ -41,6 +42,12 @@ final List<Map<String, dynamic>> _formFields = [
     ]
   },
   {
+    "title": "Attach student responsible for*",
+    'icon': Icons.person_3_outlined,
+    "hint": "Select student",
+    "menu": [0],
+  },
+  {
     "title": "Type*",
     'icon': Icons.reduce_capacity_outlined,
     "hint": "eg Relationship type e.g Primary",
@@ -66,10 +73,11 @@ final List<Map<String, dynamic>> _formFields = [
   },
 ];
 
-class _AddGuardianState extends State<AddGuardian>
+class _UpdateGuardianState extends State<UpdateGuardian>
     with TickerProviderStateMixin {
+  final List<TextEditingController> formControllers = [];
   AnimationController? guardianAnimationController;
-  final List<TextEditingController> _formControllers =
+  List<TextEditingController> _formControllers =
       List.generate(_formFields.length, (index) => TextEditingController());
   @override
   void initState() {
@@ -79,6 +87,17 @@ class _AddGuardianState extends State<AddGuardian>
       duration: const Duration(milliseconds: 800),
     );
     guardianAnimationController!.forward();
+    _formControllers = [
+      TextEditingController(text: "${widget.guardianModel.guardianFname} ${widget.guardianModel.guardianLname}"),
+      TextEditingController(text: widget.guardianModel.guardianEmail),
+      TextEditingController(text: widget.guardianModel.guardianContact.toString()),
+      TextEditingController(text: ""),
+      TextEditingController(text: widget.guardianModel.guardianGender),
+     TextEditingController(text: widget.guardianModel.student.toString()),
+      TextEditingController(text: widget.guardianModel.relationship),
+      TextEditingController(text: widget.guardianModel.type),
+      TextEditingController(text: widget.guardianModel.guardianDateOfEntry.toString()),
+    ];
     // fetchStudents().then((value) => setState(() => students = value));
     super.initState();
   }
@@ -103,7 +122,7 @@ class _AddGuardianState extends State<AddGuardian>
   
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents(context);
+    context.watch<MainController>().getAllStudents();
 
     Size size = MediaQuery.of(context).size;
     return BottomTopMoveAnimationView(
@@ -169,9 +188,11 @@ class _AddGuardianState extends State<AddGuardian>
     //
     var request = MultipartRequest(
       'POST',
-      Uri.parse(AppUrls.addGuardian),
+      Uri.parse(AppUrls.updateGuardian + "${widget.guardianModel.id}"),
     );
 
+    // request.fields['student'] = json.encode(context.watch()<MainController>()
+    //     .multiselect);
     request.fields['type'] = _formControllers[6].text.trim();
     request.fields['relationship'] = _formControllers[8].text.trim();
     request.fields['guardian_fname'] =

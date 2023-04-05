@@ -17,7 +17,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).newGuardians();
+    Provider.of<MainController>(context).newGuardians(context);
     super.didChangeDependencies();
   }
 
@@ -41,7 +41,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width / 4,
                     height: MediaQuery.of(context).size.width / 3,
-                    child: Center(child: Text("Edit Staff")),
+                    child: UpdateGuardian(guardianModel: guardians),
                   ),
                 );
               });
@@ -58,7 +58,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<MainController>(context).newGuardians();
+    Provider.of<MainController>(context).newGuardians(context);
     Size size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.width / 2.5,

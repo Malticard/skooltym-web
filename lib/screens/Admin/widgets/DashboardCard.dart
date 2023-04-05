@@ -36,7 +36,7 @@ class DashboardCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.1,
+            bottom: MediaQuery.of(context).size.height * 0.08,
             left: 25,
             child: Padding(
               padding: const EdgeInsets.only(top: 15.0),

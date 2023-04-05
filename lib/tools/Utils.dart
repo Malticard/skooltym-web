@@ -112,13 +112,13 @@ void showAppDialog(BuildContext context,
 }
 
 // return students
-Future<List<StudentModel>> fetchStudents() async {
-  var res = await Client().get(Uri.parse(AppUrls.students));
+Future<List<StudentModel>> fetchStudents(BuildContext context) async {
+  var res = await Client().get(Uri.parse(AppUrls.students + "${context.read<SchoolController>().state['school']}"));
   return studentModelFromJson(res.body);
 }
 
-Future<StudentModel> getSpecificStudent(String n) async {
-  var st = await fetchStudents();
+Future<StudentModel> getSpecificStudent(String n,BuildContext context) async {
+  var st = await fetchStudents(context);
   return st.firstWhere((element) => element.studentFname == n);
 }
 
@@ -289,7 +289,7 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/staff.svg",
     "title": "Staffs",
-    "page": const Staff(),
+    "page":  StaffView(),
   },
   {
     "title": "Guardians",
@@ -352,6 +352,20 @@ List<Map<String, dynamic>> financeViews = [
     "icon": "assets/icons/menu_store.svg",
     "title": "Cleared Overtimes",
     "page": const OvertimeReports(overtimeStatus: "Cleared",),
+  },
+];
+
+// malticard views
+List<Map<String, dynamic>> malticardViews = [
+  {
+    "icon": "assets/icons/menu_dashbord.svg",
+    "title": "Dashboard",
+    "page": const Dashboard()
+  },
+  {
+    "title": "Add School",
+    "page": const MalticardView(),
+    'icon': "assets/icons/menu_store.svg"
   },
 ];
 // valid text controllers
@@ -457,9 +471,9 @@ List<String> months = <String>[
   "Dec",
 ];
 // compute students total
-Future<int> computeStudentsTotal() async {
+Future<int> computeStudentsTotal(BuildContext context) async {
   int students = 0;
-  var response = await fetchStudents();
+  var response = await fetchStudents(context);
   students = response.length;
   // debugPrint("Total => $students");
   return students;
@@ -477,8 +491,8 @@ Future<List<PickUpModel>> fetchPickups(String id) async {
 }
 
 // fetch pickups
-Future<List<PickUpModel>> pickUps() async {
-  var response = await Client().get(Uri.parse(AppUrls.getPickUps));
+Future<List<PickUpModel>> pickUps(BuildContext context) async {
+  var response = await Client().get(Uri.parse(AppUrls.getPickUps + context.read<SchoolController>().state['school']));
   return response.statusCode == 201 || response.statusCode == 200
       ? pickUpModelFromJson(response.body)
       : [];
@@ -494,8 +508,8 @@ Future<List<DropOffModel>> fetchDropOffs(String id) async {
 }
 
 // drop offs
-Future<List<DropOffModel>> dropOffs() async {
-  var response = await Client().get(Uri.parse(AppUrls.getDropOffs));
+Future<List<DropOffModel>> dropOffs(BuildContext context) async {
+  var response = await Client().get(Uri.parse(AppUrls.getDropOffs + context.read<SchoolController>().state['school']));
   return dropOffModelFromJson(response.body);
   // return response;
 }
@@ -504,8 +518,8 @@ Future<List<DropOffModel>> dropOffs() async {
 /// Dashboard cards
 
 // fetch overtimes
-Future<List<OvertimeModel>> fetchOvertimeData(String status) async {
-  var response = await Client().get(Uri.parse(AppUrls.overtime));
+Future<List<OvertimeModel>> fetchOvertimeData(String status,BuildContext context) async {
+  var response = await Client().get(Uri.parse(AppUrls.overtime + context.read<SchoolController>().state['school']));
   return overtimeModelFromJson(response.body).where((element) => element.status == status).toList();
   // return response;
 }
@@ -577,10 +591,20 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "last_updated": "14:45"
     },
   ];
+  List<Map<String, dynamic>> malticardData = [
+    {
+      "label": "SCHOOLS",
+      "value": 0,//pendingOvertimes.length,
+      "icon": "assets/icons/005-overtime.svg",
+      'color': Color.fromARGB(255, 50, 66, 95),
+      "last_updated": "14:45"
+    }
+  ];
   return Provider.of<SchoolController>(context, listen: false).state['role'] ==
   'Admin' || Provider.of<SchoolController>(context, listen: false).state['role'] == 'SuperAdmin'
       ? dashboardData
-      : financeData;
+      : Provider.of<SchoolController>(context, listen: false).state['role'] ==
+  'Finance'? financeData : malticardData;
 }
 
 // logic to fetch a specific guardian from the scanners

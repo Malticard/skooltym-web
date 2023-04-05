@@ -23,8 +23,7 @@ class StudentModel {
         required this.createdAt,
         required this.updatedAt,
         required this.studentNo,
-        required this.v,
-        required this.studentKey,
+      
     });
 
     bool isComplete;
@@ -39,24 +38,21 @@ class StudentModel {
     DateTime createdAt;
     DateTime updatedAt;
     int studentNo;
-    int v;
-    List<dynamic> studentKey;
+
 
     factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
         isComplete: json["isComplete"],
         id: json["_id"],
         studentFname: json["student_fname"],
         studentLname: json["student_lname"],
-        studentContact: json["student_contact"],
-        studentEmail: json["student_email"],
+        studentContact: json["student_contact"].toString(),
+        studentEmail: json["student_email"] ?? "",
         studentClass: json["student_class"],
         studentGender: json["student_gender"],
         studentProfilePic: json["student_profile_pic"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        studentNo: json["student_no"],
-        v: json["__v"],
-        studentKey: List<dynamic>.from(json["student_key"].map((x) => x)),
+        studentNo: json["student_no"] ?? 0,
     );
 
     Map<String, dynamic> toJson() => {
@@ -72,7 +68,6 @@ class StudentModel {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "student_no": studentNo,
-        "__v": v,
-        "student_key": List<dynamic>.from(studentKey.map((x) => x)),
+        
     };
 }
