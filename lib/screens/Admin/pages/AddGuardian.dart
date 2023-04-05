@@ -68,19 +68,9 @@ final List<Map<String, dynamic>> _formFields = [
 
 class _AddGuardianState extends State<AddGuardian>
     {
-  AnimationController? guardianAnimationController;
+  
   final List<TextEditingController> _formControllers =
       List.generate(_formFields.length, (index) => TextEditingController());
- 
-
-  @override
-  void dispose() {
-    guardianAnimationController!.dispose();
-    // for (var element in formControllers) {
-    //   element.dispose();
-    // }
-    super.dispose();
-  }
 
   // overall form padding
   EdgeInsets padding =
@@ -96,23 +86,20 @@ class _AddGuardianState extends State<AddGuardian>
     context.watch<MainController>().getAllStudents(context);
 
     Size size = MediaQuery.of(context).size;
-    return BottomTopMoveAnimationView(
-      animationController: guardianAnimationController!,
-      child: Dialog(
-        child: SizedBox(
-           width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 2.1,
-          child: Padding(
+    return Dialog(
+      child: SizedBox(
+         width: MediaQuery.of(context).size.width / 3,
+        height: MediaQuery.of(context).size.width / 1.5,
+        child: Padding(
+          padding: padding,
+          child: CommonFormFields(
             padding: padding,
-            child: CommonFormFields(
-              padding: padding,
-              formFields: _formFields,
-              students: context.watch<MainController>().students,
-              formControllers: _formControllers,
-              buttonText: "Save Guardian Details",
-              onSubmit: _addGuardian,
-              errorMsgs: errorFields,
-            ),
+            formFields: _formFields,
+            students: context.watch<MainController>().students,
+            formControllers: _formControllers,
+            buttonText: "Save Guardian Details",
+            onSubmit: _addGuardian,
+            errorMsgs: errorFields,
           ),
         ),
       ),
@@ -122,28 +109,28 @@ class _AddGuardianState extends State<AddGuardian>
 // adding guardian
   void _addGuardian() {
     debugPrint("hey am here");
-    // if (validateEmail(_formControllers[1].text, context) != false) {
+    if (validateEmail(_formControllers[1].text, context) != false) {
      
-    //   _handleGuardian()
-    //       .then((value) {
-    //         debugPrint("Status code ${value.statusCode}");
-    //         Routes.popPage(context);
-    //         showSuccessDialog(
-    //             _formControllers[0].text.trim().split(" ")[1], context);
-    //       })
-    //       .whenComplete(() {
-    //         showSuccessDialog(
-    //             _formControllers[0].text.trim().split(" ")[1], context);
+      _handleGuardian()
+          .then((value) {
+            debugPrint("Status code ${value.statusCode}");
+            Routes.popPage(context);
+            showSuccessDialog(
+                _formControllers[0].text.trim().split(" ")[1], context);
+          })
+          .whenComplete(() {
+            showSuccessDialog(
+                _formControllers[0].text.trim().split(" ")[1], context);
           
-    //        Routes.popPage(context);
-    //        debugPrint("done saving");
-    //         showMessage(
-    //           context: context,
-    //           type: 'success',
-    //           msg: "Added new guardian successfully",
-    //         );
-    //       });
-    // }
+           Routes.popPage(context);
+           debugPrint("done saving");
+            showMessage(
+              context: context,
+              type: 'success',
+              msg: "Added new guardian successfully",
+            );
+          });
+    }
   }
 
   Future<StreamedResponse> _handleGuardian() {

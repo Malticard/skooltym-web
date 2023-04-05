@@ -8,8 +8,7 @@ class AddStaff extends StatefulWidget {
   State<AddStaff> createState() => _AddStaffState();
 }
 
-class _AddStaffState extends State<AddStaff>  {
-
+class _AddStaffState extends State<AddStaff> {
   // form details
   static final List<Map<String, dynamic>> formFields = [
     {
@@ -52,7 +51,6 @@ class _AddStaffState extends State<AddStaff>  {
     },
   ];
 
-  
   final List<TextEditingController> _formControllers =
       List.generate(formFields.length, (index) => TextEditingController());
 
@@ -68,62 +66,58 @@ class _AddStaffState extends State<AddStaff>  {
     //
     Size size = MediaQuery.of(context).size;
     return Dialog(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 2.3,
-      child: Padding(
-        padding: padding,
-        child: CommonFormFields(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width / 3,
+        height: MediaQuery.of(context).size.width / 2.3,
+        child: Padding(
           padding: padding,
-          formFields: formFields,
-          numberOfDropDowns: 2,
-          formControllers: _formControllers,
-          buttonText: "Submit Staff Details",
-          errorMsgs: errorFields,
-          onSubmit: () {
-    
-            if (validateEmail(_formControllers[1].text, context) != false) {
-              _handleFormUpload()
-                    .then(
-                      (value) {
-                        Routes.popPage(context);
-                        debugPrint("Staff data -> ${value.reasonPhrase}");
-                        if (value.statusCode == 200 || value.statusCode == 201) {
-                        //  bottom msg
-                          showMessage(
-                            context: context,
-                            type: 'success',
-                            msg: "Added new staff successfully",
-                          );
-                        //  end of bottom msg
-                        } else {
+          child: CommonFormFields(
+            padding: padding,
+            formFields: formFields,
+            numberOfDropDowns: 2,
+            formControllers: _formControllers,
+            buttonText: "Submit Staff Details",
+            errorMsgs: errorFields,
+            onSubmit: () {
+              if (validateEmail(_formControllers[1].text, context) != false) {
+                _handleFormUpload().then((value) {
+                  Routes.popPage(context);
+                  debugPrint("Staff data -> ${value.reasonPhrase}");
+                  if (value.statusCode == 200 || value.statusCode == 201) {
+                    //  bottom msg
+                    showMessage(
+                      context: context,
+                      type: 'success',
+                      msg: "Added new staff successfully",
+                    );
+                    //  end of bottom msg
+                  } else {
                     // outes.popPage(context);
-                           showMessage(
-                            context: context,
-                            type: 'danger',
-                            msg: "Error ${value.reasonPhrase}",
-                          );
-                          // showSuccessDialog(
-                          //     _formControllers[0].text.trim().split(" ")[1],
-                          //     context);
-                        }
-                      }).whenComplete((){
-                          showSuccessDialog(
-                              _formControllers[0].text.trim().split(" ")[1],
-                              context);
-                              Routes.popPage(context);
-                      });
-                    
-            }
-          },
+                    showMessage(
+                      context: context,
+                      type: 'danger',
+                      msg: "Error ${value.reasonPhrase}",
+                    );
+                    // showSuccessDialog(
+                    //     _formControllers[0].text.trim().split(" ")[1],
+                    //     context);
+                  }
+                }).whenComplete(() {
+                  showSuccessDialog(
+                      _formControllers[0].text.trim().split(" ")[1], context);
+                  Routes.popPage(context);
+                });
+              }
+            },
+          ),
         ),
       ),
-    ),);
+    );
   }
 
   Future<StreamedResponse> _handleFormUpload() async {
     String uri = _formControllers[3].text.trim();
-  debugPrint("handling form upload with $uri");
+    debugPrint("handling form upload with $uri");
     //
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStaff));
     // =============================== form fields =======================
@@ -140,8 +134,10 @@ class _AddStaffState extends State<AddStaff>  {
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
-    request.files.add(MultipartFile('image',
-        File(_formControllers[3].text.trim()).readAsBytes().asStream(), File(_formControllers[3].text.trim()).lengthSync(),
+    request.files.add(MultipartFile(
+        'image',
+        File(_formControllers[3].text.trim()).readAsBytes().asStream(),
+        File(_formControllers[3].text.trim()).lengthSync(),
         filename: uri.split("/").last));
     //
     request.fields['staff_password'] = "qwerty";

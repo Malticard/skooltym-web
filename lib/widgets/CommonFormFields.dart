@@ -277,13 +277,15 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                 buttonText: widget.buttonText,
                 onTap: () {
                   if (formKey.currentState!.validate() == true) {
+                    widget.onSubmit!();
+
                     List<String> e = widget.errorMsgs
                         .where((element) => element.isEmpty)
                         .toList();
                     //  this checks if the provided fields are empty hence no errors raised for empty fields
                     // if (e.isEmpty) {
-                    widget.onSubmit!();
                     // }
+                    
                   }
                 },
                 padding: widget.padding,
@@ -297,17 +299,13 @@ class _CommonFormFieldsState extends State<CommonFormFields>
     return widget.formEnabled
         ? Form(
             key: formKey,
-            child: Expanded(
-              child: Column(
-                children: buildForm(),
-              ),
-            ),
-          )
-        : Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: buildForm(),
             ),
-          );
+          )
+        : Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: buildForm(),
+        );
   }
 }

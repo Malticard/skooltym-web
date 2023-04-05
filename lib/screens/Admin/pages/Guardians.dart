@@ -17,7 +17,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).newGuardians(context);
+    // Provider.of<MainController>(context).newGuardians(context);
     super.didChangeDependencies();
   }
 
@@ -58,7 +58,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<MainController>(context).newGuardians(context);
+    // Provider.of<MainController>(context).newGuardians(context);
     Size size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.width / 2.5,
@@ -96,13 +96,13 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           ),
         ),
         empty: NoDataWidget(text:"No guardians registered yet.."),
-        rows: context.read<MainController>().guardians.length < 1
-            ? []
-            : List.generate(
-                context.watch<MainController>().guardians.length,
-                (index) => _dataRow(
-                    context.watch<MainController>().guardians[index], index),
-              ),
+        rows:[],//context.read<MainController>().guardians.length < 1
+            // []
+            // : List.generate(
+            //     context.watch<MainController>().guardians.length,
+            //     (index) => _dataRow(
+            //         context.watch<MainController>().guardians[index], index),
+            //   ),
       ),
     );
   }
