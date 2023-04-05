@@ -67,21 +67,11 @@ final List<Map<String, dynamic>> _formFields = [
 ];
 
 class _AddGuardianState extends State<AddGuardian>
-    with TickerProviderStateMixin {
+    {
   AnimationController? guardianAnimationController;
   final List<TextEditingController> _formControllers =
       List.generate(_formFields.length, (index) => TextEditingController());
-  @override
-  void initState() {
-    guardianAnimationController = AnimationController(
-      vsync: this,
-      value: 0,
-      duration: const Duration(milliseconds: 800),
-    );
-    guardianAnimationController!.forward();
-    // fetchStudents().then((value) => setState(() => students = value));
-    super.initState();
-  }
+ 
 
   @override
   void dispose() {
@@ -108,16 +98,22 @@ class _AddGuardianState extends State<AddGuardian>
     Size size = MediaQuery.of(context).size;
     return BottomTopMoveAnimationView(
       animationController: guardianAnimationController!,
-      child: Padding(
-        padding: padding,
-        child: CommonFormFields(
-          padding: padding,
-          formFields: _formFields,
-          students: context.watch<MainController>().students,
-          formControllers: _formControllers,
-          buttonText: "Save Guardian Details",
-          onSubmit: () => _addGuardian(),
-          errorMsgs: errorFields,
+      child: Dialog(
+        child: SizedBox(
+           width: MediaQuery.of(context).size.width / 4,
+                            height: MediaQuery.of(context).size.width / 2.1,
+          child: Padding(
+            padding: padding,
+            child: CommonFormFields(
+              padding: padding,
+              formFields: _formFields,
+              students: context.watch<MainController>().students,
+              formControllers: _formControllers,
+              buttonText: "Save Guardian Details",
+              onSubmit: _addGuardian,
+              errorMsgs: errorFields,
+            ),
+          ),
         ),
       ),
     );
@@ -125,31 +121,29 @@ class _AddGuardianState extends State<AddGuardian>
 
 // adding guardian
   void _addGuardian() {
-    if (validateEmail(_formControllers[1].text, context) != false) {
-      showProgress(context, msg: "Adding new guardian in progress");
-      _handleGuardian()
-          .then((value) {
-            print("Status code ${value.statusCode}");
-            Routes.popPage(context);
-            showSuccessDialog(
-                _formControllers[0].text.trim().split(" ")[1], context);
-          })
-          .catchError(
-            (onError) => () {
-              showMessage(
-                  context: context,
-                  msg: 'An error occurred!! ',
-                  type: 'danger');
-            },
-          )
-          .whenComplete(() {
-            showMessage(
-              context: context,
-              type: 'success',
-              msg: "Added new guardian successfully",
-            );
-          });
-    }
+    debugPrint("hey am here");
+    // if (validateEmail(_formControllers[1].text, context) != false) {
+     
+    //   _handleGuardian()
+    //       .then((value) {
+    //         debugPrint("Status code ${value.statusCode}");
+    //         Routes.popPage(context);
+    //         showSuccessDialog(
+    //             _formControllers[0].text.trim().split(" ")[1], context);
+    //       })
+    //       .whenComplete(() {
+    //         showSuccessDialog(
+    //             _formControllers[0].text.trim().split(" ")[1], context);
+          
+    //        Routes.popPage(context);
+    //        debugPrint("done saving");
+    //         showMessage(
+    //           context: context,
+    //           type: 'success',
+    //           msg: "Added new guardian successfully",
+    //         );
+    //       });
+    // }
   }
 
   Future<StreamedResponse> _handleGuardian() {

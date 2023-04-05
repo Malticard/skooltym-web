@@ -122,7 +122,7 @@ class _UpdateGuardianState extends State<UpdateGuardian>
   
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents();
+    context.watch<MainController>().getAllStudents(context);
 
     Size size = MediaQuery.of(context).size;
     return BottomTopMoveAnimationView(

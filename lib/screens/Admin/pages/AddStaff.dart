@@ -67,52 +67,58 @@ class _AddStaffState extends State<AddStaff>  {
   Widget build(BuildContext context) {
     //
     Size size = MediaQuery.of(context).size;
-    return Padding(
-      padding: padding,
-      child: CommonFormFields(
+    return Dialog(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width / 4,
+                            height: MediaQuery.of(context).size.width / 2.3,
+      child: Padding(
         padding: padding,
-        formFields: formFields,
-        numberOfDropDowns: 2,
-        formControllers: _formControllers,
-        buttonText: "Submit Staff Details",
-        errorMsgs: errorFields,
-        onSubmit: () {
-
-          if (validateEmail(_formControllers[1].text, context) != false) {
-            _handleFormUpload()
-                  .then(
-                    (value) {
-                      debugPrint("Staff data -> ${value.reasonPhrase}");
-                      if (value.statusCode == 200 || value.statusCode == 201) {
-                      //  bottom msg
-                        showMessage(
-                          context: context,
-                          type: 'success',
-                          msg: "Added new staff successfully",
-                        );
-                      //  end of bottom msg
-                      } else {
-                  
-                         showMessage(
-                          context: context,
-                          type: 'danger',
-                          msg: "Error ${value.reasonPhrase}",
-                        );
-                        // showSuccessDialog(
-                        //     _formControllers[0].text.trim().split(" ")[1],
-                        //     context);
-                      }
-                    }).whenComplete((){
-                        showSuccessDialog(
-                            _formControllers[0].text.trim().split(" ")[1],
-                            context);
-                            Routes.popPage(context);
-                    });
-                  
-          }
-        },
+        child: CommonFormFields(
+          padding: padding,
+          formFields: formFields,
+          numberOfDropDowns: 2,
+          formControllers: _formControllers,
+          buttonText: "Submit Staff Details",
+          errorMsgs: errorFields,
+          onSubmit: () {
+    
+            if (validateEmail(_formControllers[1].text, context) != false) {
+              _handleFormUpload()
+                    .then(
+                      (value) {
+                        Routes.popPage(context);
+                        debugPrint("Staff data -> ${value.reasonPhrase}");
+                        if (value.statusCode == 200 || value.statusCode == 201) {
+                        //  bottom msg
+                          showMessage(
+                            context: context,
+                            type: 'success',
+                            msg: "Added new staff successfully",
+                          );
+                        //  end of bottom msg
+                        } else {
+                    // outes.popPage(context);
+                           showMessage(
+                            context: context,
+                            type: 'danger',
+                            msg: "Error ${value.reasonPhrase}",
+                          );
+                          // showSuccessDialog(
+                          //     _formControllers[0].text.trim().split(" ")[1],
+                          //     context);
+                        }
+                      }).whenComplete((){
+                          showSuccessDialog(
+                              _formControllers[0].text.trim().split(" ")[1],
+                              context);
+                              Routes.popPage(context);
+                      });
+                    
+            }
+          },
+        ),
       ),
-    );
+    ),);
   }
 
   Future<StreamedResponse> _handleFormUpload() async {

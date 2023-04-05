@@ -11,12 +11,14 @@ loginUser(BuildContext context, String email, String password) async {
     "staff_email": email,
     "staff_password": password,
   }).then((value) {
-    if (value.statusCode == 200) {
+    if (value.statusCode == 200 || value.statusCode == 201) {
       var data = jsonDecode(value.body);
 
       Routes.popPage(context);
       debugPrint("Login response ${data}");
+
       BlocProvider.of<SchoolController>(context).setSchoolData(data);
+      // 
       Routes.namedRemovedUntilRoute(
         context,
         data['role'] == 'Admin' ||  data['role'] == 'SuperAdmin' || data['role'] == 'Finance'

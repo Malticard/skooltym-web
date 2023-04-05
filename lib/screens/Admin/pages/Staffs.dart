@@ -86,13 +86,7 @@ class _StaffViewState extends State<StaffView> {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return Dialog(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 2.3,
-                            child: AddStaff(),
-                          ),
-                        );
+                        return AddStaff();
                       });
                 },
                 icon: Icon(Icons.add),
