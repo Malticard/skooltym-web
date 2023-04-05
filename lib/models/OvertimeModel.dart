@@ -5,7 +5,7 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<OvertimeModel> overtimeModelFromJson(String str) => List<OvertimeModel>.from(json.decode(str ?? "[]").map((x) => OvertimeModel.fromJson(x)));
+List<OvertimeModel> overtimeModelFromJson(String str) => List<OvertimeModel>.from(json.decode(str).map((x) => OvertimeModel.fromJson(x)));
 
 String overtimeModelToJson(List<OvertimeModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 

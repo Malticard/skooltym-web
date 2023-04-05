@@ -39,7 +39,7 @@ class _StaffViewState extends State<StaffView> {
               builder: (context) {
                 return Dialog(
                   child: SizedBox(
-                         width: MediaQuery.of(context).size.width / 4,
+                         width: MediaQuery.of(context).size.width / 3,
                             height: MediaQuery.of(context).size.width / 2.3,
                     child: UpdateStaff(staff: staffModel),
                   ),
@@ -88,7 +88,7 @@ class _StaffViewState extends State<StaffView> {
                       builder: (context) {
                         return Dialog(
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 4,
+                            width: MediaQuery.of(context).size.width / 3,
                             height: MediaQuery.of(context).size.width / 2.3,
                             child: AddStaff(),
                           ),

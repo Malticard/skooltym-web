@@ -79,6 +79,7 @@ class _AddStaffState extends State<AddStaff>  {
         onSubmit: () {
 
           if (validateEmail(_formControllers[1].text, context) != false) {
+            debugPrint("verified => ${context.read<SchoolController>().state['school']}");
             _handleFormUpload()
                   .then(
                     (value) {
@@ -92,7 +93,6 @@ class _AddStaffState extends State<AddStaff>  {
                         );
                       //  end of bottom msg
                       } else {
-                  
                          showMessage(
                           context: context,
                           type: 'danger',

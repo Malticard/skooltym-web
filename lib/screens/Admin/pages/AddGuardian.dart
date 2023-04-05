@@ -116,7 +116,7 @@ class _AddGuardianState extends State<AddGuardian>
           students: context.watch<MainController>().students,
           formControllers: _formControllers,
           buttonText: "Save Guardian Details",
-          onSubmit: () => _addGuardian(),
+          onSubmit: () => addGuardian,
           errorMsgs: errorFields,
         ),
       ),
@@ -124,47 +124,36 @@ class _AddGuardianState extends State<AddGuardian>
   }
 
 // adding guardian
-  void _addGuardian() {
+  void addGuardian() {
     if (validateEmail(_formControllers[1].text, context) != false) {
-      showProgress(context, msg: "Adding new guardian in progress");
-      _handleGuardian()
-          .then((value) {
-            print("Status code ${value.statusCode}");
-            Routes.popPage(context);
-            showSuccessDialog(
-                _formControllers[0].text.trim().split(" ")[1], context);
-          })
-          .catchError(
-            (onError) => () {
-              showMessage(
-                  context: context,
-                  msg: 'An error occurred!! ',
-                  type: 'danger');
-            },
-          )
-          .whenComplete(() {
-            showMessage(
-              context: context,
-              type: 'success',
-              msg: "Added new guardian successfully",
-            );
-          });
+     debugPrint("verified");
+      // _handleGuardian()
+      //     .then((value) {
+      //        showProgress(context, msg: "Adding new guardian in progress");
+           
+      //       Routes.popPage(context);
+      //       showSuccessDialog(
+      //           _formControllers[0].text.trim().split(" ")[1], context);
+      //     })
+      //     .catchError(
+      //       (onError) => () {
+      //         showMessage(
+      //             context: context,
+      //             msg: 'An error occurred!! ',
+      //             type: 'danger');
+      //       },
+      //     )
+      //     .whenComplete(() {
+      //       showMessage(
+      //         context: context,
+      //         type: 'success',
+      //         msg: "Added new guardian successfully",
+      //       );
+      //     });
     }
   }
 
   Future<StreamedResponse> _handleGuardian() {
-    /**
-     *  student: req.body.student,
-                    relationship: req.body.relationship,
-                    guardian_fname: req.body.guardian_fname,
-                    guardian_lname: req.body.guardian_lname,
-                    guardian_contact: req.body.guardian_contact,
-                    guardian_email: req.body.guardian_email,
-                    guardian_gender: req.body.guardian_gender,
-                    guardian_profile_pic: req.file.path,
-                    guardian_dateOfEntry: req.body.guardian_dateOfEntry,
-                    guardian_key: req.body.guardian_key
-     */
     String uri = _formControllers[3].text.trim();
     //
     var request = MultipartRequest(
@@ -188,6 +177,7 @@ class _AddGuardianState extends State<AddGuardian>
     request.fields['guardian_dateOfEntry'] = _formControllers[7].text.trim();
     request.fields['guardian_key[key]'] = "";
     var response = request.send();
+     debugPrint("Status code ${response}");
     return response;
   }
 }

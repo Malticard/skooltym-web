@@ -80,8 +80,8 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                       builder: (context) {
                         return Dialog(
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 2.1,
+                            width: MediaQuery.of(context).size.width / 3,
+                            height: MediaQuery.of(context).size.width / 1.6,
                             child: AddGuardian(),
                           ),
                         );
