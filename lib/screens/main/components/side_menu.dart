@@ -15,7 +15,7 @@ class _SideMenuState extends State<SideMenu> {
   void initState() {
     store = context.read<SchoolController>().state['role'] == 'Admin' || context.read<SchoolController>().state['role'] == 'SuperAdmin'
         ? options
-        :context.read<SchoolController>().state['role'] == 'Finance'? financeViews :malticardViews;
+        : financeViews;
     super.initState();
   }
 
@@ -35,11 +35,11 @@ class _SideMenuState extends State<SideMenu> {
               child: Column(
                 children: [
                   Space(space: 0.04),
-                  Image.asset("assets/images/logo.png"),
-                  Space(),
+                  Image.asset("assets/images/ambro.png"),
+                  Space(),//${context.read<SchoolController>()
+                          // .state['schoolName']}
                   Text(
-                      "${context.read<SchoolController>()
-                          .state['schoolName']}",
+                      "Ambrosoli School",
                           overflow: TextOverflow.ellipsis,
                           style:TextStyles(context)
                       .getBoldStyle().copyWith(color:Colors.white,fontSize: 16),)

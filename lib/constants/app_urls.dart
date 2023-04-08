@@ -3,7 +3,7 @@ class AppUrls {
   //"https://skooltym-backend-production.up.railway.app/";
   static String imageUrl = "assets/images/";
   static String iconUrl = "assets/icons/";
-  static String liveImages = "http://13.127.169.59:5050/images/";
+  static String liveImages = "http://13.127.169.59:5050/image/images/";
   // post urls
   static String login = devURL + "post/login";
   static String addClass = devURL + "post/class/create";

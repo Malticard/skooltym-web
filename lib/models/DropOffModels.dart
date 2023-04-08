@@ -27,10 +27,10 @@ class DropOffModel {
 
     final String id;
     final String schoolName;
-    final dynamic studentName;
+    final StudentName studentName;
     final String dropOffTime;
     final DroppedBy droppedBy;
-    final dynamic authorizedBy;
+    final AuthorizedBy authorizedBy;
     final String comments;
     final List<DropoffKey> dropoffKey;
     final bool isComplete;
@@ -41,10 +41,10 @@ class DropOffModel {
     factory DropOffModel.fromJson(Map<String, dynamic> json) => DropOffModel(
         id: json["_id"],
         schoolName: json["school_name"],
-        studentName: json["student_name"],
+        studentName: StudentName.fromJson(json["student_name"]),
         dropOffTime: json["drop_off_time"],
-        droppedBy: DroppedBy.fromJson(json["dropped_by"] ?? {}),
-        authorizedBy: json["authorized_by"],
+        droppedBy: DroppedBy.fromJson(json["dropped_by"]),
+        authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
         comments: json["comments"],
         dropoffKey: List<DropoffKey>.from(json["dropoff_key"].map((x) => DropoffKey.fromJson(x))),
         isComplete: json["isComplete"],
@@ -56,16 +56,36 @@ class DropOffModel {
     Map<String, dynamic> toJson() => {
         "_id": id,
         "school_name": schoolName,
-        "student_name": studentName,
+        "student_name": studentName.toJson(),
         "drop_off_time": dropOffTime,
         "dropped_by": droppedBy.toJson(),
-        "authorized_by": authorizedBy,
+        "authorized_by": authorizedBy.toJson(),
         "comments": comments,
         "dropoff_key": List<dynamic>.from(dropoffKey.map((x) => x.toJson())),
         "isComplete": isComplete,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
+    };
+}
+
+class AuthorizedBy {
+    AuthorizedBy({
+        required this.staffFname,
+        required this.staffLname,
+    });
+
+    final String staffFname;
+    final String staffLname;
+
+    factory AuthorizedBy.fromJson(Map<String, dynamic> json) => AuthorizedBy(
+        staffFname: json["staff_fname"],
+        staffLname: json["staff_lname"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "staff_fname": staffFname,
+        "staff_lname": staffLname,
     };
 }
 
@@ -99,12 +119,32 @@ class DroppedBy {
     final String guardianLname;
 
     factory DroppedBy.fromJson(Map<String, dynamic> json) => DroppedBy(
-        guardianFname: json["guardian_fname"] ?? "",
-        guardianLname: json["guardian_lname"] ?? "",
+        guardianFname: json["guardian_fname"],
+        guardianLname: json["guardian_lname"],
     );
 
     Map<String, dynamic> toJson() => {
         "guardian_fname": guardianFname,
         "guardian_lname": guardianLname,
+    };
+}
+
+class StudentName {
+    StudentName({
+        required this.studentFname,
+        required this.studentLname,
+    });
+
+    final String studentFname;
+    final String studentLname;
+
+    factory StudentName.fromJson(Map<String, dynamic> json) => StudentName(
+        studentFname: json["student_fname"],
+        studentLname: json["student_lname"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "student_fname": studentFname,
+        "student_lname": studentLname,
     };
 }

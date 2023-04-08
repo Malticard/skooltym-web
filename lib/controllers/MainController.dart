@@ -82,6 +82,7 @@ class MainController extends ChangeNotifier {
 
   availablePickUps(BuildContext context) {
     pickUps(context).then((picks) {
+      debugPrint("Picks => $picks");
       _picks = picks;
       notifyListeners();
     });

@@ -45,6 +45,6 @@ Map<String, Widget Function(BuildContext)> routes(BuildContext context) {
   return {
     Routes.home: (context) => const MainScreen(),
     Routes.login: (context) => LoginScreen(),
-    Routes.malticard:(context) => MalticardView()
+    
   };
 }

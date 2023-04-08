@@ -13,11 +13,11 @@ class OvertimeModel {
     OvertimeModel({
         required this.id,
         required this.student,
+        required this.school,
         required this.guardian,
         required this.settings,
         required this.staff,
         required this.actualTime,
-        required this.overtimeCharge,
         required this.status,
         required this.overtimeKey,
         required this.isComplete,
@@ -28,11 +28,11 @@ class OvertimeModel {
 
     final String id;
     final Student student;
+    final String school;
     final Guardian guardian;
     final Settings settings;
     final Staff staff;
     final int actualTime;
-    final int overtimeCharge;
     final String status;
     final List<OvertimeKey> overtimeKey;
     final bool isComplete;
@@ -43,11 +43,11 @@ class OvertimeModel {
     factory OvertimeModel.fromJson(Map<String, dynamic> json) => OvertimeModel(
         id: json["_id"],
         student: Student.fromJson(json["student"]),
+        school: json["school"],
         guardian: Guardian.fromJson(json["guardian"]),
-        settings: Settings.fromJson(json["settings"]),
+        settings: Settings.fromJson(json["settings"] ?? {}),
         staff: Staff.fromJson(json["staff"]),
         actualTime: json["actual_time"],
-        overtimeCharge: json["overtime_charge"],
         status: json["status"],
         overtimeKey: List<OvertimeKey>.from(json["overtime_key"].map((x) => OvertimeKey.fromJson(x))),
         isComplete: json["isComplete"],
@@ -59,11 +59,11 @@ class OvertimeModel {
     Map<String, dynamic> toJson() => {
         "_id": id,
         "student": student.toJson(),
+        "school": school,
         "guardian": guardian.toJson(),
         "settings": settings.toJson(),
         "staff": staff.toJson(),
         "actual_time": actualTime,
-        "overtime_charge": overtimeCharge,
         "status": status,
         "overtime_key": List<dynamic>.from(overtimeKey.map((x) => x.toJson())),
         "isComplete": isComplete,
@@ -116,24 +116,24 @@ class OvertimeKey {
 class Settings {
     Settings({
         required this.pickUpEndTime,
-        required this.overtimeInterval,
         required this.overtimeRate,
+        required this.overtimeInterval,
     });
 
-    final int pickUpEndTime;
-    final int overtimeInterval;
+    final String pickUpEndTime;
     final int overtimeRate;
+    final int overtimeInterval;
 
     factory Settings.fromJson(Map<String, dynamic> json) => Settings(
-        pickUpEndTime: json["pick_up_end_time"],
-        overtimeInterval: json["overtime_interval"],
-        overtimeRate: json["overtime_rate"],
+        pickUpEndTime: json["pick_up_end_time"] ?? "",
+        overtimeRate: json["overtime_rate"] ?? 0,
+        overtimeInterval: json["overtime_interval"] ?? 0,
     );
 
     Map<String, dynamic> toJson() => {
         "pick_up_end_time": pickUpEndTime,
-        "overtime_interval": overtimeInterval,
         "overtime_rate": overtimeRate,
+        "overtime_interval": overtimeInterval,
     };
 }
 
@@ -159,20 +159,16 @@ class Staff {
 
 class Student {
     Student({
-        required this.studentFname,
-        required this.studentLname,
+        required this.username,
     });
 
-    final String studentFname;
-    final String studentLname;
+    final String username;
 
     factory Student.fromJson(Map<String, dynamic> json) => Student(
-        studentFname: json["student_fname"],
-        studentLname: json["student_lname"],
+        username: json["username"],
     );
 
     Map<String, dynamic> toJson() => {
-        "student_fname": studentFname,
-        "student_lname": studentLname,
+        "username": username,
     };
 }

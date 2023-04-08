@@ -19,7 +19,6 @@ class _SystemSettingsState extends State<SystemSettings> {
       const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 5);
   // important methods
   String currencyCode = "Ush UGX";
-  String _scheduledTime = "";
 // settings data
   @override
   Widget build(BuildContext context) {
@@ -159,22 +158,22 @@ class _SystemSettingsState extends State<SystemSettings> {
                       },
                     ),
                   ),
-                   if (context.watch<AllowOvertimeController>().state == true)
+                  //  if (context.watch<AllowOvertimeController>().state == true)
                   // set overtime interval
-                  TapEffect(
-                    onClick: () => setReportSchedule(),
-                    child: BlocBuilder<IntervalController, double>(
-                      builder: (context, state) {
-                        return SettingCard(
-                          icon: (SettingIcons.overtimeIntervalIcon),
-                          titleText: "Report schedule",
-                          subText:
-                              "Charge overtime every after this amount of minutes.",
-                          trailText: "${state.floor()} (mins)",
-                        );
-                      },
-                    ),
-                  ),
+                  // TapEffect(
+                  //   onClick: () => setReportSchedule(),
+                  //   child: BlocBuilder<IntervalController, double>(
+                  //     builder: (context, state) {
+                  //       return SettingCard(
+                  //         icon: (SettingIcons.overtimeIntervalIcon),
+                  //         titleText: "Report schedule",
+                  //         subText:
+                  //             "Charge overtime every after this amount of minutes.",
+                  //         trailText: "${state.floor()} (mins)",
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
               ],
               //  set overtime interval
               CommonButton(
@@ -192,29 +191,31 @@ class _SystemSettingsState extends State<SystemSettings> {
 
 // saving settings
   void saveSettings() async {
-
+// 2012-02-27 13:27:00
+// debugPrint("Allow allowance ${(context.read<AllowOvertimeController>().state)}");
+// DateTime()
     Map<String, dynamic> results = {
       "school_id": "${context.read<SchoolController>().state["school"]}",
       "drop_off_start_time": drop_off_time_start,
       "drop_off_end_time": drop_off_time_end,
-      "pick_up_start_time": pick_up_time_start,
-      "pick_up_end_time": pick_up_time_end,
+      "pick_up_start_time": "${DateTime.now()} ${pick_up_time_start}",
+      "pick_up_end_time": "${DateTime.now()} ${pick_up_time_end}",
       "drop_off_allowance": "${context.read<DropOffController>().state}",
       "pick_up_allowance": "${context.read<PickUpController>().state}",
-      "allow_overtime": context.read<AllowOvertimeController>().state,
-      "overtime_rate": context.read<OvertimeRateController>().state,
+      "allow_overtime": "${context.read<AllowOvertimeController>().state}",
+      "overtime_rate": "${context.read<OvertimeRateController>().state}",
       "overtime_rate_currency": currencyCode,
-      // "overtime_interval": context.read<IntervalController>().state,
       "settings_key[key]": "0",
     };
-
-    showProgress(context);
+  debugPrint("results => $results");
+    // showProgress(context);
     Client()
-        .post(Uri.parse(AppUrls.addSettings), body: results)
+        .post(Uri.parse(AppUrls.addSettings), body:results)
         .then((response) {
-      debugPrint("Status code => ${response.statusCode}");
+          var data = json.decode(response.body);
+      debugPrint("Status code => ${data['message']}");
       if (response.statusCode == 200) {
-        Routes.popPage(context);
+        // Routes.popPage(context);
         showSuccessDialog("Settings saved successfully", context);
         showMessage(msg: "Settings saved", type: 'success', context: context);
       } else {
@@ -232,7 +233,7 @@ class _SystemSettingsState extends State<SystemSettings> {
       builder: (context) => Dialog(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * .32,
-          height: MediaQuery.of(context).size.width * .2,
+          height: MediaQuery.of(context).size.width * .25,
           child: Column(
             children: [
               Padding(
@@ -302,8 +303,8 @@ class _SystemSettingsState extends State<SystemSettings> {
       context: context,
       builder: (context) => Dialog(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * .32,
-          height: MediaQuery.of(context).size.width * .2,
+          width: MediaQuery.of(context).size.width * .31,
+          height: MediaQuery.of(context).size.width * .3,
           child: Column(
             children: [
               Padding(
@@ -467,22 +468,20 @@ Space(),
 
 //IntervalSlider(),
 // schedule
-  DateTime initialDate = DateTime.now();
-  setReportSchedule() async {
-    final firstDate = DateTime(1997);
-    final lastDate = DateTime(2050);
+//   DateTime initialDate = DateTime.now();
+//   setReportSchedule() async {
+//     final firstDate = DateTime(1997);
+//     final lastDate = DateTime(2050);
 
-    var value = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: firstDate,
-        lastDate: lastDate);
+//     var value = await showDatePicker(
+//         context: context,
+//         initialDate: initialDate,
+//         firstDate: firstDate,
+//         lastDate: lastDate);
 
-    setState(() {
-      _scheduledTime =
-          "${days[value!.weekday]}, ${months[(value.month) - 1]} ${markDates(value.day)}";
-      initialDate = value;
-    });
-  }
-  //
+//     setState(() {
+//       initialDate = value;
+//     });
+//   }
+//   //
 }

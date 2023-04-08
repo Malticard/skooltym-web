@@ -59,6 +59,7 @@ class _Data_TableState extends State<Data_Table> {
                 minWidth: 900,
                 sortColumnIndex: 2,
                 sortAscending: false,
+                // showBottomBorder: true,
                 sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
                 sortArrowAnimationDuration: const Duration(milliseconds: 500),
                 columns: widget.columns ?? [],

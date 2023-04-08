@@ -72,6 +72,8 @@ export '/widgets/SettingsCard.dart';
 export '/widgets/DropDown.dart';
 export '/widgets/CommonDelete.dart';
 export '/widgets/NoDataWidget.dart';
+export '../widgets/ProfileCard_View.dart';
+export '/widgets/DividerWidget.dart';
 //routes paths
 export '/routes/routes.dart';
 // file picker
@@ -166,6 +168,4 @@ export '/screens/Admin/widgets/DropOffAllowanceSlider.dart';
 export '/screens/Admin/widgets/DashboardCard.dart';
 // --------------------------------------------------------
 
-// ----> Malticard
-export '/screens/malticard/index.dart';
 // --------------------------------------------------------

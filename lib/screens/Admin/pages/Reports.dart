@@ -52,28 +52,28 @@ class _OvertimeReportsState extends State<OvertimeReports>
         ),
         columns: [
           DataColumn(
-            label: Text("Student Name"),
+            label: Text("Student Name",style: TextStyle(fontSize: 11),),
           ),
           DataColumn(
-            label: Text("Picked by"),
+            label: Text("Picked By",style: TextStyle(fontSize: 11)),
           ),
           DataColumn(
-            label: Text("Standard PickUp"),
+            label: SizedBox(width:800,child: Text("Default \nPickUpTime",style: TextStyle(fontSize: 11))),
           ),
           DataColumn(
-            label: Text("Actual PickUp"),
+            label: Text("Current \nPickUp Time",style: TextStyle(fontSize: 11)),
           ),
           DataColumn(
-            label: Text("Authorized by"),
+            label: Text("Authorized by",style: TextStyle(fontSize: 11)),
           ),
           DataColumn(
-            label: Text("Interval"),
+            label: Text("Interval(mins)",style: TextStyle(fontSize: 11)),
           ),
           DataColumn(
-            label: Text("Overtime rate"),
+            label: Text("Overtime rate",style: TextStyle(fontSize: 11)),
           ),
           DataColumn(
-            label: Text("Overtime charge"),
+            label: Text("Overtime charge",style: TextStyle(fontSize: 11)),
           ),
           if (context.read<SchoolController>().state['role'] == 'Finance')
             DataColumn(
@@ -110,19 +110,19 @@ class _OvertimeReportsState extends State<OvertimeReports>
                 width: 45,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text("${overtimeModel.student.studentFname} ${overtimeModel.student.studentLname}"),
+                padding: const EdgeInsets.symmetric(horizontal:5),
+                child: Text("${overtimeModel.student.username}",style: TextStyle(fontSize: 11)),
               ),
             ],
           ),
         ),
         DataCell(Text("${overtimeModel.guardian.guardianFname} ${overtimeModel.guardian.guardianLname}")),
         DataCell(Text(overtimeModel.settings.pickUpEndTime.toString())),
-        DataCell(Text(overtimeModel.settings.overtimeRate.toString())),
+        DataCell(Text(overtimeModel.settings.pickUpEndTime.toString())),
         DataCell(Text("${overtimeModel.staff.staffFname} ${overtimeModel.staff.staffLname}")),
         DataCell(Text(overtimeModel.settings.overtimeInterval.toString())),
         DataCell(Text(overtimeModel.settings.overtimeRate.toString())),
-        DataCell(Text(overtimeModel.overtimeCharge.toString())),
+        DataCell(Text("50000")),
         // DataCell(Text(overtimeModel.status)),
         if (context.read<SchoolController>().state['role'] == 'Finance')
           DataCell(buildActionButtons(context, () {

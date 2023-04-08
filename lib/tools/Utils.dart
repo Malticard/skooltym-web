@@ -357,19 +357,6 @@ List<Map<String, dynamic>> financeViews = [
   },
 ];
 
-// malticard views
-List<Map<String, dynamic>> malticardViews = [
-  {
-    "icon": "assets/icons/menu_dashbord.svg",
-    "title": "Dashboard",
-    "page": const Dashboard()
-  },
-  {
-    "title": "Add School",
-    "page": const MalticardView(),
-    'icon': "assets/icons/menu_store.svg"
-  },
-];
 // valid text controllers
 bool validateTextControllers(List<TextEditingController> controllers) {
   var ct = controllers.where((element) => element.text.isEmpty).toList();
@@ -495,6 +482,7 @@ Future<List<PickUpModel>> fetchPickups(String id) async {
 // fetch pickups
 Future<List<PickUpModel>> pickUps(BuildContext context) async {
   var response = await Client().get(Uri.parse(AppUrls.getPickUps + context.read<SchoolController>().state['school']));
+  debugPrint("response => ${response.body}");
   return response.statusCode == 201 || response.statusCode == 200
       ? pickUpModelFromJson(response.body)
       : [];
@@ -541,37 +529,37 @@ String handSanIntervals() {
 Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
     BuildContext context) async {
   // get students total
-  // int students = await computeStudentsTotal();
-  // // var drops = await dropOffs();
-  // var picks = await pickUps();
-  // var clearedOvertimes = await fetchOvertimeData("Cleared");
-  // var pendingOvertimes = await fetchOvertimeData("Pending");
+  int students = await computeStudentsTotal(context);
+  var drops = await dropOffs(context);
+  var picks = await pickUps(context);
+  var clearedOvertimes = await fetchOvertimeData("Cleared",context);
+  var pendingOvertimes = await fetchOvertimeData("Pending",context);
 
   List<Map<String, dynamic>> dashboardData = [
     {
       "label": "DROP OFFS",
-      "value": 0,//drops.length,
+      "value": drops.length,
       "icon": "assets/icons/004-playtime.svg",
       'color': Color.fromARGB(255, 106, 108, 235),
       "last_updated": "14:45"
     },
     {
       "label": "PICK UPS",
-      "value": 0,
+      "value": picks.length,
       "icon": "assets/icons/009-student.svg",
       'color': Color.fromARGB(255, 181, 150, 253),
       "last_updated": "14:45"
     },
     {
       "label": "CLEARED OVERTIME",
-      "value": 0,
+      "value": clearedOvertimes.length,
       "icon": "assets/icons/002-all.svg",
       'color': Color.fromARGB(255, 77, 154, 255),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": 0,//pendingOvertimes.length,
+      "value": pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
@@ -580,14 +568,14 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
   List<Map<String, dynamic>> financeData = [
     {
       "label": "CLEARED OVERTIME",
-      "value": 0,//clearedOvertimes.length,
+      "value": clearedOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": 0,//pendingOvertimes.length,
+      "value": pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"

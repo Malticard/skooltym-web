@@ -16,6 +16,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    Provider.of<MainController>(context,listen: false).availablePickUps(context);
   }
 
   @override
@@ -30,21 +31,20 @@ class _ViewPickUpsState extends State<ViewPickUps>
         DataCell(
           Row(
             children: [
-              Image.asset(
-                StaffIcons.profile,
-                height: 45,
-                width: 45,
-              ),
+              // Image.network(
+              //   AppUrls.liveImages + pickUp.stu
+              //   height: 45,
+              //   width: 45,
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(pickUp.studentName!),
+                child: Text(pickUp.studentName.studentFname + " " + pickUp.studentName.studentLname),
               ),
             ],
           ),
         ),
-        DataCell(Text(pickUp.pickedBy)),
+        DataCell(Text("${pickUp.pickedBy.guardianFname} ${pickUp.pickedBy.guardianLname}")),
         DataCell(Text(pickUp.pickUpTime)),
-        DataCell(Text(pickUp.authorizedBy)),
       ],
     );
   }
@@ -52,6 +52,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    Provider.of<MainController>(context,listen: false).availablePickUps(context);
 
     return Container(
       padding: const EdgeInsets.all(defaultPadding),
