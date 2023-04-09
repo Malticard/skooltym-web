@@ -93,7 +93,7 @@ class _ViewStudentsState extends State<ViewStudents> {
                       });
                 },
                 icon: Icon(Icons.add),
-                label: Text("Add Staff"),
+                label: Text("Add Student"),
               ),
             ],
           ),

@@ -35,11 +35,12 @@ class _SideMenuState extends State<SideMenu> {
               child: Column(
                 children: [
                   Space(space: 0.04),
-                  Image.asset("assets/images/ambro.png"),
-                  Space(),//${context.read<SchoolController>()
-                          // .state['schoolName']}
+                  Image.network(AppUrls.liveImages+ "${context.read<SchoolController>().state['profile_pic']}",
+                      height: 50, width: 50),
+                  Space(),//
                   Text(
-                      "Ambrosoli School",
+                      "${context.read<SchoolController>()
+                           .state['schoolName']}",
                           overflow: TextOverflow.ellipsis,
                           style:TextStyles(context)
                       .getBoldStyle().copyWith(color:Colors.white,fontSize: 16),)

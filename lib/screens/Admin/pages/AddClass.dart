@@ -19,7 +19,7 @@ class _AddClassState extends State<AddClass> {
   @override
   void didChangeDependencies() {
     Provider.of<MainController>(context).staffUpdate(context);
-    Provider.of<MainController>(context).fetchClasses();
+    Provider.of<MainController>(context).fetchClasses(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 
@@ -29,15 +29,15 @@ class _AddClassState extends State<AddClass> {
   List<String> _stepText = <String>[];
 
   int currentStep = 0;
-  int _streams = 0;
-  EdgeInsets _padding = const EdgeInsets.only(right: 0, left: 0);
+  final int _streams = 0;
+  final EdgeInsets _padding = const EdgeInsets.only(right: 0, left: 0);
   //text controllers
 
-  TextEditingController _classController = TextEditingController();
-  TextEditingController _streamNoController = TextEditingController();
+  final TextEditingController _classController = TextEditingController();
+  final TextEditingController _streamNoController = TextEditingController();
   //error text
-  TextEditingController _errorController1 = TextEditingController();
-  TextEditingController _errorController2 = TextEditingController();
+  final TextEditingController _errorController1 = TextEditingController();
+  final TextEditingController _errorController2 = TextEditingController();
   //stream eror
   StepState assignState({required int index}) {
     if (currentStep == index) {
@@ -56,7 +56,7 @@ class _AddClassState extends State<AddClass> {
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
   //
-  List<TextEditingController> _ctrl =
+  final List<TextEditingController> _ctrl =
       List.generate(50, (n) => TextEditingController());
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class _AddClassState extends State<AddClass> {
         context.read<StepperController>().state.fields!,
         (index) => TextEditingController());
     Provider.of<MainController>(context).staffUpdate(context);
-    Provider.of<MainController>(context).fetchClasses();
+    Provider.of<MainController>(context).fetchClasses(context.read<SchoolController>().state['school']);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -265,7 +265,7 @@ class _AddClassState extends State<AddClass> {
                                 Map<String, dynamic> data = {
                                   "school":context.read<SchoolController>().state['school'],
                                   "class_name": _classController.text,
-                                  "class_streams": "${_stepText}",
+                                  "class_streams": _stepText.join(","),
                                 };
                                 debugPrint("Saved data $data");
                                 showProgress(context,
@@ -343,7 +343,7 @@ class _AddClassState extends State<AddClass> {
                       DataCell(Text("${index + 1}")),
                       DataCell(Text(context
                           .watch<MainController>()
-                          .classes[index]
+                          .classes[index].className
                           )),
                       DataCell(
                         Row(
@@ -358,12 +358,12 @@ class _AddClassState extends State<AddClass> {
                                 builder: (context) => CommonDelete(
                                   title: context
                                       .watch<MainController>()
-                                      .classes[index]
+                                      .classes[index].className
                                       ,
                                   url: AppUrls.deleteClass +
                                       context
                                           .watch<MainController>()
-                                          .classes[index]
+                                          .classes[index].id
                                           ,
                                 ),
                               ),

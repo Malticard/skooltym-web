@@ -26,7 +26,7 @@ final List<Map<String, dynamic>> _formFields = [
     'icon': Icons.person_2_outlined
   },
   {
-    "title": "Student's Othername*",
+    "title": "Student's Othername *",
     "hint": "e.g Paul",
     "password": false,
     'icon': Icons.person_3_outlined
@@ -40,12 +40,6 @@ final List<Map<String, dynamic>> _formFields = [
       "Male",
       "Female",
     ]
-  },
-    {
-    "title": "Attach  guardian(s) *",
-    'icon': Icons.person_3_outlined,
-    "hint": "Select guardian(s) *",
-    "menu": [0],
   },
   {
     "title": "Class *",

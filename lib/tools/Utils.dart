@@ -8,7 +8,7 @@ loginUser(BuildContext context, String email, String password) async {
   showProgress(context, msg: "Login in progress");
 
   Client().post(Uri.parse(AppUrls.login), body: {
-    "staff_email": email,
+    "staff_contact": email,
     "staff_password": password,
   }).then((value) {
     if (value.statusCode == 200 || value.statusCode == 201) {
@@ -27,7 +27,7 @@ loginUser(BuildContext context, String email, String password) async {
       );
       showMessage(
         context: context,
-        msg: "Login successfully..",
+        msg: "Logged in  successfully..",
         type: 'success',
       );
     } else {

@@ -65,9 +65,10 @@ class _ProfileCardState extends State<ProfileCard> {
         ),
         child: Row(
           children: [
-            Image.asset(
-              "assets/images/profile_pic.png",
-              height: 38,
+            CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: Image.network(AppUrls.liveImages+ "${context.read<SchoolController>().state['profile_pic']}",
+                        height: 35, width: 35),
             ),
             if (!Responsive.isMobile(context))
               Padding(
