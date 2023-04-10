@@ -16,7 +16,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    Provider.of<MainController>(context,listen: false).availablePickUps(context);
+    Provider.of<MainController>(context,listen: false).availablePickUps(context.read<SchoolController>().state['school']);
   }
 
   @override
@@ -38,7 +38,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
               // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(pickUp.studentName.studentFname + " " + pickUp.studentName.studentLname),
+                child: Text("${pickUp.studentName.studentFname} ${pickUp.studentName.studentLname}"),
               ),
             ],
           ),
@@ -52,7 +52,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Provider.of<MainController>(context,listen: false).availablePickUps(context);
+    Provider.of<MainController>(context,listen: false).availablePickUps(context.read<SchoolController>().state['school']);
 
     return Container(
       padding: const EdgeInsets.all(defaultPadding),

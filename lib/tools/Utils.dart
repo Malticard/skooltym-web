@@ -68,59 +68,14 @@ String greetUser() {
 
   return greet;
 }
-
-// dialog
-void showAppDialog(BuildContext context,
-    {String? title,
-    String? denyText,
-    String? confirmText,
-    bool showCancel = false,
-    String? successText,
-    String? errorText}) async {
-  ArtDialogResponse response = await ArtSweetAlert.show(
-      barrierDismissible: false,
-      context: context,
-      artDialogArgs: ArtDialogArgs(
-        showCancelBtn: true,
-        denyButtonText: denyText ?? "Don't save",
-        title: title ?? "Do you want to save the changes?",
-        confirmButtonText: confirmText ?? "Save",
-      ));
-
-  if (response.isTapConfirmButton) {
-    ArtSweetAlert.show(
-        context: context,
-        artDialogArgs: ArtDialogArgs(
-            type: ArtSweetAlertType.success, title: successText ?? "Saved!"));
-    return;
-  }
-  if (response.isTapCancelButton) {
-    ArtSweetAlert.show(
-      context: context,
-      artDialogArgs: ArtDialogArgs(
-          type: ArtSweetAlertType.success,
-          title: successText ?? "Operation cancel...."),
-    );
-  }
-
-  if (response.isTapDenyButton) {
-    ArtSweetAlert.show(
-        context: context,
-        artDialogArgs: ArtDialogArgs(
-            type: ArtSweetAlertType.info,
-            title: errorText ?? "Changes are not saved!"));
-    return;
-  }
-}
-
 // return students
-Future<List<StudentModel>> fetchStudents(BuildContext context) async {
-  var res = await Client().get(Uri.parse(AppUrls.students + "${context.read<SchoolController>().state['school']}"));
+Future<List<StudentModel>> fetchStudents(String id) async {
+  var res = await Client().get(Uri.parse(AppUrls.students + id));
   return studentModelFromJson(res.body);
 }
 
-Future<StudentModel> getSpecificStudent(String n,BuildContext context) async {
-  var st = await fetchStudents(context);
+Future<StudentModel> getSpecificStudent(String n,String school) async {
+  var st = await fetchStudents(school);
   return st.firstWhere((element) => element.studentFname == n);
 }
 
@@ -136,7 +91,7 @@ void showSuccessDialog(String name, BuildContext context,
         // overflow: TextOverflow,
         style: TextStyles(context).getRegularStyle(),
       ),
-      content: Icon(Icons.check_circle_outline_rounded,
+      content: const Icon(Icons.check_circle_outline_rounded,
           size: 75, color: Colors.green),
       actions: [
         TextButton(
@@ -145,7 +100,7 @@ void showSuccessDialog(String name, BuildContext context,
                 Routes.popPage(context);
                 // Routes.namedRoute(context, Routes.dashboard);
               },
-          child: Text("Okay"),
+          child:const Text("Okay"),
         )
       ],
     ),
@@ -212,7 +167,7 @@ edit,VoidCallback delete) {
     children: [
       TextButton(
         onPressed: edit,
-        child: Icon(
+        child: const Icon(
           Icons.edit,
           color: Colors.white,
         ),
@@ -226,15 +181,11 @@ edit,VoidCallback delete) {
       ),
       TextButton(
         onPressed: delete,
-        //     () {
-        //
-        //   showAppDialog(context,
-        //       title: "Are you sure you want to delete $text?");
-        // },
-        child: Icon(Icons.delete_outline_rounded, color: Colors.white),
+      
+        child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
         style: TextButton.styleFrom(
           backgroundColor: Colors.red,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding:const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         ),
       ),
     ],
@@ -460,9 +411,9 @@ List<String> months = <String>[
   "Dec",
 ];
 // compute students total
-Future<int> computeStudentsTotal(BuildContext context) async {
+Future<int> computeStudentsTotal(String id) async {
   int students = 0;
-  var response = await fetchStudents(context);
+  var response = await fetchStudents(id);
   students = response.length;
   // debugPrint("Total => $students");
   return students;
@@ -480,8 +431,8 @@ Future<List<PickUpModel>> fetchPickups(String id) async {
 }
 
 // fetch pickups
-Future<List<PickUpModel>> pickUps(BuildContext context) async {
-  var response = await Client().get(Uri.parse(AppUrls.getPickUps + context.read<SchoolController>().state['school']));
+Future<List<PickUpModel>> pickUps(String id) async {
+  var response = await Client().get(Uri.parse(AppUrls.getPickUps + id));
   debugPrint("response => ${response.body}");
   return response.statusCode == 201 || response.statusCode == 200
       ? pickUpModelFromJson(response.body)
@@ -498,8 +449,8 @@ Future<List<DropOffModel>> fetchDropOffs(String id) async {
 }
 
 // drop offs
-Future<List<DropOffModel>> dropOffs(BuildContext context) async {
-  var response = await Client().get(Uri.parse(AppUrls.getDropOffs + context.read<SchoolController>().state['school']));
+Future<List<DropOffModel>> dropOffs(String id) async {
+  var response = await Client().get(Uri.parse(AppUrls.getDropOffs + id));
   return dropOffModelFromJson(response.body);
   // return response;
 }
@@ -508,8 +459,8 @@ Future<List<DropOffModel>> dropOffs(BuildContext context) async {
 /// Dashboard cards
 
 // fetch overtimes
-Future<List<OvertimeModel>> fetchOvertimeData(String status,BuildContext context) async {
-  var response = await Client().get(Uri.parse(AppUrls.overtime + context.read<SchoolController>().state['school']));
+Future<List<OvertimeModel>> fetchOvertimeData(String status,String id) async {
+  var response = await Client().get(Uri.parse(AppUrls.overtime + id));
   return overtimeModelFromJson(response.body).where((element) => element.status == status).toList();
   // return response;
 }
@@ -526,14 +477,13 @@ String handSanIntervals() {
 }
 
 // fetch dashboard meta data
-Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
-    BuildContext context) async {
+Future<List<Map<String, dynamic>>> fetchDashboardMetaData(String school_id,String role) async {
   // get students total
-  int students = await computeStudentsTotal(context);
-  var drops = await dropOffs(context);
-  var picks = await pickUps(context);
-  var clearedOvertimes = await fetchOvertimeData("Cleared",context);
-  var pendingOvertimes = await fetchOvertimeData("Pending",context);
+  int students = await computeStudentsTotal(school_id);
+  var drops = await dropOffs(school_id);
+  var picks = await pickUps(school_id);
+  var clearedOvertimes = await fetchOvertimeData("Cleared",school_id);
+  var pendingOvertimes = await fetchOvertimeData("Pending",school_id);
 
   List<Map<String, dynamic>> dashboardData = [
     {
@@ -570,31 +520,20 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "label": "CLEARED OVERTIME",
       "value": clearedOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 50, 66, 95),
+      'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
       "value": pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 50, 66, 95),
+      'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
   ];
-  List<Map<String, dynamic>> malticardData = [
-    {
-      "label": "SCHOOLS",
-      "value": 0,//pendingOvertimes.length,
-      "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 50, 66, 95),
-      "last_updated": "14:45"
-    }
-  ];
-  return Provider.of<SchoolController>(context, listen: false).state['role'] ==
-  'Admin' || Provider.of<SchoolController>(context, listen: false).state['role'] == 'SuperAdmin'
+  return role == 'Admin'
       ? dashboardData
-      : Provider.of<SchoolController>(context, listen: false).state['role'] ==
-  'Finance'? financeData : malticardData;
+      : financeData;
 }
 
 // logic to fetch a specific guardian from the scanners

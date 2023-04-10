@@ -17,7 +17,7 @@ class _StaffViewState extends State<StaffView> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).staffUpdate(context);
+    Provider.of<MainController>(context).staffUpdate(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 

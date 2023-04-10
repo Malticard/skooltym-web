@@ -12,9 +12,11 @@ class DropOffAllowanceSlider extends StatefulWidget {
 
 class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
   // double _currentValue = 0.0;
-
+  bool switcher = true;
   @override
   Widget build(BuildContext context) {
+    var textController = TextEditingController(text:context
+                          .read<DropOffController>().state.toString());
     return Scaffold(
       body: BlocBuilder<DropOffController, double>(
         builder: (context, state) {
@@ -24,7 +26,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
             children: [
               Text(
                 "Set drop off allowance",
-                style: TextStyles(context).getTitleStyle(),
+                style: TextStyles(context).getRegularStyle().copyWith(fontSize: 16),
               ),
               const Space(space: 0.03),
               Padding(
@@ -43,16 +45,57 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                       context
                           .read<DropOffController>()
                           .setDropOffAllowanceTime(v.toDouble());
-                      // setState(() {
-                      //   widget.currentValue = v.toDouble();
-                      // });
+                      setState(() {
+                        textController.text = v.toString();
+                      });
                     }),
               ),
-              const Space(space: 0.03),
-              Text(
-                "${state.floor()} (mins)",
-                style:
-                    TextStyles(context).getBoldStyle().copyWith(fontSize: 24),
+                const Space(space: 0.03),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Visibility(
+                    visible: switcher,
+                    replacement: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        controller: textController,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Enter your dropoff allowance time here",
+                            hintStyle: TextStyles(context)
+                                .getRegularStyle()
+                                .copyWith(fontSize: 15)),
+                        // hintText: "Enter your pick up allowance time here",
+                        onChanged: (p0) {
+                          context
+                              .read<DropOffController>()
+                              .setDropOffAllowanceTime(double.parse(p0));
+                        },
+                      ),
+                    ),
+                    child: Text(
+                      "${state.floor()} (mins)",
+                      style: TextStyles(context)
+                          .getBoldStyle()
+                          .copyWith(fontSize: 16),
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 13,
+                    onPressed: () {
+                      setState(() {
+                        switcher = !switcher;
+                      });
+                    },
+                    icon: Icon(
+                      switcher ? Icons.edit : Icons.check,
+                      color: Colors.blue,
+                    ),
+                  )
+                ],
               ),
               const Space(space: 0.03),
               CommonButton(

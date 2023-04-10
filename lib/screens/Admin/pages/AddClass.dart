@@ -18,7 +18,7 @@ class _AddClassState extends State<AddClass> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).staffUpdate(context);
+    Provider.of<MainController>(context).staffUpdate(context.read<SchoolController>().state['school']);
     Provider.of<MainController>(context).fetchClasses(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
@@ -65,7 +65,7 @@ class _AddClassState extends State<AddClass> {
     List<TextEditingController> _streamErrorControllers = List.generate(
         context.read<StepperController>().state.fields!,
         (index) => TextEditingController());
-    Provider.of<MainController>(context).staffUpdate(context);
+    Provider.of<MainController>(context).staffUpdate(context.read<SchoolController>().state['school']);
     Provider.of<MainController>(context).fetchClasses(context.read<SchoolController>().state['school']);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

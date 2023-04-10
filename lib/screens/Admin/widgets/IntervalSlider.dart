@@ -10,10 +10,12 @@ class IntervalSlider extends StatefulWidget {
 }
 
 class _IntervalSliderState extends State<IntervalSlider> {
-  double _currentValue = 0.0;
-
+ 
+ bool switcher = true;
   @override
   Widget build(BuildContext context) {
+  final textController = TextEditingController(text: context
+                          .read<IntervalController>().state.toString());
     return Scaffold(
       body: BlocBuilder<IntervalController, double>(
         builder: (context, state) {
@@ -47,10 +49,52 @@ class _IntervalSliderState extends State<IntervalSlider> {
                       // });
                     }),
               ),
-              const Space(space: 0.03),
-              Text(
-                "${state.floor()} (mins)",
-                style: TextStyles(context).getTitleStyle(),
+               const Space(space: 0.03),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Visibility(
+                    visible: switcher,
+                    replacement: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        controller: textController,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Enter your dropoff allowance time here",
+                            hintStyle: TextStyles(context)
+                                .getRegularStyle()
+                                .copyWith(fontSize: 15)),
+                        // hintText: "Enter your pick up allowance time here",
+                        onChanged: (p0) {
+                          context
+                              .read<IntervalController>()
+                              .computeInterval(double.parse(p0));
+                        },
+                      ),
+                    ),
+                    child: Text(
+                      "${state.floor()} (mins)",
+                      style: TextStyles(context)
+                          .getBoldStyle()
+                          .copyWith(fontSize: 16),
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 13,
+                    onPressed: () {
+                      setState(() {
+                        switcher = !switcher;
+                      });
+                    },
+                    icon: Icon(
+                      switcher ? Icons.edit : Icons.check,
+                      color: Colors.blue,
+                    ),
+                  )
+                ],
               ),
               const Space(space: 0.03),
               CommonButton(

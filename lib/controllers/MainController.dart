@@ -41,8 +41,8 @@ class MainController extends ChangeNotifier {
   void disposeKey() {
     _scaffoldKey.currentState!.dispose();
   }
-  void fetchUpdates(BuildContext context) {
-    fetchDashboardMetaData(context).then((v) {
+  void fetchUpdates(String school,String role) {
+    fetchDashboardMetaData(school,role).then((v) {
       _dashData = v;
       notifyListeners();
     });
@@ -57,8 +57,8 @@ class MainController extends ChangeNotifier {
   }
 
 // check for new entries of students
-  void staffUpdate(BuildContext context) {
-    Client().get(Uri.parse(AppUrls.staff + context.read<SchoolController>().state['school'])).then((response) {
+  void staffUpdate(String school) {
+    Client().get(Uri.parse(AppUrls.staff + school)).then((response) {
       _availableStaff = staffModelFromJson(response.body);
       notifyListeners();
     });
@@ -73,15 +73,15 @@ class MainController extends ChangeNotifier {
   }
 
   // available picks and drops
-  availableDropOffs(BuildContext context) {
-    dropOffs(context).then((drops) {
+  availableDropOffs(String school) {
+    dropOffs(school).then((drops) {
       _drops = drops;
       notifyListeners();
     });
   }
 
-  availablePickUps(BuildContext context) {
-    pickUps(context).then((picks) {
+  availablePickUps(String school) {
+    pickUps(school).then((picks) {
       debugPrint("Picks => $picks");
       _picks = picks;
       notifyListeners();

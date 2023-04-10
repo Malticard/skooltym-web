@@ -25,7 +25,7 @@ class _ViewDropOffsState extends State<ViewDropOffs>
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).availableDropOffs(context);
+    Provider.of<MainController>(context).availableDropOffs(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 

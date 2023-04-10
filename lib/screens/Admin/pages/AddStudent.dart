@@ -47,6 +47,13 @@ final List<Map<String, dynamic>> _formFields = [
     "password": false,
     'icon': Icons.home_work_outlined
   },
+  {
+    "title": "Stream *",
+    "hint": "e.g North",
+    "password": false,
+    'icon': Icons.home_work_outlined
+  },
+
 ];
 
 class _AddStudentState extends State<AddStudent> {

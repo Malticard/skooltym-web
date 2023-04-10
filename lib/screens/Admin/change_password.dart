@@ -13,7 +13,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   String _errorConfirmPassword = '';
   final TextEditingController _newController = TextEditingController();
   final TextEditingController _confirmController = TextEditingController();
-
+  bool _confirm = false;
+  bool _pass = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,10 +37,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      "Enter new password",
+                      "Ensure your new password is at least 6 characters long and different from your current password.",
                       textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 18,
+                      style: TextStyles(context).getDescriptionStyle().copyWith(
+                        fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).disabledColor,
                       ),
@@ -48,8 +49,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                 ],
               ),
             ),
-            Space(space: 0.06,),
+            // Space(space: 0.06,),
             CommonTextField(
+              enableSuffix: true,
+               suffixIcon: _confirm
+                          ? Icons.remove_red_eye_rounded
+                          : Icons.visibility_off,
               controller: _newController,
               titleText: "New password",
               icon: Icons.lock_outline_rounded,
@@ -57,20 +62,31 @@ class _ChangePasswordState extends State<ChangePassword> {
               hintText: "************",
               keyboardType: TextInputType.visiblePassword,
               isObscureText: true,
-              onChanged: (String txt) {},
+              onTapSuffix: () {
+                        setState(() {
+                          _confirm = !_confirm;
+                        });
+                      },
               errorText: _errorNewPassword,
             ),
             CommonTextField(
               controller: _confirmController,
               icon: Icons.lock_outline_rounded,
-
+                enableSuffix: true,
+                      suffixIcon: _pass
+                          ? Icons.remove_red_eye_rounded
+                          : Icons.visibility_off,
               titleText: "Confirm Password",
               //AppLocalizations(context).of("confirm_password"),
               padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
               hintText: "*************",
               keyboardType: TextInputType.visiblePassword,
               isObscureText: true,
-              onChanged: (String txt) {},
+               onTapSuffix: () {
+                        setState(() {
+                          _pass = !_pass;
+                        });
+                      },
               errorText: _errorConfirmPassword,
             ),
             CommonButton(
