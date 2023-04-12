@@ -166,7 +166,7 @@ class _AddGuardianState extends State<AddGuardian>
     request.fields['guardian_dateOfEntry'] = _formControllers[6].text.trim();
     request.fields['guardian_key[key]'] = "";
     var response = request.send();
-     debugPrint("Status code ${response}");
+     debugPrint("Status code $response");
     return response;
   }
 }

@@ -9,20 +9,22 @@ class UpdateStaff extends StatefulWidget {
   State<UpdateStaff> createState() => _UpdateStaffState();
 }
 
-class _UpdateStaffState extends State<UpdateStaff>  {
-List<TextEditingController> _formControllers = <TextEditingController>[];
-@override
-void initState() { 
-  super.initState();
-   _formControllers = <TextEditingController>[
-    TextEditingController(text: "${widget.staff.staffFname} ${widget.staff.staffLname}"),
-    TextEditingController(text:widget.staff.staffEmail),
-    TextEditingController(text: widget.staff.staffContact),
-    TextEditingController(text: widget.staff.staffProfilePic),
-    TextEditingController(text: widget.staff.staffGender),
-    TextEditingController(text: widget.staff.staffRole),
-  ];
-}
+class _UpdateStaffState extends State<UpdateStaff> {
+  List<TextEditingController> _formControllers = <TextEditingController>[];
+  @override
+  void initState() {
+    super.initState();
+    _formControllers = <TextEditingController>[
+      TextEditingController(
+          text: "${widget.staff.staffFname} ${widget.staff.staffLname}"),
+      TextEditingController(text: widget.staff.staffEmail),
+      TextEditingController(text: widget.staff.staffContact),
+      TextEditingController(text: AppUrls.liveImages + widget.staff.staffProfilePic),
+      TextEditingController(text: widget.staff.staffGender),
+      TextEditingController(text: widget.staff.staffRole.roleType),
+    ];
+  }
+
   // form details
   static final List<Map<String, dynamic>> formFields = [
     {
@@ -65,7 +67,6 @@ void initState() {
     },
   ];
 
- 
   // overall form padding
   EdgeInsets padding =
       const EdgeInsets.only(left: 14, top: 0, right: 14, bottom: 5);
@@ -75,8 +76,6 @@ void initState() {
   List<String> errorFields = List.generate(formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-
-
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: padding,
@@ -89,45 +88,45 @@ void initState() {
         buttonText: "Submit Staff Details",
         errorMsgs: errorFields,
         onSubmit: () {
-
           if (validateEmail(_formControllers[1].text, context) != false) {
-            _handleFormUpload()
-                  .then(
-                    (value) {
-                      debugPrint("Staff data -> ${value.reasonPhrase}");
-                      if (value.statusCode == 200 || value.statusCode == 201) {
-                      //  bottom msg
-                        showMessage(
-                          context: context,
-                          type: 'success',
-                          msg: "Updated staff successfully",
-                        );
-                        Routes.popPage(context);
-                      //  end of bottom msg
-                      } else {
-                  
-                         showMessage(
-                          context: context,
-                          type: 'danger',
-                          msg: "Error ${value.reasonPhrase}",
-                        );
-                        // showSuccessDialog(
-                        //     _formControllers[0].text.trim().split(" ")[1],
-                        //     context);
-                      }
-                    });
-                  
+            if (_formControllers[0].text.trim().split(" ")[1] == '') {
+              showMessage(context: context, msg: "Staff last name is required");
+            } else {
+              _handleFormUpload(widget.staff.id).then((value) {
+                debugPrint("response code -> ${value.statusCode}");
+                debugPrint("Staff data -> ${value.reasonPhrase}");
+                if (value.statusCode == 200 || value.statusCode == 201) {
+                  //  bottom msg
+                  showMessage(
+                    context: context,
+                    type: 'success',
+                    msg: "Updated staff successfully",
+                  );
+                  Routes.popPage(context);
+                  //  end of bottom msg
+                } else {
+                  showMessage(
+                    context: context,
+                    type: 'danger',
+                    msg: "Error ${value.reasonPhrase}",
+                  );
+                  // showSuccessDialog(
+                  //     _formControllers[0].text.trim().split(" ")[1],
+                  //     context);
+                }
+              });
+            }
           }
         },
       ),
     );
   }
 
-  Future<StreamedResponse> _handleFormUpload() async {
-      String uri = _formControllers[3].text.trim();
+  Future<StreamedResponse> _handleFormUpload(String id) async {
+    String uri = _formControllers[3].text.trim();
     debugPrint("handling form upload with $uri");
     //
-    var request = MultipartRequest('POST', Uri.parse(AppUrls.addStaff));
+    var request = MultipartRequest('POST', Uri.parse(AppUrls.updateStaff + id));
     // =============================== form fields =======================
     request.fields['staff_school'] =
         "${context.read<SchoolController>().state['school']}";

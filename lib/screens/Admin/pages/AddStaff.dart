@@ -68,7 +68,7 @@ class _AddStaffState extends State<AddStaff> {
     return Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 2.3,
+        height: MediaQuery.of(context).size.width / 3,
         child: Padding(
           padding: padding,
           child: CommonFormFields(

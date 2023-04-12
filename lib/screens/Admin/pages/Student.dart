@@ -52,7 +52,7 @@ class _ViewStudentsState extends State<ViewStudents> {
                 return Dialog(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width / 3.5,
-                            height: MediaQuery.of(context).size.width / 2,
+                            height: MediaQuery.of(context).size.width / 2.2,
                     child: UpdateStudent(studentModel: studentModel),
                   ),
                 );
@@ -97,7 +97,7 @@ class _ViewStudentsState extends State<ViewStudents> {
                         return Dialog(
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 3.5,
-                            height: MediaQuery.of(context).size.width / 1.5,
+                            height: MediaQuery.of(context).size.width / 2.2,
                             child: const AddStudent(),
                           ),
                         );

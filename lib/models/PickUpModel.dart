@@ -39,9 +39,9 @@ class PickUpModel {
     factory PickUpModel.fromJson(Map<String, dynamic> json) => PickUpModel(
         id: json["_id"],
         schoolName: json["school_name"],
-        studentName: StudentName_.fromJson(json["student_name"] ?? ""),
+        studentName: StudentName_.fromJson(json["student_name"] ?? {}),
         pickUpTime: json["pick_up_time"],
-        pickedBy: PickedBy.fromJson(json["picked_by"]),
+        pickedBy: PickedBy.fromJson(json["picked_by"] ?? {}),
         authorizedBy: AuthorizedBy_.fromJson(json["authorized_by"]),
         comments: json["comments"],
         pickupKey: List<PickupKey>.from(json["pickup_key"].map((x) => PickupKey.fromJson(x))),
@@ -75,8 +75,8 @@ class AuthorizedBy_ {
     final String staffLname;
 
     factory AuthorizedBy_.fromJson(Map<String, dynamic> json) => AuthorizedBy_(
-        staffFname: json["staff_fname"],
-        staffLname: json["staff_lname"],
+        staffFname: json["staff_fname"] ?? "",
+        staffLname: json["staff_lname"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {
@@ -95,8 +95,8 @@ class PickedBy {
     final String guardianLname;
 
     factory PickedBy.fromJson(Map<String, dynamic> json) => PickedBy(
-        guardianFname: json["guardian_fname"],
-        guardianLname: json["guardian_lname"],
+        guardianFname: json["guardian_fname"] ?? "",
+        guardianLname: json["guardian_lname"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {
@@ -135,8 +135,8 @@ class StudentName_ {
     final String studentLname;
 
     factory StudentName_.fromJson(Map<String, dynamic> json) => StudentName_(
-        studentFname: json["student_fname"],
-        studentLname: json["student_lname"],
+        studentFname: json["student_fname"] ?? "",
+        studentLname: json["student_lname"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {

@@ -22,7 +22,7 @@ class _StaffViewState extends State<StaffView> {
     super.didChangeDependencies();
   }
 
-  List<String> staffs = ["Staff Name", "Email", "Gender", "Actions"];
+  List<String> staffs = ["Staff Name","Role","Email", "Gender", "Actions"];
   DataRow _dataRow(StaffModel staffModel, int i) {
     return DataRow(
       cells: [
@@ -38,11 +38,12 @@ class _StaffViewState extends State<StaffView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child:
-                    Text("${staffModel.staffFname} ${staffModel.staffLname}"),
+                    Text(staffModel.staffFname,overflow: TextOverflow.ellipsis,),
               ),
             ],
           ),
         ),
+        DataCell(Text((staffModel.staffRole.roleType))),
         DataCell(Text(staffModel.staffEmail)),
         DataCell(Text(staffModel.staffGender)),
         DataCell(buildActionButtons(context, () {

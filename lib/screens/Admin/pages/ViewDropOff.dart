@@ -36,8 +36,8 @@ class _ViewDropOffsState extends State<ViewDropOffs>
         DataCell(
           Row(
             children: [
-              Image.asset(
-                StaffIcons.profile,
+              Image.network(
+               AppUrls.liveImages + (dropOff.studentName.studentProfilePic),
                 height: 45,
                 width: 45,
               ),
@@ -48,9 +48,9 @@ class _ViewDropOffsState extends State<ViewDropOffs>
             ],
           ),
         ),
-        DataCell(Text(dropOff.droppedBy.guardianFname)),
+        DataCell(Text("${dropOff.droppedBy.guardianFname} ${dropOff.droppedBy.guardianLname}")),
         DataCell(Text("${dropOff.authorizedBy.staffFname} ${dropOff.authorizedBy.staffLname}")),
-        DataCell(Text("7:25 AM")),
+        DataCell(Text(dropOff.dropOffTime.toString().split(" ").last.toString().split(".").first)),
 
       ],
     );

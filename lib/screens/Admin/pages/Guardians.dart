@@ -49,13 +49,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           showDialog(
               context: context,
               builder: (context) {
-                return Dialog(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: UpdateGuardian(guardianModel: guardians),
-                  ),
-                );
+                return UpdateGuardian(guardianModel: guardians);
               });
         },(){
           showDialog(

@@ -54,6 +54,11 @@ final List<Map<String, dynamic>> _formFields = [
     "password": false,
     'icon': Icons.calendar_month_outlined
   },
+    {
+    "title": "Students *",
+    "hint": "Select students",
+    "menu": 0,
+  },
   {
     "title": "Relationship*",
     "hint": "Select relationship",
@@ -78,11 +83,12 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
       TextEditingController(text: "${widget.guardianModel.guardianFname} ${widget.guardianModel.guardianLname}"),
       TextEditingController(text: widget.guardianModel.guardianEmail),
       TextEditingController(text: widget.guardianModel.guardianContact.toString()),
-      TextEditingController(text: ""),
+      TextEditingController(text: AppUrls.liveImages + widget.guardianModel.guardianProfilePic),
       TextEditingController(text: widget.guardianModel.guardianGender),
-      TextEditingController(text: widget.guardianModel.relationship),
       TextEditingController(text: widget.guardianModel.type),
       TextEditingController(text: widget.guardianModel.guardianDateOfEntry.toString()),
+      TextEditingController(text: widget.guardianModel.relationship),
+
     ];
     // fetchStudents().then((value) => setState(() => students = value));
     super.initState();
@@ -106,29 +112,29 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
   Widget build(BuildContext context) {
     context.watch<MainController>().getAllStudents(context);
 
-    Size size = MediaQuery.of(context).size;
-    return Dialog(
-      
+    // Size size = MediaQuery.of(context).size;
+        return Dialog(
       child: SizedBox(
-       width: MediaQuery.of(context).size.width / 3,
-      height: MediaQuery.of(context).size.width / 1.5,
+         width: MediaQuery.of(context).size.width / 3,
+        height: MediaQuery.of(context).size.width / 1.5,
         child: Padding(
           padding: padding,
           child: CommonFormFields(
+            initialPic: widget.guardianModel.guardianProfilePic,
             padding: padding,
             formFields: _formFields,
             lists: context.watch<MainController>().students,
             dropdownLists: context.watch<MainController>().students.map((item) {
-                      return "${item.studentFname} ${item.studentLname}";
-                    }).toList(),
-            onDropDownValue: (p0) {
+                    return "${item.studentFname} ${item.studentLname}";
+                  }).toList(),
+                    onDropDownValue: (p0) {
               if (p0 != null) {
               Provider.of<MainController>(context,listen:false).selectMultiStudent(json.decode(p0));
               }
             },
             formControllers: _formControllers,
-            buttonText: "Save Guardian Details",
-            onSubmit: () => _addGuardian(),
+            buttonText: "Update Guardian Details",
+            onSubmit:() =>  _addGuardian(),
             errorMsgs: errorFields,
           ),
         ),
@@ -139,10 +145,10 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
 // adding guardian
   void _addGuardian() {
     if (validateEmail(_formControllers[1].text, context) != false) {
-      showProgress(context, msg: "Adding new guardian in progress");
+      showProgress(context, msg: "Updating guardian in progress");
       _handleGuardian()
           .then((value) {
-            print("Status code ${value.statusCode}");
+            debugPrint("Status code ${value.statusCode}");
             Routes.popPage(context);
             showSuccessDialog(
                 _formControllers[0].text.trim().split(" ")[1], context);
@@ -174,12 +180,12 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     //
     var request = MultipartRequest(
       'POST',
-      Uri.parse(AppUrls.updateGuardian + "${widget.guardianModel.id}"),
+      Uri.parse(AppUrls.updateGuardian + widget.guardianModel.id),
     );
 
     request.fields['school'] = context.read<SchoolController>().state['school'];
     request.fields['type'] = _formControllers[6].text.trim();
-    request.fields['relationship'] = _formControllers[8].text.trim();
+    request.fields['relationship'] = _formControllers[7].text.trim();
     request.fields['guardian_fname'] =
         _formControllers[0].text.trim().split(" ").first;
     request.fields['guardian_lname'] =

@@ -95,17 +95,16 @@ class _OvertimeReportsState extends State<OvertimeReports>
                   ""),
         ),
         rows: List.generate(
-          4,
-          // context.watch<MainController>().pendingOvertime.length,
+          context.watch<MainController>().pendingOvertime.length,
           (index) => overtimeDataRow(
-              "context.watch<MainController>().pendingOvertime[index]", index),
+              context.watch<MainController>().pendingOvertime[index], index),
         ),
       ),
     );
   }
 
   // row data
-  DataRow overtimeDataRow(String overtimeModel, int i) {
+  DataRow overtimeDataRow(OvertimeModel overtimeModel, int i) {
     return DataRow(
       cells: [
         DataCell(
@@ -116,24 +115,24 @@ class _OvertimeReportsState extends State<OvertimeReports>
                 height: 45,
                 width: 45,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Text("overtimeModel.student.username",
-                    style: TextStyle(fontSize: 11)),
+               Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Text(overtimeModel.student.username,
+                    style: const TextStyle(fontSize: 11)),
               ),
             ],
           ),
         ),
-        const DataCell(Text(
-            "{overtimeModel.guardian.guardianFname} {overtimeModel.guardian.guardianLname}")),
-        const DataCell(Text("overtimeModel.settings.pickUpEndTime.toString()")),
-        const DataCell(Text("overtimeModel.settings.pickUpEndTime.toString()")),
-        const DataCell(Text(
-            "{overtimeModel.staff.staffFname} {overtimeModel.staff.staffLname}")),
-        const DataCell(
-            Text("overtimeModel.settings.overtimeInterval.toString()")),
-        const DataCell(Text("overtimeModel.settings.overtimeRate.toString()")),
-        const DataCell(Text("50000")),
+         DataCell(Text(
+            "${overtimeModel.guardian.guardianFname} ${overtimeModel.guardian.guardianLname}")),
+         DataCell(Text(overtimeModel.settings.pickUpEndTime.toString())),
+         DataCell(Text(overtimeModel.settings.pickUpEndTime.toString())),
+         DataCell(Text(
+            "${overtimeModel.staff.staffFname} ${overtimeModel.staff.staffLname}")),
+         DataCell(
+            Text(overtimeModel.settings.overtimeInterval.toString())),
+         DataCell(Text(overtimeModel.settings.overtimeRate.toString())),
+         DataCell(Text("50000")),
         // DataCell(Text(overtimeModel.status)),
         if (context.read<SchoolController>().state['role'] == 'Finance')
           DataCell(buildActionButtons(context, () {

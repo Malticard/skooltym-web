@@ -12,8 +12,16 @@ class UpdateStudent extends StatefulWidget {
   State<UpdateStudent> createState() => _UpdateStudentState();
 }
 
+
+class _UpdateStudentState extends State<UpdateStudent> {
+  List<TextEditingController> _formControllers = <TextEditingController>[];
+  List<Map<String, dynamic>> _formFields = <Map<String, dynamic>>[];
+ 
+  @override
+ void initState() { 
+
 // form data
-final List<Map<String, dynamic>> _formFields = [
+_formFields = [
   {
     "title": "Student's Firstname *",
     "hint": "e.g John",
@@ -43,22 +51,21 @@ final List<Map<String, dynamic>> _formFields = [
     ]
   },
   {
-    "title": "Class*",
+    "title": "Class *",
     "hint": "e.g grade 2",
-    "password": false,
+    "data": [
+      "Select class",
+      ...context.read<MainController>().classes.map((e) => e).toList(),
+    ],
     'icon': Icons.home_work_outlined
-  },
+  }
 ];
 
-class _UpdateStudentState extends State<UpdateStudent> {
-  List<TextEditingController> _formControllers = <TextEditingController>[];
-  @override
- void initState() { 
   super.initState();
    _formControllers = <TextEditingController>[
     TextEditingController(text: widget.studentModel.studentFname),
     TextEditingController(text:widget.studentModel.studentLname),
-    // TextEditingController(text:widget.studentModel.studentOthername),
+    TextEditingController(text:widget.studentModel.otherName),
     TextEditingController(text: ""),
     TextEditingController(text: ""),
     TextEditingController(text: widget.studentModel.studentGender),
@@ -71,74 +78,70 @@ class _UpdateStudentState extends State<UpdateStudent> {
 // form key
   final formKey = GlobalKey<FormState>();
   // error fields
-  List<String> errorFields = List.generate(_formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Text("Add Student", style: TextStyles(context).getTitleStyle()),
-          SingleChildScrollView(
-            child: CommonFormFields(
-              padding: _padding,
-              formFields: _formFields,
-              formControllers: _formControllers,
-              buttonText: "Save Student Details",
-              onSubmit: () {
-                if (true) {
-                  showProgress(context);
-                  _handleStudentRegistration()
-                      .then(
-                        (value) {
-                          if (value.statusCode == 200) {
-                            Routes.popPage(context);
-                            showMessage(
-                              context: context,
-                              type: 'success',
-                              msg: "Added new student successfully",
-                            );
-                            for (var v in _formControllers) {
-                              v.clear();
-                            }
-                            showSuccessDialog(
-                                _formControllers[0].text.trim().split(" ")[1],
-                                context);
-                          } else {
-                            showMessage(
-                              msg:
-                                  "Failed to add student ${value.reasonPhrase}",
-                              context: context,
-                              type: "danger",
-                            );
-                          }
-                        },
-                      )
-                      .catchError(
-                        (onError) => () => showMessage(
+  List<String> errorFields = List.generate(_formFields.length, (i) => '');
+
+    return Column(
+      children: [
+        Text("Add Student", style: TextStyles(context).getTitleStyle()),
+        SingleChildScrollView(
+          child: CommonFormFields(
+            initialPic: widget.studentModel.studentProfilePic,
+            padding: _padding,
+            formFields: _formFields,
+            formControllers: _formControllers,
+            buttonText: "Save Student Details",
+            onSubmit: () {
+              if (true) {
+                _handleStudentRegistration()
+                    .then(
+                      (value) {
+                showProgress(context);
+
+                        if (value.statusCode == 200) {
+                          Routes.popPage(context);
+                          showMessage(
                             context: context,
-                            msg: 'An error occurred!! ',
-                            type: 'danger'),
-                      )
-                      .whenComplete(() {
-                        Routes.popPage(context);
-                      });
-                }
-              },
-              errorMsgs: errorFields,
-              lists:context.watch<MainController>().students,
-              onDropDownValue: (p0) {
-                if (p0 != null) {
-                 Provider.of<MainController>(context).guardians;
-                }
-              },
-              dropdownLists: context.watch<MainController>().students.map((item) {
-                    return "${item.studentFname} ${item.studentLname}";
-                  }).toList(),
-                
-            ),
+                            type: 'success',
+                            msg: "Student details updated successfully",
+                          );
+                          for (var v in _formControllers) {
+                            v.clear();
+                          }
+                          showSuccessDialog(
+                              _formControllers[0].text.trim().split(" ")[1],
+                              context);
+                        } else {
+                          showMessage(
+                            msg:
+                                "Failed to update student ${value.reasonPhrase}",
+                            context: context,
+                            type: "danger",
+                          );
+                        }
+                      },
+                    )
+                   
+                    .whenComplete(() {
+                      Routes.popPage(context);
+                    });
+              }
+            },
+            errorMsgs: errorFields,
+            lists:context.watch<MainController>().students,
+            onDropDownValue: (p0) {
+              if (p0 != null) {
+               Provider.of<MainController>(context).guardians;
+              }
+            },
+            dropdownLists: context.watch<MainController>().students.map((item) {
+                  return "${item.studentFname} ${item.studentLname}";
+                }).toList(),
+              
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -186,7 +189,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
     
                     student_key: req.body.student_key
      */
-    var request = MultipartRequest('POST', Uri.parse(AppUrls.updateStudent));
+    var request = MultipartRequest('POST', Uri.parse(AppUrls.updateStudent + widget.studentModel.id));
     debugPrint("${request.headers}");
     //  ============================== student details ============================
     request.fields['school'] =
