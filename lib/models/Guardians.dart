@@ -35,7 +35,7 @@ class Guardians {
     final String type;
     final String guardianFname;
     final String guardianLname;
-    final int guardianContact;
+    final String guardianContact;
     final String guardianEmail;
     final String guardianGender;
     final String guardianProfilePic;

@@ -26,10 +26,22 @@ class _ViewGuardiansState extends State<ViewGuardians> {
     return DataRow(
       cells: [
         DataCell(
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Text(guardians.guardianFname),
+            Row(
+            children: [
+          CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage(
+                  AppUrls.liveImages + guardians.guardianProfilePic,
+                ),
+              ),
+               Padding(
+            padding:  const EdgeInsets.symmetric(horizontal: defaultPadding),
+            child: Text(
+                "${guardians.guardianFname} ${guardians.guardianLname}"),
           ),
+            ],
+          )
+         
         ),
         DataCell(Text(guardians.guardianEmail)),
         DataCell(Text(guardians.guardianGender)),
@@ -68,21 +80,21 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if(context.watch<MainController>().guardians.length > 0)
+              if(context.watch<MainController>().guardians.isNotEmpty)
                  const Expanded(child: SearchField()),
               if (!Responsive.isMobile(context))
                 Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-             SizedBox(),
+             const SizedBox(),
               ElevatedButton.icon(
                 onPressed: () {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return AddGuardian();
+                        return const AddGuardian();
                       });
                 },
-                icon: Icon(Icons.add),
-                label: Text("Add Guardian"),
+                icon: const Icon(Icons.add),
+                label: const Text("Add Guardian"),
               ),
             ],
           ),
@@ -95,8 +107,8 @@ class _ViewGuardiansState extends State<ViewGuardians> {
             ),
           ),
         ),
-        empty: NoDataWidget(text:"No guardians registered yet.."),
-        rows:context.read<MainController>().guardians.length < 1 ?
+        empty: const NoDataWidget(text:"No guardians registered yet.."),
+        rows:context.read<MainController>().guardians.isEmpty ?
             []
             : List.generate(
                 context.watch<MainController>().guardians.length,

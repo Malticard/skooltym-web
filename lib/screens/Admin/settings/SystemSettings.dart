@@ -181,22 +181,22 @@ class _SystemSettingsState extends State<SystemSettings> {
       "settings_key[key]": "0",
     };
     debugPrint("results => $results");
-    // showProgress(context);
-    // Client()
-    //     .post(Uri.parse(AppUrls.addSettings), body: results)
-    //     .then((response) {
-    //   var data = json.decode(response.body);
-    //   debugPrint("Status code => ${data['message']}");
-    //   if (response.statusCode == 200) {
-    //     // Routes.popPage(context);
-    //     showSuccessDialog("Settings saved successfully", context);
-    //     showMessage(msg: "Settings saved", type: 'success', context: context);
-    //   } else {
-    //     Routes.popPage(context);
-    //     showMessage(
-    //         msg: "${response.reasonPhrase}", type: 'danger', context: context);
-    //   }
-    // });
+    showProgress(context);
+    Client()
+        .post(Uri.parse(AppUrls.addSettings), body: results)
+        .then((response) {
+      var data = json.decode(response.body);
+      debugPrint("Status code => ${data['message']}");
+      if (response.statusCode == 200) {
+        Routes.popPage(context);
+        showSuccessDialog("Settings saved successfully", context);
+        showMessage(msg: "Settings saved", type: 'success', context: context);
+      } else {
+        Routes.popPage(context);
+        showMessage(
+            msg: "${response.reasonPhrase}", type: 'danger', context: context);
+      }
+    });
   }
 
   // drop offs

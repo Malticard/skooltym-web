@@ -20,9 +20,9 @@ class _MyFilesState extends State<MyFiles> {
           children: [
 
             Row(
-              children: [
+              children: const [
 
-                const SizedBox(
+                SizedBox(
                   width: 20,
                 ),
 

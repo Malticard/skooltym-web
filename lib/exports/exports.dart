@@ -130,6 +130,7 @@ export '/controllers/OnlineCheckerController.dart';
 export '/controllers/DashboardController.dart';
 export '/controllers/OvertimeController.dart';
 export '/controllers/StepperController.dart';
+export '/controllers/ClassNameController.dart';
 
 
 // themes

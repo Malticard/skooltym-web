@@ -17,7 +17,8 @@ class _StaffViewState extends State<StaffView> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).staffUpdate(context.read<SchoolController>().state['school']);
+    Provider.of<MainController>(context)
+        .staffUpdate(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 
@@ -26,9 +27,20 @@ class _StaffViewState extends State<StaffView> {
     return DataRow(
       cells: [
         DataCell(
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Text(staffModel.staffFname),
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage(
+                  AppUrls.liveImages + staffModel.staffProfilePic,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child:
+                    Text("${staffModel.staffFname} ${staffModel.staffLname}"),
+              ),
+            ],
           ),
         ),
         DataCell(Text(staffModel.staffEmail)),
@@ -39,8 +51,8 @@ class _StaffViewState extends State<StaffView> {
               builder: (context) {
                 return Dialog(
                   child: SizedBox(
-                         width: MediaQuery.of(context).size.width / 3,
-                            height: MediaQuery.of(context).size.width / 2.3,
+                    width: MediaQuery.of(context).size.width / 3,
+                    height: MediaQuery.of(context).size.width / 2.3,
                     child: UpdateStaff(staff: staffModel),
                   ),
                 );
@@ -50,7 +62,10 @@ class _StaffViewState extends State<StaffView> {
           showDialog(
               context: context,
               builder: (context) {
-            return CommonDelete(title: '${staffModel.staffFname} ${staffModel.staffLname}', url: AppUrls.deleteStaff + staffModel.id,);
+                return CommonDelete(
+                  title: '${staffModel.staffFname} ${staffModel.staffLname}',
+                  url: AppUrls.deleteStaff + staffModel.id,
+                );
               });
         })),
       ],
@@ -69,12 +84,15 @@ class _StaffViewState extends State<StaffView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (context.watch<MainController>().staffData.length > 0)
-                 Expanded(child: SearchField(onChanged: (value){
-                  debugPrint("search value $value");
+              if (context.watch<MainController>().staffData.isNotEmpty)
+                Expanded(child: SearchField(
+                  onChanged: (value) {
+                    debugPrint("search value $value");
                     context.read<MainController>().searchStaff(value!);
-                    debugPrint("search result ${context.read<MainController>().staffData[0].staffFname}");
-                },)),
+                    debugPrint(
+                        "search result ${context.read<MainController>().staffData[0].staffFname}");
+                  },
+                )),
               if (!Responsive.isMobile(context))
                 Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
               Text(
@@ -86,11 +104,11 @@ class _StaffViewState extends State<StaffView> {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return AddStaff();
+                        return const AddStaff();
                       });
                 },
-                icon: Icon(Icons.add),
-                label: Text("Add Staff"),
+                icon: const Icon(Icons.add),
+                label: const Text("Add Staff"),
               ),
             ],
           ),
@@ -103,7 +121,7 @@ class _StaffViewState extends State<StaffView> {
             ),
           ),
         ),
-        empty: NoDataWidget(text: "You currently have no staff records"),
+        empty: const NoDataWidget(text: "You currently have no staff records"),
         rows: List.generate(
           context.watch<MainController>().staffData.length,
           (index) =>

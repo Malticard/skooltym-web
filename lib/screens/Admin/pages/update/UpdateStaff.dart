@@ -18,7 +18,7 @@ void initState() {
     TextEditingController(text: "${widget.staff.staffFname} ${widget.staff.staffLname}"),
     TextEditingController(text:widget.staff.staffEmail),
     TextEditingController(text: widget.staff.staffContact),
-    TextEditingController(text: ""),
+    TextEditingController(text: widget.staff.staffProfilePic),
     TextEditingController(text: widget.staff.staffGender),
     TextEditingController(text: widget.staff.staffRole),
   ];
@@ -81,6 +81,7 @@ void initState() {
     return Padding(
       padding: padding,
       child: CommonFormFields(
+        initialPic: widget.staff.staffProfilePic,
         padding: padding,
         formFields: formFields,
         numberOfDropDowns: 2,
@@ -123,10 +124,10 @@ void initState() {
   }
 
   Future<StreamedResponse> _handleFormUpload() async {
-    String uri = _formControllers[3].text.trim();
-  debugPrint("handling form upload with $uri");
+      String uri = _formControllers[3].text.trim();
+    debugPrint("handling form upload with $uri");
     //
-    var request = MultipartRequest('POST', Uri.parse(AppUrls.updateStaff + widget.staff.id));
+    var request = MultipartRequest('POST', Uri.parse(AppUrls.addStaff));
     // =============================== form fields =======================
     request.fields['staff_school'] =
         "${context.read<SchoolController>().state['school']}";
@@ -141,8 +142,10 @@ void initState() {
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
-    request.files.add(MultipartFile('image',
-        File(_formControllers[3].text.trim()).readAsBytes().asStream(), File(_formControllers[3].text.trim()).lengthSync(),
+    request.files.add(MultipartFile(
+        'image',
+        File(_formControllers[3].text.trim()).readAsBytes().asStream(),
+        File(_formControllers[3].text.trim()).lengthSync(),
         filename: uri.split("/").last));
     //
     request.fields['staff_password'] = "qwerty";

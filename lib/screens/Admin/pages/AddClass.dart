@@ -323,8 +323,8 @@ class _AddClassState extends State<AddClass> {
               // width: size.width,
               height: size.width / 2.5,
               child: Data_Table(
-                header:Text("Classes",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                columns: [
+                header:const Text("Classes",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                columns: const [
                   DataColumn(
                     label: Text("No."),
                   ),
@@ -343,14 +343,14 @@ class _AddClassState extends State<AddClass> {
                       DataCell(Text("${index + 1}")),
                       DataCell(Text(context
                           .watch<MainController>()
-                          .classes[index].className
+                          .classes[index]
                           )),
                       DataCell(
                         Row(
                           children: [
                             IconButton(
                               onPressed: () {},
-                              icon: Icon(Icons.edit),
+                              icon: const Icon(Icons.edit),
                             ),
                             IconButton(
                               onPressed: () => showDialog(
@@ -358,16 +358,16 @@ class _AddClassState extends State<AddClass> {
                                 builder: (context) => CommonDelete(
                                   title: context
                                       .watch<MainController>()
-                                      .classes[index].className
+                                      .classes[index]
                                       ,
                                   url: AppUrls.deleteClass +
                                       context
                                           .watch<MainController>()
-                                          .classes[index].id
+                                          .classes[index]
                                           ,
                                 ),
                               ),
-                              icon: Icon(Icons.delete),
+                              icon:const Icon(Icons.delete),
                             ),
                           ],
                         ),
@@ -375,7 +375,7 @@ class _AddClassState extends State<AddClass> {
                     ],
                   );
                 }),
-                empty: Center(
+                empty: const Center(
                   child: Text("No classes added.."),
                 ),
               ),

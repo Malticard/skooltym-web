@@ -67,20 +67,13 @@ final List<Map<String, dynamic>> _formFields = [
   },
 ];
 
-class _UpdateGuardianState extends State<UpdateGuardian>
-    with TickerProviderStateMixin {
+class _UpdateGuardianState extends State<UpdateGuardian> {
   final List<TextEditingController> formControllers = [];
   AnimationController? guardianAnimationController;
   List<TextEditingController> _formControllers =
       List.generate(_formFields.length, (index) => TextEditingController());
   @override
   void initState() {
-    guardianAnimationController = AnimationController(
-      vsync: this,
-      value: 0,
-      duration: const Duration(milliseconds: 800),
-    );
-    guardianAnimationController!.forward();
     _formControllers = [
       TextEditingController(text: "${widget.guardianModel.guardianFname} ${widget.guardianModel.guardianLname}"),
       TextEditingController(text: widget.guardianModel.guardianEmail),
@@ -97,10 +90,6 @@ class _UpdateGuardianState extends State<UpdateGuardian>
 
   @override
   void dispose() {
-    guardianAnimationController!.dispose();
-    // for (var element in formControllers) {
-    //   element.dispose();
-    // }
     super.dispose();
   }
 
@@ -118,18 +107,30 @@ class _UpdateGuardianState extends State<UpdateGuardian>
     context.watch<MainController>().getAllStudents(context);
 
     Size size = MediaQuery.of(context).size;
-    return BottomTopMoveAnimationView(
-      animationController: guardianAnimationController!,
-      child: Padding(
-        padding: padding,
-        child: CommonFormFields(
+    return Dialog(
+      
+      child: SizedBox(
+       width: MediaQuery.of(context).size.width / 3,
+      height: MediaQuery.of(context).size.width / 1.5,
+        child: Padding(
           padding: padding,
-          formFields: _formFields,
-          students: context.watch<MainController>().students,
-          formControllers: _formControllers,
-          buttonText: "Save Guardian Details",
-          onSubmit: () => _addGuardian(),
-          errorMsgs: errorFields,
+          child: CommonFormFields(
+            padding: padding,
+            formFields: _formFields,
+            lists: context.watch<MainController>().students,
+            dropdownLists: context.watch<MainController>().students.map((item) {
+                      return "${item.studentFname} ${item.studentLname}";
+                    }).toList(),
+            onDropDownValue: (p0) {
+              if (p0 != null) {
+              Provider.of<MainController>(context,listen:false).selectMultiStudent(json.decode(p0));
+              }
+            },
+            formControllers: _formControllers,
+            buttonText: "Save Guardian Details",
+            onSubmit: () => _addGuardian(),
+            errorMsgs: errorFields,
+          ),
         ),
       ),
     );
@@ -146,14 +147,6 @@ class _UpdateGuardianState extends State<UpdateGuardian>
             showSuccessDialog(
                 _formControllers[0].text.trim().split(" ")[1], context);
           })
-          .catchError(
-            (onError) => () {
-              showMessage(
-                  context: context,
-                  msg: 'An error occurred!! ',
-                  type: 'danger');
-            },
-          )
           .whenComplete(() {
             showMessage(
               context: context,

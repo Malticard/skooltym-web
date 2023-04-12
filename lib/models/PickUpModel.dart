@@ -39,7 +39,7 @@ class PickUpModel {
     factory PickUpModel.fromJson(Map<String, dynamic> json) => PickUpModel(
         id: json["_id"],
         schoolName: json["school_name"],
-        studentName: StudentName_.fromJson(json["student_name"]),
+        studentName: StudentName_.fromJson(json["student_name"] ?? ""),
         pickUpTime: json["pick_up_time"],
         pickedBy: PickedBy.fromJson(json["picked_by"]),
         authorizedBy: AuthorizedBy_.fromJson(json["authorized_by"]),

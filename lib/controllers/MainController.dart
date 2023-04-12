@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import '/exports/exports.dart';
 
 class MainController extends ChangeNotifier {
@@ -8,9 +10,11 @@ class MainController extends ChangeNotifier {
   List<PickUpModel> _picks = [];
   List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
-  List<ClassModel> _classes = [];
+  List<String> _classes = [];
+  List<String> _streams = [];
   int _stepCount = 0;
-  List<dynamic> _multiselect = [];
+  List<dynamic> _multiguardian = [];
+  List<dynamic> _multistudent = [];
   List<OvertimeModel> _pendingOvertime = [];
 
 // getters
@@ -23,8 +27,11 @@ class MainController extends ChangeNotifier {
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   List<Map<String, dynamic>> get dashboardData => _dashData;
   List<OvertimeModel> get pendingOvertime => _pendingOvertime;
-  List<dynamic> get multiselect => _multiselect;
-  List<ClassModel> get classes => _classes;
+  List<dynamic> get multistudent => _multistudent;
+  List<dynamic> get multiguardian => _multiguardian;
+  List<String> get classes => _classes;
+  List<String> get streams => _streams;
+
   // end of getters
 
   void controlMenu() {
@@ -101,21 +108,37 @@ void setTextCount(int value){
     notifyListeners();
 }
 //
-void newSelection(List<dynamic> selection){
+void selectMultiGuardians(List<dynamic> selection){
   debugPrint("Selection => $selection");
-    _multiselect = selection;
+    _multiguardian = selection;
     notifyListeners();
 }
+
+void selectMultiStudent(List<dynamic> selection){
+  debugPrint("Selection => $selection");
+    _multistudent = selection;
+    notifyListeners();
+}
+
 // method to fetch available classes
 void fetchClasses(String id){
   Client().get(Uri.parse(AppUrls.getClasses + id)).then((value) {
     if(value.statusCode == 200){
      _classes = classModelFromJson(value.body);
+    //  save the classes to shared preferences
+    //  for (var element in _classes) {
+    //    debugPrint("Class => ${element.className}");
+    //    debugPrint("Streams => ${element.classStreams}");
+    //     SharedPreferences.getInstance().then((value) => value.setString("classes", _classes.toString()));
+    //  }
+    //  fetch the respective streams for the different classes
+     _streams = _classes.map((e) => e).join().split(',');
       notifyListeners();
     }
   });
 }
-  // functtion to search for staff members by  either first name or last nam
+
+  // function to search for staff members by  either first name or last nam
 
   void searchStaff(String value){
     Client().get(Uri.parse(AppUrls.staff)).then((value) {

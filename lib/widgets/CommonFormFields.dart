@@ -4,13 +4,17 @@ import '/exports/exports.dart';
 
 class CommonFormFields extends StatefulWidget {
   final EdgeInsets padding;
+  final String? initialPic; 
   final List<Map<String, dynamic>> formFields;
   final List<String> errorMsgs;
   final List<TextEditingController> formControllers;
-  final List<StudentModel>? students;
+  final List<dynamic>? lists;
+  final void Function(dynamic)? onDropDownValue;
+  final List<dynamic>? dropdownLists;
   final int? numberOfDropDowns;
   final String buttonText;
   final VoidCallback? onSubmit;
+  final void Function(String?)? onSelectedValue;
   final Widget? submit;
   final String? formTitle;
   final bool formEnabled;
@@ -25,8 +29,10 @@ class CommonFormFields extends StatefulWidget {
       this.submit,
       this.formEnabled = true,
       required this.buttonText,
-      this.students,
-      this.numberOfDropDowns});
+      this.lists,
+      this.numberOfDropDowns,
+      this.dropdownLists,
+       this.onDropDownValue, this.onSelectedValue, this.initialPic });
 
   @override
   State<CommonFormFields> createState() => _CommonFormFieldsState();
@@ -84,9 +90,9 @@ class _CommonFormFieldsState extends State<CommonFormFields>
     // widget.formControllers[a].text = = file!.files.first.pat
   }
 
-  ImageProvider<Object>? drawImage(var url) {
+  Object drawImage(var url) {
     if (url == null || url.isEmpty) {
-      return const AssetImage("assets/icons/001-profile.png");
+      return widget.initialPic != null ? NetworkImage(AppUrls.liveImages + widget.initialPic!) : const AssetImage("assets/icons/001-profile.png");
     }
     return MemoryImage(url);
   }
@@ -106,7 +112,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
           SizedBox(
             child: CircleAvatar(
               radius: 35,
-              backgroundImage: drawImage(_imageBytes ?? ''),
+              backgroundImage: drawImage(_imageBytes ?? '') as ImageProvider<Object>,
             ),
           ),
           // code for uploading profile picture  using file picker
@@ -115,7 +121,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28)),
-                fixedSize: Size(150, 50),
+                fixedSize: const Size(150, 50),
                 foregroundColor: Colors.black45,
                 // backgroundColor: Colors.blue,
               ),
@@ -163,6 +169,9 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                           // controller: widget.formControllers[index -1],
                           elements: widget.formFields[index - 1]['data'],
                           selectedValue: (value) {
+                            // context.read<ClassNameController>().setClass(value?? '');
+                            debugPrint("Selected => ${value.toString()}");
+                            // widget.onSelectedValue!;
                             setState(() {
                               dropMsg![index - 1] = value;
                               widget.formControllers[index - 1].text = value!;
@@ -183,7 +192,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                               fieldColor: Theme.of(context).brightness ==
                                       Brightness.light
                                   ? Colors.white
-                                  : Color.fromARGB(66, 75, 74, 74),
+                                  : const Color.fromARGB(66, 75, 74, 74),
                               errorText: widget.errorMsgs[index - 1],
                               padding: widget.padding,
                               onChanged: (v) {
@@ -199,7 +208,6 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                   setState(() {
                                     widget.formControllers[index - 1].text =
                                         "${days[value!.weekday - 1]}, ${months[(value.month) - 1]} ${markDates(value.day)}";
-                                    ;
                                   });
                                 });
                               },
@@ -213,27 +221,33 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                           // dropdown menu
                           (widget.formFields[index - 1]['menu'] != null)
                               ? SingleChildScrollView(
-                                child: CommonMenuWidget(
+                                  child: CommonMenuWidget(
                                     fieldColor: Theme.of(context).brightness ==
-                                        Brightness.light
+                                            Brightness.light
                                         ? Colors.white
-                                        : Color.fromARGB(66, 75, 74, 74),
+                                        : const Color.fromARGB(66, 75, 74, 74),
                                     // controller: widget.formControllers[index - 1],
                                     fieldText: widget.formFields[index - 1]
                                         ['title'],
                                     hint: widget.formFields[index - 1]['hint'],
                                     padding: widget.padding,
-                                    onChange: (v) {
-                              
-                                      debugPrint("data => $v");
-                                      if(v != null){
+                                    onChange: widget.onDropDownValue ?? (v) {
+                                      debugPrint("Selected => $v");
+                                      if (v != null) {
                                         Provider.of<MainController>(context,listen:false)
-                                            .newSelection(v);
+                                            .selectMultiStudent(json.decode(v));
+                                        setState(() {
+                                          dropMsg![index - 1] = v;
+                                          widget.formControllers[index - 1].text = v!;
+                                        });
+                                        
                                       }
-                              
+                                           
                                     },
+                                    data: widget.lists ?? context.watch<MainController>().students,
+                                    dropdownList: widget.dropdownLists ?? [],
                                   ),
-                              )
+                                )
                               :
                               // other fields
                               CommonTextField(
@@ -247,7 +261,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                   fieldColor: Theme.of(context).brightness ==
                                           Brightness.light
                                       ? Colors.white
-                                      : Color.fromARGB(66, 75, 74, 74),
+                                      : const Color.fromARGB(66, 75, 74, 74),
                                   errorText: widget.errorMsgs[index - 1],
                                   padding: widget.padding,
                                   isObscureText: widget.formFields[index - 1]
@@ -287,7 +301,6 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                     //  this checks if the provided fields are empty hence no errors raised for empty fields
                     // if (e.isEmpty) {
                     // }
-                    
                   }
                 },
                 padding: widget.padding,
@@ -306,8 +319,8 @@ class _CommonFormFieldsState extends State<CommonFormFields>
             ),
           )
         : Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: buildForm(),
-        );
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: buildForm(),
+          );
   }
 }

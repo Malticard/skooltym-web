@@ -54,6 +54,11 @@ final List<Map<String, dynamic>> _formFields = [
     'icon': Icons.calendar_month_outlined
   },
   {
+    "title": "Students *",
+    "hint": "Select students",
+    "menu": 0,
+  },
+  {
     "title": "Relationship*",
     "hint": "Select relationship",
     "data": [
@@ -95,7 +100,10 @@ class _AddGuardianState extends State<AddGuardian>
           child: CommonFormFields(
             padding: padding,
             formFields: _formFields,
-            students: context.watch<MainController>().students,
+            lists: context.watch<MainController>().students,
+            dropdownLists: context.watch<MainController>().students.map((item) {
+                    return "${item.studentFname} ${item.studentLname}";
+                  }).toList(),
             formControllers: _formControllers,
             buttonText: "Save Guardian Details",
             onSubmit:() =>  addGuardian(),
@@ -140,9 +148,10 @@ class _AddGuardianState extends State<AddGuardian>
       'POST',
       Uri.parse(AppUrls.addGuardian),
     );
+    request.fields['students'] = json.encode(context.read<MainController>().students);
     request.fields['school'] = context.read<SchoolController>().state['school'];
     request.fields['type'] = _formControllers[5].text.trim();
-    request.fields['relationship'] = _formControllers[7].text.trim();
+    request.fields['relationship'] = _formControllers[8].text.trim();
     request.fields['guardian_fname'] =
         _formControllers[0].text.trim().split(" ").first;
     request.fields['guardian_lname'] =

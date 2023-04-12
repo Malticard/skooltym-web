@@ -59,10 +59,10 @@ class _UpdateStudentState extends State<UpdateStudent> {
     TextEditingController(text: widget.studentModel.studentFname),
     TextEditingController(text:widget.studentModel.studentLname),
     // TextEditingController(text:widget.studentModel.studentOthername),
-    TextEditingController(text: widget.studentModel.studentContact),
+    TextEditingController(text: ""),
     TextEditingController(text: ""),
     TextEditingController(text: widget.studentModel.studentGender),
-    TextEditingController(text: widget.studentModel.studentClass),
+    TextEditingController(text: widget.studentModel.studentModelClass),
   ];
 }
   // overall form padding
@@ -97,7 +97,9 @@ class _UpdateStudentState extends State<UpdateStudent> {
                               type: 'success',
                               msg: "Added new student successfully",
                             );
-                            _formControllers.forEach((v) => v.clear());
+                            for (var v in _formControllers) {
+                              v.clear();
+                            }
                             showSuccessDialog(
                                 _formControllers[0].text.trim().split(" ")[1],
                                 context);
@@ -123,7 +125,16 @@ class _UpdateStudentState extends State<UpdateStudent> {
                 }
               },
               errorMsgs: errorFields,
-              students: [],
+              lists:context.watch<MainController>().students,
+              onDropDownValue: (p0) {
+                if (p0 != null) {
+                 Provider.of<MainController>(context).guardians;
+                }
+              },
+              dropdownLists: context.watch<MainController>().students.map((item) {
+                    return "${item.studentFname} ${item.studentLname}";
+                  }).toList(),
+                
             ),
           ),
         ],

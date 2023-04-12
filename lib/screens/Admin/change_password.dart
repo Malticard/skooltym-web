@@ -1,4 +1,6 @@
-import '../../exports/exports.dart';
+// ignore_for_file: library_private_types_in_public_api, prefer_interpolation_to_compose_strings
+
+import '/exports/exports.dart';
 
 ///  Created by bruno on 15/02/2023.
 class ChangePassword extends StatefulWidget {
@@ -15,6 +17,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   final TextEditingController _confirmController = TextEditingController();
   bool _confirm = false;
   bool _pass = false;
+  var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,80 +29,99 @@ class _ChangePasswordState extends State<ChangePassword> {
       child: Card(
         color: Theme.of(context).brightness == Brightness.light ? Theme.of
           (context).scaffoldBackgroundColor: Theme.of(context).canvasColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, bottom: 16.0, left: 34, right: 34),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      "Ensure your new password is at least 6 characters long and different from your current password.",
-                      textAlign: TextAlign.start,
-                      style: TextStyles(context).getDescriptionStyle().copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).disabledColor,
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 16.0, bottom: 16.0, left: 34, right: 34),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        "Ensure your new password is at least 6 characters long and different from your current password.",
+                        textAlign: TextAlign.start,
+                        style: TextStyles(context).getDescriptionStyle().copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).disabledColor,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            // Space(space: 0.06,),
-            CommonTextField(
-              enableSuffix: true,
-               suffixIcon: _confirm
-                          ? Icons.remove_red_eye_rounded
-                          : Icons.visibility_off,
-              controller: _newController,
-              titleText: "New password",
-              icon: Icons.lock_outline_rounded,
-              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
-              hintText: "************",
-              keyboardType: TextInputType.visiblePassword,
-              isObscureText: true,
-              onTapSuffix: () {
-                        setState(() {
-                          _confirm = !_confirm;
-                        });
-                      },
-              errorText: _errorNewPassword,
-            ),
-            CommonTextField(
-              controller: _confirmController,
-              icon: Icons.lock_outline_rounded,
+              // Space(space: 0.06,),
+              CommonTextField(
                 enableSuffix: true,
-                      suffixIcon: _pass
-                          ? Icons.remove_red_eye_rounded
-                          : Icons.visibility_off,
-              titleText: "Confirm Password",
-              //AppLocalizations(context).of("confirm_password"),
-              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
-              hintText: "*************",
-              keyboardType: TextInputType.visiblePassword,
-              isObscureText: true,
-               onTapSuffix: () {
-                        setState(() {
-                          _pass = !_pass;
-                        });
-                      },
-              errorText: _errorConfirmPassword,
-            ),
-            CommonButton(
-              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
-              buttonText:
-                  "Apply Changes", //AppLocalizations(context).of("Apply_text"),
-              onTap: () {
-                if (_allValidation()) {
-                  Navigator.pop(context);
-                }
-              },
-            )
-          ],
+                 suffixIcon: _confirm
+                            ? Icons.remove_red_eye_rounded
+                            : Icons.visibility_off,
+                controller: _newController,
+                titleText: "New password",
+                icon: Icons.lock_outline_rounded,
+                padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
+                hintText: "************",
+                keyboardType: TextInputType.visiblePassword,
+                isObscureText: !_confirm,
+                onTapSuffix: () {
+                          setState(() {
+                            _confirm = !_confirm;
+                          });
+                        },
+                errorText: _errorNewPassword,
+              ),
+              CommonTextField(
+                controller: _confirmController,
+                icon: Icons.lock_outline_rounded,
+                  enableSuffix: true,
+                        suffixIcon: !_pass
+                            ? Icons.remove_red_eye_rounded
+                            : Icons.visibility_off,
+                titleText: "Confirm Password",
+                padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+                hintText: "*************",
+                keyboardType: TextInputType.visiblePassword,
+                isObscureText: _pass,
+                 onTapSuffix: () {
+                          setState(() {
+                            _pass = !_pass;
+                          });
+                        },
+                errorText: _errorConfirmPassword,
+              ),
+              CommonButton(
+                padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
+                buttonText:
+                    "Apply Changes", //AppLocalizations(context).of("Apply_text"),
+                onTap: () {
+                  if (_allValidation()) {
+                    Client().post(Uri.parse("${AppUrls.setPass + context.read<SchoolController>().state['id']}/"+ context.read<SchoolController>().state['_token']), body: {
+                      "new_password": _newController.text.trim(),
+                      "confirm_password": _confirmController.text.trim(),
+                    }).then((value) {
+                      debugPrint("Change response => ${value.body}");
+                      if (value.statusCode == 200 || value.statusCode == 201) {
+                        final Map<String, dynamic> data = jsonDecode(value.body);
+                        debugPrint(data.toString());
+                        // if (data['status'] == 200) {
+                          _newController.clear();
+                          _confirmController.clear();
+                         showMessage(context: context,msg: value.body,type: 'success');
+  
+                      } else {
+                         showMessage(context: context,msg: value.body,type: 'danger');
+
+                      }
+                    });
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

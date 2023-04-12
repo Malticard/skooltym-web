@@ -30,7 +30,7 @@ class _OvertimeReportsState extends State<OvertimeReports>
   void didChangeDependencies() {
     // Provider.of<MainController>(context, listen: false)
     //     .fetchPendingOvertime(widget.overtimeStatus ?? "Pending");
-    // TODO: implement didChangeDependencies
+    // ies
     super.didChangeDependencies();
   }
 
@@ -39,7 +39,7 @@ class _OvertimeReportsState extends State<OvertimeReports>
     Size size = MediaQuery.of(context).size;
     //invoke new overtimes
     Provider.of<MainController>(context, listen: false)
-        .fetchPendingOvertime(widget.overtimeStatus ?? "Pending",context);
+        .fetchPendingOvertime(widget.overtimeStatus ?? "Pending", context);
     return SizedBox(
       width: size.width,
       height: size.width / 2.5,
@@ -51,32 +51,39 @@ class _OvertimeReportsState extends State<OvertimeReports>
           style: TextStyles(context).getTitleStyle(),
         ),
         columns: [
-          DataColumn(
-            label: Text("Student Name",style: TextStyle(fontSize: 11),),
+          const DataColumn(
+            label: Text(
+              "Student Name",
+              style: TextStyle(fontSize: 13),
+            ),
           ),
-          DataColumn(
-            label: Text("Picked By",style: TextStyle(fontSize: 11)),
+          const DataColumn(
+            label: Text("Picked By", style: TextStyle(fontSize: 13)),
           ),
-          DataColumn(
-            label: SizedBox(width:800,child: Text("Default \nPickUpTime",style: TextStyle(fontSize: 11))),
+          const DataColumn(
+            label: SizedBox(
+                width: 800,
+                child: Text("Default\nPickUpTime",
+                    style: TextStyle(fontSize: 13))),
           ),
-          DataColumn(
-            label: Text("Current \nPickUp Time",style: TextStyle(fontSize: 11)),
+          const DataColumn(
+            label:
+                Text("Current \nPickUp Time", style: TextStyle(fontSize: 13)),
           ),
-          DataColumn(
-            label: Text("Authorized by",style: TextStyle(fontSize: 11)),
+          const DataColumn(
+            label: Text("Authorized by", style: TextStyle(fontSize: 13)),
           ),
-          DataColumn(
-            label: Text("Interval(mins)",style: TextStyle(fontSize: 11)),
+          const DataColumn(
+            label: Text("Interval(mins)", style: TextStyle(fontSize: 13)),
           ),
-          DataColumn(
-            label: Text("Overtime rate",style: TextStyle(fontSize: 11)),
+          const DataColumn(
+            label: Text("Overtime rate", style: TextStyle(fontSize: 13)),
           ),
-          DataColumn(
-            label: Text("Overtime charge",style: TextStyle(fontSize: 11)),
+          const DataColumn(
+            label: Text("Overtime\ncharge", style: TextStyle(fontSize: 13)),
           ),
           if (context.read<SchoolController>().state['role'] == 'Finance')
-            DataColumn(
+            const DataColumn(
               label: Text("Actions"),
             ),
         ],
@@ -87,18 +94,18 @@ class _OvertimeReportsState extends State<OvertimeReports>
                   "recorded "
                   ""),
         ),
-        rows:
-         List.generate(
-          context.watch<MainController>().pendingOvertime.length,
+        rows: List.generate(
+          4,
+          // context.watch<MainController>().pendingOvertime.length,
           (index) => overtimeDataRow(
-              context.watch<MainController>().pendingOvertime[index], index),
+              "context.watch<MainController>().pendingOvertime[index]", index),
         ),
       ),
     );
   }
 
   // row data
-  DataRow overtimeDataRow(OvertimeModel overtimeModel, int i) {
+  DataRow overtimeDataRow(String overtimeModel, int i) {
     return DataRow(
       cells: [
         DataCell(
@@ -109,20 +116,24 @@ class _OvertimeReportsState extends State<OvertimeReports>
                 height: 45,
                 width: 45,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal:5),
-                child: Text("${overtimeModel.student.username}",style: TextStyle(fontSize: 11)),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                child: Text("overtimeModel.student.username",
+                    style: TextStyle(fontSize: 11)),
               ),
             ],
           ),
         ),
-        DataCell(Text("${overtimeModel.guardian.guardianFname} ${overtimeModel.guardian.guardianLname}")),
-        DataCell(Text(overtimeModel.settings.pickUpEndTime.toString())),
-        DataCell(Text(overtimeModel.settings.pickUpEndTime.toString())),
-        DataCell(Text("${overtimeModel.staff.staffFname} ${overtimeModel.staff.staffLname}")),
-        DataCell(Text(overtimeModel.settings.overtimeInterval.toString())),
-        DataCell(Text(overtimeModel.settings.overtimeRate.toString())),
-        DataCell(Text("50000")),
+        const DataCell(Text(
+            "{overtimeModel.guardian.guardianFname} {overtimeModel.guardian.guardianLname}")),
+        const DataCell(Text("overtimeModel.settings.pickUpEndTime.toString()")),
+        const DataCell(Text("overtimeModel.settings.pickUpEndTime.toString()")),
+        const DataCell(Text(
+            "{overtimeModel.staff.staffFname} {overtimeModel.staff.staffLname}")),
+        const DataCell(
+            Text("overtimeModel.settings.overtimeInterval.toString()")),
+        const DataCell(Text("overtimeModel.settings.overtimeRate.toString()")),
+        const DataCell(Text("50000")),
         // DataCell(Text(overtimeModel.status)),
         if (context.read<SchoolController>().state['role'] == 'Finance')
           DataCell(buildActionButtons(context, () {
@@ -132,8 +143,32 @@ class _OvertimeReportsState extends State<OvertimeReports>
                   return Dialog(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width / 4,
-                      height: MediaQuery.of(context).size.width / 3,
-                      child: Center(child: Text("Edit Staff")),
+                      height: MediaQuery.of(context).size.width / 6,
+                      child: Center(
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.2,
+                          child: Column(
+                            children: [
+                              Center(child: Text("Clear overtime",style: TextStyles(context).getRegularStyle(),),),
+                              Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Row(children: [ Text("Clear with cash",style: TextStyles(context).getRegularStyle(),)],),
+                              ),
+                              Row(children: [ Text("Clear with comment",style: TextStyles(context).getRegularStyle()),],),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CommonButton(
+                                  height: 40,
+                                  padding: const EdgeInsets.only(left: 40,right: 40),
+                                  buttonText: "Clear",
+                                  onTap: () {},
+                                 
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   );
                 });
@@ -145,8 +180,8 @@ class _OvertimeReportsState extends State<OvertimeReports>
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width / 4,
                       height: MediaQuery.of(context).size.width / 3,
-                      child: Center(
-                        child: Text("Delete Staff"),
+                      child: const Center(
+                        child: Text("Delete"),
                       ),
                     ),
                   );
@@ -157,7 +192,11 @@ class _OvertimeReportsState extends State<OvertimeReports>
   }
 
   _buildButton() {
-    return DataCell(ElevatedButton(onPressed: () {  },
-    child: Text("Clear"),),);
+    return DataCell(
+      ElevatedButton(
+        onPressed: () {},
+        child: const Text("Clear"),
+      ),
+    );
   }
 }

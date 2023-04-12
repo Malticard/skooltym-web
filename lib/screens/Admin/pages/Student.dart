@@ -26,13 +26,24 @@ class _ViewStudentsState extends State<ViewStudents> {
     return DataRow(
       cells: [
         DataCell(
-          Padding(
+           Row(
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage(
+                  AppUrls.liveImages + studentModel.studentProfilePic,
+                ),
+              ),
+               Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Text(
                 "${studentModel.studentFname} ${studentModel.studentLname}"),
           ),
+            ],
+          )
+          
         ),
-        DataCell(Text(studentModel.studentClass)),
+        DataCell(Text(studentModel.studentModelClass)),
         DataCell(Text(studentModel.studentGender)),
         DataCell(buildActionButtons(context, () {
           showDialog(
@@ -70,8 +81,8 @@ class _ViewStudentsState extends State<ViewStudents> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
 
-              if(context.read<MainController>().students.length > 0)
-                Expanded(child: SizedBox(width:120,child: SearchField())),
+              if(context.read<MainController>().students.isNotEmpty)
+                const Expanded(child: SizedBox(width:120,child: SearchField())),
               if (!Responsive.isMobile(context))
                 Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
               Text(
@@ -87,18 +98,18 @@ class _ViewStudentsState extends State<ViewStudents> {
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 3.5,
                             height: MediaQuery.of(context).size.width / 1.5,
-                            child: AddStudent(),
+                            child: const AddStudent(),
                           ),
                         );
                       });
                 },
-                icon: Icon(Icons.add),
-                label: Text("Add Student"),
+                icon: const Icon(Icons.add),
+                label: const Text("Add Student"),
               ),
             ],
           ),
         ),
-        empty: NoDataWidget(
+        empty: const NoDataWidget(
           text: "No "
               "Students added as "
               "yet...",

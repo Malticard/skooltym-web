@@ -98,6 +98,8 @@ void showSuccessDialog(String name, BuildContext context,
           onPressed: onPressed ??
               () {
                 Routes.popPage(context);
+                context.read<WidgetController>().pushWidget(const AddClass());
+                context.read<TitleController>().setTitle("Classes");
                 // Routes.namedRoute(context, Routes.dashboard);
               },
           child:const Text("Okay"),
@@ -167,65 +169,30 @@ edit,VoidCallback delete) {
     children: [
       TextButton(
         onPressed: edit,
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.blue,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        ),
         child: const Icon(
           Icons.edit,
           color: Colors.white,
         ),
-        style: TextButton.styleFrom(
-          backgroundColor: Colors.blue,
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        ),
       ),
-      SizedBox(
+      const SizedBox(
         width: 10,
       ),
       TextButton(
         onPressed: delete,
-      
-        child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
         style: TextButton.styleFrom(
           backgroundColor: Colors.red,
           padding:const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         ),
+        child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
       ),
     ],
   );
 }
 // build dashboard cards
-// Widget buildBody(BuildContext context) {
-//   Size size = MediaQuery.of(context).size;
-//   return SizedBox(
-//     width: size.width,
-//     child: FutureBuilder(
-//         // future: fetchDashboardMetaData(),
-//         builder: (context, snapshot) {
-//           var data = snapshot.data ?? [];
-//           return snapshot.connectionState == ConnectionState.waiting
-//               ? const Center(child: Loader(text: "Dashboard"))
-//               : snapshot.hasData
-//                   ? Flex(
-//                       direction: Axis.horizontal,
-//                       children: List.generate(
-//                         data.length,
-//                         (index) => SizedBox(
-//                           width: size.width * 0.123,
-//                           height: size.width * 0.123,
-//                           child: DashboardCard(
-//                             label: data[index]['label'],
-//                             value: data[index]['value'],
-//                             icon: data[index]['icon'],
-//                             color: data[index]['color'],
-//                             last_updated: data[index]['last_updated'],
-//                           ),
-//                         ),
-//                       ),
-//                     )
-//                   : const Center(
-//                       child: Text("No Data"),
-//                     );
-//         }),
-//   );
-// }
 
 // sidebar data
 List<Map<String, dynamic>> options = [
@@ -242,7 +209,7 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/staff.svg",
     "title": "Staffs",
-    "page":  StaffView(),
+    "page":  const StaffView(),
   },
   {
     "title": "Guardians",
@@ -311,7 +278,7 @@ List<Map<String, dynamic>> financeViews = [
 // valid text controllers
 bool validateTextControllers(List<TextEditingController> controllers) {
   var ct = controllers.where((element) => element.text.isEmpty).toList();
-  return ct.length < 1 ? true : false;
+  return ct.isEmpty ? true : false;
 }
 
 /// show snackbar message
@@ -337,7 +304,7 @@ void showMessage(
               : type == 'danger'
                   ? Colors.red[800]!.withOpacity(opacity)
                   : type == 'success'
-                      ? Color.fromARGB(255, 2, 104, 7).withOpacity(opacity)
+                      ? const Color.fromARGB(255, 2, 104, 7).withOpacity(opacity)
                       : Colors.grey[600]!.withOpacity(opacity),
       duration: Duration(seconds: duration),
     ),
@@ -361,7 +328,7 @@ void showProgress(BuildContext context, {String? msg}) {
               color: Theme.of(context).brightness == Brightness.dark
                   ? Colors.white
                   : Theme.of(context).primaryColor),
-          Space(
+          const Space(
             space: 0.03,
           ),
           Text(
@@ -490,28 +457,28 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(String school_id,Strin
       "label": "DROP OFFS",
       "value": drops.length,
       "icon": "assets/icons/004-playtime.svg",
-      'color': Color.fromARGB(255, 106, 108, 235),
+      'color': const Color.fromARGB(255, 106, 108, 235),
       "last_updated": "14:45"
     },
     {
       "label": "PICK UPS",
       "value": picks.length,
       "icon": "assets/icons/009-student.svg",
-      'color': Color.fromARGB(255, 181, 150, 253),
+      'color': const Color.fromARGB(255, 181, 150, 253),
       "last_updated": "14:45"
     },
     {
       "label": "CLEARED OVERTIME",
       "value": clearedOvertimes.length,
       "icon": "assets/icons/002-all.svg",
-      'color': Color.fromARGB(255, 77, 154, 255),
+      'color': const Color.fromARGB(255, 77, 154, 255),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
       "value": pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 50, 66, 95),
+      'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
   ];
@@ -553,7 +520,7 @@ Future<Map<String, dynamic>> fetchSpecificGuardian(String id) async {
   Map<String, dynamic> results = {
     "student_name": "${studentData.studentFname} ${studentData.studentLname}",
     "student_pic": studentData.studentProfilePic,
-    "student_class": studentData.studentClass,
+    "student_class": studentData.studentModelClass,
     "student_id": studentData.id,
     "picker_name":
         "${guardianData.guardianFname} ${guardianData.guardianLname}",
