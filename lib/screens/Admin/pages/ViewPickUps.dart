@@ -32,7 +32,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
           Row(
             children: [
               // Image.network(
-              //   AppUrls.liveImages + pickUp.stu
+              //  AppUrls.liveImages + (pickUp.studentName..studentProfilePic),
               //   height: 45,
               //   width: 45,
               // ),
@@ -44,6 +44,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
           ),
         ),
         DataCell(Text("${pickUp.pickedBy.guardianFname} ${pickUp.pickedBy.guardianLname}")),
+        DataCell(Text("${pickUp.authorizedBy.staffFname} ${pickUp.authorizedBy.staffLname}")),
         DataCell(Text(pickUp.pickUpTime)),
       ],
     );
@@ -82,7 +83,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
 
                 ],
               ),
-              columns: [
+              columns: const [
                 DataColumn(
                   label: Text("Student Name"),
                 ),
@@ -96,7 +97,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
                   label: Text("Time Of PickOff"),
                 ),
               ],
-              empty: NoDataWidget(text: "No PickUps recorded..",),
+              empty: const NoDataWidget(text: "No PickUps recorded..",),
               rows: List.generate(
                 context.watch<MainController>().pickUpData.length,
                 (index) => _dataRow(
