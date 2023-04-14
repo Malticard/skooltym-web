@@ -5,9 +5,15 @@
         "dropoff",
         "fname",
         "Focuse",
+        "Lname",
+        "Malticard",
+        "multiguardian",
+        "multistudent",
         "prefs",
+        "specfic",
         "Starage",
         "Sumbnail",
+        "sweetalert",
         "vsync"
     ]
 }

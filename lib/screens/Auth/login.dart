@@ -247,10 +247,10 @@ class _LoginScreenState extends State<LoginScreen> {
             icon: Icons.email_outlined,
             controller: _emailController,
             errorText: _errorEmail,
-            titleText: "Email",
+            titleText: "Contact",
             padding: padding,
             enableSuffix: true,
-            hintText: "example@gmail.com",
+            hintText: "Provider your registered contact",
             keyboardType: TextInputType.emailAddress,
           ),
           const Space(space: 0.01),
@@ -261,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
             suffixIcon: showPassword
                 ? Icons.remove_red_eye_rounded
                 : Icons.visibility_off,
-            titleText: "Password", //AppLocalizations(context).of("password"),
+            titleText: "Passcode", //AppLocalizations(context).of("password"),
             padding: padding,
             hintText: "************",
             isObscureText: !showPassword,
@@ -280,7 +280,7 @@ class _LoginScreenState extends State<LoginScreen> {
             buttonText: "Sign in", //AppLocalizations(context).of("login"),
             onTap: () {
               // if (context.watch<OnlineCheckerController>().state == true) {
-              if (_allValidation() && formKey.currentState!.validate()) {
+              if ( formKey.currentState!.validate()) {
                 loginUser(
                     context, _emailController.text, _passwordController.text);
               }

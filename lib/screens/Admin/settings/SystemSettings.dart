@@ -19,7 +19,6 @@ class _SystemSettingsState extends State<SystemSettings> {
       const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 5);
   // important methods
   String currencyCode = "Ush UGX";
-  String _scheduledTime = "";
 // settings data
   @override
   Widget build(BuildContext context) {
@@ -28,24 +27,11 @@ class _SystemSettingsState extends State<SystemSettings> {
       padding: EdgeInsets.only(
           right: MediaQuery.of(context).size.width * 0.05,
           left: MediaQuery.of(context).size.width * 0.05),
-      child: Expanded(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width / 3,
-          height: MediaQuery.of(context).size.width / 2.5,
-          child: ListView(
-            // shrinkWrap: true,
-            // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //   crossAxisCount: size.width < 650 ? 2 : 4,
-            //   crossAxisSpacing: defaultPadding,
-            //   mainAxisSpacing: defaultPadding,
-            //   childAspectRatio: Responsive.isMobile(context)
-            //       ? size.width < 650 && size.width > 350
-            //           ? 1.3
-            //           : 1
-            //       : size.width < 1400
-            //           ? 1.1
-            //           : 1.4,
-            // ),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width / 3,
+        height: MediaQuery.of(context).size.width / 2,
+        child: SingleChildScrollView(
+          child: Column(
             children: [
               // set drop off time
               TapEffect(
@@ -116,22 +102,6 @@ class _SystemSettingsState extends State<SystemSettings> {
               ),
               //rendering overtime settings if enabled.
               ...[
-                if (context.watch<AllowOvertimeController>().state == true)
-                  // set overtime rate
-                  TapEffect(
-                    onClick: () => setOvertimeRate(),
-                    child: BlocBuilder<OvertimeRateController, double>(
-                      builder: (context, state) {
-                        return SettingCard(
-                          icon: (SettingIcons.overtimeRateIcon),
-                          titleText: "Overtime rate",
-                          subText:
-                              "Set the time by which the overtime show be paid ",
-                          trailText: "${state.floor()}",
-                        );
-                      },
-                    ),
-                  ),
                 //  overtime currency
                 if (context.watch<AllowOvertimeController>().state == true)
                   TapEffect(
@@ -139,7 +109,7 @@ class _SystemSettingsState extends State<SystemSettings> {
                     child: SettingCard(
                       icon: (SettingIcons.overtimeCurrencyIcon),
                       titleText: "Overtime currency",
-                      subText: "Set the start and end time for drop offs",
+                      subText: "Set the currency in which overtime is paid",
                       trailText: currencyCode,
                     ),
                   ),
@@ -159,18 +129,18 @@ class _SystemSettingsState extends State<SystemSettings> {
                       },
                     ),
                   ),
-                   if (context.watch<AllowOvertimeController>().state == true)
-                  // set overtime interval
+                if (context.watch<AllowOvertimeController>().state == true)
+                  // set overtime rate
                   TapEffect(
-                    onClick: () => setReportSchedule(),
-                    child: BlocBuilder<IntervalController, double>(
+                    onClick: () => setOvertimeRate(),
+                    child: BlocBuilder<OvertimeRateController, double>(
                       builder: (context, state) {
                         return SettingCard(
-                          icon: (SettingIcons.overtimeIntervalIcon),
-                          titleText: "Report schedule",
+                          icon: (SettingIcons.overtimeRateIcon),
+                          titleText: "Overtime rate",
                           subText:
-                              "Charge overtime every after this amount of minutes.",
-                          trailText: "${state.floor()} (mins)",
+                              "Set the charge to be paid after a period of overtime set. ",
+                          trailText: "${state.floor()}",
                         );
                       },
                     ),
@@ -192,27 +162,31 @@ class _SystemSettingsState extends State<SystemSettings> {
 
 // saving settings
   void saveSettings() async {
-
+// 2012-02-27 13:27:00
+// debugPrint("Allow allowance ${(context.read<AllowOvertimeController>().state)}");
+// DateTime()
     Map<String, dynamic> results = {
       "school_id": "${context.read<SchoolController>().state["school"]}",
       "drop_off_start_time": drop_off_time_start,
       "drop_off_end_time": drop_off_time_end,
-      "pick_up_start_time": pick_up_time_start,
-      "pick_up_end_time": pick_up_time_end,
+      "pick_up_start_time":
+          "${DateTime.now().toString().split(" ")[0]} $pick_up_time_start",
+      "pick_up_end_time":
+          "${DateTime.now().toString().split(" ")[0]} $pick_up_time_end",
       "drop_off_allowance": "${context.read<DropOffController>().state}",
       "pick_up_allowance": "${context.read<PickUpController>().state}",
-      "allow_overtime": context.read<AllowOvertimeController>().state,
-      "overtime_rate": context.read<OvertimeRateController>().state,
+      "allow_overtime": "${context.read<AllowOvertimeController>().state}",
+      "overtime_rate": "${context.read<OvertimeRateController>().state}",
       "overtime_rate_currency": currencyCode,
-      // "overtime_interval": context.read<IntervalController>().state,
       "settings_key[key]": "0",
     };
-
+    debugPrint("results => $results");
     showProgress(context);
     Client()
         .post(Uri.parse(AppUrls.addSettings), body: results)
         .then((response) {
-      debugPrint("Status code => ${response.statusCode}");
+      var data = json.decode(response.body);
+      debugPrint("Status code => ${data['message']}");
       if (response.statusCode == 200) {
         Routes.popPage(context);
         showSuccessDialog("Settings saved successfully", context);
@@ -231,7 +205,7 @@ class _SystemSettingsState extends State<SystemSettings> {
       context: context,
       builder: (context) => Dialog(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * .32,
+          width: MediaQuery.of(context).size.width * .37,
           height: MediaQuery.of(context).size.width * .2,
           child: Column(
             children: [
@@ -239,53 +213,74 @@ class _SystemSettingsState extends State<SystemSettings> {
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 8, left: 20, right: 20),
                 child: Text(
-                  "Setting pickup time",
+                  "Setting Drop Off Time",
                   style: TextStyles(context).getTitleStyle(),
                 ),
               ),
-              Space(),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 8, bottom: 8, left: 20, right: 20),
-                child: TapEffect(
-                  onClick: () {
-                    showTimePicker(
-                            context: context, initialTime: TimeOfDay.now())
-                        .then(
-                      (value) => setState(() {
-                        drop_off_time_start = "${value!.hour}:${value.minute}";
-                      }),
-                    );
-                  },
-                  child: SettingCard(
-                    titleText: "Start time for drop off",
-                    trailText: drop_off_time_start,
+              const Space(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8, bottom: 8, left: 20, right: 20),
+                    child: TapEffect(
+                      onClick: () {
+                        showTimePicker(
+                            helpText: "DropOff start time",
+                                context: context, initialTime: TimeOfDay.now())
+                            .then(
+                          (value) => setState(() {
+                            drop_off_time_start =
+                                "${value!.hour}:${value.minute < 10 ? '${value.minute}0' : value.minute}:00";
+                          }),
+                        );
+                      },
+                      child: Card(
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Theme.of(context).cardColor
+                            : Theme.of(context).canvasColor,
+                        child: const Padding(
+                          padding: EdgeInsets.all(33.0),
+                          child: Text("Tap to set start time"),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              // Space(),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 8, bottom: 8, left: 20, right: 20),
-                child: TapEffect(
-                  onClick: () {
-                    showTimePicker(
-                            context: context, initialTime: TimeOfDay.now())
-                        .then(
-                      (value) => setState(() {
-                        drop_off_time_end = "${value!.hour}:${value.minute}";
-                      }),
-                    );
-                  },
-                  child: SettingCard(
-                    titleText: "End time for drop off",
-                    trailText: drop_off_time_end,
+                  //  const Space(space: 0.01,),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8, bottom: 8, left: 20, right: 20),
+                    child: TapEffect(
+                        onClick: () {
+                          showTimePicker(
+                              helpText: "DropOff end time",
+                                  context: context,
+                                  initialTime: TimeOfDay.now())
+                              .then(
+                            (value) => setState(() {
+                              drop_off_time_end =
+                                  "${value!.hour}:${value.minute < 10 ? '${value.minute}0' : value.minute}:00";
+                            }),
+                          );
+                        },
+                        child: Card(
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Theme.of(context).cardColor
+                                  : Theme.of(context).canvasColor,
+                          child: const Padding(
+                            padding: EdgeInsets.all(33.0),
+                            child: Text("Tap to set end time"),
+                          ),
+                        )),
                   ),
-                ),
+                ],
               ),
               CommonButton(
                 padding: const EdgeInsets.only(
-                    top: 8, bottom: 8, left: 40, right: 40),
+                    top: 8, bottom: 8, left: 100, right: 100),
                 buttonText: "Done",
                 onTap: () => Routes.popPage(context),
               )
@@ -297,12 +292,12 @@ class _SystemSettingsState extends State<SystemSettings> {
   }
 
 // pickups
- void showPickUpOptions() {
+  void showPickUpOptions() {
     showDialog(
       context: context,
       builder: (context) => Dialog(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * .32,
+          width: MediaQuery.of(context).size.width * .37,
           height: MediaQuery.of(context).size.width * .2,
           child: Column(
             children: [
@@ -310,48 +305,71 @@ class _SystemSettingsState extends State<SystemSettings> {
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 8, left: 20, right: 20),
                 child: Text(
-                  "Setting pickup time",
+                  "Setting PickUp Time",
                   style: TextStyles(context).getTitleStyle(),
                 ),
               ),
-Space(),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 8, bottom: 8, left: 20, right: 20),
-                child: TapEffect(
-                  onClick: () {
-                    showTimePicker(context: context, initialTime: TimeOfDay.now())
-                        .then(
-                      (value) => setState(() {
-                        pick_up_time_start = "${value!.hour}:${value.minute}";
-                      }),
-                    );
-                  },
-                  child: SettingCard(
-                    icon: SettingIcons.pickupIcon,
-                    titleText: "Start time for pick up",
-                    trailText: pick_up_time_start,
+              const Space(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Space(),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8, bottom: 8, left: 20, right: 20),
+                    child: TapEffect(
+                      onClick: () {
+                        showTimePicker(
+                                helpText: "PickUp start time",
+                                context: context,
+                                initialTime: TimeOfDay.now())
+                            .then(
+                          (value) => setState(() {
+                            pick_up_time_start =
+                                '${value!.hour}:${value.minute < 10 ? '${value.minute}0' : value.minute}:00';
+                          }),
+                        );
+                      },
+                      child: Card(
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Theme.of(context).cardColor
+                            : Theme.of(context).canvasColor,
+                        child: const Padding(
+                          padding: EdgeInsets.all(33.0),
+                          child: Text("Tap to set start time"),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 8, bottom: 8, left: 20, right: 20),
-                child: TapEffect(
-                  onClick: () {
-                    showTimePicker(context: context, initialTime: TimeOfDay.now())
-                        .then(
-                      (value) => setState(() {
-                        pick_up_time_end = "${value!.hour}:${value.minute}";
-                      }),
-                    );
-                  },
-                  child: SettingCard(
-                    icon: SettingIcons.pickupIcon,
-                    titleText: "End time for pick up",
-                    trailText: pick_up_time_end,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8, bottom: 8, left: 20, right: 20),
+                    child: TapEffect(
+                        onClick: () {
+                          showTimePicker(
+                              helpText: "PickUp end time",
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          ).then(
+                            (value) => setState(() {
+                              pick_up_time_end =
+                                  "${value!.hour}:${value.minute < 10 ? '${value.minute}0' : value.minute}:00";
+                            }),
+                          );
+                        },
+                        child: Card(
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Theme.of(context).cardColor
+                                  : Theme.of(context).canvasColor,
+                          child: const Padding(
+                            padding: EdgeInsets.all(33.0),
+                            child: Text("Tap to set end time"),
+                          ),
+                        )),
                   ),
-                ),
+                ],
               ),
               CommonButton(
                 buttonText: "Okay",
@@ -367,7 +385,7 @@ Space(),
   }
 
 // setting overtime
- void setOvertimeRate() {
+  void setOvertimeRate() {
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -413,8 +431,8 @@ Space(),
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.22,
           height: MediaQuery.of(context).size.width * 0.22,
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(
+          child: const ClipRRect(
+            borderRadius: BorderRadius.all(
               Radius.circular(30),
             ),
             child: PickUpAllowanceSlider(),
@@ -464,25 +482,4 @@ Space(),
       ),
     );
   }
-
-//IntervalSlider(),
-// schedule
-  DateTime initialDate = DateTime.now();
-  setReportSchedule() async {
-    final firstDate = DateTime(1997);
-    final lastDate = DateTime(2050);
-
-    var value = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: firstDate,
-        lastDate: lastDate);
-
-    setState(() {
-      _scheduledTime =
-          "${days[value!.weekday]}, ${months[(value.month) - 1]} ${markDates(value.day)}";
-      initialDate = value;
-    });
-  }
-  //
 }

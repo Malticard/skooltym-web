@@ -13,35 +13,40 @@ class _SideMenuState extends State<SideMenu> {
   var store;
   @override
   void initState() {
-    store = context.read<SchoolController>().state['role'] == 'Admin'
+    store = context.read<SchoolController>().state['role'] == 'Admin' || context.read<SchoolController>().state['role'] == 'SuperAdmin'
         ? options
         : financeViews;
     super.initState();
   }
 
-  int selected = 0;
+  int selected = 10;
   @override
   Widget build(BuildContext context) {
     return Drawer(
       key: context.read<MainController>().scaffoldKey,
       backgroundColor: Theme.of(context).brightness == Brightness
-          .light?Color.fromRGBO(6, 109, 161, 1.0) :Theme.of(context)
+          .light?const Color.fromRGBO(6, 109, 161, 1.0) :Theme.of(context)
           .canvasColor,
       child: Column(
         children: [
           DrawerHeader(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
-              child: Column(
-                children: [
-                  Space(space: 0.04),
-                  Image.asset("assets/images/logo.png"),
-                  Space(),
-                  Text(
-                      "${context.read<SchoolController>()
-                          .state['schoolName']}",style:TextStyles(context)
-                      .getBoldStyle().copyWith(color:Colors.white),)
-                ],
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Space(space: 0.04), 
+                    Image.network("${AppUrls.liveImages}${context.read<SchoolController>().state['school_badge']}",
+                        height: 40, width: 40),
+                    const Space(),//
+                    Text(
+                        "${context.read<SchoolController>()
+                             .state['schoolName']}",
+                            overflow: TextOverflow.ellipsis,
+                            style:TextStyles(context)
+                        .getBoldStyle().copyWith(color:Colors.white,fontSize: 19),)
+                  ],
+                ),
               ),
             ),
           ),
@@ -128,7 +133,7 @@ class DrawerListTile extends StatelessWidget {
       selectedTileColor: Colors.blueAccent.withOpacity(0.1),
       onTap: press,
       shape: RoundedRectangleBorder(
-        side: selected ? BorderSide(color: Colors.white60) : BorderSide.none,
+        side: selected ? const BorderSide(color: Colors.white60) : BorderSide.none,
       ),
       horizontalTitleGap: 0.6,
       leading: SvgPicture.asset(

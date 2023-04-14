@@ -4,6 +4,8 @@ class CommonMenuWidget extends StatefulWidget {
   final Color? fieldColor;
   final String fieldText;
   final bool enableBorder;
+  final List<dynamic> data;
+  final List<dynamic> dropdownList;
   final String hint;
   final EdgeInsets padding;
   final ValueChanged onChange;
@@ -14,7 +16,7 @@ class CommonMenuWidget extends StatefulWidget {
       this.enableBorder = false,
       required this.onChange,
       required this.hint,
-      required this.padding})
+      required this.padding, required this.data, required this.dropdownList})
       : super(key: key);
 
   @override
@@ -26,14 +28,13 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
   var selected;
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents();
     return Padding(
       padding: widget.padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            widget.fieldText ?? "",
+            widget.fieldText,
             style: TextStyles(context).getDescriptionStyle(),
           ),
           Card(
@@ -57,22 +58,19 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
                 left: 16,
                 right: 16,
               ),
-              child: SizedBox(
+              child: Expanded(
                 child: CustomSearchableDropDown(
-                  items: context.watch<MainController>().students,
+                  items: widget.data,
                   label: widget.hint,
                   multiSelectTag: 'Names',
                   multiSelectValuesAsWidget: true,
                   multiSelect: true,
-                  menuMode: true,
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(0.0),
+                  menuMode:false,
+                  prefixIcon: const Padding(
+                    padding:  EdgeInsets.all(0.0),
                     child: Icon(Icons.search),
                   ),
-                  dropDownMenuItems:
-                      context.watch<MainController>().students.map((item) {
-                    return "${item.studentFname} ${item.studentLname}";
-                  }).toList(),
+                  dropDownMenuItems: widget.dropdownList,
                   onChanged: widget.onChange, //(value){
                   decoration:
                       BoxDecoration(border: Border.all(color: Colors.white54)),

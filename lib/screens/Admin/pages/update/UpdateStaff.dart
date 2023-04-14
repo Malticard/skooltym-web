@@ -1,14 +1,30 @@
 import '/exports/exports.dart';
 // export 'package:flutter/cupertino.dart';
 
-class AddStaff extends StatefulWidget {
-  const AddStaff({super.key});
+class UpdateStaff extends StatefulWidget {
+  final StaffModel staff;
+  const UpdateStaff({super.key, required this.staff});
 
   @override
-  State<AddStaff> createState() => _AddStaffState();
+  State<UpdateStaff> createState() => _UpdateStaffState();
 }
 
-class _AddStaffState extends State<AddStaff> {
+class _UpdateStaffState extends State<UpdateStaff> {
+  List<TextEditingController> _formControllers = <TextEditingController>[];
+  @override
+  void initState() {
+    super.initState();
+    _formControllers = <TextEditingController>[
+      TextEditingController(
+          text: "${widget.staff.staffFname} ${widget.staff.staffLname}"),
+      TextEditingController(text: widget.staff.staffEmail),
+      TextEditingController(text: widget.staff.staffContact),
+      TextEditingController(text: AppUrls.liveImages + widget.staff.staffProfilePic),
+      TextEditingController(text: widget.staff.staffGender),
+      TextEditingController(text: widget.staff.staffRole.roleType),
+    ];
+  }
+
   // form details
   static final List<Map<String, dynamic>> formFields = [
     {
@@ -51,9 +67,6 @@ class _AddStaffState extends State<AddStaff> {
     },
   ];
 
-  final List<TextEditingController> _formControllers =
-      List.generate(formFields.length, (index) => TextEditingController());
-
   // overall form padding
   EdgeInsets padding =
       const EdgeInsets.only(left: 14, top: 0, right: 14, bottom: 5);
@@ -63,67 +76,57 @@ class _AddStaffState extends State<AddStaff> {
   List<String> errorFields = List.generate(formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    // 0756598425
     Size size = MediaQuery.of(context).size;
-    return Dialog(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 2.2,
-        child: Padding(
-          padding: padding,
-          child: CommonFormFields(
-            padding: padding,
-            formFields: formFields,
-            numberOfDropDowns: 2,
-            formControllers: _formControllers,
-            buttonText: "Submit Staff Details",
-            errorMsgs: errorFields,
-            onSubmit: () {
-              if (validateEmail(_formControllers[1].text, context) != false) {
+    return Padding(
+      padding: padding,
+      child: CommonFormFields(
+        initialPic: widget.staff.staffProfilePic,
+        padding: padding,
+        formFields: formFields,
+        numberOfDropDowns: 2,
+        formControllers: _formControllers,
+        buttonText: "Submit Staff Details",
+        errorMsgs: errorFields,
+        onSubmit: () {
+          if (validateEmail(_formControllers[1].text, context) != false) {
+            if (_formControllers[0].text.trim().split(" ")[1] == '') {
+              showMessage(context: context, msg: "Staff last name is required");
+            } else {
+              _handleFormUpload(widget.staff.id).then((value) {
+                debugPrint("response code -> ${value.statusCode}");
+                debugPrint("Staff data -> ${value.reasonPhrase}");
+                if (value.statusCode == 200 || value.statusCode == 201) {
+                  //  bottom msg
+                  showMessage(
+                    context: context,
+                    type: 'success',
+                    msg: "Updated staff successfully",
+                  );
                   Routes.popPage(context);
-
-                _handleFormUpload().then((value) {
-                  debugPrint("Staff data -> ${value.reasonPhrase}");
-                  if (value.statusCode == 200 || value.statusCode == 201) {
-                    //  bottom msg
-                    showMessage(
-                      context: context,
-                      type: 'success',
-                      msg: "Added new staff successfully",
-                    );
-
-                    //  end of bottom msg
-                  } else {
-                    showMessage(
-                      context: context,
-                      type: 'danger',
-                      msg: "Error ${value.reasonPhrase}",
-                    );
-                    Routes.popPage(context);
-
-                    // showSuccessDialog(
-                    //     _formControllers[0].text.trim().split(" ")[1],
-                    //     context);
-                  }
-                    showSuccessDialog(
-                      _formControllers[0].text.trim().split(" ")[1], context);
-                }).whenComplete(() {
-                
-                  // Routes.popPage(context);
-                });
-              }
-            },
-          ),
-        ),
+                  //  end of bottom msg
+                } else {
+                  showMessage(
+                    context: context,
+                    type: 'danger',
+                    msg: "Error ${value.reasonPhrase}",
+                  );
+                  // showSuccessDialog(
+                  //     _formControllers[0].text.trim().split(" ")[1],
+                  //     context);
+                }
+              });
+            }
+          }
+        },
       ),
     );
   }
 
-  Future<StreamedResponse> _handleFormUpload() async {
+  Future<StreamedResponse> _handleFormUpload(String id) async {
     String uri = _formControllers[3].text.trim();
     debugPrint("handling form upload with $uri");
     //
-    var request = MultipartRequest('POST', Uri.parse(AppUrls.addStaff));
+    var request = MultipartRequest('POST', Uri.parse(AppUrls.updateStaff + id));
     // =============================== form fields =======================
     request.fields['staff_school'] =
         "${context.read<SchoolController>().state['school']}";

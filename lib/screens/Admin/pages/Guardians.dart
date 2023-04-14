@@ -17,7 +17,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).newGuardians();
+    Provider.of<MainController>(context).newGuardians(context);
     super.didChangeDependencies();
   }
 
@@ -26,10 +26,22 @@ class _ViewGuardiansState extends State<ViewGuardians> {
     return DataRow(
       cells: [
         DataCell(
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Text(guardians.guardianFname),
+            Row(
+            children: [
+          CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage(
+                  AppUrls.liveImages + guardians.guardianProfilePic,
+                ),
+              ),
+               Padding(
+            padding:  const EdgeInsets.symmetric(horizontal: defaultPadding),
+            child: Text(
+                "${guardians.guardianFname} ${guardians.guardianLname}"),
           ),
+            ],
+          )
+         
         ),
         DataCell(Text(guardians.guardianEmail)),
         DataCell(Text(guardians.guardianGender)),
@@ -37,25 +49,13 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           showDialog(
               context: context,
               builder: (context) {
-                return Dialog(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(child: Text("Edit Staff")),
-                  ),
-                );
+                return UpdateGuardian(guardianModel: guardians);
               });
         },(){
           showDialog(
               context: context,
               builder: (context) {
-                return Dialog(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(child: Text("Delete Staff"),),
-                  ),
-                );
+                return CommonDelete(title: "${guardians.guardianFname} ${guardians.guardianLname}", url: AppUrls.deleteGuardian + guardians.id,);
               });
         },)),
       ],
@@ -64,7 +64,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<MainController>(context).newGuardians();
+    Provider.of<MainController>(context).newGuardians(context);
     Size size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.width / 2.5,
@@ -74,27 +74,21 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if(context.watch<MainController>().guardians.length > 0)
+              if(context.watch<MainController>().guardians.isNotEmpty)
                  const Expanded(child: SearchField()),
               if (!Responsive.isMobile(context))
                 Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-    SizedBox(),
+             const SizedBox(),
               ElevatedButton.icon(
                 onPressed: () {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return Dialog(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 2.1,
-                            child: AddGuardian(),
-                          ),
-                        );
+                        return const AddGuardian();
                       });
                 },
-                icon: Icon(Icons.add),
-                label: Text("Add Guardian"),
+                icon: const Icon(Icons.add),
+                label: const Text("Add Guardian"),
               ),
             ],
           ),
@@ -107,9 +101,9 @@ class _ViewGuardiansState extends State<ViewGuardians> {
             ),
           ),
         ),
-        empty: NoDataWidget(text:"No guardians registered yet.."),
-        rows: context.read<MainController>().guardians.length < 1
-            ? []
+        empty: const NoDataWidget(text:"No guardians registered yet.."),
+        rows:context.read<MainController>().guardians.isEmpty ?
+            []
             : List.generate(
                 context.watch<MainController>().guardians.length,
                 (index) => _dataRow(

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import '/exports/exports.dart';
 class TestWidget extends StatefulWidget {
   final Color? fieldColor;
@@ -17,7 +19,7 @@ class _TestWidgetState extends State<TestWidget> {
   var selected;
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents();
+    context.watch<MainController>().getAllStudents(context);
     return Card(
       elevation: 0,
       color: widget.fieldColor,
@@ -58,8 +60,8 @@ class _TestWidgetState extends State<TestWidget> {
 
                   multiSelect: true,
                   menuMode: true,
-                  prefixIcon:  Padding(
-                    padding: const EdgeInsets.all(0.0),
+                  prefixIcon:  const Padding(
+                    padding: EdgeInsets.all(0.0),
                     child: Icon(Icons.search),
                   ),
                   dropDownMenuItems: context.watch<MainController>().students.map((item) {
@@ -71,6 +73,7 @@ class _TestWidgetState extends State<TestWidget> {
                     if(value!=null)
                     {
                       selectedList = jsonDecode(value);
+                      debugPrint(selectedList.toString());
                     }
                     else{
                       selectedList.clear();

@@ -70,7 +70,10 @@ export '/widgets/CommonDropDown.dart';
 export '/widgets/CommonFormFields.dart';
 export '/widgets/SettingsCard.dart';
 export '/widgets/DropDown.dart';
+export '/widgets/CommonDelete.dart';
 export '/widgets/NoDataWidget.dart';
+export '../widgets/ProfileCard_View.dart';
+export '/widgets/DividerWidget.dart';
 //routes paths
 export '/routes/routes.dart';
 // file picker
@@ -99,7 +102,9 @@ export '/models/StudentModel.dart';
 export '/models/Guardians.dart';
 export '/models/GuardianModel.dart';
 export '/models/PickUpModel.dart';
+export '/models/ClassModel.dart';
 export '/models/DropOffModels.dart';
+export '/models/ResultsModel.dart';
 
 // themes
 
@@ -126,6 +131,7 @@ export '/controllers/OnlineCheckerController.dart';
 export '/controllers/DashboardController.dart';
 export '/controllers/OvertimeController.dart';
 export '/controllers/StepperController.dart';
+export '/controllers/ClassNameController.dart';
 
 
 // themes
@@ -141,7 +147,6 @@ export '/screens/Admin/pages/Reports.dart';
 export '/screens/Admin/pages/Staffs.dart';
 export '/screens/Admin/pages/Test.dart';
 export '/screens/Admin/pages/Student.dart';
-export '/screens/Admin/pages/Classes.dart';
 export '/screens/Admin/pages/Guardians.dart';
 export '/screens/Admin/pages/AddStaff.dart';
 export '/screens/Admin/pages/ViewDropOff.dart';
@@ -152,7 +157,10 @@ export '/screens/Admin/settings/SystemSettings.dart';
 export '/screens/Admin/settings/privacy_policy.dart';
 export '/screens/Admin/settings/about.dart';
 export '/screens/dashboard/dashboard.dart';
-
+// updates
+export '/screens/Admin/pages/update/UpdateStudent.dart';
+export '/screens/Admin/pages/update/UpdateStaff.dart';
+export '/screens/Admin/pages/update/UpdateGuardian.dart';
 // --> admin widgets
 export '/screens/Admin/widgets/PopOptions.dart';
 export '/screens/Admin/widgets/IntervalSlider.dart';
@@ -160,4 +168,6 @@ export '/screens/Admin/widgets/RateSlider.dart';
 export '/screens/Admin/widgets/PickUpAllowanceSlider.dart';
 export '/screens/Admin/widgets/DropOffAllowanceSlider.dart';
 export '/screens/Admin/widgets/DashboardCard.dart';
+// --------------------------------------------------------
+
 // --------------------------------------------------------

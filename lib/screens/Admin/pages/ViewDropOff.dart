@@ -25,7 +25,7 @@ class _ViewDropOffsState extends State<ViewDropOffs>
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).availableDropOffs();
+    Provider.of<MainController>(context).availableDropOffs(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 
@@ -36,21 +36,22 @@ class _ViewDropOffsState extends State<ViewDropOffs>
         DataCell(
           Row(
             children: [
-              Image.asset(
-                StaffIcons.profile,
+              Image.network(
+               AppUrls.liveImages + (dropOff.studentName.studentProfilePic),
                 height: 45,
                 width: 45,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(dropOff.studentName),
+                child: Text("${dropOff.studentName.studentFname} ${dropOff.studentName.studentLname}"),
               ),
             ],
           ),
         ),
-        DataCell(Text(dropOff.droppedBy)),
-        DataCell(Text(dropOff.dropOffTime)),
-        DataCell(Text(dropOff.authorizedBy)),
+        DataCell(Text("${dropOff.droppedBy.guardianFname} ${dropOff.droppedBy.guardianLname}")),
+        DataCell(Text("${dropOff.authorizedBy.staffFname} ${dropOff.authorizedBy.staffLname}")),
+        DataCell(Text(dropOff.dropOffTime.toString().split(" ").last.toString().split(".").first)),
+
       ],
     );
   }

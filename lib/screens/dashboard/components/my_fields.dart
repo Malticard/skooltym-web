@@ -20,9 +20,9 @@ class _MyFilesState extends State<MyFiles> {
           children: [
 
             Row(
-              children: [
+              children: const [
 
-                const SizedBox(
+                SizedBox(
                   width: 20,
                 ),
 
@@ -63,13 +63,13 @@ class FileInfoCardGridView extends StatefulWidget {
 class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   @override
   void initState() {
-    Provider.of<MainController>(context, listen: false).fetchUpdates(context);
+    Provider.of<MainController>(context, listen: false).fetchUpdates(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     super.initState();
   }
 
   @override
   void didUpdateWidget(oldWidget) {
-    context.watch<MainController>().fetchUpdates(context);
+    context.watch<MainController>().fetchUpdates(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     super.didUpdateWidget(oldWidget);
   }
 

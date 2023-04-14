@@ -4,11 +4,12 @@ import 'dart:io';
 
 import '/exports/exports.dart';
 
-class AddGuardian extends StatefulWidget {
-  const AddGuardian({super.key});
+class UpdateGuardian extends StatefulWidget {
+  final Guardians guardianModel;
+  const UpdateGuardian({super.key, required this.guardianModel});
 
   @override
-  State<AddGuardian> createState() => _AddGuardianState();
+  State<UpdateGuardian> createState() => _UpdateGuardianState();
 }
 
 final List<Map<String, dynamic>> _formFields = [
@@ -53,7 +54,7 @@ final List<Map<String, dynamic>> _formFields = [
     "password": false,
     'icon': Icons.calendar_month_outlined
   },
-  {
+    {
     "title": "Students *",
     "hint": "Select students",
     "menu": 0,
@@ -71,11 +72,32 @@ final List<Map<String, dynamic>> _formFields = [
   },
 ];
 
-class _AddGuardianState extends State<AddGuardian>
-    {
-  
-  final List<TextEditingController> _formControllers =
+class _UpdateGuardianState extends State<UpdateGuardian> {
+  final List<TextEditingController> formControllers = [];
+  AnimationController? guardianAnimationController;
+  List<TextEditingController> _formControllers =
       List.generate(_formFields.length, (index) => TextEditingController());
+  @override
+  void initState() {
+    _formControllers = [
+      TextEditingController(text: "${widget.guardianModel.guardianFname} ${widget.guardianModel.guardianLname}"),
+      TextEditingController(text: widget.guardianModel.guardianEmail),
+      TextEditingController(text: widget.guardianModel.guardianContact.toString()),
+      TextEditingController(text: AppUrls.liveImages + widget.guardianModel.guardianProfilePic),
+      TextEditingController(text: widget.guardianModel.guardianGender),
+      TextEditingController(text: widget.guardianModel.type),
+      TextEditingController(text: widget.guardianModel.guardianDateOfEntry.toString()),
+      TextEditingController(text: widget.guardianModel.relationship),
+
+    ];
+    // fetchStudents().then((value) => setState(() => students = value));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   // overall form padding
   EdgeInsets padding =
@@ -90,23 +112,29 @@ class _AddGuardianState extends State<AddGuardian>
   Widget build(BuildContext context) {
     context.watch<MainController>().getAllStudents(context);
 
-    Size size = MediaQuery.of(context).size;
-    return Dialog(
+    // Size size = MediaQuery.of(context).size;
+        return Dialog(
       child: SizedBox(
          width: MediaQuery.of(context).size.width / 3,
         height: MediaQuery.of(context).size.width / 1.5,
         child: Padding(
           padding: padding,
           child: CommonFormFields(
+            initialPic: widget.guardianModel.guardianProfilePic,
             padding: padding,
             formFields: _formFields,
             lists: context.watch<MainController>().students,
             dropdownLists: context.watch<MainController>().students.map((item) {
                     return "${item.studentFname} ${item.studentLname}";
                   }).toList(),
+                    onDropDownValue: (p0) {
+              if (p0 != null) {
+              Provider.of<MainController>(context,listen:false).selectMultiStudent(json.decode(p0));
+              }
+            },
             formControllers: _formControllers,
-            buttonText: "Save Guardian Details",
-            onSubmit:() =>  addGuardian(),
+            buttonText: "Update Guardian Details",
+            onSubmit:() =>  _addGuardian(),
             errorMsgs: errorFields,
           ),
         ),
@@ -115,11 +143,10 @@ class _AddGuardianState extends State<AddGuardian>
   }
 
 // adding guardian
-  void addGuardian() {
+  void _addGuardian() {
     if (validateEmail(_formControllers[1].text, context) != false) {
-    debugPrint("hey am here");
-     
-      handleGuardian()
+      showProgress(context, msg: "Updating guardian in progress");
+      _handleGuardian()
           .then((value) {
             debugPrint("Status code ${value.statusCode}");
             Routes.popPage(context);
@@ -127,11 +154,6 @@ class _AddGuardianState extends State<AddGuardian>
                 _formControllers[0].text.trim().split(" ")[1], context);
           })
           .whenComplete(() {
-            showSuccessDialog(
-                _formControllers[0].text.trim().split(" ")[1], context);
-          
-           Routes.popPage(context);
-           debugPrint("done saving");
             showMessage(
               context: context,
               type: 'success',
@@ -141,17 +163,29 @@ class _AddGuardianState extends State<AddGuardian>
     }
   }
 
-  Future<StreamedResponse> handleGuardian() {
+  Future<StreamedResponse> _handleGuardian() {
+    /**
+     *  student: req.body.student,
+                    relationship: req.body.relationship,
+                    guardian_fname: req.body.guardian_fname,
+                    guardian_lname: req.body.guardian_lname,
+                    guardian_contact: req.body.guardian_contact,
+                    guardian_email: req.body.guardian_email,
+                    guardian_gender: req.body.guardian_gender,
+                    guardian_profile_pic: req.file.path,
+                    guardian_dateOfEntry: req.body.guardian_dateOfEntry,
+                    guardian_key: req.body.guardian_key
+     */
     String uri = _formControllers[3].text.trim();
     //
     var request = MultipartRequest(
       'POST',
-      Uri.parse(AppUrls.addGuardian),
+      Uri.parse(AppUrls.updateGuardian + widget.guardianModel.id),
     );
-    request.fields['students'] = json.encode(context.read<MainController>().students);
+
     request.fields['school'] = context.read<SchoolController>().state['school'];
-    request.fields['type'] = _formControllers[5].text.trim();
-    request.fields['relationship'] = _formControllers[8].text.trim();
+    request.fields['type'] = _formControllers[6].text.trim();
+    request.fields['relationship'] = _formControllers[7].text.trim();
     request.fields['guardian_fname'] =
         _formControllers[0].text.trim().split(" ").first;
     request.fields['guardian_lname'] =
@@ -163,10 +197,9 @@ class _AddGuardianState extends State<AddGuardian>
     request.files.add(MultipartFile('image',
         File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
-    request.fields['guardian_dateOfEntry'] = _formControllers[6].text.trim();
+    request.fields['guardian_dateOfEntry'] = _formControllers[7].text.trim();
     request.fields['guardian_key[key]'] = "";
     var response = request.send();
-     debugPrint("Status code $response");
     return response;
   }
 }

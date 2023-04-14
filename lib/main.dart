@@ -26,6 +26,7 @@ void main() async {
         BlocProvider(create: (context) => TitleController()),
         BlocProvider(create: (context) => DashboardController()),
         BlocProvider(create: (context) => StepperController()),
+        BlocProvider(create: (context) => ClassNameController()),
       ],
       child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
         // school data
@@ -48,8 +49,9 @@ void main() async {
                   : Colors.white,
             ),
           ),
+          // initialRoute: Routes.malticard,
           initialRoute: (prefs.getString('schoolData') != null &&
-                  (prefs.getString('role') == 'Admin' ||
+                  (prefs.getString('role') == 'SuperAdmin' || prefs.getString('role') == 'Admin' ||
                       prefs.getString('role') == 'Finance'))
               ? Routes.home
               : Routes.login,

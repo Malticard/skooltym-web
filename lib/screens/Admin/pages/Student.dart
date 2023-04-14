@@ -17,7 +17,7 @@ class _ViewStudentsState extends State<ViewStudents> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).getAllStudents();
+    Provider.of<MainController>(context).getAllStudents(context);
     super.didChangeDependencies();
   }
 
@@ -26,13 +26,24 @@ class _ViewStudentsState extends State<ViewStudents> {
     return DataRow(
       cells: [
         DataCell(
-          Padding(
+           Row(
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage(
+                  AppUrls.liveImages + studentModel.studentProfilePic,
+                ),
+              ),
+               Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Text(
                 "${studentModel.studentFname} ${studentModel.studentLname}"),
           ),
+            ],
+          )
+          
         ),
-        DataCell(Text(studentModel.studentClass)),
+        DataCell(Text(studentModel.studentModelClass)),
         DataCell(Text(studentModel.studentGender)),
         DataCell(buildActionButtons(context, () {
           showDialog(
@@ -40,9 +51,9 @@ class _ViewStudentsState extends State<ViewStudents> {
               builder: (context) {
                 return Dialog(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(child: Text("Edit Student")),
+                    width: MediaQuery.of(context).size.width / 3.5,
+                            height: MediaQuery.of(context).size.width / 2.2,
+                    child: UpdateStudent(studentModel: studentModel),
                   ),
                 );
               });
@@ -50,15 +61,7 @@ class _ViewStudentsState extends State<ViewStudents> {
           showDialog(
               context: context,
               builder: (context) {
-                return Dialog(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: MediaQuery.of(context).size.width / 3,
-                    child: Center(
-                      child: Text("Delete Student"),
-                    ),
-                  ),
-                );
+                return CommonDelete(title: '${studentModel.studentFname} ${studentModel.studentLname}', url: AppUrls.deleteStudent + studentModel.id);
               });
         })),
       ],
@@ -68,7 +71,7 @@ class _ViewStudentsState extends State<ViewStudents> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Provider.of<MainController>(context).getAllStudents();
+    Provider.of<MainController>(context).getAllStudents(context);
     return SizedBox(
       height: size.width / 2.5,
       child: Data_Table(
@@ -78,8 +81,8 @@ class _ViewStudentsState extends State<ViewStudents> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
 
-              if(context.read<MainController>().students.length > 0)
-                Expanded(child: SizedBox(width:120,child: SearchField())),
+              if(context.read<MainController>().students.isNotEmpty)
+                const Expanded(child: SizedBox(width:120,child: SearchField())),
               if (!Responsive.isMobile(context))
                 Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
               Text(
@@ -93,20 +96,20 @@ class _ViewStudentsState extends State<ViewStudents> {
                       builder: (context) {
                         return Dialog(
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 4,
-                            height: MediaQuery.of(context).size.width / 2.6,
-                            child: AddStudent(),
+                            width: MediaQuery.of(context).size.width / 3.5,
+                            height: MediaQuery.of(context).size.width / 2.2,
+                            child: const AddStudent(),
                           ),
                         );
                       });
                 },
-                icon: Icon(Icons.add),
-                label: Text("Add Staff"),
+                icon: const Icon(Icons.add),
+                label: const Text("Add Student"),
               ),
             ],
           ),
         ),
-        empty: NoDataWidget(
+        empty: const NoDataWidget(
           text: "No "
               "Students added as "
               "yet...",

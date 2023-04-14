@@ -7,7 +7,7 @@ class Routes {
   // static const String o = '/n';
   static const String forgotPassword = '/forgotPassword';
   static const String home = '/wksktyui';
-
+  static const String malticard = '/malticard';
   static void push(Widget widget, BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => widget, fullscreenDialog: true),
@@ -45,5 +45,6 @@ Map<String, Widget Function(BuildContext)> routes(BuildContext context) {
   return {
     Routes.home: (context) => const MainScreen(),
     Routes.login: (context) => LoginScreen(),
+    
   };
 }

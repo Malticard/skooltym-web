@@ -11,8 +11,16 @@ class AddStudent extends StatefulWidget {
   State<AddStudent> createState() => _AddStudentState();
 }
 
-// form data
-final List<Map<String, dynamic>> _formFields = [
+
+class _AddStudentState extends State<AddStudent> {
+ List<Map<String, dynamic>> formFields = [];
+ List<TextEditingController> formControllers = [];
+ @override
+ void initState() {
+    context.read<MainController>().fetchClasses(context.read<SchoolController>().state['school']);
+
+   // form data
+ formFields = [
   {
     "title": "Student's Firstname *",
     "hint": "e.g John",
@@ -26,14 +34,14 @@ final List<Map<String, dynamic>> _formFields = [
     'icon': Icons.person_2_outlined
   },
   {
-    "title": "Student's Othername*",
+    "title": "Student's Othername *",
     "hint": "e.g Paul",
     "password": false,
     'icon': Icons.person_3_outlined
   },
   {'title': 'Student Profile', 'profile': 5},
   {
-    "title": "Gender*",
+    "title": "Gender *",
     "hint": "Select gender",
     "data": [
       "Select gender",
@@ -42,112 +50,114 @@ final List<Map<String, dynamic>> _formFields = [
     ]
   },
   {
-    "title": "Class*",
+    "title": "Class *",
     "hint": "e.g grade 2",
-    "password": false,
+    "data": [
+      "Select class",
+      ...context.read<MainController>().classes.map((e) => e).toList(),
+    ],
     'icon': Icons.home_work_outlined
-  },
+  }
+
 ];
 
-class _AddStudentState extends State<AddStudent> {
-  final List<TextEditingController> _formControllers =
-      List.generate(_formFields.length, (index) => TextEditingController());
+  formControllers =
+      List.generate(formFields.length, (index) => TextEditingController());
+   super.initState();
+
+ }
 
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
 // form key
   final formKey = GlobalKey<FormState>();
-  // error fields
-  List<String> errorFields = List.generate(_formFields.length, (i) => '');
+  
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Text("Add Student", style: TextStyles(context).getTitleStyle()),
-          SingleChildScrollView(
-            child: CommonFormFields(
-              padding: _padding,
-              formFields: _formFields,
-              formControllers: _formControllers,
-              buttonText: "Save Student Details",
-              onSubmit: () {
-                if (true) {
-                  showProgress(context);
-                  _handleStudentRegistration()
-                      .then(
-                        (value) {
-                          if (value.statusCode == 200) {
-                            Routes.popPage(context);
-                            showMessage(
-                              context: context,
-                              type: 'success',
-                              msg: "Added new student successfully",
-                            );
-                            _formControllers.forEach((v) => v.clear());
-                            showSuccessDialog(
-                                _formControllers[0].text.trim().split(" ")[1],
-                                context);
-                          } else {
-                            showMessage(
-                              msg:
-                                  "Failed to add student ${value.reasonPhrase}",
-                              context: context,
-                              type: "danger",
-                            );
-                          }
-                        },
-                      )
-                      .catchError(
-                        (onError) => () => showMessage(
+    context.read<MainController>().fetchClasses(context.read<SchoolController>().state['school']);
+// error fields
+  List<String> errorFields = List.generate(formFields.length, (i) => '');
+
+    return Column(
+      children: [
+        Text("Add Student", style: TextStyles(context).getTitleStyle()),
+        SingleChildScrollView(
+          child: CommonFormFields(
+            padding: _padding,
+            formFields: formFields,
+            formControllers: formControllers,
+            buttonText: "Save Student Details",
+            onSubmit: () {
+              if (true) {
+                showProgress(context);
+                _handleStudentRegistration()
+                    .then(
+                      (value) {
+                        if (value.statusCode == 200) {
+                          Routes.popPage(context);
+                          showMessage(
                             context: context,
-                            msg: 'An error occurred!! ',
-                            type: 'danger'),
-                      )
-                      .whenComplete(() {
-                        Routes.popPage(context);
-                      });
+                            type: 'success',
+                            msg: "Added new student successfully",
+                          );
+                          formControllers.forEach((v) => v.clear());
+                          showSuccessDialog(
+                              formControllers[0].text.trim(),
+                              context);
+                        } else {
+                          showMessage(
+                            msg:
+                                "Failed to add student ${value.reasonPhrase}",
+                            context: context,
+                            type: "danger",
+                          );
+                        }
+                      },
+                    )
+                    .whenComplete(() {
+                      Routes.popPage(context);
+                    });
+              }
+            },
+            errorMsgs: errorFields,
+             lists:context.watch<MainController>().guardians,
+              onDropDownValue: (p0) {
+                if (p0 != null) {
+                 Provider.of<MainController>(context).guardians;
                 }
               },
-              errorMsgs: errorFields,
-              students: [],
-            ),
+              dropdownLists: context.watch<MainController>().students.map((item) {
+                    return "${item.studentFname} ${item.studentLname}";
+                  }).toList(),
+                
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Future<StreamedResponse> _handleStudentRegistration() async {
-    String uri = _formControllers[3].text;
-    /**
-     *    school: req.body.school,
-                    student_fname: req.body.student_fname,
-                    student_lname: req.body.student_lname,
-                    student_contact: req.body.student_contact,
-                    student_email: req.body.student_email,
-                    student_class: req.body.student_class,
-                    student_gender: req.body.student_gender,
-                    student_profile_pic: req.file.path,
-                    student_key: req.body.student_key
-     */
+    String uri = formControllers[3].text;
+ 
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStudent));
     debugPrint("${request.headers}");
     //  ============================== student details ============================
+     request.fields['guardians'] = "";//json.encode(context.watch()<MainController>().multiselect);
     request.fields['school'] =
         "${context.read<SchoolController>().state['school']}";
     request.fields['student_fname'] =
-        _formControllers[0].text.trim().split(" ").first;
+        formControllers[0].text.trim().split(" ").first;
     request.fields['student_lname'] =
-        _formControllers[0].text.trim().split(" ").last;
-    request.fields['student_contact'] = _formControllers[2].text.trim();
-    request.fields['student_email'] = _formControllers[1].text.trim();
-    request.fields['student_class'] = _formControllers[5].text.trim();
-    request.fields['student_gender'] = _formControllers[4].text.trim();
+        formControllers[1].text.trim().split(" ").last;
+    request.fields['username'] = "${formControllers[0].text.trim().split(" ").first}_256";//_formControllers[2].text.trim();
+    request.fields['other_name'] = formControllers[2].text.trim();
+    request.fields['_class'] = formControllers[5].text.trim();
+    request.fields['stream'] = "";
+    request.fields['student_gender'] = formControllers[4].text.trim();
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
-    request.files.add(MultipartFile('student_profile_pic',
+    request.files.add(MultipartFile('image',
         File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
     //  ============================== student key ============================

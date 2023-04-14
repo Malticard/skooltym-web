@@ -8,24 +8,26 @@ loginUser(BuildContext context, String email, String password) async {
   showProgress(context, msg: "Login in progress");
 
   Client().post(Uri.parse(AppUrls.login), body: {
-    "staff_email": email,
+    "staff_contact": email,
     "staff_password": password,
   }).then((value) {
-    if (value.statusCode == 200) {
+    if (value.statusCode == 200 || value.statusCode == 201) {
       var data = jsonDecode(value.body);
 
       Routes.popPage(context);
       debugPrint("Login response ${data}");
+
       BlocProvider.of<SchoolController>(context).setSchoolData(data);
+      // 
       Routes.namedRemovedUntilRoute(
         context,
-        data['role'] == 'Admin' || data['role'] == 'Finance'
+        data['role'] == 'Admin' ||  data['role'] == 'SuperAdmin' || data['role'] == 'Finance'
             ? Routes.home
             : Routes.login,
       );
       showMessage(
         context: context,
-        msg: "Login successfully..",
+        msg: "Logged in  successfully..",
         type: 'success',
       );
     } else {
@@ -66,59 +68,14 @@ String greetUser() {
 
   return greet;
 }
-
-// dialog
-void showAppDialog(BuildContext context,
-    {String? title,
-    String? denyText,
-    String? confirmText,
-    bool showCancel = false,
-    String? successText,
-    String? errorText}) async {
-  ArtDialogResponse response = await ArtSweetAlert.show(
-      barrierDismissible: false,
-      context: context,
-      artDialogArgs: ArtDialogArgs(
-        showCancelBtn: true,
-        denyButtonText: denyText ?? "Don't save",
-        title: title ?? "Do you want to save the changes?",
-        confirmButtonText: confirmText ?? "Save",
-      ));
-
-  if (response.isTapConfirmButton) {
-    ArtSweetAlert.show(
-        context: context,
-        artDialogArgs: ArtDialogArgs(
-            type: ArtSweetAlertType.success, title: successText ?? "Saved!"));
-    return;
-  }
-  if (response.isTapCancelButton) {
-    ArtSweetAlert.show(
-      context: context,
-      artDialogArgs: ArtDialogArgs(
-          type: ArtSweetAlertType.success,
-          title: successText ?? "Operation cancel...."),
-    );
-  }
-
-  if (response.isTapDenyButton) {
-    ArtSweetAlert.show(
-        context: context,
-        artDialogArgs: ArtDialogArgs(
-            type: ArtSweetAlertType.info,
-            title: errorText ?? "Changes are not saved!"));
-    return;
-  }
-}
-
 // return students
-Future<List<StudentModel>> fetchStudents() async {
-  var res = await Client().get(Uri.parse(AppUrls.students));
+Future<List<StudentModel>> fetchStudents(String id) async {
+  var res = await Client().get(Uri.parse(AppUrls.students + id));
   return studentModelFromJson(res.body);
 }
 
-Future<StudentModel> getSpecificStudent(String n) async {
-  var st = await fetchStudents();
+Future<StudentModel> getSpecificStudent(String n,String school) async {
+  var st = await fetchStudents(school);
   return st.firstWhere((element) => element.studentFname == n);
 }
 
@@ -134,16 +91,18 @@ void showSuccessDialog(String name, BuildContext context,
         // overflow: TextOverflow,
         style: TextStyles(context).getRegularStyle(),
       ),
-      content: Icon(Icons.check_circle_outline_rounded,
+      content: const Icon(Icons.check_circle_outline_rounded,
           size: 75, color: Colors.green),
       actions: [
         TextButton(
           onPressed: onPressed ??
               () {
                 Routes.popPage(context);
+                context.read<WidgetController>().pushWidget(const AddClass());
+                context.read<TitleController>().setTitle("Classes");
                 // Routes.namedRoute(context, Routes.dashboard);
               },
-          child: Text("Okay"),
+          child:const Text("Okay"),
         )
       ],
     ),
@@ -202,7 +161,7 @@ bool validateEmail(String email, BuildContext context) {
   return isValid;
 }
 
-// action buttos
+// action buttons
 // build Action Buttons
 Widget buildActionButtons(BuildContext context,VoidCallback
 edit,VoidCallback delete) {
@@ -210,69 +169,30 @@ edit,VoidCallback delete) {
     children: [
       TextButton(
         onPressed: edit,
-        child: Icon(
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.blue,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        ),
+        child: const Icon(
           Icons.edit,
           color: Colors.white,
         ),
-        style: TextButton.styleFrom(
-          backgroundColor: Colors.blue,
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        ),
       ),
-      SizedBox(
+      const SizedBox(
         width: 10,
       ),
       TextButton(
         onPressed: delete,
-        //     () {
-        //
-        //   showAppDialog(context,
-        //       title: "Are you sure you want to delete $text?");
-        // },
-        child: Icon(Icons.delete_outline_rounded, color: Colors.white),
         style: TextButton.styleFrom(
           backgroundColor: Colors.red,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding:const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         ),
+        child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
       ),
     ],
   );
 }
 // build dashboard cards
-// Widget buildBody(BuildContext context) {
-//   Size size = MediaQuery.of(context).size;
-//   return SizedBox(
-//     width: size.width,
-//     child: FutureBuilder(
-//         // future: fetchDashboardMetaData(),
-//         builder: (context, snapshot) {
-//           var data = snapshot.data ?? [];
-//           return snapshot.connectionState == ConnectionState.waiting
-//               ? const Center(child: Loader(text: "Dashboard"))
-//               : snapshot.hasData
-//                   ? Flex(
-//                       direction: Axis.horizontal,
-//                       children: List.generate(
-//                         data.length,
-//                         (index) => SizedBox(
-//                           width: size.width * 0.123,
-//                           height: size.width * 0.123,
-//                           child: DashboardCard(
-//                             label: data[index]['label'],
-//                             value: data[index]['value'],
-//                             icon: data[index]['icon'],
-//                             color: data[index]['color'],
-//                             last_updated: data[index]['last_updated'],
-//                           ),
-//                         ),
-//                       ),
-//                     )
-//                   : const Center(
-//                       child: Text("No Data"),
-//                     );
-//         }),
-//   );
-// }
 
 // sidebar data
 List<Map<String, dynamic>> options = [
@@ -289,7 +209,7 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/staff.svg",
     "title": "Staffs",
-    "page": const Staff(),
+    "page":  const StaffView(),
   },
   {
     "title": "Guardians",
@@ -299,7 +219,7 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/staff.svg",
     "title": "Classes",
-    "page": const ViewClasses(),
+    "page": const AddClass(),
   },
   {
     "title": "Pending Overtimes",
@@ -354,10 +274,11 @@ List<Map<String, dynamic>> financeViews = [
     "page": const OvertimeReports(overtimeStatus: "Cleared",),
   },
 ];
+
 // valid text controllers
 bool validateTextControllers(List<TextEditingController> controllers) {
   var ct = controllers.where((element) => element.text.isEmpty).toList();
-  return ct.length < 1 ? true : false;
+  return ct.isEmpty ? true : false;
 }
 
 /// show snackbar message
@@ -383,7 +304,7 @@ void showMessage(
               : type == 'danger'
                   ? Colors.red[800]!.withOpacity(opacity)
                   : type == 'success'
-                      ? Color.fromARGB(255, 2, 104, 7).withOpacity(opacity)
+                      ? const Color.fromARGB(255, 2, 104, 7).withOpacity(opacity)
                       : Colors.grey[600]!.withOpacity(opacity),
       duration: Duration(seconds: duration),
     ),
@@ -407,7 +328,7 @@ void showProgress(BuildContext context, {String? msg}) {
               color: Theme.of(context).brightness == Brightness.dark
                   ? Colors.white
                   : Theme.of(context).primaryColor),
-          Space(
+          const Space(
             space: 0.03,
           ),
           Text(
@@ -457,9 +378,9 @@ List<String> months = <String>[
   "Dec",
 ];
 // compute students total
-Future<int> computeStudentsTotal() async {
+Future<int> computeStudentsTotal(String id) async {
   int students = 0;
-  var response = await fetchStudents();
+  var response = await fetchStudents(id);
   students = response.length;
   // debugPrint("Total => $students");
   return students;
@@ -477,8 +398,9 @@ Future<List<PickUpModel>> fetchPickups(String id) async {
 }
 
 // fetch pickups
-Future<List<PickUpModel>> pickUps() async {
-  var response = await Client().get(Uri.parse(AppUrls.getPickUps));
+Future<List<PickUpModel>> pickUps(String id) async {
+  var response = await Client().get(Uri.parse(AppUrls.getPickUps + id));
+  debugPrint("response => ${response.body}");
   return response.statusCode == 201 || response.statusCode == 200
       ? pickUpModelFromJson(response.body)
       : [];
@@ -494,8 +416,8 @@ Future<List<DropOffModel>> fetchDropOffs(String id) async {
 }
 
 // drop offs
-Future<List<DropOffModel>> dropOffs() async {
-  var response = await Client().get(Uri.parse(AppUrls.getDropOffs));
+Future<List<DropOffModel>> dropOffs(String id) async {
+  var response = await Client().get(Uri.parse(AppUrls.getDropOffs + id));
   return dropOffModelFromJson(response.body);
   // return response;
 }
@@ -504,9 +426,9 @@ Future<List<DropOffModel>> dropOffs() async {
 /// Dashboard cards
 
 // fetch overtimes
-Future<List<OvertimeModel>> fetchOvertimeData() async {
-  var response = await Client().get(Uri.parse(AppUrls.overtime));
-  return overtimeModelFromJson(response.body);
+Future<List<OvertimeModel>> fetchOvertimeData(String status,String id) async {
+  var response = await Client().get(Uri.parse(AppUrls.overtime + id));
+  return overtimeModelFromJson(response.body).where((element) => element.status == status).toList();
   // return response;
 }
 
@@ -522,61 +444,61 @@ String handSanIntervals() {
 }
 
 // fetch dashboard meta data
-Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
-    BuildContext context) async {
+Future<List<Map<String, dynamic>>> fetchDashboardMetaData(String school_id,String role) async {
   // get students total
-  int students = await computeStudentsTotal();
-  var drops = await dropOffs();
-  var picks = await pickUps();
-  var overtimes = await fetchOvertimeData();
+  int students = await computeStudentsTotal(school_id);
+  var drops = await dropOffs(school_id);
+  var picks = await pickUps(school_id);
+  var clearedOvertimes = await fetchOvertimeData("Cleared",school_id);
+  var pendingOvertimes = await fetchOvertimeData("Pending",school_id);
+
   List<Map<String, dynamic>> dashboardData = [
     {
       "label": "DROP OFFS",
       "value": drops.length,
       "icon": "assets/icons/004-playtime.svg",
-      'color': Color.fromARGB(255, 106, 108, 235),
+      'color': const Color.fromARGB(255, 106, 108, 235),
       "last_updated": "14:45"
     },
     {
       "label": "PICK UPS",
       "value": picks.length,
       "icon": "assets/icons/009-student.svg",
-      'color': Color.fromARGB(255, 181, 150, 253),
+      'color': const Color.fromARGB(255, 181, 150, 253),
       "last_updated": "14:45"
     },
     {
-      "label": "TOTALS",
-      "value": students,
+      "label": "CLEARED OVERTIME",
+      "value": clearedOvertimes.length,
       "icon": "assets/icons/002-all.svg",
-      'color': Color.fromARGB(255, 77, 154, 255),
+      'color': const Color.fromARGB(255, 77, 154, 255),
       "last_updated": "14:45"
     },
     {
-      "label": "OVERTIME",
-      "value": overtimes.length,
+      "label": "PENDING OVERTIME",
+      "value": pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 50, 66, 95),
+      'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
   ];
   List<Map<String, dynamic>> financeData = [
     {
       "label": "CLEARED OVERTIME",
-      "value": overtimes.length,
+      "value": clearedOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 50, 66, 95),
+      'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": overtimes.length,
+      "value": pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 50, 66, 95),
+      'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
   ];
-  return Provider.of<SchoolController>(context, listen: false).state['role'] ==
-          'Admin'
+  return role == 'Admin'
       ? dashboardData
       : financeData;
 }
@@ -598,7 +520,7 @@ Future<Map<String, dynamic>> fetchSpecificGuardian(String id) async {
   Map<String, dynamic> results = {
     "student_name": "${studentData.studentFname} ${studentData.studentLname}",
     "student_pic": studentData.studentProfilePic,
-    "student_class": studentData.studentClass,
+    "student_class": studentData.studentModelClass,
     "student_id": studentData.id,
     "picker_name":
         "${guardianData.guardianFname} ${guardianData.guardianLname}",
@@ -643,7 +565,7 @@ registerDropOffOrPickUp(var data, BuildContext context) async {
 // determine overtime
 overtimes(BuildContext context) async {
   var checker = InternetConnectionChecker.createInstance();
-  String overtimeMsg = "";
+  // String overtimeMsg = "";
   checker.hasConnection.then((online) {
     context.read<OnlineCheckerController>().updateChecker(online);
   });
@@ -657,8 +579,8 @@ overtimes(BuildContext context) async {
       var overtimeStart = data['overtime_start'];
       var overtimeEnd = data['overtime_end'];
       var overtimeDuration = data['overtime_duration'];
-      var overtimeFee = data['overtime_fee'];
-      var overtimeMsg = data['overtime_msg'];
+      // var overtimeFee = data['overtime_fee'];
+      // var overtimeMsg = data['overtime_msg'];
       // check if overtime is enabled
       if (overtime) {
         // check if the time is between the overtime start and end

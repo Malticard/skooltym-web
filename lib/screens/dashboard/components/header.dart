@@ -65,9 +65,10 @@ class _ProfileCardState extends State<ProfileCard> {
         ),
         child: Row(
           children: [
-            Image.asset(
-              "assets/images/profile_pic.png",
-              height: 38,
+            CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: Image.network(AppUrls.liveImages+ "${context.read<SchoolController>().state['profile_pic']}",
+                        height: 35, width: 35),
             ),
             if (!Responsive.isMobile(context))
               Padding(
@@ -101,14 +102,21 @@ class _ProfileCardState extends State<ProfileCard> {
   }
 }
 
-class SearchField extends StatelessWidget {
+class SearchField extends StatefulWidget {
+  final ValueChanged<String?>? onChanged;
   const SearchField({
-    Key? key,
+    Key? key,  this.onChanged,
   }) : super(key: key);
 
   @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged:widget.onChanged ,
       decoration: InputDecoration(
         hintText: "Search",
         fillColor: Theme.of(context).canvasColor,
