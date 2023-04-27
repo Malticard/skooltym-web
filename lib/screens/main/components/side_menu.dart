@@ -70,13 +70,24 @@ class _SideMenuState extends State<SideMenu> {
                         context.read<SideBarController>().changeSelected(index);
                         // setState(() => selected = index);
                         // update page title
+                      if(context.read<SchoolController>().state['role'] == 'Finance') {
                         context
-                            .read<TitleController>()
-                            .setTitle(store[index]['title']);
-                        // update rendered page
+                              .read<FinanceTitleController>()
+                              .setTitle(store[index]['title']);
+                                // update rendered page
+                        context
+                            .read<FinanceViewController>()
+                            .pushWidget(store[index]['page']);
+                      } else {
+                         context
+                              .read<TitleController>()
+                              .setTitle(store[index]['title']);
+                                // update rendered page
                         context
                             .read<WidgetController>()
                             .pushWidget(store[index]['page']);
+                      }
+                      
                       },
                     ),
                   ),

@@ -169,7 +169,17 @@ bool validateEmail(String email, BuildContext context) {
 // build Action Buttons
 Widget buildActionButtons(BuildContext context,VoidCallback
 edit,VoidCallback delete) {
-  return Row(
+  return context.read<SchoolController>().state['role'] == 'Finance'?TextButton(
+        onPressed: edit,
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.blue,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        ),
+        child: const Icon(
+          Icons.edit,
+          color: Colors.white,
+        ),
+      ): Row(
     children: [
       TextButton(
         onPressed: edit,
@@ -272,6 +282,10 @@ List<Map<String, dynamic>> financeViews = [
     "icon": "assets/icons/menu_store.svg",
     "title": "Cleared Overtimes",
     "page": const OvertimeReports(overtimeStatus: "Cleared",),
+  },{
+    "title": "Change Password",
+    "page": const ChangePassword(),
+    'icon': "assets/icons/password-reset.svg"
   },
 ];
 
@@ -400,7 +414,7 @@ Future<List<PickUpModel>> fetchPickups(String id) async {
 // fetch pickups
 Future<List<PickUpModel>> pickUps(String id) async {
   var response = await Client().get(Uri.parse(AppUrls.getPickUps + id));
-  debugPrint("response => ${response.body}");
+  // debugPrint("response => ${response.body}");
   return response.statusCode == 201 || response.statusCode == 200
       ? pickUpModelFromJson(response.body)
       : [];

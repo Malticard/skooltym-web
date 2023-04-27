@@ -22,7 +22,7 @@ class _StaffViewState extends State<StaffView> {
     super.didChangeDependencies();
   }
 
-  List<String> staffs = ["Staff Name","Role","Email", "Gender", "Actions"];
+  List<String> staffs = ["Staff Name", "Role", "Email", "Gender", "Actions"];
   DataRow _dataRow(StaffModel staffModel, int i) {
     return DataRow(
       cells: [
@@ -35,7 +35,10 @@ class _StaffViewState extends State<StaffView> {
                   AppUrls.liveImages + staffModel.staffProfilePic,
                 ),
               ),
-              Text(staffModel.staffFname,overflow: TextOverflow.ellipsis,),
+              Text(
+                staffModel.staffFname,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),
@@ -74,56 +77,88 @@ class _StaffViewState extends State<StaffView> {
     Size size = MediaQuery.of(context).size;
     // Provider.of<MainController>(context).staffUpdate();
     return SizedBox(
-      height: size.width / 2.5,
-      child: Data_Table(
-        header: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (context.watch<MainController>().staffData.isNotEmpty)
-                Expanded(child: SearchField(
-                  onChanged: (value) {
-                    debugPrint("search value $value");
-                    context.read<MainController>().searchStaff(value!);
-                    debugPrint(
-                        "search result ${context.read<MainController>().staffData[0].staffFname}");
-                  },
-                )),
-              if (!Responsive.isMobile(context))
-                Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-              Text(
-                "",
-                style: Theme.of(context).textTheme.subtitle1,
+      height: size.width / 2.4,
+      child: Stack(
+        children: [
+          Data_Table(
+            header: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (context.watch<MainController>().staffData.isNotEmpty)
+                    Expanded(
+                      child: SearchField(
+                        onChanged: (value) {
+                          Provider.of<MainController>(context, listen: false)
+                              .searchStaff(value ?? "");
+                        },
+                      ),
+                    ),
+                  if (!Responsive.isMobile(context))
+                    Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                  Text(
+                    "",
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const AddStaff();
+                          });
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text("Add Staff"),
+                  ),
+                ],
               ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return const AddStaff();
-                      });
-                },
-                icon: const Icon(Icons.add),
-                label: const Text("Add Staff"),
+            ),
+            columns: List.generate(
+              staffs.length,
+              (index) => DataColumn(
+                label: Text(
+                  staffs[index],
+                ),
               ),
-            ],
-          ),
-        ),
-        columns: List.generate(
-          staffs.length,
-          (index) => DataColumn(
-            label: Text(
-              staffs[index],
+            ),
+            empty:
+                const NoDataWidget(text: "You currently have no staff records"),
+            rows: List.generate(
+              context.watch<MainController>().sStaff.isEmpty
+                  ? context.watch<MainController>().staffData.length
+                  : context.watch<MainController>().sStaff.length,
+              (index) => _dataRow(
+                  context.watch<MainController>().sStaff.isEmpty
+                      ? context.watch<MainController>().staffData[index]
+                      : context.watch<MainController>().sStaff[index],
+                  index),
             ),
           ),
-        ),
-        empty: const NoDataWidget(text: "You currently have no staff records"),
-        rows: List.generate(
-          context.watch<MainController>().staffData.length,
-          (index) =>
-              _dataRow(context.watch<MainController>().staffData[index], index),
-        ),
+          Positioned(
+            bottom: 10,
+            left: 10,
+            child: Row(
+              children: [
+                const Text("Continue to add students"),
+                TextButton(
+                  onPressed: () {
+                    context
+                        .read<WidgetController>()
+                        .pushWidget(const ViewStudents());
+                    context.read<TitleController>().setTitle("Students");
+                    context.read<SideBarController>().changeSelected(1);
+                  },
+                  child: Text(
+                    "Click here",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

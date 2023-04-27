@@ -141,8 +141,9 @@ export '/controllers/SideBarController.dart';
 export '/controllers/ImageUploadController.dart';
 export '/controllers/ForgotPasswordController.dart';
 export '/controllers/SettingsController.dart';
+export '/controllers/FinanceViewController.dart';
 export '/controllers/MultiStudentsController.dart';
-
+export '/controllers/FinanceTitleController.dart';
 
 // themes
 export '/Themes/Themes.dart';
@@ -178,6 +179,7 @@ export '/screens/Admin/widgets/RateSlider.dart';
 export '/screens/Admin/widgets/PickUpAllowanceSlider.dart';
 export '/screens/Admin/widgets/DropOffAllowanceSlider.dart';
 export '/screens/Admin/widgets/DashboardCard.dart';
+export '/screens/Admin/widgets/ClearWindow.dart';
 // --------------------------------------------------------
 
 // --------------------------------------------------------

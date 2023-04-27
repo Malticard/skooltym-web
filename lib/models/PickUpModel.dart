@@ -43,7 +43,7 @@ class PickUpModel {
         schoolName: json["school_name"],
         studentName_: StudentName_.fromJson(json["student_name"] ?? {}),
         pickUpTime: DateTime.parse(json["pick_up_time"]),
-        pickedBy: PickedBy.fromJson(json["picked_by"]),
+        pickedBy: PickedBy.fromJson(json["picked_by"] ?? {}),
         authorizedBy_: AuthorizedBy_.fromJson(json["authorized_by"]),
         comments: json["comments"],
         pickupKey: List<dynamic>.from(json["pickup_key"].map((x) => x)),
@@ -97,8 +97,8 @@ class PickedBy {
     final String guardianLname;
 
     factory PickedBy.fromJson(Map<String, dynamic> json) => PickedBy(
-        guardianFname: json["guardian_fname"],
-        guardianLname: json["guardian_lname"],
+        guardianFname: json["guardian_fname"] ?? "",
+        guardianLname: json["guardian_lname"]??"",
     );
 
     Map<String, dynamic> toJson() => {

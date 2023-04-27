@@ -68,7 +68,12 @@ class _ViewPickUpsState extends State<ViewPickUps>
             if (!Responsive.isMobile(context))
               Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
             if(context.watch<MainController>().pickUpData.isNotEmpty)
-              const Expanded(child: SearchField()),
+               Expanded(child: SearchField(
+                        onChanged: (value) {
+                          Provider.of<MainController>(context, listen: false)
+                              .searchPickUps(value ?? "");
+                        },
+                      ),),
 
           ],
         ),
@@ -87,11 +92,16 @@ class _ViewPickUpsState extends State<ViewPickUps>
           ),
         ],
         empty: const NoDataWidget(text: "No PickUps recorded..",),
-        rows: List.generate(
-          context.watch<MainController>().pickUpData.length,
-          (index) => _dataRow(
-              context.watch<MainController>().pickUpData[index], index),
-        ),
+        rows:  List.generate(
+              context.watch<MainController>().sPickUp.isEmpty
+                  ? context.watch<MainController>().pickUpData.length
+                  : context.watch<MainController>().sPickUp.length,
+              (index) => _dataRow(
+                  context.watch<MainController>().sPickUp.isEmpty
+                      ? context.watch<MainController>().pickUpData[index]
+                      : context.watch<MainController>().sPickUp[index],
+                  index),
+            ),
       ),
     );
   }

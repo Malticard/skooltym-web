@@ -34,6 +34,7 @@ class _OvertimeReportsState extends State<OvertimeReports>
     super.didChangeDependencies();
   }
 
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -88,7 +89,7 @@ class _OvertimeReportsState extends State<OvertimeReports>
             ),
         ],
         empty: SizedBox(
-          height: MediaQuery.of(context).size.width / 7,
+          height: MediaQuery.of(context).size.width / 9,
           child: NoDataWidget(
               text: "No ${widget.overtimeStatus} overtime "
                   "recorded "
@@ -111,91 +112,68 @@ class _OvertimeReportsState extends State<OvertimeReports>
           Row(
             children: [
               Image.network(
-               AppUrls.liveImages+ overtimeModel.student.studentProfilePic,
+                AppUrls.liveImages + overtimeModel.student.studentProfilePic,
                 height: 33,
                 width: 33,
               ),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.all(0),
-                child: Text(overtimeModel.student.username,overflow: TextOverflow.ellipsis,
+                child: Text(overtimeModel.student.username,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 11)),
               ),
             ],
           ),
         ),
-         DataCell(Text(
-            "${overtimeModel.guardian.guardianFname} ${overtimeModel.guardian.guardianLname}",style: const TextStyle(fontSize: 11))),
-         DataCell(Text(overtimeModel.settings.pickUpEndTime.toString().split(" ").last.split(".").first,style: const TextStyle(fontSize: 11))),
-         DataCell(Text(overtimeModel.actualTime.toString().split(" ").last.split(".").first,style: const TextStyle(fontSize: 11))),
-         DataCell(Text(
-            "${overtimeModel.staff.staffFname} ${overtimeModel.staff.staffLname}",style: const TextStyle(fontSize: 11))),
-         DataCell(
-            Text(overtimeModel.settings.overtimeInterval.toString(),style: const TextStyle(fontSize: 11))),
-         DataCell(Text(overtimeModel.overtimeCharge.toString(),style: const TextStyle(fontSize: 11))),
-    
+        DataCell(Text(
+            "${overtimeModel.guardian.guardianFname} ${overtimeModel.guardian.guardianLname}",
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(
+            overtimeModel.settings.pickUpEndTime
+                .toString()
+                .split(" ")
+                .last
+                .split(".")
+                .first,
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(
+            overtimeModel.actualTime
+                .toString()
+                .split(" ")
+                .last
+                .split(".")
+                .first,
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(
+            "${overtimeModel.staff.staffFname} ${overtimeModel.staff.staffLname}",
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(overtimeModel.settings.overtimeInterval.toString(),
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(overtimeModel.overtimeCharge.toString(),
+            style: const TextStyle(fontSize: 11))),
+
         // DataCell(Text(overtimeModel.status)),
         if (context.read<SchoolController>().state['role'] == 'Finance')
-          DataCell(buildActionButtons(context, () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return Dialog(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 4,
-                      height: MediaQuery.of(context).size.width / 6,
-                      child: Center(
+          DataCell(
+            buildActionButtons(
+              context,
+              () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
                         child: SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.2,
-                          child: Column(
-                            children: [
-                              Center(child: Text("Clear overtime",style: TextStyles(context).getRegularStyle(),),),
-                              Padding(
-                                padding: const EdgeInsets.all(18.0),
-                                child: Row(children: [ Text("Clear with cash",style: TextStyles(context).getRegularStyle(),)],),
-                              ),
-                              Row(children: [ Text("Clear with comment",style: TextStyles(context).getRegularStyle()),],),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CommonButton(
-                                  height: 40,
-                                  padding: const EdgeInsets.only(left: 40,right: 40),
-                                  buttonText: "Clear",
-                                  onTap: () {},
-                                 
-                                ),
-                              ),
-                            ],
-                          ),
+                          width: MediaQuery.of(context).size.width / 2.4,
+                          height: MediaQuery.of(context).size.width / 4,
+                          child: ClearWindow(title:overtimeModel.student.username ,),
                         ),
-                      ),
-                    ),
-                  );
-                });
-          }, () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return Dialog(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 4,
-                      height: MediaQuery.of(context).size.width / 3,
-                      child: const Center(
-                        child: Text("Delete"),
-                      ),
-                    ),
-                  );
-                });
-          })),
+                      );
+                    });
+              },
+              () {},
+            ),
+          ),
       ],
-    );
-  }
-
-  _buildButton() {
-    return DataCell(
-      ElevatedButton(
-        onPressed: () {},
-        child: const Text("Clear"),
-      ),
     );
   }
 }

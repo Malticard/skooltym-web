@@ -153,7 +153,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
             debugPrint("Status code ${value.statusCode}");
             Routes.popPage(context);
             showSuccessDialog(
-                _formControllers[0].text.trim().split(" ")[1], context);
+                _formControllers[0].text.trim().split(" ")[1], context,onPressed: () => Routes.popPage(context));
           })
           .whenComplete(() {
             showMessage(
@@ -171,7 +171,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     //
     var request = MultipartRequest(
       'POST',
-      Uri.parse(AppUrls.addGuardian),
+      Uri.parse(AppUrls.updateGuardian),
     );
     request.headers.addAll({
       'Content-Type': 'multipart/form-data',

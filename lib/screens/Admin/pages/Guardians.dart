@@ -39,7 +39,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                 scrollDirection: Axis.horizontal,
                 child: Text(
                   "${guardians.guardianFname} ${guardians.guardianLname}",
-                  style: TextStyle(fontSize: 13.5),
+                  style: const TextStyle(fontSize: 13.5),
                 ),
               ),
             ),
@@ -53,7 +53,8 @@ class _ViewGuardiansState extends State<ViewGuardians> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return SingleChildScrollView(child: UpdateGuardian(guardianModel: guardians));
+                  return SingleChildScrollView(
+                      child: UpdateGuardian(guardianModel: guardians));
                 });
           },
           () {
@@ -79,51 +80,87 @@ class _ViewGuardiansState extends State<ViewGuardians> {
     return SizedBox(
       width: size.width,
       height: size.width / 2.5,
-      child: Data_Table(
-        header: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (context.watch<MainController>().guardians.isNotEmpty)
-                const Expanded(child: SearchField()),
-              if (!Responsive.isMobile(context))
-                Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-              const SizedBox(),
-              ElevatedButton.icon(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const SingleChildScrollView(
-                        child: AddGuardian(),
+      child: Stack(
+        children: [
+          Data_Table(
+            header: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (context.watch<MainController>().guardians.isNotEmpty)
+                    Expanded(
+                      child: SearchField(
+                        onChanged: (value) {
+                          Provider.of<MainController>(context, listen: false)
+                              .searchGuardians(value ?? "");
+                        },
+                      ),
+                    ),
+                  if (!Responsive.isMobile(context))
+                    Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                  const SizedBox(),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const SingleChildScrollView(
+                            child: AddGuardian(),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-                icon: const Icon(Icons.add),
-                label: const Text("Add Guardian"),
+                    icon: const Icon(Icons.add),
+                    label: const Text("Add Guardian"),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-        columns: List.generate(
-          staffs.length,
-          (index) => DataColumn(
-            numeric: true,
-            label: Text(
-              staffs[index],
+            ),
+            columns: List.generate(
+              staffs.length,
+              (index) => DataColumn(
+                numeric: true,
+                label: Text(
+                  staffs[index],
+                ),
+              ),
+            ),
+            empty: const NoDataWidget(text: "No guardians registered yet.."),
+            rows:  List.generate(
+              context.watch<MainController>().sGuardian.isEmpty
+                  ? context.watch<MainController>().guardians.length
+                  : context.watch<MainController>().sGuardian.length,
+              (index) => _dataRow(
+                  context.watch<MainController>().sGuardian.isEmpty
+                      ? context.watch<MainController>().guardians[index]
+                      : context.watch<MainController>().sGuardian[index],
+                  index),
             ),
           ),
-        ),
-        empty: const NoDataWidget(text: "No guardians registered yet.."),
-        rows: context.read<MainController>().guardians.isEmpty
-            ? []
-            : List.generate(
-                context.watch<MainController>().guardians.length,
-                (index) => _dataRow(
-                    context.watch<MainController>().guardians[index], index),
-              ),
+          Positioned(
+            bottom: 10,
+            left: 10,
+            child: Row(
+              children: [
+                const Text("Continue to dashboard"),
+                TextButton(
+                  onPressed: () {
+                    context
+                        .read<WidgetController>()
+                        .pushWidget(const Dashboard());
+                    context.read<TitleController>().setTitle("Dashboard");
+                    context.read<SideBarController>().changeSelected(0);
+                  },
+                  child: Text(
+                    "Click here",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

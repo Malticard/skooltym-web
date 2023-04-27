@@ -1,9 +1,9 @@
 import '/exports/exports.dart';
 
 class Header extends StatelessWidget {
-  final GlobalKey<ScaffoldState> scaffoldKey;
+  // final GlobalKey<ScaffoldState> scaffoldKey;
   const Header({
-    Key? key, required this.scaffoldKey,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -14,11 +14,19 @@ class Header extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.menu),
             onPressed:() {
-              debugPrint("Scaffold state => ${scaffoldKey.currentWidget}");
+              // debugPrint("Scaffold state => ${scaffoldKey.currentWidget}");
             } //context.read<MainController>().controlMenu(scaffoldKey),
           ),
         if (!Responsive.isMobile(context))
-          BlocBuilder<TitleController, String>(builder: (context, title) {
+          if(context.read<SchoolController>().state['role'] == 'Finance')
+             BlocBuilder<FinanceTitleController, String>(builder: (context, title) {
+            return Text(
+              title,
+              style: TextStyles(context).getTitleStyle(),
+            );
+          }),
+          if(context.read<SchoolController>().state['role'] != 'Finance')
+             BlocBuilder<TitleController, String>(builder: (context, title) {
             return Text(
               title,
               style: TextStyles(context).getTitleStyle(),
@@ -70,12 +78,12 @@ class _ProfileCardState extends State<ProfileCard> {
           children: [
             CircleAvatar(
               backgroundColor: Colors.transparent,
-              child: Image.network(AppUrls.liveImages+ "${context.read<SchoolController>().state['profile_pic']}",
+              child: Image.network("${AppUrls.liveImages}${context.read<SchoolController>().state['profile_pic']}",
                         height: 35, width: 35),
             ),
             if (!Responsive.isMobile(context))
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
                 child: Text(
                     "${context.read<SchoolController>().state['fname']} ${context.read<SchoolController>().state['lname']}"),
               ),
@@ -93,7 +101,7 @@ class _ProfileCardState extends State<ProfileCard> {
                           ? Routes.logout(context)
                           : context
                               .read<WidgetController>()
-                              .pushWidget(AdminProfile());
+                              .pushWidget(const AdminProfile());
                       Navigator.pop(context);
                     },
                   )),

@@ -9,6 +9,13 @@ class MainController extends ChangeNotifier {
   List<PickUpModel> _picks = [];
   List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
+  // searching arrays
+  List<StaffModel> _searchStaff = [];
+  List<StudentModel> _searchStudent = [];
+  List<Guardians> _searchGuardian = [];
+  List<DropOffModel> _searchDropOff = [];
+  List<PickUpModel> _searchPickUp = [];
+  // end of searching arrays
   List<String> _classes = [];
   List<String> _streams = [];
   int _stepCount = 0;
@@ -19,6 +26,13 @@ class MainController extends ChangeNotifier {
 // getters
   List<StudentModel> get students => _students;
   List<StaffModel> get staffData => _availableStaff;
+  // search getters
+  List<StaffModel> get sStaff => _searchStaff;
+  List<StudentModel> get sStudent => _searchStudent;
+  List<Guardians> get sGuardian => _searchGuardian;
+  List<DropOffModel> get sdropOff => _searchDropOff;
+  List<PickUpModel> get sPickUp => _searchPickUp;
+  // end of search
   List<Guardians> get guardians => _guardians;
   List<DropOffModel> get dropOffData => _drops;
   int get stepCount => _stepCount;
@@ -87,7 +101,7 @@ class MainController extends ChangeNotifier {
 
   availablePickUps(String school) {
     pickUps(school).then((picks) {
-      debugPrint("Picks => $picks");
+      // debugPrint("Picks => $picks");
       _picks = picks;
       notifyListeners();
     });
@@ -107,13 +121,13 @@ void setTextCount(int value){
 }
 //
 void selectMultiGuardians(List<dynamic> selection){
-  debugPrint("Selection => $selection");
+  // debugPrint("Selection => $selection");
     _multiguardian = selection;
     notifyListeners();
 }
 
 void selectMultiStudent(List<dynamic> selection){
-  debugPrint("Selection => $selection");
+  // debugPrint("Selection => $selection");
     _multistudent = selection;
     notifyListeners();
 }
@@ -139,11 +153,25 @@ void fetchClasses(String id){
   // function to search for staff members by  either first name or last nam
 
   void searchStaff(String value){
-    Client().get(Uri.parse(AppUrls.staff)).then((value) {
-      if(value.statusCode == 200){
-        _availableStaff = staffModelFromJson(value.body).where((element) => element.staffFname == value || element.staffLname == value).toList();
+     _searchStaff = staffData.where((element) => element.staffFname == value || element.staffLname == value).toList();
         notifyListeners();
-      }
-    });
+  }
+  // function to search for guardians by either first name or last name
+  void searchGuardians(String value){
+    _searchGuardian = guardians.where((element) => element.guardianFname == value || element.guardianLname == value).toList();
+    notifyListeners();
+  }
+  // function to search for students by either first name or last name
+  void searchStudents(String value){
+    _searchStudent = students.where((element) => element.studentFname == value || element.studentLname == value).toList();
+    notifyListeners();
+  }
+  //  function to search for drops offs by first name or last name
+  void searchDropOffs(String value){
+    _searchDropOff = dropOffData.where((element) => element.studentName.studentLname == value || element.studentName.studentFname == value).toList();
+  }
+  // function to search for pick ups by first name or last name 
+  void searchPickUps(String value){
+    _searchPickUp = pickUpData.where((element) => element.studentName_.studentFname == value || element.studentName_.studentLname == value).toList();
   }
 }

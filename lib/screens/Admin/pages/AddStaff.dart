@@ -82,11 +82,12 @@ class _AddStaffState extends State<AddStaff> {
             errorMsgs: errorFields,
             onSubmit: () {
               if (validateEmail(_formControllers[1].text, context) != false) {
-                  // Routes.popPage(context);
+                  Routes.popPage(context);
         showProgress(context,msg: "Adding new staff");
                 _handleFormUpload().then((value) {
                   debugPrint("Staff data -> ${value.reasonPhrase}");
                   if (value.statusCode == 200 || value.statusCode == 201) {
+                      Routes.popPage(context);
                     //  bottom msg
                     showMessage(
                       context: context,
@@ -102,7 +103,6 @@ class _AddStaffState extends State<AddStaff> {
                       msg: "Error ${value.reasonPhrase}",
                     );
                     Routes.popPage(context);
-
                     // showSuccessDialog(
                     //     _formControllers[0].text.trim().split(" ")[1],
                     //     context);
@@ -122,7 +122,7 @@ class _AddStaffState extends State<AddStaff> {
 
   Future<StreamedResponse> _handleFormUpload() async {
     String uri = _formControllers[3].text.trim();
-    debugPrint("handling form upload with ${context.read<ImageUploadController>().state}");
+    // debugPrint("handling form upload with ${context.read<ImageUploadController>().state}");
     //
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStaff));
     // =============================== form fields =======================
@@ -140,13 +140,13 @@ class _AddStaffState extends State<AddStaff> {
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
     // if (kIsWeb) {
-     request.files.add(MultipartFile(
-        "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
-        filename: context.read<ImageUploadController>().state['name']));
+    //  request.files.add(MultipartFile(
+    //     "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
+    //     filename: context.read<ImageUploadController>().state['name']));
     // } else {
-    //   request.files.add(MultipartFile('image',
-    //     File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-    //     filename: uri.split("/").last));
+      request.files.add(MultipartFile('image',
+        File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
+        filename: uri.split("/").last));
     // }
     
     //

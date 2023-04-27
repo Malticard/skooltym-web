@@ -7,6 +7,7 @@
         "multiguardian",
         "multistudent",
         "Passcode",
-        "scontact"
+        "scontact",
+        "sdrop"
     ]
 }

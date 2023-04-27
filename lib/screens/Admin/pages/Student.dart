@@ -25,21 +25,17 @@ class _ViewStudentsState extends State<ViewStudents> {
   DataRow _dataRow(StudentModel studentModel, int i) {
     return DataRow(
       cells: [
-        DataCell(
-           Row(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(
-                  AppUrls.liveImages + studentModel.studentProfilePic,
-                ),
+        DataCell(Row(
+          children: [
+            CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(
+                AppUrls.liveImages + studentModel.studentProfilePic,
               ),
-               Text(
-                   "${studentModel.studentFname} ${studentModel.studentLname}"),
-            ],
-          )
-          
-        ),
+            ),
+            Text("${studentModel.studentFname} ${studentModel.studentLname}"),
+          ],
+        )),
         DataCell(Text(studentModel.studentModelClass)),
         DataCell(Text(studentModel.studentGender)),
         DataCell(buildActionButtons(context, () {
@@ -49,7 +45,7 @@ class _ViewStudentsState extends State<ViewStudents> {
                 return Dialog(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width / 3.5,
-                            height: MediaQuery.of(context).size.width / 2.2,
+                    height: MediaQuery.of(context).size.width / 2,
                     child: UpdateStudent(studentModel: studentModel),
                   ),
                 );
@@ -58,7 +54,10 @@ class _ViewStudentsState extends State<ViewStudents> {
           showDialog(
               context: context,
               builder: (context) {
-                return CommonDelete(title: '${studentModel.studentFname} ${studentModel.studentLname}', url: AppUrls.deleteStudent + studentModel.id);
+                return CommonDelete(
+                    title:
+                        '${studentModel.studentFname} ${studentModel.studentLname}',
+                    url: AppUrls.deleteStudent + studentModel.id);
               });
         })),
       ],
@@ -71,59 +70,100 @@ class _ViewStudentsState extends State<ViewStudents> {
     Provider.of<MainController>(context).getAllStudents(context);
     return SizedBox(
       height: size.width / 2.5,
-      child: Data_Table(
-        header: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-
-              if(context.read<MainController>().students.isNotEmpty)
-                const Expanded(child: SizedBox(width:120,child: SearchField())),
-              if (!Responsive.isMobile(context))
-                Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-              Text(
-                "",
-                style: Theme.of(context).textTheme.subtitle1,
+      child: Stack(
+        children: [
+          Data_Table(
+            header: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (context.read<MainController>().students.isNotEmpty)
+                    Expanded(
+                      child: SizedBox(
+                        width: 120,
+                        child: SearchField(
+                          onChanged: (value) {
+                            Provider.of<MainController>(context, listen: false)
+                                .searchStudents(value ?? "");
+                          },
+                        ),
+                      ),
+                    ),
+                  if (!Responsive.isMobile(context))
+                    Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                  Text(
+                    "",
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width / 3.5,
+                                height: MediaQuery.of(context).size.width / 2.2,
+                                child: const SingleChildScrollView(
+                                    child: AddStudent()),
+                              ),
+                            );
+                          });
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text("Add Student"),
+                  ),
+                ],
               ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 3.5,
-                            height: MediaQuery.of(context).size.width / 2.2,
-                            child: const SingleChildScrollView(child: AddStudent()),
-                          ),
-                        );
-                      });
-                },
-                icon: const Icon(Icons.add),
-                label: const Text("Add Student"),
+            ),
+            empty: const NoDataWidget(
+              text: "No "
+                  "Students added as "
+                  "yet...",
+            ),
+            columns: List.generate(
+              staffs.length,
+              (index) => DataColumn(
+                label: Text(
+                  staffs[index],
+                ),
               ),
-            ],
-          ),
-        ),
-        empty: const NoDataWidget(
-          text: "No "
-              "Students added as "
-              "yet...",
-        ),
-        columns: List.generate(
-          staffs.length,
-          (index) => DataColumn(
-            label: Text(
-              staffs[index],
+            ),
+            rows:  List.generate(
+              context.watch<MainController>().sStudent.isEmpty
+                  ? context.watch<MainController>().students.length
+                  : context.watch<MainController>().sStudent.length,
+              (index) => _dataRow(
+                  context.watch<MainController>().sStudent.isEmpty
+                      ? context.watch<MainController>().students[index]
+                      : context.watch<MainController>().sStudent[index],
+                  index),
             ),
           ),
-        ),
-        rows: List.generate(
-          context.watch<MainController>().students.length,
-          (index) =>
-              _dataRow(context.watch<MainController>().students[index], index),
-        ),
+          Positioned(
+            bottom: 10,
+            left: 10,
+            child: Row(
+              children: [
+                const Text("Continue to adding guardians"),
+                TextButton(
+                  onPressed: () {
+                    context
+                        .read<WidgetController>()
+                        .pushWidget(const ViewGuardians());
+                    context.read<TitleController>().setTitle("Guardians");
+                    context.read<SideBarController>().changeSelected(3);
+                  },
+                  child: Text(
+                    "Click here",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

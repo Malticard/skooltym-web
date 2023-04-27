@@ -32,6 +32,8 @@ void main() async {
         BlocProvider(create: (context) => ForgotPasswordController()),
         BlocProvider(create: (context) => SettingsController()),
         BlocProvider(create: (context) => MultiStudentsController()),
+        BlocProvider(create: (context) => FinanceViewController()),
+        BlocProvider(create: (context) => FinanceTitleController()),
       ],
       child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
         // school data

@@ -25,7 +25,8 @@ class _ViewDropOffsState extends State<ViewDropOffs>
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).availableDropOffs(context.read<SchoolController>().state['school']);
+    Provider.of<MainController>(context)
+        .availableDropOffs(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 
@@ -37,21 +38,29 @@ class _ViewDropOffsState extends State<ViewDropOffs>
           Row(
             children: [
               Image.network(
-               AppUrls.liveImages + (dropOff.studentName.studentProfilePic),
+                AppUrls.liveImages + (dropOff.studentName.studentProfilePic),
                 height: 45,
                 width: 45,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text("${dropOff.studentName.studentFname} ${dropOff.studentName.studentLname}"),
+                child: Text(
+                    "${dropOff.studentName.studentFname} ${dropOff.studentName.studentLname}"),
               ),
             ],
           ),
         ),
-        DataCell(Text("${dropOff.droppedBy.guardianFname} ${dropOff.droppedBy.guardianLname}")),
-        DataCell(Text("${dropOff.authorizedBy.staffFname} ${dropOff.authorizedBy.staffLname}")),
-        DataCell(Text(dropOff.dropOffTime.toString().split(" ").last.toString().split(".").first)),
-
+        DataCell(Text(
+            "${dropOff.droppedBy.guardianFname} ${dropOff.droppedBy.guardianLname}")),
+        DataCell(Text(
+            "${dropOff.authorizedBy.staffFname} ${dropOff.authorizedBy.staffLname}")),
+        DataCell(Text(dropOff.dropOffTime
+            .toString()
+            .split(" ")
+            .last
+            .toString()
+            .split(".")
+            .first)),
       ],
     );
   }
@@ -62,7 +71,7 @@ class _ViewDropOffsState extends State<ViewDropOffs>
 
     return SizedBox(
       width: size.width,
-      height: size.width /2.5,
+      height: size.width / 2.5,
       child: Data_Table(
         header: Row(
           children: [
@@ -72,30 +81,41 @@ class _ViewDropOffsState extends State<ViewDropOffs>
             ),
             if (!Responsive.isMobile(context))
               Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-            if(context.read<MainController>().dropOffData.length > 0)
-              const Expanded(child: SearchField()),
+            if (context.read<MainController>().dropOffData.isNotEmpty)
+              Expanded(
+                child: SearchField(
+                  onChanged: (value) {
+                    Provider.of<MainController>(context, listen: false)
+                        .searchDropOffs(value ?? "");
+                  },
+                ),
+              ),
           ],
         ),
-        columns: [
-          const DataColumn(
+        columns: const [
+          DataColumn(
             label: Text("Student Name"),
           ),
-          const DataColumn(
+          DataColumn(
             label: Text("Dropped by"),
           ),
-          const DataColumn(
+          DataColumn(
             label: Text("Cleared by"),
           ),
-          const DataColumn(
+          DataColumn(
             label: Text("Time Of DropOff"),
           ),
         ],
-        empty:  const NoDataWidget(text:"No drop offs captured yet"),
-
+        empty: const NoDataWidget(text: "No drop offs captured yet"),
         rows: List.generate(
-          context.watch<MainController>().dropOffData.length,
+          context.watch<MainController>().sdropOff.isEmpty
+              ? context.watch<MainController>().dropOffData.length
+              : context.watch<MainController>().sdropOff.length,
           (index) => _dataRow(
-              context.watch<MainController>().dropOffData[index], index),
+              context.watch<MainController>().sdropOff.isEmpty
+                  ? context.watch<MainController>().dropOffData[index]
+                  : context.watch<MainController>().sdropOff[index],
+              index),
         ),
       ),
     );

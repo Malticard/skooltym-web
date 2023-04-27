@@ -64,7 +64,7 @@ class _Data_TableState extends State<Data_Table> {
                 sortArrowAnimationDuration: const Duration(milliseconds: 500),
                 columns: widget.columns ?? [],
                 empty: widget.empty ??
-                    Center(
+                    const Center(
                         child: Text("There nothing here"),),
                 rows: widget.rows ?? [],
               ),

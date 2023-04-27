@@ -48,7 +48,7 @@ class OvertimeModel {
         id: json["_id"],
         student: Student.fromJson(json["student"]),
         school: json["school"],
-        guardian: Guardian.fromJson(json["guardian"]),
+        guardian: Guardian.fromJson(json["guardian"] ?? {}),
         settings: Settings.fromJson(json["settings"]),
         staff: Staff.fromJson(json["staff"]),
         actualTime: json["actual_time"],
@@ -91,8 +91,8 @@ class Guardian {
     final String guardianLname;
 
     factory Guardian.fromJson(Map<String, dynamic> json) => Guardian(
-        guardianFname: json["guardian_fname"],
-        guardianLname: json["guardian_lname"],
+        guardianFname: json["guardian_fname"] ?? "",
+        guardianLname: json["guardian_lname"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {

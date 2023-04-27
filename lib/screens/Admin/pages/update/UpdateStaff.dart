@@ -143,13 +143,13 @@ class _UpdateStaffState extends State<UpdateStaff> {
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
     //  if (kIsWeb) {
-     request.files.add(MultipartFile(
-        "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
-        filename: context.read<ImageUploadController>().state['name']));
+    //  request.files.add(MultipartFile(
+    //     "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
+    //     filename: context.read<ImageUploadController>().state['name']));
     // } else {
-    //   request.files.add(MultipartFile('image',
-    //     File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-    //     filename: uri.split("/").last));
+      request.files.add(MultipartFile('image',
+        File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
+        filename: uri.split("/").last));
     // }
     // request.files.add(MultipartFile(
     //     'image',
