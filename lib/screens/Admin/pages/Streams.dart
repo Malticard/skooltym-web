@@ -73,29 +73,46 @@ class _StreamsState extends State<Streams> {
                 label: Text("Action"),
               ),
             ],
-            rows: List.generate(context.read<MainController>().classes.length,
+            rows: List.generate(context.read<MainController>().streams.length,
                 (index) {
               // debugPrint(
               //     "Classes > ${context.read<MainController>().classes.length}");
               return DataRow(
                 cells: [
                   DataCell(Text("${index + 1}")),
-                  DataCell(Text(context.read<MainController>().classes[index])),
+                  DataCell(
+                    Text(context
+                        .read<MainController>()
+                        .streams[index]
+                        .streamName),
+                  ),
                   DataCell(buildActionButtons(
                     context,
                     // update a stream
                     () => showDialog(
                         builder: (context) {
-                          return  UpdateStream(stream: context.read<MainController>().classes[index],);
+                          return UpdateStream(
+                            stream: context
+                                .read<MainController>()
+                                .streams[index]
+                                .streamName,
+                            id: context
+                                .read<MainController>()
+                                .streams[index]
+                                .id,
+                          );
                         },
                         context: context),
-                        // delete a stream
+                    // delete a stream
                     () => showDialog(
                       context: context,
                       builder: (context) => CommonDelete(
-                        title: context.read<MainController>().classes[index],
+                        title: context
+                            .read<MainController>()
+                            .streams[index]
+                            .streamName,
                         url: AppUrls.deleteClass +
-                            context.read<MainController>().classes[index],
+                            context.read<MainController>().streams[index].id,
                       ),
                     ),
                   )),
@@ -103,7 +120,7 @@ class _StreamsState extends State<Streams> {
               );
             }),
             empty: const Center(
-              child: Text("No classes added.."),
+              child: Text("No Streams added.."),
             ),
           ),
         ),
@@ -115,9 +132,7 @@ class _StreamsState extends State<Streams> {
               const Text("Continue to add classes"),
               TextButton(
                 onPressed: () {
-                  context
-                      .read<WidgetController>()
-                      .pushWidget(const Classes());
+                  context.read<WidgetController>().pushWidget(const Classes());
                   context.read<TitleController>().setTitle("Classes");
                   context.read<SideBarController>().changeSelected(4);
                 },

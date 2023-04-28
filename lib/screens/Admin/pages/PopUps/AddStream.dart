@@ -9,7 +9,7 @@ class AddStream extends StatefulWidget {
 
 class _AddStreamState extends State<AddStream> {
   // text controllers
-  final streamErrorController = TextEditingController();
+   String streamError = "";
   final TextEditingController streamController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -32,12 +32,13 @@ class _AddStreamState extends State<AddStream> {
               CommonTextField(
                 icon: Icons.home_work_outlined,
                 hintText: "Stream Name",
+                controller: streamController,
                 contentPadding:const EdgeInsets.only(top: 10, left: 10, bottom: 5),
                 padding: const EdgeInsets.only(
                     top: 5, bottom: 5, right: 15, left: 15),
                 validate: (valid) {
                   setState(() {
-                    streamErrorController.text = "Stream "
+                    streamError = "Stream "
                         "is"
                         " required to continue ";
                   });
@@ -53,7 +54,10 @@ class _AddStreamState extends State<AddStream> {
                       top: 5, bottom: 5, right: 15, left: 15),
                   onTap: () {
                     // _stepText = [];
-                    Map<String, dynamic> data = {};
+                    Map<String, dynamic> data = {
+                      "school":context.read<SchoolController>().state['id'],
+                      "stream_name":streamController.text,
+                    };
                     debugPrint("Saved data $data");
                     showProgress(context, msg: 'Adding stream in progress');
                     // saving class data to db

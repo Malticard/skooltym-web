@@ -110,6 +110,8 @@ export '/models/PickUpModel.dart';
 export '/models/ClassModel.dart';
 export '/models/DropOffModels.dart';
 export '/models/ResultsModel.dart';
+export '/models/DashboardModel.dart';
+export '/models/StreamModel.dart';
 
 // themes
 

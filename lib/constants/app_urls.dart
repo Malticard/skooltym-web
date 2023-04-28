@@ -30,6 +30,7 @@ class AppUrls {
   static String getPickUps = "${devURL}get/pickup/";
   static String getDropOffs = "${devURL}get/dropoff/";
   static String getClasses = "${devURL}get/class/";
+  static String getStreams = "${devURL}get/stream/";
   // fetch specific
   static String specficOvertime = "${devURL}specific/overtime/";
   static String getGuardian = "${devURL}specific/guardians/";
@@ -44,6 +45,8 @@ class AppUrls {
   static String deletePickUp = "${devURL}delete/pickup/";
   static String deleteDropOff = "${devURL}delete/dropoff/";
   static String deleteClass = "${devURL}delete/class/";
+  static String deleteStrean = "${devURL}delete/stream/";
+  // static String deleteClass = "${devURL}delete/class/";
   // update
   static String updateStaff = "${devURL}update/staff/";
   static String updateStudent = "${devURL}update/students/";
@@ -51,6 +54,7 @@ class AppUrls {
   static String updatePickUp = "${devURL}update/pickup/";
   static String updateDropOff = "${devURL}update/dropoff/";
   static String updateClass = "${devURL}update/class/";
+  static String updateStream = "${devURL}update/stream/";
   static String updateSettings = "${devURL}update/settings/";
   static String updateOvertime = "${devURL}update/overtime/";
 // 
@@ -59,5 +63,7 @@ static String forgotPassword = "${devURL}password/forgot-password";
 static String verifyOtp = "${devURL}password/get-otp/";
 static String setPassword = "${devURL}password/set-password/";
 static String results = "${devURL}results/scanned-results/";
+// dashboard
+static String dashboard = "${devURL}dashboard/data/";
 }
 

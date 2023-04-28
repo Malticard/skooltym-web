@@ -44,7 +44,7 @@ class DropOffModel {
         studentName: StudentName.fromJson(json["student_name"] ?? {}),
         dropOffTime: DateTime.parse(json["drop_off_time"] == "19:58"?"2023-04-12 09:56:40":json["drop_off_time"]),
         droppedBy: DroppedBy.fromJson(json["dropped_by"] ?? {}),
-        authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
+        authorizedBy: AuthorizedBy.fromJson(json["authorized_by"] ?? {}),
         comments: json["comments"],
         isComplete: json["isComplete"],
         dropoffKey: List<dynamic>.from(json["dropoff_key"].map((x) => x)),
@@ -79,8 +79,8 @@ class AuthorizedBy {
     final String staffLname;
 
     factory AuthorizedBy.fromJson(Map<String, dynamic> json) => AuthorizedBy(
-        staffFname: json["staff_fname"],
-        staffLname: json["staff_lname"],
+        staffFname: json["staff_fname"] ?? "",
+        staffLname: json["staff_lname"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {

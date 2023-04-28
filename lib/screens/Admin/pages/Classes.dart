@@ -81,24 +81,32 @@ class _ClassesState extends State<Classes> {
               return DataRow(
                 cells: [
                   DataCell(Text("${index + 1}")),
-                  DataCell(
-                      Text(context.watch<MainController>().classes[index])),
+                  DataCell(Text(context
+                      .watch<MainController>()
+                      .classes[index]
+                      .className)),
                   DataCell(
                     buildActionButtons(
                       context,
                       () => showDialog(
                         context: context,
                         builder: (context) => UpdateClass(
-                          className:
-                              context.watch<MainController>().classes[index],
+                          className: context
+                              .watch<MainController>()
+                              .classes[index]
+                              .className,
+                          id: context.read<MainController>().classes[index].id,
                         ),
                       ),
                       () => showDialog(
                         context: context,
                         builder: (context) => CommonDelete(
-                          title:
-                              " ${context.watch<MainController>().classes[index]}",
-                          url: '',
+                          title: context
+                              .watch<MainController>()
+                              .classes[index]
+                              .className,
+                          url: AppUrls.deleteClass +
+                              context.read<MainController>().classes[index].id,
                         ),
                       ),
                     ),

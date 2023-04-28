@@ -2,7 +2,8 @@ import '/exports/exports.dart';
 
 class UpdateStream extends StatefulWidget {
   final String stream;
-  const UpdateStream({super.key, required this.stream});
+  final String id;
+  const UpdateStream({super.key, required this.stream, required this.id});
 
   @override
   State<UpdateStream> createState() => _UpdateStreamState();
@@ -11,7 +12,12 @@ class UpdateStream extends StatefulWidget {
 class _UpdateStreamState extends State<UpdateStream> {
   // text controllers
   final streamErrorController = TextEditingController();
-  final TextEditingController streamController = TextEditingController();
+  late final  TextEditingController _updateStreamController;
+  @override
+  void initState() {
+   _updateStreamController = TextEditingController(text: widget.stream);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -33,6 +39,7 @@ class _UpdateStreamState extends State<UpdateStream> {
               CommonTextField(
                 icon: Icons.home_work_outlined,
                 hintText: "Stream Name",
+                controller: _updateStreamController,
                 contentPadding:const EdgeInsets.only(top: 10, left: 10, bottom: 5),
                 padding: const EdgeInsets.only(
                     top: 5, bottom: 5, right: 15, left: 15),
@@ -54,12 +61,15 @@ class _UpdateStreamState extends State<UpdateStream> {
                       top: 5, bottom: 5, right: 15, left: 15),
                   onTap: () {
                     // _stepText = [];
-                    Map<String, dynamic> data = {};
+                    Map<String, dynamic> data = {
+                      "school":context.read<SchoolController>().state['id'],
+                      "stream_name": _updateStreamController.text,
+                    };
                     debugPrint("Saved data $data");
                     showProgress(context, msg: 'Adding stream in progress');
                     // saving class data to db
                     Client()
-                        .post(Uri.parse(AppUrls.addStream), body: data)
+                        .patch(Uri.parse(AppUrls.updateStream), body: data)
                         .then((value) {
                       if (value.statusCode == 200) {
                         Routes.popPage(context);

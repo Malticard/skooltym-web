@@ -9,6 +9,8 @@ class MainController extends ChangeNotifier {
   List<PickUpModel> _picks = [];
   List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
+  List<StreamModel> _streams = [];
+  List<DashboardModel> _dashboardClasses = [];
   // searching arrays
   List<StaffModel> _searchStaff = [];
   List<StudentModel> _searchStudent = [];
@@ -16,8 +18,7 @@ class MainController extends ChangeNotifier {
   List<DropOffModel> _searchDropOff = [];
   List<PickUpModel> _searchPickUp = [];
   // end of searching arrays
-  List<String> _classes = [];
-  List<String> _streams = [];
+  List<ClassModel> _classes = [];
   int _stepCount = 0;
   List<dynamic> _multiguardian = [];
   List<dynamic> _multistudent = [];
@@ -32,6 +33,8 @@ class MainController extends ChangeNotifier {
   List<Guardians> get sGuardian => _searchGuardian;
   List<DropOffModel> get sdropOff => _searchDropOff;
   List<PickUpModel> get sPickUp => _searchPickUp;
+  List<DashboardModel> get  dashboardClasses => _dashboardClasses;
+
   // end of search
   List<Guardians> get guardians => _guardians;
   List<DropOffModel> get dropOffData => _drops;
@@ -42,25 +45,15 @@ class MainController extends ChangeNotifier {
   List<OvertimeModel> get pendingOvertime => _pendingOvertime;
   List<dynamic> get multistudent => _multistudent;
   List<dynamic> get multiguardian => _multiguardian;
-  List<String> get classes => _classes;
-  List<String> get streams => _streams;
+  List<ClassModel> get classes => _classes;
+  List<StreamModel> get streams => _streams;
 
   // end of getters
 
   void controlMenu(GlobalKey<ScaffoldState> scaffoldKey) {
     // if (!scaffoldKey.currentState!.isDrawerOpen) {
       scaffoldKey.currentState!.openDrawer();
-    // }
-    // dispose off the scaffold key
-
-    // _scaffoldKey.currentState!.dispose();
-    // function to fetch updates for the dashboard
-
-    // set dashData
-  }
-  // void disposeKey() {
-  //   _scaffoldKey.currentState!.dispose();
-  // }
+    }
   void fetchUpdates(String school,String role) {
     fetchDashboardMetaData(school,role).then((v) {
       _dashData = v;
@@ -137,19 +130,28 @@ void fetchClasses(String id){
   Client().get(Uri.parse(AppUrls.getClasses + id)).then((value) {
     if(value.statusCode == 200){
      _classes = classModelFromJson(value.body);
-    //  save the classes to shared preferences
-    //  for (var element in _classes) {
-    //    debugPrint("Class => ${element.className}");
-    //    debugPrint("Streams => ${element.classStreams}");
-    //     SharedPreferences.getInstance().then((value) => value.setString("classes", _classes.toString()));
-    //  }
-    //  fetch the respective streams for the different classes
-     _streams = _classes.map((e) => e).join().split(',');
       notifyListeners();
     }
   });
 }
 
+void fetchStreams(String id){
+  Client().get(Uri.parse(AppUrls.getStreams + id)).then((value) {
+    if(value.statusCode == 200){
+     _streams = streamModelFromJson(value.body);
+      notifyListeners();
+    }
+  });
+}
+// dashboard class data
+  void fetchDashboardClasses(String school) {
+    Client().get(Uri.parse(AppUrls.dashboard + school)).then((value) {
+    if(value.statusCode == 200){
+     _dashboardClasses = dashboardModelFromJson(value.body);
+      notifyListeners();
+    }
+  });
+  }
   // function to search for staff members by  either first name or last nam
 
   void searchStaff(String value){

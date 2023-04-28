@@ -8,9 +8,10 @@ class AddClass extends StatefulWidget {
 }
 
 class _AddClassState extends State<AddClass> {
+  String _selectedStreams = "";
   // text controllers
   final streamErrorController = TextEditingController();
-  final TextEditingController streamController = TextEditingController();
+  final TextEditingController _classController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -32,6 +33,7 @@ class _AddClassState extends State<AddClass> {
               CommonTextField(
                 icon: Icons.home_work_outlined,
                 hintText: "Class Name",
+                controller: _classController,
                 contentPadding:
                     const EdgeInsets.only(top: 10, left: 10, bottom: 5),
                 padding: const EdgeInsets.only(
@@ -49,12 +51,16 @@ class _AddClassState extends State<AddClass> {
               ),
               CommonMenuWidget(
                 // fieldColor: Colors.transparent,
-                onChange: (v) {},
+                onChange: (v) {
+                  setState(() {
+                    _selectedStreams = json.decode(v).join(",");
+                  });
+                },
                 hint: "Attach streams",
                 padding: const EdgeInsets.only(
                     top: 10, bottom: 10, right: 10, left: 10),
-                data: [],
-                dropdownList: [],
+                data: context.read<MainController>().streams.map((e) => e.id).toList(),
+                dropdownList:context.read<MainController>().streams.map((e) => e.streamName).toList(),
               ),
               const SizedBox(height: defaultPadding),
               CommonButton(
@@ -63,25 +69,29 @@ class _AddClassState extends State<AddClass> {
                       top: 5, bottom: 5, right: 15, left: 15),
                   onTap: () {
                     // _stepText = [];
-                    Map<String, dynamic> data = {};
+                    Map<String, dynamic> data = {
+                      "school": context.read<SchoolController>().state['id'],
+                      "class_name":_classController.text ,
+                      "class_streams":_selectedStreams
+                    };
                     debugPrint("Saved data $data");
                     showProgress(context, msg: 'Adding stream in progress');
                     // saving class data to db
                     Client()
-                        .post(Uri.parse(AppUrls.addStream), body: data)
+                        .post(Uri.parse(AppUrls.addClass), body: data)
                         .then((value) {
                       if (value.statusCode == 200) {
                         Routes.popPage(context);
                         showMessage(
                             context: context,
-                            msg: "Stream added successfully",
+                            msg: "Class added successfully",
                             type: 'success',
                             duration: 6);
                       } else {
                         Routes.popPage(context);
                         showMessage(
                             context: context,
-                            msg: 'Stream not added',
+                            msg: 'Class not added',
                             type: 'danger',
                             duration: 6);
                       }

@@ -27,14 +27,14 @@ class _DashboardState extends State<Dashboard> {
               Expanded(
                 child: GridView.builder(
                     shrinkWrap: true,
-                    itemCount: 9,
+                    itemCount: context.read<MainController>().dashboardClasses.length,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
                       crossAxisSpacing: defaultPadding,
                       mainAxisSpacing: 20,
                       childAspectRatio: 1,
                     ),
-                    itemBuilder: (context, index) => const FileInfoCard(info: null),
+                    itemBuilder: (context, index) =>  FileInfoCard(info: context.read<MainController>().dashboardClasses[index]),
                   ),
               ),
               ],

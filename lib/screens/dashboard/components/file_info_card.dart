@@ -6,7 +6,7 @@ class FileInfoCard extends StatelessWidget {
     required this.info,
   }) : super(key: key);
 
-  final info;
+  final DashboardModel info;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,8 @@ class FileInfoCard extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.9,
             child: Column(
               children: [
-                const CommonAppbarView(
-                  titleText: "Available Streams in P.4",
+                 CommonAppbarView(
+                  titleText: "Available Streams in ${info.className}",
                   topPadding: 10,
                 ),
                 Expanded(
@@ -45,7 +45,7 @@ class FileInfoCard extends StatelessWidget {
                               style: TextStyles(context).getDescriptionStyle(),
                             ),
                           ),
-                      itemCount: 10,
+                      itemCount: info.classStreams.length,
                       separatorBuilder: (ctx, ind) => const Divider()),
                 )
               ],
@@ -101,7 +101,7 @@ class FileInfoCard extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      text: '2',
+                      text: '',
                       style: TextStyles(context).getBoldStyle(),
                       children: [
                         TextSpan(

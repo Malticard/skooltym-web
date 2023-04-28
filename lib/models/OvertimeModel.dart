@@ -50,7 +50,7 @@ class OvertimeModel {
         school: json["school"],
         guardian: Guardian.fromJson(json["guardian"] ?? {}),
         settings: Settings.fromJson(json["settings"]),
-        staff: Staff.fromJson(json["staff"]),
+        staff: Staff.fromJson(json["staff"] ?? {}),
         actualTime: json["actual_time"],
         overtimeCharge: json["overtime_charge"],
         status: json["status"],
@@ -139,8 +139,8 @@ class Staff {
     final String staffLname;
 
     factory Staff.fromJson(Map<String, dynamic> json) => Staff(
-        staffFname: json["staff_fname"],
-        staffLname: json["staff_lname"],
+        staffFname: json["staff_fname"] ?? "",
+        staffLname: json["staff_lname"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {
@@ -160,7 +160,7 @@ class Student {
 
     factory Student.fromJson(Map<String, dynamic> json) => Student(
         username: json["username"] ?? "",
-        studentProfilePic: json["student_profile_pic"],
+        studentProfilePic: json["student_profile_pic"] ?? "profile.png",
     );
 
     Map<String, dynamic> toJson() => {

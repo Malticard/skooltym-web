@@ -3,7 +3,13 @@ import '/exports/exports.dart';
 class UpdateClass extends StatefulWidget {
   final String className;
   final List<String>? streams;
-  const UpdateClass({super.key, required this.className, this.streams,});
+  final String id;
+  const UpdateClass({
+    super.key,
+    required this.className,
+    this.streams,
+    required this.id,
+  });
 
   @override
   State<UpdateClass> createState() => _UpdateClassState();
@@ -12,7 +18,8 @@ class UpdateClass extends StatefulWidget {
 class _UpdateClassState extends State<UpdateClass> {
   // text controllers
   final streamErrorController = TextEditingController();
-  final TextEditingController streamController = TextEditingController();
+  final TextEditingController _classController = TextEditingController();
+  String _updatedStreams = "";
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -33,6 +40,7 @@ class _UpdateClassState extends State<UpdateClass> {
               ),
               CommonTextField(
                 icon: Icons.home_work_outlined,
+                controller: _classController,
                 hintText: "e.g Grade 2",
                 contentPadding:
                     const EdgeInsets.only(top: 10, left: 10, bottom: 5),
@@ -51,12 +59,16 @@ class _UpdateClassState extends State<UpdateClass> {
               ),
               CommonMenuWidget(
                 // fieldColor: Colors.transparent,
-                onChange: (v) {},
+                onChange: (v) {
+                  setState(() {
+                    _updatedStreams = json.decode(v).join(",");
+                  });
+                },
                 hint: "Attach streams",
                 padding: const EdgeInsets.only(
                     top: 10, bottom: 10, right: 10, left: 10),
-                data: widget.streams ?? [],
-                dropdownList: [],
+                data: context.read<MainController>().streams.map((e) => e.id).toList(),
+                dropdownList: context.read<MainController>().streams.map((e) => e.streamName).toList(),
               ),
               const SizedBox(height: defaultPadding),
               CommonButton(
@@ -64,13 +76,17 @@ class _UpdateClassState extends State<UpdateClass> {
                   padding: const EdgeInsets.only(
                       top: 5, bottom: 5, right: 15, left: 15),
                   onTap: () {
-                    // _stepText = [];
-                    Map<String, dynamic> data = {};
+                    Map<String, dynamic> data = {
+                      "school": context.read<SchoolController>().state['id'],
+                      "class_name": _classController.text,
+                      "class_streams": _updatedStreams
+                    };
                     debugPrint("Saved data $data");
                     showProgress(context, msg: 'Adding stream in progress');
                     // saving class data to db
                     Client()
-                        .post(Uri.parse(AppUrls.addStream), body: data)
+                        .patch(Uri.parse(AppUrls.updateClass + widget.id),
+                            body: data)
                         .then((value) {
                       if (value.statusCode == 200) {
                         Routes.popPage(context);
