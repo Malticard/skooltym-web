@@ -172,6 +172,7 @@ edit,VoidCallback delete) {
   return context.read<SchoolController>().state['role'] == 'Finance'?TextButton(
         onPressed: edit,
         style: TextButton.styleFrom(
+          
           backgroundColor: Colors.blue,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         ),
@@ -231,9 +232,13 @@ List<Map<String, dynamic>> options = [
     'icon': "assets/icons/guardian.svg"
   },
   {
-    "icon": "assets/icons/staff.svg",
+    "icon": "assets/vectors/class.svg",
     "title": "Classes",
-    "page": const AddClass(),
+    "page": const Classes(),
+  },{
+    "icon": "assets/icons/staff.svg",
+    "title": "Streams",
+    "page": const Streams(),
   },
   {
     "title": "Pending Overtimes",

@@ -15,6 +15,7 @@ class AppUrls {
   static String addPickUp = "${devURL}post/pickup/create";
   static String addDropOff = "${devURL}post/dropoff/create";
   static String registerOvertime = "${devURL}post/overtime/create";
+  static String addStream = "${devURL}post/stream/create";
   // static String registerOvertime = devURL + "post/overtime/create";
   // get urls
   static String roles = "${devURL}get/roles/";

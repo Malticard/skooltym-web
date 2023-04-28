@@ -46,7 +46,7 @@ class OvertimeModel {
 
     factory OvertimeModel.fromJson(Map<String, dynamic> json) => OvertimeModel(
         id: json["_id"],
-        student: Student.fromJson(json["student"]),
+        student: Student.fromJson(json["student"] ?? {}),
         school: json["school"],
         guardian: Guardian.fromJson(json["guardian"] ?? {}),
         settings: Settings.fromJson(json["settings"]),
@@ -159,7 +159,7 @@ class Student {
     final String studentProfilePic;
 
     factory Student.fromJson(Map<String, dynamic> json) => Student(
-        username: json["username"],
+        username: json["username"] ?? "",
         studentProfilePic: json["student_profile_pic"],
     );
 

@@ -44,13 +44,13 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
             color: widget.fieldColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(80),
-              side: widget.enableBorder
-                  ? BorderSide(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white12
-                          : Colors.black12,
-                    )
-                  : BorderSide.none,
+              // side: widget.enableBorder
+              //     ? BorderSide(
+              //         color: Theme.of(context).brightness == Brightness.dark
+              //             ? Colors.white12
+              //             : Colors.black12,
+              //       )
+              //     : BorderSide.none,
             ),
             shadowColor: Colors.black26.withOpacity(
               Theme.of(context).brightness == Brightness.dark ? 0.6 : 0.5,
@@ -59,6 +59,7 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
               padding: const EdgeInsets.only(
                 left: 16,
                 right: 16,
+                top: 5,bottom: 5,
               ),
               child: CustomSearchableDropDown(
                 items: widget.data,
@@ -67,9 +68,9 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
                 multiSelectValuesAsWidget: true,
                 multiSelect: true,
                 menuMode:false,
-                prefixIcon: const Padding(
-                  padding:  EdgeInsets.all(0.0),
-                  child: Icon(Icons.search),
+                prefixIcon: Padding(
+                  padding:  const EdgeInsets.all(0.0),
+                  child: Icon(Icons.search,color: Colors.grey.shade300,),
                 ),
                 dropDownMenuItems: widget.dropdownList,
                 onChanged: widget.onChange, //(value){

@@ -162,16 +162,25 @@ export '/screens/Admin/pages/Guardians.dart';
 export '/screens/Admin/pages/AddStaff.dart';
 export '/screens/Admin/pages/ViewDropOff.dart';
 export '/screens/Admin/pages/ViewPickUps.dart';
-export '/screens/Admin/pages/AddClass.dart';
+export '../screens/Admin/pages/Classes.dart';
 export '/screens/Admin/settings/AppSettings.dart';
 export '/screens/Admin/settings/SystemSettings.dart';
 export '/screens/Admin/settings/privacy_policy.dart';
 export '/screens/Admin/settings/about.dart';
 export '/screens/dashboard/dashboard.dart';
+export '/screens/Admin/pages/Streams.dart';
+// popups
+export '/screens/Admin/pages/PopUps/AddStream.dart';
+export '/screens/Admin/pages/PopUps/AddClass.dart';
+// === Dash board popups
+export '/screens/dashboard/popups/StudentsPopUp.dart';
+// end of popups
 // updates
 export '/screens/Admin/pages/update/UpdateStudent.dart';
 export '/screens/Admin/pages/update/UpdateStaff.dart';
 export '/screens/Admin/pages/update/UpdateGuardian.dart';
+export '/screens/Admin/pages/update/UpdateStream.dart';
+export '/screens/Admin/pages/update/UpdateClass.dart';
 // --> admin widgets
 export '/screens/Admin/widgets/PopOptions.dart';
 export '/screens/Admin/widgets/IntervalSlider.dart';

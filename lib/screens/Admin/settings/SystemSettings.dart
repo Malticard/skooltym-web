@@ -21,7 +21,6 @@ class _SystemSettingsState extends State<SystemSettings> {
 // settings data
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     BlocProvider.of<SettingsController>(context).getSettings();
     return Padding(
       padding: EdgeInsets.only(
@@ -191,18 +190,16 @@ class _SystemSettingsState extends State<SystemSettings> {
     Client()
         .post(Uri.parse(AppUrls.addSettings), body: results)
         .then((response) {
-      var data = json.decode(response.body);
-      debugPrint("Status code => ${data['message']}");
       if (response.statusCode == 200) {
         Routes.popPage(context);
         showSuccessDialog(
           "Settings saved successfully",
-          context,
+          context,  
           onPressed: () {
             Routes.popPage(context);
-            context.read<WidgetController>().pushWidget(const AddClass());
-            context.read<TitleController>().setTitle("Classes");
-            context.read<SideBarController>().changeSelected(4);
+            context.read<WidgetController>().pushWidget(const Streams());
+            context.read<TitleController>().setTitle("Streams");
+            context.read<SideBarController>().changeSelected(5);
           },
         );
         showMessage(msg: "Settings saved", type: 'success', context: context);
@@ -213,7 +210,6 @@ class _SystemSettingsState extends State<SystemSettings> {
       }
     });
   }
-
   // drop offs
   showDropOffOptions() {
     showDialog(

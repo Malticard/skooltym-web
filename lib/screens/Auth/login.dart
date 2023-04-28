@@ -265,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
             suffixIcon: showPassword
                 ? Icons.remove_red_eye_rounded
                 : Icons.visibility_off,
-            titleText: "Passcode", //AppLocalizations(context).of("password"),
+            titleText: "Password", //AppLocalizations(context).of("password"),
             padding: padding,
             hintText: "************",
             isObscureText: !showPassword,

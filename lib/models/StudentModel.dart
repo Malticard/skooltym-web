@@ -1,8 +1,4 @@
 // To parse this JSON data, do
-//
-//     final studentModel = studentModelFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 List<StudentModel> studentModelFromJson(String str) => List<StudentModel>.from(json.decode(str).map((x) => StudentModel.fromJson(x)));
@@ -49,8 +45,8 @@ class StudentModel {
     factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
         id: json["_id"],
         school: json["school"],
-        studentModelClass: json["_class"],
-        stream: json["stream"],
+        studentModelClass: json["_class"] ?? "",
+        stream: json["stream"] ?? "",
         guardians: List<dynamic>.from(json["guardians"].map((x) => x)),
         studentFname: json["student_fname"],
         studentLname: json["student_lname"],

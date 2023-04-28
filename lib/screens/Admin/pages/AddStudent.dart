@@ -57,6 +57,15 @@ class _AddStudentState extends State<AddStudent> {
       ...context.read<MainController>().classes.map((e) => e).toList(),
     ],
     'icon': Icons.home_work_outlined
+  },
+  {
+    "title": "Stream *",
+    "hint": "e.g North",
+    "data": [
+      "Select class",
+      ...context.read<MainController>().classes.map((e) => e).toList(),
+    ],
+    'icon': Icons.home_work_outlined
   }
 
 ];

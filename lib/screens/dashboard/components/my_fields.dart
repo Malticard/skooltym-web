@@ -25,7 +25,6 @@ class _MyFilesState extends State<MyFiles> {
                 SizedBox(
                   width: 20,
                 ),
-
               ],
             ),
           ],

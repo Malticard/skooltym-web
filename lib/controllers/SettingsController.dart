@@ -5,10 +5,8 @@ class SettingsController extends Cubit<Map<String,dynamic>>{
     "school_id": "",
       "drop_off_start_time": "",
       "drop_off_end_time": "",
-      "pick_up_start_time":
-          "${DateTime.now().toString().split(" ")[0]} ",
-      "pick_up_end_time":
-          DateTime.now().toString().split(" ")[0],
+      "pick_up_start_time":"",
+      "pick_up_end_time":"",
       "drop_off_allowance": "0",
       "pick_up_allowance": "0",
       "allow_overtime": false,

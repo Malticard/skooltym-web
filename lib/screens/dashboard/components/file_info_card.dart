@@ -10,58 +10,124 @@ class FileInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+    return TapEffect(
+      onClick: () => showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: Column(
+              children: [
+                const CommonAppbarView(
+                  titleText: "Available Streams in P.4",
+                  topPadding: 10,
+                ),
+                Expanded(
+                  child: ListView.separated(
+                      itemBuilder: (context, index) => ListTile(
+                            onTap: () {
+                              Navigator.pop(context);
+                              showDialog(
+                                context: context,
+                                builder: (context) => const Dialog(
+                                  child: StudentsPopUps(),
+                                ),
+                              );
+                            },
+                            leading: const Icon(Icons.home),
+                            title: Text(
+                              "North",
+                              style: TextStyles(context).getRegularStyle(),
+                            ),
+                            subtitle: Text(
+                              "Tap to view",
+                              style: TextStyles(context).getDescriptionStyle(),
+                            ),
+                          ),
+                      itemCount: 10,
+                      separatorBuilder: (ctx, ind) => const Divider()),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(defaultPadding),
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.width / 3.5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: EdgeInsets.all(defaultPadding * 0.75),
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: info['color'].withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: SvgPicture.asset(
-                  info['icon'],
-                  color: info['color'],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Class",
+                  style: TextStyles(context)
+                      .getRegularStyle()
+                      .copyWith(fontSize: 18),
                 ),
               ),
-              // Icon(Icons.more_vert, color: Theme.of(context).backgroundColor)
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 150,
+                    height: 40,
+                  ),
+                  Container(
+                    // padding:const EdgeInsets.all(defaultPadding),
+                    height: 60,
+                    width: 60,
+                    decoration: const BoxDecoration(
+                      // color: info['color'].withOpacity(0.1),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: SvgPicture.asset(
+                      "assets/vectors/class.svg",
+                      // color: Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      text: '2',
+                      style: TextStyles(context).getBoldStyle(),
+                      children: [
+                        TextSpan(
+                          text: ' Streams',
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      text: '2',
+                      style: TextStyles(context).getBoldStyle(),
+                      children: [
+                        TextSpan(
+                          text: ' Students',
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
-          Text(
-            info['label'],
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          ProgressLine(
-            color: info['color'],
-            percentage: info['value'],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "${info['value']} Records",
-                style: TextStyles(context).getBoldStyle(),
-              ),
-              Text(
-                info['last_updated'],
-                style: Theme.of(context).textTheme.caption,
-              ),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }
@@ -86,7 +152,7 @@ class ProgressLine extends StatelessWidget {
           height: 5,
           decoration: BoxDecoration(
             color: color!.withOpacity(0.1),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
         ),
         LayoutBuilder(
@@ -95,7 +161,7 @@ class ProgressLine extends StatelessWidget {
             height: 5,
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
           ),
         ),
