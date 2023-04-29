@@ -11,7 +11,8 @@ class _PhoneVerifyState extends State<PhoneVerify>
     with TickerProviderStateMixin {
   AnimationController? forgotController;
   String _errorPhone = '';
-  final TextEditingController _phoneVerificationController = TextEditingController();
+  final TextEditingController _phoneVerificationController =
+      TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -33,7 +34,7 @@ class _PhoneVerifyState extends State<PhoneVerify>
         },
         child: BottomTopMoveAnimationView(
           animationController: forgotController!,
-          child:  Responsive(
+          child: Responsive(
             mobile: Padding(
               padding: EdgeInsets.only(top: size.width * 0.180),
               child: Stack(
@@ -47,8 +48,7 @@ class _PhoneVerifyState extends State<PhoneVerify>
                             topLeft: Radius.circular(50),
                             topRight: Radius.circular(50),
                           ),
-                          color: Theme.of(context).brightness ==
-                                  Brightness.dark
+                          color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.black26
                               : Colors.white),
                       child: buildList(),
@@ -62,7 +62,7 @@ class _PhoneVerifyState extends State<PhoneVerify>
                       width: MediaQuery.of(context).size.width / 1.3,
                       height: MediaQuery.of(context).size.width * 0.5,
                       child: SvgPicture.asset(
-                        "assets/images/back2Skool.svg",
+                        "assets/vectors/forgot_pass.svg",
                       ),
                     ),
                   ),
@@ -87,10 +87,9 @@ class _PhoneVerifyState extends State<PhoneVerify>
                           ),
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width,
-                            height:
-                                MediaQuery.of(context).size.height * 0.43,
+                            height: MediaQuery.of(context).size.height / 1.2,
                             child: SvgPicture.asset(
-                              "assets/images/back2Skool.svg",
+                              "assets/vectors/forgot_pass.svg",
                             ),
                           ),
                         ),
@@ -114,10 +113,10 @@ class _PhoneVerifyState extends State<PhoneVerify>
                               bottomLeft: Radius.circular(50),
                               bottomRight: Radius.circular(50),
                             ),
-                            color: Theme.of(context).brightness ==
-                                    Brightness.dark
-                                ? Colors.black26
-                                : Colors.white.withOpacity(1)),
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.black26
+                                    : Colors.white.withOpacity(1)),
                         child: buildList(),
                       ),
                     ),
@@ -146,8 +145,7 @@ class _PhoneVerifyState extends State<PhoneVerify>
                             bottomLeft: Radius.circular(50),
                             bottomRight: Radius.circular(50),
                           ),
-                          color: Theme.of(context).brightness ==
-                                  Brightness.dark
+                          color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.black26
                               : Colors.white.withOpacity(1)),
                       child: buildList(),
@@ -157,7 +155,7 @@ class _PhoneVerifyState extends State<PhoneVerify>
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.3,
                     child: SvgPicture.asset(
-                      "assets/images/back2Skool.svg",
+                      "assets/vectors/forgot_pass.svg",
                     ),
                   ),
                 ],
@@ -179,93 +177,86 @@ class _PhoneVerifyState extends State<PhoneVerify>
       },
     );
   }
-  Widget buildList(){
-    return ListView(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    appBar(),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 16.0, bottom: 10.0, left: 24, right: 24),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              "Provide the phone number that was registered at the time of creating your account.",
-                              textAlign: TextAlign.start,
-                              style: TextStyles(context)
-                                  .getDescriptionStyle()
-                                  .copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Theme.of(context).disabledColor,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ...[
-                      CommonTextField(
-                        fieldColor: Theme.of(context).cardColor,
-                        controller: _phoneVerificationController,
-                        titleText:
-                            "Phone number", //AppLocalizations(context).of("your_mail"),
-                        errorText: _errorPhone,
-                        icon: Icons.phone,
-                        isObscureText: false,
-                        padding: const EdgeInsets.only(
-                            left: 24, right: 24, bottom: 24),
-                        hintText: "Enter the phone number that was registered",
-                        keyboardType: TextInputType.phone,
-                        onChanged: (String txt) {},
-                      ),
-                      CommonButton(
-                        padding: const EdgeInsets.only(
-                            left: 24, right: 24, bottom: 16),
-                        buttonText:
-                            "Submit contact details", //AppLocalizations(context).of("send"),
-                        onTap: () {
-                          if (_allValidation()) {
-                            showProgress(context,
-                                msg:
-                                    "${_phoneVerificationController.text} verification");
 
-                            Client().post(Uri.parse(AppUrls.forgotPassword),
-                                body: {
-                                  "scontact": _phoneVerificationController.text
-                                }).then((value) {
-                              var data = jsonDecode(value.body);
-                              print("data => " + value.body);
-                              if (value.statusCode == 200 ||
-                                  value.statusCode == 201) {
-                                // if (data['otp'] != null) {
-                                Routes.popPage(context);
-                                context
-                                    .read<ForgotPasswordController>()
-                                    .updateForgot(data);
-                                showMessage(
-                                    context: context,
-                                    msg:
-                                        "${_phoneVerificationController.text} verified",
-                                    type: 'success');
-                                Routes.push(
-                                    Verification(
-                                      phone: _phoneVerificationController.text,
-                                      code: data['id'].toString(),
-                                    ),
-                                    context);
-                                // }
-                              }
-                            });
-                          }
-                          ;
-                        },
-                      )
-                    ],
-                  ],
-                );
+  Widget buildList() {
+    return ListView(
+      // mainAxisAlignment: MainAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        appBar(),
+        Padding(
+          padding: const EdgeInsets.only(
+              top: 16.0, bottom: 10.0, left: 24, right: 24),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  "Provide the phone number that was registered at the time of creating your account.",
+                  textAlign: TextAlign.start,
+                  style: TextStyles(context).getDescriptionStyle().copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).disabledColor,
+                      ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        ...[
+          CommonTextField(
+            fieldColor: Theme.of(context).cardColor,
+            controller: _phoneVerificationController,
+            titleText:
+                "Phone number", //AppLocalizations(context).of("your_mail"),
+            errorText: _errorPhone,
+            icon: Icons.phone,
+            isObscureText: false,
+            padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+            hintText: "Enter the phone number that was registered",
+            keyboardType: TextInputType.phone,
+            onChanged: (String txt) {},
+          ),
+          CommonButton(
+            padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
+            buttonText:
+                "Submit contact details", //AppLocalizations(context).of("send"),
+            onTap: () {
+              if (_allValidation()) {
+                showProgress(context,
+                    msg: "${_phoneVerificationController.text} verification");
+
+                Client().post(Uri.parse(AppUrls.forgotPassword), body: {
+                  "scontact": _phoneVerificationController.text
+                }).then((value) {
+                  var data = jsonDecode(value.body);
+                  if (kDebugMode) {
+                    print("data => ${value.body}");
+                  }
+                  if (value.statusCode == 200 || value.statusCode == 201) {
+                    // if (data['otp'] != null) {
+                    Routes.popPage(context);
+                    context.read<ForgotPasswordController>().updateForgot(data);
+                    showMessage(
+                        context: context,
+                        msg: "${_phoneVerificationController.text} verified",
+                        type: 'success');
+                    Routes.push(
+                        Verification(
+                          phone: _phoneVerificationController.text,
+                          code: data['id'].toString(),
+                        ),
+                        context);
+                    // }
+                  }
+                });
+              }
+              ;
+            },
+          )
+        ],
+      ],
+    );
   }
 
   bool _allValidation() {

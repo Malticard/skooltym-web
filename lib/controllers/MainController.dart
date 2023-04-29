@@ -78,10 +78,15 @@ class MainController extends ChangeNotifier {
   }
   // check new guardians
   void newGuardians(BuildContext context) {
-    Client().get(Uri.parse(AppUrls.getGuardians + context.read<SchoolController>().state['school'])).then((value) {
+    try {
+      Client().get(Uri.parse(AppUrls.getGuardians + context.read<SchoolController>().state['school'])).then((value) {
       _guardians = guardiansFromJson(value.body);
       notifyListeners();
     });
+    } on ClientException catch (_, e) {
+      showMessage(context: context,msg: _.message,type: 'warning');
+    }
+    
   }
 
   // available picks and drops
@@ -127,30 +132,42 @@ void selectMultiStudent(List<dynamic> selection){
 
 // method to fetch available classes
 void fetchClasses(String id){
+  try{
   Client().get(Uri.parse(AppUrls.getClasses + id)).then((value) {
     if(value.statusCode == 200){
      _classes = classModelFromJson(value.body);
       notifyListeners();
     }
   });
+   } on ClientException catch (_, e) {
+      print( _.message);
+    }
 }
 
 void fetchStreams(String id){
+  try{
   Client().get(Uri.parse(AppUrls.getStreams + id)).then((value) {
     if(value.statusCode == 200){
      _streams = streamModelFromJson(value.body);
       notifyListeners();
     }
   });
+   } on ClientException catch (_, e) {
+      print( _.message);
+    }
 }
 // dashboard class data
   void fetchDashboardClasses(String school) {
+    try{
     Client().get(Uri.parse(AppUrls.dashboard + school)).then((value) {
     if(value.statusCode == 200){
      _dashboardClasses = dashboardModelFromJson(value.body);
       notifyListeners();
     }
   });
+   } on ClientException catch (_, e) {
+      print( _.message);
+    }
   }
   // function to search for staff members by  either first name or last nam
 

@@ -47,7 +47,7 @@ class _StreamsState extends State<Streams> {
           child: FutureBuilder<List<ClassModel>>(
             future: fetchClasses(context.read<SchoolController>().state['school']),
             builder: (context,snap) {
-              return Data_Table(
+              return  Data_Table(
                 header: Row(
                   children: [
                     const Text(
@@ -116,7 +116,7 @@ class _StreamsState extends State<Streams> {
                                 .read<MainController>()
                                 .streams[index]
                                 .streamName,
-                            url: AppUrls.deleteClass +
+                            url: AppUrls.deleteStream +
                                 context.read<MainController>().streams[index].id,
                           ),
                         ),

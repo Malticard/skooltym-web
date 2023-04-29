@@ -25,7 +25,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Set drop off allowance",
+                "Set drop off time allowance",
                 style: TextStyles(context).getRegularStyle().copyWith(fontSize: 16),
               ),
               const Space(space: 0.03),

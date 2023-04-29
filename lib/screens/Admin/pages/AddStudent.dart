@@ -157,22 +157,22 @@ class _AddStudentState extends State<AddStudent> {
     request.fields['username'] = "${formControllers[0].text.trim().split(" ").first}_256";//_formControllers[2].text.trim();
     request.fields['other_name'] = formControllers[2].text.trim();
     request.fields['_class'] = formControllers[5].text.trim();
-    request.fields['stream'] = "";
+    request.fields['stream'] = formControllers[6].text.trim();
     request.fields['student_gender'] = formControllers[4].text.trim();
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
-    // if (kIsWeb) {
+    if (kIsWeb) {
     request.files.add(MultipartFile(
         "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
         filename: context.read<ImageUploadController>().state['name']));
-    // } else {
-    //   request.files.add(MultipartFile('image',
-    //     File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-    //     filename: uri.split("/").last));
-    // }
+    } else {
+      request.files.add(MultipartFile('image',
+        File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
+        filename: uri.split("/").last));
+    }
     
     //  ============================== student key ============================
-    request.fields['student_key[key]'] = "";
+    request.fields['student_key[key]'] = "0";
     //  ============================== student key ============================
     var response = request.send();
     var res = await response;

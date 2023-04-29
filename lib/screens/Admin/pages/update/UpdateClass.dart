@@ -108,7 +108,7 @@ class _UpdateClassState extends State<UpdateClass> {
                   "class_streams": _updatedStreams
                 };
                 // debugPrint("Saved data $data");
-                showProgress(context, msg: 'Adding stream in progress');
+                showProgress(context, msg: 'Updating class in progress');
                 // saving class data to db
                 Client()
                     .patch(Uri.parse(AppUrls.updateClass + widget.id),

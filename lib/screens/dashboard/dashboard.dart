@@ -16,14 +16,14 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    // context.read<MainController>().fetchDashboardClasses(context.read<SchoolController>().state['id']);
+    context.read<MainController>().fetchDashboardClasses(context.read<SchoolController>().state['id']);
 
     return Column(
       children: [
         const MyFiles(),
         const SizedBox(height: defaultPadding),
         SizedBox(
-          height: MediaQuery.of(context).size.height / 1.98,
+          height: MediaQuery.of(context).size.height / 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -39,8 +39,8 @@ class _DashboardState extends State<Dashboard> {
                     context.read<SchoolController>().state['school'])),
                 builder: (context, snapshot) {
                   // print("Dashboard data => ${snapshot.data?.body}");
-                  var classes =
-                      dashboardModelFromJson(snapshot.data?.body ?? "");
+                  // var classes =
+                  //     dashboardModelFromJson(snapshot.data?.body ?? "");
                   return snapshot.connectionState == ConnectionState.waiting
                       ? const Center(
                         child: Loader(
@@ -57,7 +57,7 @@ class _DashboardState extends State<Dashboard> {
                           : Expanded(
                               child: GridView.builder(
                                 shrinkWrap: true,
-                                itemCount: classes.length,
+                                itemCount: context.read<MainController>().dashboardClasses.length,
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 4,
@@ -66,7 +66,7 @@ class _DashboardState extends State<Dashboard> {
                                   childAspectRatio: 1,
                                 ),
                                 itemBuilder: (context, index) =>
-                                    FileInfoCard(info: classes[index]),
+                                    FileInfoCard(info: context.read<MainController>().dashboardClasses[index]),
                               ),
                             );
                 },

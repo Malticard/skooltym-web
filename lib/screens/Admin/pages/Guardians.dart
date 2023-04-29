@@ -155,6 +155,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                             .pushWidget(const Dashboard());
                         context.read<TitleController>().setTitle("Dashboard");
                         context.read<SideBarController>().changeSelected(0);
+                        context.read<FirstTimeUserController>().setFirstTimeUser(true);
                       },
                       child: Text(
                         "Click here",

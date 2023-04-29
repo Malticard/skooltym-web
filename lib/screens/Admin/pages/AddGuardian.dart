@@ -127,9 +127,9 @@ class _AddGuardianState extends State<AddGuardian> {
     context.read<MultiStudentsController>().getMultiStudents();
 
     if (validateEmail(_formControllers[1].text, context) != false) {
-      print("hey am here");
+       showProgress(context,msg: "Adding guardian...");
       handleGuardian().then((value) {
-        debugPrint("Status code ${value.statusCode}");
+        // debugPrint("Status code ${value.statusCode}");
         Routes.popPage(context);
         showSuccessDialog(
             _formControllers[0].text.trim().split(" ")[1], context);
@@ -140,7 +140,7 @@ class _AddGuardianState extends State<AddGuardian> {
         );
       }).whenComplete(() {
         Routes.popPage(context);
-        debugPrint("done saving");
+        // debugPrint("done saving");
       });
     }
   }

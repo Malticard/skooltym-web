@@ -491,7 +491,7 @@ class _SystemSettingsState extends State<SystemSettings> {
         backgroundColor: Colors.transparent,
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.22,
-          height: MediaQuery.of(context).size.width * 0.22,
+          height: MediaQuery.of(context).size.width * 0.32,
           child: const ClipRRect(
             borderRadius: BorderRadius.all(
               Radius.circular(30),

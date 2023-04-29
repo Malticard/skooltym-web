@@ -55,7 +55,7 @@ class StudentModel {
         studentLname: json["student_lname"],
         otherName: json["other_name"],
         username: json["username"],
-        stream: json["stream"],
+        stream: json["stream"] ?? "",
         studentGender: json["student_gender"],
         studentProfilePic: json["student_profile_pic"],
         studentKey: List<StudentKey>.from(json["student_key"].map((x) => StudentKey.fromJson(x))),

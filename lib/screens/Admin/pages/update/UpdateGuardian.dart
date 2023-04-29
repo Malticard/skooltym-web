@@ -83,7 +83,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
       TextEditingController(text: "${widget.guardianModel.guardianFname} ${widget.guardianModel.guardianLname}"),
       TextEditingController(text: widget.guardianModel.guardianEmail),
       TextEditingController(text: widget.guardianModel.guardianContact.toString()),
-      TextEditingController(text: AppUrls.liveImages + widget.guardianModel.guardianProfilePic),
+      TextEditingController(text: ""),
       TextEditingController(text: widget.guardianModel.guardianGender),
       TextEditingController(text: widget.guardianModel.type),
       TextEditingController(text: widget.guardianModel.guardianDateOfEntry.toString()),
@@ -156,11 +156,12 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
                 _formControllers[0].text.trim().split(" ")[1], context,onPressed: () => Routes.popPage(context));
           })
           .whenComplete(() {
-            showMessage(
-              context: context,
-              type: 'success',
-              msg: "Added new guardian successfully",
-            );
+            Routes.popPage(context);
+            // showMessage(
+            //   context: context,
+            //   type: 'success',
+            //   msg: "Added new guardian successfully",
+            // );
           });
     }
   }
@@ -171,7 +172,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     //
     var request = MultipartRequest(
       'POST',
-      Uri.parse(AppUrls.updateGuardian),
+      Uri.parse(AppUrls.updateGuardian + widget.guardianModel.id),
     );
     request.headers.addAll({
       'Content-Type': 'multipart/form-data',

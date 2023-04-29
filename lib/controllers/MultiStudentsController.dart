@@ -12,9 +12,6 @@ class MultiStudentsController extends Cubit<String>{
     SharedPreferences.getInstance().then((value) {
       if (value.containsKey('multiStudents')) {
         emit(value.getString('multiStudents')!);
-        if (kDebugMode) {
-          print("Attached students => ${value.getString('multiStudents')!}");
-        }
       }
     });
   }

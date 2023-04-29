@@ -11,6 +11,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => WidgetController()),
         BlocProvider(create: (context) => ImageUploadController()),
         BlocProvider(create: (context) => SideBarController()),
+        BlocProvider(create: (context) => FirstTimeUserController()),
         ChangeNotifierProvider(create: (context) => MainController()),
         BlocProvider(create: (context) => ThemeController()),
         BlocProvider(create: (context) => IntervalController()),

@@ -148,6 +148,7 @@ export '/controllers/MultiStudentsController.dart';
 export '/controllers/FinanceTitleController.dart';
 export '/controllers/PickUpTimeController.dart';
 export '/controllers/DropOffTimeController.dart';
+export '/controllers/FirstTimeUserController.dart';
 
 // themes
 export '/Themes/Themes.dart';

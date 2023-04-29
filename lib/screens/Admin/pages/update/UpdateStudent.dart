@@ -111,8 +111,8 @@ class _UpdateStudentState extends State<UpdateStudent> {
                       for (var v in _formControllers) {
                         v.clear();
                       }
-                      showSuccessDialog(
-                          _formControllers[0].text.trim(), context);
+                      // showSuccessDialog(
+                      //     _formControllers[0].text.trim(), context);
                     } else {
                       showMessage(
                         msg: "Failed to update student ${value.reasonPhrase}",

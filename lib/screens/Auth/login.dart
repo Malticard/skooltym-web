@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height * 0.3,
                         child: SvgPicture.asset(
-                          "assets/images/back2Skool.svg",
+                          "assets/vectors/forgot_pass.svg",
                         ),
                       ),
                     ],

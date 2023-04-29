@@ -222,7 +222,7 @@ List<Map<String, dynamic>> options = [
   },
   {
     "icon": "assets/icons/staff.svg",
-    "title": "Staffs",
+    "title": "Staff",
     "page":  const StaffView(),
   },
   {
@@ -304,6 +304,7 @@ bool validateTextControllers(List<TextEditingController> controllers) {
 
 // method to fetch available classes
 Future<List<ClassModel>> fetchClasses(String id) async {
+  
     var response = await Client().get(Uri.parse(AppUrls.getClasses + id));
     // if(value.statusCode == 200){
     return response.statusCode == 200 ? classModelFromJson(response.body) :[];
