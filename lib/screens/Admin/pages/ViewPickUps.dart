@@ -56,7 +56,7 @@ class _ViewPickUpsState extends State<ViewPickUps>
     Provider.of<MainController>(context,listen: false).availablePickUps(context.read<SchoolController>().state['school']);
     return SizedBox(
       width: size.width,
-      height: size.width / 2.5,
+      height: size.width / 2.39,
       child: Data_Table(
         header:  Row(
           children: [

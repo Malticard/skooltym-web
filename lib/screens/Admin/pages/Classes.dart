@@ -42,7 +42,7 @@ class _ClassesState extends State<Classes> {
       children: [
         SizedBox(
           // width: size.width,
-          height: size.width / 2.5,
+          height: size.width / 2.39,
           child: Data_Table(
             header: Row(
               children: [
@@ -76,8 +76,6 @@ class _ClassesState extends State<Classes> {
             ],
             rows: List.generate(context.watch<MainController>().classes.length,
                 (index) {
-              debugPrint(
-                  "Classes > ${context.watch<MainController>().classes.length}");
               return DataRow(
                 cells: [
                   DataCell(Text("${index + 1}")),
@@ -91,6 +89,7 @@ class _ClassesState extends State<Classes> {
                       () => showDialog(
                         context: context,
                         builder: (context) => UpdateClass(
+                          streams: context.read<MainController>().classes[index].classStreams,
                           className: context
                               .watch<MainController>()
                               .classes[index]
@@ -102,7 +101,7 @@ class _ClassesState extends State<Classes> {
                         context: context,
                         builder: (context) => CommonDelete(
                           title: context
-                              .watch<MainController>()
+                              .read<MainController>()
                               .classes[index]
                               .className,
                           url: AppUrls.deleteClass +

@@ -101,7 +101,7 @@ class FileInfoCard extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      text: '',
+                      text: '${info.classStreams.length}',
                       style: TextStyles(context).getBoldStyle(),
                       children: [
                         TextSpan(
@@ -113,7 +113,7 @@ class FileInfoCard extends StatelessWidget {
                   ),
                   RichText(
                     text: TextSpan(
-                      text: '2',
+                      text: "${info.classStudents}",
                       style: TextStyles(context).getBoldStyle(),
                       children: [
                         TextSpan(

@@ -20,7 +20,7 @@ class _UpdateStaffState extends State<UpdateStaff> {
           text: "${widget.staff.staffFname} ${widget.staff.staffLname}"),
       TextEditingController(text: widget.staff.staffEmail),
       TextEditingController(text: widget.staff.staffContact),
-      TextEditingController(text: AppUrls.liveImages + widget.staff.staffProfilePic),
+      TextEditingController(text: ""),
       TextEditingController(text: widget.staff.staffGender),
       TextEditingController(text: widget.staff.staffRole.roleType),
     ];
@@ -93,17 +93,18 @@ class _UpdateStaffState extends State<UpdateStaff> {
             if (_formControllers[0].text.trim().split(" ")[1] == '') {
               showMessage(context: context, msg: "Staff last name is required");
             } else {
+              showProgress(context,msg: "Updating staff in progress");
               _handleFormUpload(widget.staff.id).then((value) {
-                debugPrint("response code -> ${value.statusCode}");
-                debugPrint("Staff data -> ${value.reasonPhrase}");
+                // debugPrint("response code -> ${value.statusCode}");
+                // debugPrint("Staff data -> ${value.reasonPhrase}");
                 if (value.statusCode == 200 || value.statusCode == 201) {
+                   Routes.popPage(context);
                   //  bottom msg
                   showMessage(
                     context: context,
                     type: 'success',
                     msg: "Updated staff successfully",
                   );
-                  Routes.popPage(context);
                   //  end of bottom msg
                 } else {
                   showMessage(
@@ -111,10 +112,10 @@ class _UpdateStaffState extends State<UpdateStaff> {
                     type: 'danger',
                     msg: "Error ${value.reasonPhrase}",
                   );
-                  // showSuccessDialog(
-                  //     _formControllers[0].text.trim().split(" ")[1],
-                  //     context);
+
                 }
+              }).whenComplete(() {
+                  Routes.popPage(context);
               });
             }
           }
@@ -142,21 +143,18 @@ class _UpdateStaffState extends State<UpdateStaff> {
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
-    //  if (kIsWeb) {
-    //  request.files.add(MultipartFile(
-    //     "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
-    //     filename: context.read<ImageUploadController>().state['name']));
-    // } else {
-      request.files.add(MultipartFile('image',
+     if (kIsWeb) {
+     request.files.add(MultipartFile(
+        "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
+        filename: context.read<ImageUploadController>().state['name']));
+    } else {
+      if (uri.isNotEmpty) {
+        request.files.add(MultipartFile('image',
         File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
-    // }
-    // request.files.add(MultipartFile(
-    //     'image',
-    //     File(_formControllers[3].text.trim()).readAsBytes().asStream(),
-    //     File(_formControllers[3].text.trim()).lengthSync(),
-    //     filename: uri.split("/").last));
-    //
+      }
+      
+    }
     request.fields['staff_password'] = "qwerty";
     request.fields['staff_key[key]'] = "";
     // ===================================================================

@@ -29,10 +29,13 @@ class _StaffViewState extends State<StaffView> {
         DataCell(
           Row(
             children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(
-                  AppUrls.liveImages + staffModel.staffProfilePic,
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(
+                    AppUrls.liveImages + staffModel.staffProfilePic,
+                  ),
                 ),
               ),
               Text(
@@ -76,11 +79,11 @@ class _StaffViewState extends State<StaffView> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     // Provider.of<MainController>(context).staffUpdate();
-    return SizedBox(
-      height: size.width / 2.4,
-      child: Stack(
-        children: [
-          Data_Table(
+    return Stack(
+      children: [
+        SizedBox(
+          height: size.width / 2.39,
+          child: Data_Table(
             header: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
@@ -136,30 +139,30 @@ class _StaffViewState extends State<StaffView> {
                   index),
             ),
           ),
-          Positioned(
-            bottom: 10,
-            left: 10,
-            child: Row(
-              children: [
-                const Text("Continue to add students"),
-                TextButton(
-                  onPressed: () {
-                    context
-                        .read<WidgetController>()
-                        .pushWidget(const ViewStudents());
-                    context.read<TitleController>().setTitle("Students");
-                    context.read<SideBarController>().changeSelected(1);
-                  },
-                  child: Text(
-                    "Click here",
-                    style: TextStyles(context).getRegularStyle(),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: 10,
+          left: 10,
+          child: Row(
+            children: [
+              const Text("Continue to add students"),
+              TextButton(
+                onPressed: () {
+                  context
+                      .read<WidgetController>()
+                      .pushWidget(const ViewStudents());
+                  context.read<TitleController>().setTitle("Students");
+                  context.read<SideBarController>().changeSelected(1);
+                },
+                child: Text(
+                  "Click here",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }

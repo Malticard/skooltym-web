@@ -27,16 +27,19 @@ class _ViewStudentsState extends State<ViewStudents> {
       cells: [
         DataCell(Row(
           children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(
-                AppUrls.liveImages + studentModel.studentProfilePic,
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(
+                  AppUrls.liveImages + studentModel.studentProfilePic,
+                ),
               ),
             ),
             Text("${studentModel.studentFname} ${studentModel.studentLname}"),
           ],
         )),
-        DataCell(Text(studentModel.studentModelClass)),
+        DataCell(Text(studentModel.studentModelClass.className)),
         DataCell(Text(studentModel.studentGender)),
         DataCell(buildActionButtons(context, () {
           showDialog(
@@ -68,11 +71,11 @@ class _ViewStudentsState extends State<ViewStudents> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     Provider.of<MainController>(context).getAllStudents(context);
-    return SizedBox(
-      height: size.width / 2.5,
-      child: Stack(
-        children: [
-          Data_Table(
+    return Stack(
+      children: [
+        SizedBox(
+          height: size.width / 2.39,
+          child: Data_Table(
             header: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
@@ -141,30 +144,30 @@ class _ViewStudentsState extends State<ViewStudents> {
                   index),
             ),
           ),
-          Positioned(
-            bottom: 10,
-            left: 10,
-            child: Row(
-              children: [
-                const Text("Continue to adding guardians"),
-                TextButton(
-                  onPressed: () {
-                    context
-                        .read<WidgetController>()
-                        .pushWidget(const ViewGuardians());
-                    context.read<TitleController>().setTitle("Guardians");
-                    context.read<SideBarController>().changeSelected(3);
-                  },
-                  child: Text(
-                    "Click here",
-                    style: TextStyles(context).getRegularStyle(),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+        ),
+        Positioned(
+                bottom: 10,
+                left: 10,
+                child: Row(
+                  children: [
+                    const Text("Continue to adding guardians"),
+                    TextButton(
+                      onPressed: () {
+                        context
+                            .read<WidgetController>()
+                            .pushWidget(const ViewGuardians());
+                        context.read<TitleController>().setTitle("Guardians");
+                        context.read<SideBarController>().changeSelected(3);
+                      },
+                      child: Text(
+                        "Click here",
+                        style: TextStyles(context).getRegularStyle(),
+                      ),
+                    )
+                  ],
+                ),
+              )
+      ],
     );
   }
 }

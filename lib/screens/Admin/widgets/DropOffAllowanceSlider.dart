@@ -16,9 +16,9 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
   @override
   Widget build(BuildContext context) {
     var textController = TextEditingController(text:context
-                          .read<DropOffController>().state.toString());
+                          .read<DropOffAllowanceController>().state.toString());
     return Scaffold(
-      body: BlocBuilder<DropOffController, double>(
+      body: BlocBuilder<DropOffAllowanceController, double>(
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,7 +43,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                     minorTicksPerInterval: 1,
                     onChanged: (v) {
                       context
-                          .read<DropOffController>()
+                          .read<DropOffAllowanceController>()
                           .setDropOffAllowanceTime(v.toDouble());
                       setState(() {
                         textController.text = v.toString();
@@ -71,7 +71,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                         // hintText: "Enter your pick up allowance time here",
                         onChanged: (p0) {
                           context
-                              .read<DropOffController>()
+                              .read<DropOffAllowanceController>()
                               .setDropOffAllowanceTime(double.parse(p0));
                         },
                       ),

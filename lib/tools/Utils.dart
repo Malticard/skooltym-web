@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:ui';
 
@@ -169,7 +171,8 @@ bool validateEmail(String email, BuildContext context) {
 // build Action Buttons
 Widget buildActionButtons(BuildContext context,VoidCallback
 edit,VoidCallback delete) {
-  return context.read<SchoolController>().state['role'] == 'Finance'?TextButton(
+  return context.read<SchoolController>().state['role'] == 'Finance'?
+  TextButton(
         onPressed: edit,
         style: TextButton.styleFrom(
           
@@ -182,27 +185,23 @@ edit,VoidCallback delete) {
         ),
       ): Row(
     children: [
-      TextButton(
-        onPressed: edit,
-        style: TextButton.styleFrom(
-          backgroundColor: Colors.blue,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        ),
-        child: const Icon(
+      CommonButton(
+        onTap: edit,
+        width: 50,height: 50,
+          // padding: const EdgeInsets.only(top: 15, bottom: 15),
+        buttonTextWidget: const Icon(
           Icons.edit,
-          color: Colors.white,
+          color: Colors.white,size: 20,
         ),
       ),
       const SizedBox(
         width: 10,
       ),
-      TextButton(
-        onPressed: delete,
-        style: TextButton.styleFrom(
+      CommonButton(
+        width: 50,height: 50,
+        onTap: delete,
           backgroundColor: Colors.red,
-          padding:const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        ),
-        child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
+        buttonTextWidget: const Icon(Icons.delete_outline_rounded, color: Colors.white),
       ),
     ],
   );

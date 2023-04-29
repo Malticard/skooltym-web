@@ -15,6 +15,7 @@ class CommonFormFields extends StatefulWidget {
   final String buttonText;
   final VoidCallback? onSubmit;
   final void Function(String?)? onSelectedValue;
+  final void Function(String?)? selectedData;
   final Widget? submit;
   final String? formTitle;
   final bool formEnabled;
@@ -32,7 +33,7 @@ class CommonFormFields extends StatefulWidget {
       this.lists,
       this.numberOfDropDowns,
       this.dropdownLists,
-       this.onDropDownValue, this.onSelectedValue, this.initialPic });
+       this.onDropDownValue, this.onSelectedValue, this.initialPic, this.selectedData });
 
   @override
   State<CommonFormFields> createState() => _CommonFormFieldsState();
@@ -184,6 +185,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                           // controller: widget.formControllers[index -1],
                           elements: widget.formFields[index - 1]['data'],
                           selectedValue: (value) {
+                              print("Selected data ${value}");
                             // context.read<ClassNameController>().setClass(value?? '');
                             debugPrint("Selected => ${value.toString()}");
                             // widget.onSelectedValue!;

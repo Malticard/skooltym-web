@@ -17,7 +17,7 @@ class _PickUpAllowanceSliderState extends State<PickUpAllowanceSlider> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<PickUpController, double>(
+      body: BlocBuilder<PickUpAllowanceTimeController, int>(
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,7 +44,7 @@ class _PickUpAllowanceSliderState extends State<PickUpAllowanceSlider> {
                     minorTicksPerInterval: 1,
                     onChanged: (v) {
                       context
-                          .read<PickUpController>()
+                          .read<PickUpAllowanceTimeController>()
                           .setPickUpAllowanceTime(v.toDouble());
 
                       setState(() {
@@ -69,6 +69,8 @@ class _PickUpAllowanceSliderState extends State<PickUpAllowanceSlider> {
                       child: TextField(
                         keyboardType: TextInputType.number,
                         controller: _textController,
+                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                        maxLength: 60,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "Enter your pick up allowance time here",
@@ -78,8 +80,8 @@ class _PickUpAllowanceSliderState extends State<PickUpAllowanceSlider> {
                         // hintText: "Enter your pick up allowance time here",
                         onChanged: (p0) {
                           context
-                              .read<PickUpController>()
-                              .setPickUpAllowanceTime(double.parse(p0));
+                              .read<PickUpAllowanceTimeController>()
+                              .setPickUpAllowanceTime(int.parse(p0));
                         },
                       ),
                     ),

@@ -13,13 +13,26 @@ class AddStudent extends StatefulWidget {
 
 
 class _AddStudentState extends State<AddStudent> {
- List<Map<String, dynamic>> formFields = [];
- List<TextEditingController> formControllers = [];
+ List<Map<String, dynamic>>? formFields;
+ List<TextEditingController> formControllers =  List.generate(7, (index) => TextEditingController());
  @override
  void initState() {
     context.read<MainController>().fetchClasses(context.read<SchoolController>().state['school']);
-
-   // form data
+    context.read<MainController>().fetchStreams(context.read<SchoolController>().state['school']);
+   super.initState();
+ }
+  // overall form padding
+  final EdgeInsets _padding =
+      const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
+// form key
+  final formKey = GlobalKey<FormState>();
+  
+  @override
+  Widget build(BuildContext context) {
+    // context.read<MainController>().fetchClasses(context.read<SchoolController>().state['school']);
+    // context.read<MainController>().fetchStreams(context.read<SchoolController>().state['school']);
+// error fields
+  List<String> errorFields = List.generate(7, (i) => '');
  formFields = [
   {
     "title": "Student's Firstname *",
@@ -54,7 +67,7 @@ class _AddStudentState extends State<AddStudent> {
     "hint": "e.g grade 2",
     "data": [
       "Select class",
-      ...context.read<MainController>().classes.map((e) => e).toList(),
+      ...context.read<MainController>().classes.map((e) => e.className).toList(),
     ],
     'icon': Icons.home_work_outlined
   },
@@ -62,31 +75,12 @@ class _AddStudentState extends State<AddStudent> {
     "title": "Stream *",
     "hint": "e.g North",
     "data": [
-      "Select class",
-      ...context.read<MainController>().classes.map((e) => e).toList(),
+      "Select stream",
+      ...context.read<MainController>().streams.map((e) => e.streamName).toList(),
     ],
     'icon': Icons.home_work_outlined
   }
-
 ];
-
-  formControllers =
-      List.generate(formFields.length, (index) => TextEditingController());
-   super.initState();
-
- }
-
-  // overall form padding
-  final EdgeInsets _padding =
-      const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
-// form key
-  final formKey = GlobalKey<FormState>();
-  
-  @override
-  Widget build(BuildContext context) {
-    context.read<MainController>().fetchClasses(context.read<SchoolController>().state['school']);
-// error fields
-  List<String> errorFields = List.generate(formFields.length, (i) => '');
 
     return Column(
       children: [
@@ -94,8 +88,9 @@ class _AddStudentState extends State<AddStudent> {
         SingleChildScrollView(
           child: CommonFormFields(
             padding: _padding,
-            formFields: formFields,
+            formFields: formFields ?? [],
             formControllers: formControllers,
+           
             buttonText: "Save Student Details",
             onSubmit: () {
               if (true) {

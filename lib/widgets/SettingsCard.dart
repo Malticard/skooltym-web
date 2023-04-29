@@ -44,14 +44,18 @@ class SettingCard extends StatelessWidget {
       ),
       child: ListTileTheme(
         contentPadding:
-            const EdgeInsets.only(left: 3, top: 3, right: 4, bottom: 3),
+            const EdgeInsets.only(left: 20, top: 1.2, right:20, bottom: 1.2),
         child: ListTile(
-          leading: leading ??
-              Image.asset(
-                icon,
-                width: MediaQuery.of(context).size.width / 8,
-                height: MediaQuery.of(context).size.width / 8,
-              ),
+          leading: SizedBox(
+            width: 30,height: 30,
+            child: Center(
+              child: leading ??
+                  Image.asset(
+                    icon,
+                    width: MediaQuery.of(context).size.width / 20,
+                  ),
+            ),
+          ),
           trailing: trailText == null || trailText == ''
               ? trailWidget
               : Text(

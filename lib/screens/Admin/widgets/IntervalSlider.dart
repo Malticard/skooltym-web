@@ -17,7 +17,7 @@ class _IntervalSliderState extends State<IntervalSlider> {
   final textController = TextEditingController(text: context
                           .read<IntervalController>().state.toString());
     return Scaffold(
-      body: BlocBuilder<IntervalController, double>(
+      body: BlocBuilder<IntervalController, int>(
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,7 +71,7 @@ class _IntervalSliderState extends State<IntervalSlider> {
                         onChanged: (p0) {
                           context
                               .read<IntervalController>()
-                              .computeInterval(double.parse(p0));
+                              .computeInterval(int.parse(p0));
                         },
                       ),
                     ),

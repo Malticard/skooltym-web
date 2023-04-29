@@ -2,8 +2,8 @@ import '/exports/exports.dart';
 
 class RateSlider extends StatefulWidget {
   final void Function(dynamic)? onChange;
-  double? currentValue;
-  RateSlider({super.key, this.onChange, this.currentValue = 0.0});
+  int? currentValue;
+  RateSlider({super.key, this.onChange, this.currentValue = 0});
 
   @override
   State<RateSlider> createState() => _RateSliderState();
@@ -17,7 +17,7 @@ class _RateSliderState extends State<RateSlider> {
                           .read<OvertimeRateController>().state.toString());
 
     return Scaffold(
-      body: BlocBuilder<OvertimeRateController, double>(
+      body: BlocBuilder<OvertimeRateController, int>(
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,7 +71,7 @@ class _RateSliderState extends State<RateSlider> {
                         onChanged: (p0) {
                           context
                               .read<OvertimeRateController>()
-                              .setOvertimeRate(double.parse(p0));
+                              .setOvertimeRate(int.parse(p0));
                         },
                       ),
                     ),

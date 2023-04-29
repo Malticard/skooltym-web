@@ -56,7 +56,7 @@ class _UpdateStreamState extends State<UpdateStream> {
               ),
               const SizedBox(height: defaultPadding),
               CommonButton(
-                  buttonText: "Save stream",
+                  buttonText:"Update stream",
                   padding: const EdgeInsets.only(
                       top: 5, bottom: 5, right: 15, left: 15),
                   onTap: () {
@@ -69,7 +69,7 @@ class _UpdateStreamState extends State<UpdateStream> {
                     showProgress(context, msg: 'Adding stream in progress');
                     // saving class data to db
                     Client()
-                        .patch(Uri.parse(AppUrls.updateStream), body: data)
+                        .patch(Uri.parse(AppUrls.updateStream + widget.id), body: data)
                         .then((value) {
                       if (value.statusCode == 200) {
                         Routes.popPage(context);
@@ -86,6 +86,8 @@ class _UpdateStreamState extends State<UpdateStream> {
                             type: 'danger',
                             duration: 6);
                       }
+                    }).whenComplete(() {
+                      Routes.popPage(context);
                     });
                     // done saving class data to db
                   })

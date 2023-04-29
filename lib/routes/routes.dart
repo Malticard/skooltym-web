@@ -6,7 +6,7 @@ class Routes {
   static const String network = '/network';
   // static const String o = '/n';
   static const String forgotPassword = '/forgotPassword';
-  static const String home = '/wksktyui';
+  static const String home = '/';
   static const String phoneVerify = '/phoneVerify';
   static void push(Widget widget, BuildContext context) {
     Navigator.of(context).push(
@@ -30,13 +30,17 @@ class Routes {
 
   static void logout(BuildContext context) {
     // clear all set data
-    SharedPreferences.getInstance()
-        .then((value) => value.clear())
-        .whenComplete(() {
+    SharedPreferences.getInstance().then((value) {
+      value.clear().whenComplete(() {
+        showMessage(
+            context: context, type: 'info', msg: 'Signed out successfully');
+        namedRemovedUntilRoute(context, login);
+      });
+      // if (value.containsKey("schoolData")) {
+      //   value.remove("schoolData");
+      // }
+    }).whenComplete(() {
       //
-      showMessage(
-          context: context, type: 'info', msg: 'Signed out successfully');
-      namedRemovedUntilRoute(context, login);
     });
   }
 }
@@ -45,7 +49,7 @@ Map<String, Widget Function(BuildContext)> routes(BuildContext context) {
   return {
     Routes.home: (context) => const MainScreen(),
     Routes.login: (context) => LoginScreen(),
-    Routes.forgotPassword:(context) => const ChangePassword(),
-    Routes.phoneVerify: (context) =>  PhoneVerify(),
+    Routes.forgotPassword: (context) => const ChangePassword(),
+    Routes.phoneVerify: (context) => PhoneVerify(),
   };
 }

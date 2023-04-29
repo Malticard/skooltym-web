@@ -127,7 +127,7 @@ export '/Icons/Images.dart';
 export '/controllers/ThemeController.dart';
 export '/controllers/IntervalController.dart';
 export '/controllers/OvertimeRateController.dart';
-export '/controllers/PickUpController.dart';
+export '/controllers/PickUpAllowanceTimeController.dart';
 export '/controllers/DropOffController.dart';
 export '/controllers/SchoolController.dart';
 export '/controllers/AllowOvertimeController.dart';
@@ -146,6 +146,8 @@ export '/controllers/SettingsController.dart';
 export '/controllers/FinanceViewController.dart';
 export '/controllers/MultiStudentsController.dart';
 export '/controllers/FinanceTitleController.dart';
+export '/controllers/PickUpTimeController.dart';
+export '/controllers/DropOffTimeController.dart';
 
 // themes
 export '/Themes/Themes.dart';

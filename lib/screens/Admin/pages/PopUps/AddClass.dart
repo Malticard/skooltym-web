@@ -21,9 +21,7 @@ class _AddClassState extends State<AddClass> {
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,
         height: MediaQuery.of(context).size.width / 4,
-        child: BlocBuilder<StepperController, StepperModel>(
-            builder: (context, inx) {
-          return Column(
+        child:Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -53,7 +51,7 @@ class _AddClassState extends State<AddClass> {
                 // fieldColor: Colors.transparent,
                 onChange: (v) {
                   setState(() {
-                    _selectedStreams = json.decode(v).join(",");
+                    _selectedStreams = json.decode(v).join(",");// [jjjjk].join(",") => j,j,jj
                   });
                 },
                 hint: "Attach streams",
@@ -70,7 +68,7 @@ class _AddClassState extends State<AddClass> {
                   onTap: () {
                     // _stepText = [];
                     Map<String, dynamic> data = {
-                      "school": context.read<SchoolController>().state['id'],
+                      "school": context.read<SchoolController>().state['school'],
                       "class_name":_classController.text ,
                       "class_streams":_selectedStreams
                     };
@@ -95,12 +93,14 @@ class _AddClassState extends State<AddClass> {
                             type: 'danger',
                             duration: 6);
                       }
+                    }).whenComplete(() {
+                      Routes.popPage(context);
                     });
                     // done saving class data to db
                   })
             ],
-          );
-        }),
+          ),
+      
       ),
     );
   }

@@ -48,7 +48,7 @@ class _TestWidgetState extends State<TestWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
 
-              Text(widget.fieldText ?? "",
+              Text(widget.fieldText,
                   style: TextStyles(context).getDescriptionStyle(),),
               Padding(
                 padding: const EdgeInsets.all(8.0),

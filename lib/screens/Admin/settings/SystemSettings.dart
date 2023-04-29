@@ -15,13 +15,20 @@ class _SystemSettingsState extends State<SystemSettings> {
   String pick_up_time_end = "";
   // overall form padding
   final EdgeInsets _padding =
-      const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 5);
+      const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5);
   // important methods
   String currencyCode = "Ush UGX";
 // settings data
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<SettingsController>(context).getSettings();
+     BlocProvider.of<SchoolController>(context).getSchoolData();
+    BlocProvider.of<PickUpAllowanceTimeController>(context)
+        .getComputedPickUpTime();
+    BlocProvider.of<DropOffAllowanceController>(context).getDropOffAllowance();
+    BlocProvider.of<IntervalController>(context).getComputedInterval();
+    BlocProvider.of<DropOffTimeController>(context).getDropOffTime();
+    BlocProvider.of<AllowOvertimeController>(context).getAllowOvertime();
+    BlocProvider.of<PickUpTimeController>(context).getPickUpTime();
     return Padding(
       padding: EdgeInsets.only(
           right: MediaQuery.of(context).size.width * 0.05,
@@ -29,133 +36,139 @@ class _SystemSettingsState extends State<SystemSettings> {
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,
         height: MediaQuery.of(context).size.width / 2,
-        child: BlocBuilder<SettingsController, Map<String,dynamic>>(
+        child: BlocBuilder<SettingsController, Map<String, dynamic>>(
           builder: (context, state) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  // set drop off time
-                  TapEffect(
-                    onClick: () => showDropOffOptions(),
-                    child: SettingCard(
-                      // radius: 10,
-                      icon: SettingIcons.dropoffIcon,
-
-                      titleText: "Drop offs",
-                      subText: "Set the start and end time for drop offs",
-                      trailText: state["drop_off_start_time"]+ "-"+ state["drop_off_end_time"],
-                    ),
-                  ),
-                  //  set drop time allowance
-                  TapEffect(
-                    onClick: () => setDropOffAllowance(),
-                    child: BlocBuilder<DropOffController, double>(
-                      builder: (context, state) {
-                        return SettingCard(
-                          icon: SettingIcons.dropoffIcon,
-                          titleText: "Drop off time allowance",
-                          subText: "Set the start and end time for drop offs",
-                          trailText: "${state.floor()}(mins)",
-                        );
-                      },
-                    ),
-                  ),
-                  // set pick up time
-                  TapEffect(
-                    onClick: () => showPickUpOptions(),
-                    child: SettingCard(
-                      icon: (SettingIcons.pickupIcon),
-                      titleText: "Pick Ups",
-                      subText: "Set the start and end time for pick ups",
-                      trailText: state["pick_up_start_time"]+ "-"+ state["pick_up_end_time"],
-                    ),
-                  ),
-                  //  set pick up time allowance
-                  TapEffect(
-                    onClick: () => setPickUpAllowance(),
-                    child: BlocBuilder<PickUpController, double>(
-                      builder: (context, state) {
-                        return SettingCard(
-                          icon: (SettingIcons.dropoffIcon),
-                          titleText: "Pick Up time allowance",
-                          subText: "Set the start and end time for drop offs",
-                          trailText: "${state.floor()} (mins) ",
-                        );
-                      },
-                    ),
-                  ),
-                  // check if overtime is allowed
-                  BlocBuilder<AllowOvertimeController, bool>(
-                    builder: (context, allow) {
+            return ListView(
+              
+              children: [
+                // set drop off time
+                TapEffect(
+                  onClick: () => showDropOffOptions(),
+                  child: BlocBuilder<DropOffTimeController, String>(
+                    builder: (context, state) {
                       return SettingCard(
-                        icon: (SettingIcons.overtimeRateIcon),
-                        titleText: "Overtime",
-                        subText: "Enable or disable overtime",
-                        trailWidget: Switch.adaptive(
-                            value: allow,
-                            onChanged: (b) {
-                              context
-                                  .read<AllowOvertimeController>()
-                                  .allowOvertime(b);
-                            }),
+                        // radius: 10,
+                        icon: SettingIcons.dropoffIcon,
+                        titleText: "Drop offs",
+                        subText: "Set the start and end time for students drop offs",
+                        trailText: state,
                       );
                     },
                   ),
-                  //rendering overtime settings if enabled.
-                  ...[
-                    //  overtime currency
-                    if (context.watch<AllowOvertimeController>().state == true)
-                      TapEffect(
-                        onClick: () => setOvertimeCurrency(),
-                        child: SettingCard(
-                          icon: (SettingIcons.overtimeCurrencyIcon),
-                          titleText: "Overtime currency",
-                          subText: "Set the currency in which overtime is paid",
-                          trailText: currencyCode,
-                        ),
-                      ),
-                    if (context.watch<AllowOvertimeController>().state == true)
-                      // set overtime interval
-                      TapEffect(
-                        onClick: () => setOvertimeInterval(),
-                        child: BlocBuilder<IntervalController, double>(
-                          builder: (context, state) {
-                            return SettingCard(
-                              icon: (SettingIcons.overtimeIntervalIcon),
-                              titleText: "Overtime interval",
-                              subText:
-                                  "Charge overtime every after this amount of minutes.",
-                              trailText: "${state.floor()} (mins)",
-                            );
-                          },
-                        ),
-                      ),
-                    if (context.watch<AllowOvertimeController>().state == true)
-                      // set overtime rate
-                      TapEffect(
-                        onClick: () => setOvertimeRate(),
-                        child: BlocBuilder<OvertimeRateController, double>(
-                          builder: (context, state) {
-                            return SettingCard(
-                              icon: (SettingIcons.overtimeRateIcon),
-                              titleText: "Overtime rate",
-                              subText:
-                                  "Set the charge to be paid after a period of overtime set. ",
-                              trailText: "${state.floor()}",
-                            );
-                          },
-                        ),
-                      ),
-                  ],
-                  //  set overtime interval
-                  CommonButton(
-                    padding: _padding,
-                    height: 55,
-                    buttonText: "Save Changes",
-                    onTap: () => saveSettings(),
+                ),
+                //  set drop time allowance
+                TapEffect(
+                  onClick: () => setDropOffAllowance(),
+                  child: BlocBuilder<DropOffAllowanceController, double>(
+                    builder: (context, state) {
+                      return SettingCard(
+                        icon: SettingIcons.dropoffIcon,
+                        titleText: "Drop off time allowance",
+                        subText: "Set the start and end time for students drop offs",
+                        trailText: "${state.floor()}(mins)",
+                      );
+                    },
                   ),
+                ),
+                // set pick up time
+                TapEffect(
+                  onClick: () => showPickUpOptions(),
+                  child: BlocBuilder<PickUpTimeController, String>(
+                    builder: (context, state) {
+                      return SettingCard(
+                        icon: (SettingIcons.pickupIcon),
+                        titleText: "Pick Ups",
+                        subText: "Set the start and end time for students pickups",
+                        trailText: state,
+                      );
+                    },
+                  ),
+                ),
+                //  set pick up time allowance
+                TapEffect(
+                  onClick: () => setPickUpAllowance(),
+                  child: BlocBuilder<PickUpAllowanceTimeController, int>(
+                    builder: (context, state) {
+                      return SettingCard(
+                        icon: (SettingIcons.dropoffIcon),
+                        titleText: "Pick Up time allowance",
+                        subText: "Set the start and end time for students pickups",
+                        trailText: "${state.floor()} (mins) ",
+                      );
+                    },
+                  ),
+                ),
+                // check if overtime is allowed
+                BlocBuilder<AllowOvertimeController, bool>(
+                  builder: (context, allow) {
+                    return SettingCard(
+                      icon: (SettingIcons.overtimeRateIcon),
+                      titleText: "Overtime",
+                      subText: allow == true? "Overtime enabled":"Overtime disabled",
+                      trailWidget: Switch.adaptive(
+                          value: allow,
+                          onChanged: (b) {
+                            context
+                                .read<AllowOvertimeController>()
+                                .allowOvertime(b);
+                          }),
+                    );
+                  },
+                ),
+                //rendering overtime settings if enabled.
+                ...[
+                  //  overtime currency
+                  if (context.watch<AllowOvertimeController>().state == true)
+                    TapEffect(
+                      onClick: () => setOvertimeCurrency(),
+                      child: SettingCard(
+                        icon: (SettingIcons.overtimeCurrencyIcon),
+                        titleText: "Overtime currency",
+                        subText: "Set the currency in which overtime is paid",
+                        trailText: currencyCode,
+                      ),
+                    ),
+                  if (context.watch<AllowOvertimeController>().state == true)
+                    // set overtime interval
+                    TapEffect(
+                      onClick: () => setOvertimeInterval(),
+                      child: BlocBuilder<IntervalController, int>(
+                        builder: (context, state) {
+                          return SettingCard(
+                            icon: (SettingIcons.overtimeIntervalIcon),
+                            titleText: "Overtime interval",
+                            subText:
+                                "Set the amount of time after which overtime will be charged eg. every after 20mins",
+                            trailText: "${state.floor()} (mins)",
+                          );
+                        },
+                      ),
+                    ),
+                  if (context.watch<AllowOvertimeController>().state == true)
+                    // set overtime rate
+                    TapEffect(
+                      onClick: () => setOvertimeRate(),
+                      child: BlocBuilder<OvertimeRateController, int>(
+                        builder: (context, state) {
+                          return SettingCard(
+                            icon: (SettingIcons.overtimeRateIcon),
+                            titleText: "Overtime rate",
+                            subText:
+                                "Set the amount of money to charge every after the set overtime interval eg. 20000 every after 20mins ",
+                            trailText: "${state.floor()}",
+                          );
+                        },
+                      ),
+                    ),
                 ],
-              ),
+                //  set overtime interval
+                CommonButton(
+                  padding: _padding,
+                  height: 55,
+                  buttonText: "Save Changes",
+                  onTap: () => saveSettings(),
+                ),
+              ],
             );
           },
         ),
@@ -170,14 +183,16 @@ class _SystemSettingsState extends State<SystemSettings> {
 // DateTime()
     Map<String, dynamic> results = {
       "school_id": "${context.read<SchoolController>().state["school"]}",
-      "drop_off_start_time": drop_off_time_start,
-      "drop_off_end_time": drop_off_time_end,
+      "drop_off_start_time": context.read<DropOffTimeController>().state.split("-")[0],
+      "drop_off_end_time": context.read<DropOffTimeController>().state.split("-")[1],
       "pick_up_start_time":
-          "${DateTime.now().toString().split(" ")[0]} $pick_up_time_start",
+          "${DateTime.now().toString().split(" ")[0]}${context.read<PickUpTimeController>().state.split("-")[0]}",
       "pick_up_end_time":
-          "${DateTime.now().toString().split(" ")[0]} $pick_up_time_end",
-      "drop_off_allowance": "${context.read<DropOffController>().state}",
-      "pick_up_allowance": "${context.read<PickUpController>().state}",
+          "${DateTime.now().toString().split(" ")[0]}${context.read<PickUpTimeController>().state.split("-")[1]}",
+      "drop_off_allowance":
+          "${context.read<DropOffAllowanceController>().state}",
+      "pick_up_allowance":
+          "${context.read<PickUpAllowanceTimeController>().state}",
       "allow_overtime": "${context.read<AllowOvertimeController>().state}",
       "overtime_rate": "${context.read<OvertimeRateController>().state}",
       "overtime_rate_currency": currencyCode,
@@ -194,7 +209,7 @@ class _SystemSettingsState extends State<SystemSettings> {
         Routes.popPage(context);
         showSuccessDialog(
           "Settings saved successfully",
-          context,  
+          context,
           onPressed: () {
             Routes.popPage(context);
             context.read<WidgetController>().pushWidget(const Streams());
@@ -210,6 +225,7 @@ class _SystemSettingsState extends State<SystemSettings> {
       }
     });
   }
+
   // drop offs
   showDropOffOptions() {
     showDialog(
@@ -243,10 +259,12 @@ class _SystemSettingsState extends State<SystemSettings> {
                                 context: context,
                                 initialTime: TimeOfDay.now())
                             .then(
-                          (value) => setState(() {
-                            drop_off_time_start =
+                          (value) {
+                            setState(() {
+                              drop_off_time_start =
                                 "${value!.hour}:${value.minute < 10 ? '${value.minute}0' : value.minute}:00";
-                          }),
+                            });
+                          },
                         );
                       },
                       child: Card(
@@ -294,7 +312,10 @@ class _SystemSettingsState extends State<SystemSettings> {
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 8, left: 100, right: 100),
                 buttonText: "Done",
-                onTap: () => Routes.popPage(context),
+                onTap: (){
+                  Routes.popPage(context);
+                  context.read<DropOffTimeController>().setDropOffTime( "$drop_off_time_start - $drop_off_time_end");
+                },
               )
             ],
           ),
@@ -387,7 +408,10 @@ class _SystemSettingsState extends State<SystemSettings> {
                 buttonText: "Okay",
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 8, left: 40, right: 40),
-                onTap: () => Routes.popPage(context),
+                onTap: (){
+                  Routes.popPage(context);
+                  context.read<PickUpTimeController>().setPickUpTime( "$pick_up_time_start - $pick_up_time_end");
+                },
               )
             ],
           ),

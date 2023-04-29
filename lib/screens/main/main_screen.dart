@@ -15,15 +15,15 @@ class _MainScreenState extends State<MainScreen> {
     context.read<ThemeController>().getTheme();
     // retrive session state
     context.read<SchoolController>().getSchoolData();
+    context.read<MainController>().fetchUpdates(context.read<SchoolController>().state['school'] ?? "",context.read<SchoolController>().state['role'] ?? "");
+
     super.initState();
   }
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    context.read<MainController>().fetchUpdates(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     return Scaffold(
-      // key: context.read<MainController>().scaffoldKey,
       drawer:  SideMenu(scaffoldKey: _scaffoldKey,),
       body: SafeArea(
         child: Row(

@@ -82,12 +82,11 @@ class _AddStaffState extends State<AddStaff> {
             errorMsgs: errorFields,
             onSubmit: () {
               if (validateEmail(_formControllers[1].text, context) != false) {
-                  Routes.popPage(context);
-        showProgress(context,msg: "Adding new staff");
+                Routes.popPage(context);
+                showProgress(context, msg: "Adding new staff");
                 _handleFormUpload().then((value) {
                   debugPrint("Staff data -> ${value.reasonPhrase}");
                   if (value.statusCode == 200 || value.statusCode == 201) {
-                      Routes.popPage(context);
                     //  bottom msg
                     showMessage(
                       context: context,
@@ -107,10 +106,10 @@ class _AddStaffState extends State<AddStaff> {
                     //     _formControllers[0].text.trim().split(" ")[1],
                     //     context);
                   }
-                    showSuccessDialog(
+                  showSuccessDialog(
                       _formControllers[0].text.trim().split(" ")[1], context);
                 }).whenComplete(() {
-                  // Routes.popPage(context);
+                  Routes.popPage(context);
                 });
               }
             },
@@ -144,11 +143,11 @@ class _AddStaffState extends State<AddStaff> {
     //     "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
     //     filename: context.read<ImageUploadController>().state['name']));
     // } else {
-      request.files.add(MultipartFile('image',
-        File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
+    request.files.add(MultipartFile(
+        'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
     // }
-    
+
     //
     request.fields['staff_password'] = "qwerty";
     request.fields['staff_key[key]'] = "";

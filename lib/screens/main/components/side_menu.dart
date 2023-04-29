@@ -15,16 +15,19 @@ class _SideMenuState extends State<SideMenu> {
   var store;
   @override
   void initState() {
-    store = context.read<SchoolController>().state['role'] == 'Admin' ||
-            context.read<SchoolController>().state['role'] == 'SuperAdmin'
-        ? options
-        : financeViews;
+     context.read<SchoolController>().getSchoolData();
+   
     super.initState();
   }
 
 
   @override
   Widget build(BuildContext context) {
+
+     context.read<SchoolController>().getSchoolData();
+ store = context.read<SchoolController>().state['role'] == 'Admin'
+        ? options
+        : context.read<SchoolController>().state['role'] == 'Finance'? financeViews :[];
     return Drawer(
       key: widget.scaffoldKey,
       backgroundColor: Theme.of(context).brightness == Brightness.light

@@ -1,11 +1,8 @@
 import '/exports/exports.dart';
 
-void main() async {
+Future<void> main() async {
   // Obtain shared preferences.
   WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setSystemUIOverlayStyle(
-  //   SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
-  // );
   Bloc.observer = const Observer();
   var prefs = await SharedPreferences.getInstance();
   runApp(
@@ -18,8 +15,8 @@ void main() async {
         BlocProvider(create: (context) => ThemeController()),
         BlocProvider(create: (context) => IntervalController()),
         BlocProvider(create: (context) => OvertimeRateController()),
-        BlocProvider(create: (context) => PickUpController()),
-        BlocProvider(create: (context) => DropOffController()),
+        BlocProvider(create: (context) => PickUpAllowanceTimeController()),
+        BlocProvider(create: (context) => DropOffAllowanceController()),
         BlocProvider(create: (context) => SchoolController()),
         BlocProvider(create: (context) => AllowOvertimeController()),
         BlocProvider(create: (context) => LightDarkController()),
@@ -34,20 +31,19 @@ void main() async {
         BlocProvider(create: (context) => MultiStudentsController()),
         BlocProvider(create: (context) => FinanceViewController()),
         BlocProvider(create: (context) => FinanceTitleController()),
+        BlocProvider(create: (context) => DropOffTimeController()),
+        BlocProvider(create: (context) => PickUpTimeController()),
       ],
       child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
-        // school data
-        // retrieve app state
-        // BlocProvider.of<SchoolController>(context).getSchoolData();
-
         return MaterialApp(
-          debugShowCheckedModeBanner: false,
+          // debugShowCheckedModeBanner: false,
           themeMode: theme.brightness == Brightness.light
               ? ThemeMode.light
               : ThemeMode.dark,
           theme: theme.copyWith(
             textTheme:
-                GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme).apply(
+                GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
+                    .apply(
               bodyColor: theme.brightness == Brightness.light
                   ? Colors.black
                   : Colors.white,
@@ -56,10 +52,7 @@ void main() async {
                   : Colors.white,
             ),
           ),
-          // initialRoute: Routes.malticard,
-          initialRoute: (prefs.getString('schoolData') != null &&
-                  (prefs.getString('role') == 'SuperAdmin' || prefs.getString('role') == 'Admin' ||
-                      prefs.getString('role') == 'Finance'))
+          initialRoute: prefs.containsKey('schoolData') == true
               ? Routes.home
               : Routes.login,
           routes: routes(context),

@@ -52,14 +52,15 @@ class _Data_TableState extends State<Data_Table> {
               width: size.width,
               height: size.width / 4,
               child: DataTable2(
-                columnSpacing: defaultPadding,
+                columnSpacing: 5,//defaultPadding,
                 dividerThickness:
                     1, // this one will be ignored if [border] is set above
                 bottomMargin: 10,
                 minWidth: 900,
+                dataRowHeight: 60,
                 sortColumnIndex: 2,
                 sortAscending: false,
-                // showBottomBorder: true,
+                showBottomBorder: true,
                 sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
                 sortArrowAnimationDuration: const Duration(milliseconds: 500),
                 columns: widget.columns ?? [],
@@ -70,6 +71,7 @@ class _Data_TableState extends State<Data_Table> {
               ),
             ),
           ),
+          // AsyncPaginatedDataTable2(columns: columns, source: source)
         ],
       ),
     );

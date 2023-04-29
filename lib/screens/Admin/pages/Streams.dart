@@ -18,16 +18,16 @@ class _StreamsState extends State<Streams> {
 
   @override
   void didChangeDependencies() {
+    // Provider.of<MainController>(context)
+    //     .staffUpdate(context.read<SchoolController>().state['school']);
     Provider.of<MainController>(context)
-        .staffUpdate(context.read<SchoolController>().state['school']);
-    Provider.of<MainController>(context)
-        .fetchClasses(context.read<SchoolController>().state['school']);
+        .fetchStreams(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 
   List<String> staffs = ["Student Name", "Class", "Gender", "Actions"];
 
-  List<String> _stepText = <String>[];
+  // List<String> _stepText = <String>[];
 
   int currentStep = 0;
   final EdgeInsets _padding = const EdgeInsets.only(right: 0, left: 0);
@@ -35,13 +35,15 @@ class _StreamsState extends State<Streams> {
   //text controllers
   @override
   Widget build(BuildContext context) {
+    Provider.of<MainController>(context,listen: false)
+        .fetchStreams(context.read<SchoolController>().state['school']);
     // responsive dimensions
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
         SizedBox(
           width: size.width,
-          height: size.width / 2.5,
+          height: size.width / 2.39,
           child: Data_Table(
             header: Row(
               children: [

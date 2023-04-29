@@ -36,7 +36,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
             Text("${studentModel.studentFname} ${studentModel.studentLname}"),
           ],
         )),
-        DataCell(Text(studentModel.studentModelClass)),
+        DataCell(Text(studentModel.studentModelClass.className)),
         DataCell(Text(studentModel.studentGender)),
         DataCell(buildActionButtons(context, () {
           showDialog(

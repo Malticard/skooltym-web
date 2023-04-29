@@ -27,10 +27,13 @@ class _ViewGuardiansState extends State<ViewGuardians> {
       cells: [
         DataCell(Row(
           children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(
-                AppUrls.liveImages + guardians.guardianProfilePic,
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(
+                  AppUrls.liveImages + guardians.guardianProfilePic,
+                ),
               ),
             ),
             Padding(
@@ -77,12 +80,12 @@ class _ViewGuardiansState extends State<ViewGuardians> {
   Widget build(BuildContext context) {
     Provider.of<MainController>(context).newGuardians(context);
     Size size = MediaQuery.of(context).size;
-    return SizedBox(
-      width: size.width,
-      height: size.width / 2.5,
-      child: Stack(
-        children: [
-          Data_Table(
+    return Stack(
+      children: [
+        SizedBox(
+          width: size.width,
+          height: size.width / 2.5,
+          child: Data_Table(
             header: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
@@ -138,30 +141,30 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                   index),
             ),
           ),
-          Positioned(
-            bottom: 10,
-            left: 10,
-            child: Row(
-              children: [
-                const Text("Continue to dashboard"),
-                TextButton(
-                  onPressed: () {
-                    context
-                        .read<WidgetController>()
-                        .pushWidget(const Dashboard());
-                    context.read<TitleController>().setTitle("Dashboard");
-                    context.read<SideBarController>().changeSelected(0);
-                  },
-                  child: Text(
-                    "Click here",
-                    style: TextStyles(context).getRegularStyle(),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+        ),
+        Positioned(
+                bottom: 10,
+                left: 10,
+                child: Row(
+                  children: [
+                    const Text("Continue to dashboard"),
+                    TextButton(
+                      onPressed: () {
+                        context
+                            .read<WidgetController>()
+                            .pushWidget(const Dashboard());
+                        context.read<TitleController>().setTitle("Dashboard");
+                        context.read<SideBarController>().changeSelected(0);
+                      },
+                      child: Text(
+                        "Click here",
+                        style: TextStyles(context).getRegularStyle(),
+                      ),
+                    )
+                  ],
+                ),
+              )
+      ],
     );
   }
 }

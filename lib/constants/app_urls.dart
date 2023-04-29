@@ -38,6 +38,8 @@ class AppUrls {
   static String pickUps = "${devURL}specific/pickup/";
   static String dropOffs = "${devURL}specific/dropoff/";
   static String getOtherGaurdians = "${devURL}specific/otherGuardians/";
+  static String specificClass = "${devURL}specific/class/";
+  static String specificStream = "${devURL}specific/stream/";
   // delete
   static String deleteStaff = "${devURL}delete/staff/";
   static String deleteStudent = "${devURL}delete/students/";
@@ -45,7 +47,7 @@ class AppUrls {
   static String deletePickUp = "${devURL}delete/pickup/";
   static String deleteDropOff = "${devURL}delete/dropoff/";
   static String deleteClass = "${devURL}delete/class/";
-  static String deleteStrean = "${devURL}delete/stream/";
+  static String deleteStream = "${devURL}delete/stream/";
   // static String deleteClass = "${devURL}delete/class/";
   // update
   static String updateStaff = "${devURL}update/staff/";

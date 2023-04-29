@@ -71,7 +71,7 @@ class _ViewDropOffsState extends State<ViewDropOffs>
 
     return SizedBox(
       width: size.width,
-      height: size.width / 2.5,
+      height: size.width / 2.39,
       child: Data_Table(
         header: Row(
           children: [

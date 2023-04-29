@@ -1,8 +1,18 @@
 import '/exports/exports.dart';
 
-class IntervalController extends Cubit<double> {
+class IntervalController extends Cubit<int> {
   IntervalController() : super(index);
-  static double index = 0;
+  static int index = 0;
 
-  computeInterval(double value) => emit(value);
+  computeInterval(int v){
+    SharedPreferences.getInstance().then((value) {
+      value.setInt("interval", v);
+    });
+    emit(v);
+  }
+  getComputedInterval(){
+    SharedPreferences.getInstance().then((value) {
+      emit(value.getInt("interval") ?? 0);
+    });
+  }
 }
