@@ -43,7 +43,7 @@ class _RateSliderState extends State<RateSlider> {
                     onChanged: (v) {
                       context
                           .read<OvertimeRateController>()
-                          .setOvertimeRate(v.toDouble());
+                          .setOvertimeRate(v.Int());
                       // setState(() {
                       //   widget.currentValue = v.toDouble();
                       // });
@@ -60,6 +60,7 @@ class _RateSliderState extends State<RateSlider> {
                       width: MediaQuery.of(context).size.width * 0.1,
                       child: TextField(
                         keyboardType: TextInputType.number,
+                        maxLength: 6,
                         controller: textController,
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -71,7 +72,7 @@ class _RateSliderState extends State<RateSlider> {
                         onChanged: (p0) {
                           context
                               .read<OvertimeRateController>()
-                              .setOvertimeRate(int.parse(p0));
+                              .setOvertimeRate(int.parse(p0 == ""?"0":valueLimit(p0, "100000")));
                         },
                       ),
                     ),

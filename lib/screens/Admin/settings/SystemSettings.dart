@@ -21,7 +21,7 @@ class _SystemSettingsState extends State<SystemSettings> {
 // settings data
   @override
   Widget build(BuildContext context) {
-     BlocProvider.of<SchoolController>(context).getSchoolData();
+    BlocProvider.of<SchoolController>(context).getSchoolData();
     BlocProvider.of<PickUpAllowanceTimeController>(context)
         .getComputedPickUpTime();
     BlocProvider.of<DropOffAllowanceController>(context).getDropOffAllowance();
@@ -39,7 +39,6 @@ class _SystemSettingsState extends State<SystemSettings> {
         child: BlocBuilder<SettingsController, Map<String, dynamic>>(
           builder: (context, state) {
             return ListView(
-              
               children: [
                 // set drop off time
                 TapEffect(
@@ -50,7 +49,8 @@ class _SystemSettingsState extends State<SystemSettings> {
                         // radius: 10,
                         icon: SettingIcons.dropoffIcon,
                         titleText: "Drop offs",
-                        subText: "Set the start and end time for students drop offs",
+                        subText:
+                            "Set the start and end time for students drop offs",
                         trailText: state,
                       );
                     },
@@ -59,12 +59,13 @@ class _SystemSettingsState extends State<SystemSettings> {
                 //  set drop time allowance
                 TapEffect(
                   onClick: () => setDropOffAllowance(),
-                  child: BlocBuilder<DropOffAllowanceController, double>(
+                  child: BlocBuilder<DropOffAllowanceController, int>(
                     builder: (context, state) {
                       return SettingCard(
                         icon: SettingIcons.dropoffIcon,
                         titleText: "Drop off time allowance",
-                        subText: "Set the start and end time for students drop offs",
+                        subText:
+                            "Set the start and end time for students drop offs",
                         trailText: "${state.floor()}(mins)",
                       );
                     },
@@ -78,7 +79,8 @@ class _SystemSettingsState extends State<SystemSettings> {
                       return SettingCard(
                         icon: (SettingIcons.pickupIcon),
                         titleText: "Pick Ups",
-                        subText: "Set the start and end time for students pickups",
+                        subText:
+                            "Set the start and end time for students pickups",
                         trailText: state,
                       );
                     },
@@ -92,7 +94,8 @@ class _SystemSettingsState extends State<SystemSettings> {
                       return SettingCard(
                         icon: (SettingIcons.dropoffIcon),
                         titleText: "Pick Up time allowance",
-                        subText: "Set the start and end time for students pickups",
+                        subText:
+                            "Set the start and end time for students pickups",
                         trailText: "${state.floor()} (mins) ",
                       );
                     },
@@ -104,7 +107,9 @@ class _SystemSettingsState extends State<SystemSettings> {
                     return SettingCard(
                       icon: (SettingIcons.overtimeRateIcon),
                       titleText: "Overtime",
-                      subText: allow == true? "Overtime enabled":"Overtime disabled",
+                      subText: allow == true
+                          ? "Overtime enabled"
+                          : "Overtime disabled",
                       trailWidget: Switch.adaptive(
                           value: allow,
                           onChanged: (b) {
@@ -183,8 +188,10 @@ class _SystemSettingsState extends State<SystemSettings> {
 // DateTime()
     Map<String, dynamic> results = {
       "school_id": "${context.read<SchoolController>().state["school"]}",
-      "drop_off_start_time": context.read<DropOffTimeController>().state.split("-")[0],
-      "drop_off_end_time": context.read<DropOffTimeController>().state.split("-")[1],
+      "drop_off_start_time":
+          context.read<DropOffTimeController>().state.split("-")[0],
+      "drop_off_end_time":
+          context.read<DropOffTimeController>().state.split("-")[1],
       "pick_up_start_time":
           "${DateTime.now().toString().split(" ")[0]}${context.read<PickUpTimeController>().state.split("-")[0]}",
       "pick_up_end_time":
@@ -262,15 +269,13 @@ class _SystemSettingsState extends State<SystemSettings> {
                           (value) {
                             setState(() {
                               drop_off_time_start =
-                                "${value!.hour}:${value.minute < 10 ? '${value.minute}0' : value.minute}:00";
+                                  "${value!.hour}:${value.minute < 10 ? '${value.minute}0' : value.minute}:00";
                             });
                           },
                         );
                       },
                       child: Card(
-                        color: Theme.of(context).brightness == Brightness.light
-                            ? Theme.of(context).cardColor
-                            : Theme.of(context).canvasColor,
+                        color: Theme.of(context).canvasColor.withOpacity(0.5),
                         child: const Padding(
                           padding: EdgeInsets.all(33.0),
                           child: Text("Tap to set start time"),
@@ -288,18 +293,15 @@ class _SystemSettingsState extends State<SystemSettings> {
                                   helpText: "DropOff end time",
                                   context: context,
                                   initialTime: TimeOfDay.now())
-                              .then(
-                            (value) => setState(() {
+                              .then((value) {
+                            setState(() {
                               drop_off_time_end =
-                                  "${value!.hour}:${value.minute < 10 ? '${value.minute}0' : value.minute}:00";
-                            }),
-                          );
+                                  "${value?.hour}:${value!.minute < 10 ? '${value.minute}0' : value.minute}:00";
+                            });
+                          });
                         },
                         child: Card(
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Theme.of(context).cardColor
-                                  : Theme.of(context).canvasColor,
+                          color: Theme.of(context).canvasColor.withOpacity(0.5),
                           child: const Padding(
                             padding: EdgeInsets.all(33.0),
                             child: Text("Tap to set end time"),
@@ -312,9 +314,10 @@ class _SystemSettingsState extends State<SystemSettings> {
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 8, left: 100, right: 100),
                 buttonText: "Done",
-                onTap: (){
+                onTap: () {
                   Routes.popPage(context);
-                  context.read<DropOffTimeController>().setDropOffTime( "$drop_off_time_start - $drop_off_time_end");
+                  context.read<DropOffTimeController>().setDropOffTime(
+                      "$drop_off_time_start - $drop_off_time_end");
                 },
               )
             ],
@@ -408,9 +411,11 @@ class _SystemSettingsState extends State<SystemSettings> {
                 buttonText: "Okay",
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 8, left: 40, right: 40),
-                onTap: (){
+                onTap: () {
                   Routes.popPage(context);
-                  context.read<PickUpTimeController>().setPickUpTime( "$pick_up_time_start - $pick_up_time_end");
+                  context
+                      .read<PickUpTimeController>()
+                      .setPickUpTime("$pick_up_time_start - $pick_up_time_end");
                 },
               )
             ],

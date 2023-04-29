@@ -44,86 +44,91 @@ class _StreamsState extends State<Streams> {
         SizedBox(
           width: size.width,
           height: size.width / 2.39,
-          child: Data_Table(
-            header: Row(
-              children: [
-                const Text(
-                  "Streams",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          child: FutureBuilder<List<ClassModel>>(
+            future: fetchClasses(context.read<SchoolController>().state['school']),
+            builder: (context,snap) {
+              return Data_Table(
+                header: Row(
+                  children: [
+                    const Text(
+                      "Streams",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const AddStream(),
+                        );
+                      },
+                      label: const Text("Add Stream"),
+                      icon: const Icon(Icons.add),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const AddStream(),
-                    );
-                  },
-                  label: const Text("Add Stream"),
-                  icon: const Icon(Icons.add),
-                ),
-              ],
-            ),
-            columns: const [
-              DataColumn(
-                label: Text("#"),
-              ),
-              DataColumn(
-                label: Text("Stream"),
-              ),
-              DataColumn(
-                label: Text("Action"),
-              ),
-            ],
-            rows: List.generate(context.read<MainController>().streams.length,
-                (index) {
-              // debugPrint(
-              //     "Classes > ${context.read<MainController>().classes.length}");
-              return DataRow(
-                cells: [
-                  DataCell(Text("${index + 1}")),
-                  DataCell(
-                    Text(context
-                        .read<MainController>()
-                        .streams[index]
-                        .streamName),
+                columns: const [
+                  DataColumn(
+                    label: Text("#"),
                   ),
-                  DataCell(buildActionButtons(
-                    context,
-                    // update a stream
-                    () => showDialog(
-                        builder: (context) {
-                          return UpdateStream(
-                            stream: context
+                  DataColumn(
+                    label: Text("Stream"),
+                  ),
+                  DataColumn(
+                    label: Text("Action"),
+                  ),
+                ],
+                rows: List.generate(context.read<MainController>().streams.length,
+                    (index) {
+                  // debugPrint(
+                  //     "Classes > ${context.read<MainController>().classes.length}");
+                  return DataRow(
+                    cells: [
+                      DataCell(Text("${index + 1}")),
+                      DataCell(
+                        Text(context
+                            .read<MainController>()
+                            .streams[index]
+                            .streamName),
+                      ),
+                      DataCell(buildActionButtons(
+                        context,
+                        // update a stream
+                        () => showDialog(
+                            builder: (context) {
+                              return UpdateStream(
+                                stream: context
+                                    .read<MainController>()
+                                    .streams[index]
+                                    .streamName,
+                                id: context
+                                    .read<MainController>()
+                                    .streams[index]
+                                    .id,
+                              );
+                            },
+                            context: context),
+                        // delete a stream
+                        () => showDialog(
+                          context: context,
+                          builder: (context) => CommonDelete(
+                            title: context
                                 .read<MainController>()
                                 .streams[index]
                                 .streamName,
-                            id: context
-                                .read<MainController>()
-                                .streams[index]
-                                .id,
-                          );
-                        },
-                        context: context),
-                    // delete a stream
-                    () => showDialog(
-                      context: context,
-                      builder: (context) => CommonDelete(
-                        title: context
-                            .read<MainController>()
-                            .streams[index]
-                            .streamName,
-                        url: AppUrls.deleteClass +
-                            context.read<MainController>().streams[index].id,
-                      ),
-                    ),
-                  )),
-                ],
+                            url: AppUrls.deleteClass +
+                                context.read<MainController>().streams[index].id,
+                          ),
+                        ),
+                      )),
+                    ],
+                  );
+                }),
+                empty: const Center(
+                  child: Text("No Streams added.."),
+                ),
               );
-            }),
-            empty: const Center(
-              child: Text("No Streams added.."),
-            ),
+            }
           ),
         ),
         Positioned(

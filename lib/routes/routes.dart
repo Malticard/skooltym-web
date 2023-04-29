@@ -31,16 +31,15 @@ class Routes {
   static void logout(BuildContext context) {
     // clear all set data
     SharedPreferences.getInstance().then((value) {
-      value.clear().whenComplete(() {
-        showMessage(
-            context: context, type: 'info', msg: 'Signed out successfully');
-        namedRemovedUntilRoute(context, login);
-      });
-      // if (value.containsKey("schoolData")) {
-      //   value.remove("schoolData");
-      // }
-    }).whenComplete(() {
-      //
+      if (value.containsKey("schoolData")) {
+        value.remove("schoolData").then((value) {
+          if (value == true) {
+            showMessage(
+                context: context, type: 'info', msg: 'Signed out successfully');
+            namedRemovedUntilRoute(context, login);
+          }
+        });
+      }
     });
   }
 }

@@ -136,7 +136,6 @@ void fetchClasses(String id){
 }
 
 void fetchStreams(String id){
-  // print("$id");
   Client().get(Uri.parse(AppUrls.getStreams + id)).then((value) {
     if(value.statusCode == 200){
      _streams = streamModelFromJson(value.body);

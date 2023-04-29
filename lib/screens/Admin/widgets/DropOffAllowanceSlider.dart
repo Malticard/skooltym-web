@@ -18,7 +18,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
     var textController = TextEditingController(text:context
                           .read<DropOffAllowanceController>().state.toString());
     return Scaffold(
-      body: BlocBuilder<DropOffAllowanceController, double>(
+      body: BlocBuilder<DropOffAllowanceController, int>(
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,8 +34,8 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                     top: 8.0, bottom: 8.0, right: 26, left: 26),
                 child: SfSlider(
                     min: 0.0,
-                    max: 100.0,
-                    value: state,
+                    max: 60,
+                    value: state > 60 ? 60 : state,
                     stepSize: 5,
                     // showTicks: true,
                     showLabels: true,
@@ -44,7 +44,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                     onChanged: (v) {
                       context
                           .read<DropOffAllowanceController>()
-                          .setDropOffAllowanceTime(v.toDouble());
+                          .setDropOffAllowanceTime(v.toInt());
                       setState(() {
                         textController.text = v.toString();
                       });
@@ -62,6 +62,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                       child: TextField(
                         keyboardType: TextInputType.number,
                         controller: textController,
+                        maxLength: 2,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "Enter your dropoff allowance time here",
@@ -72,7 +73,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                         onChanged: (p0) {
                           context
                               .read<DropOffAllowanceController>()
-                              .setDropOffAllowanceTime(double.parse(p0));
+                              .setDropOffAllowanceTime(int.parse(p0 == ""?"0":valueLimit(p0, "60")));
                         },
                       ),
                     ),

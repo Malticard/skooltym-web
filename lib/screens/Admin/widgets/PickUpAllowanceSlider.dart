@@ -34,8 +34,8 @@ class _PickUpAllowanceSliderState extends State<PickUpAllowanceSlider> {
                 padding: const EdgeInsets.only(
                     top: 8.0, bottom: 8.0, right: 26, left: 26),
                 child: SfSlider(
-                    min: 0.0,
-                    max: 100.0,
+                    min: 0,
+                    max: 60,
                     value: state,
                     stepSize: 5,
                     // showTicks: true,
@@ -70,7 +70,7 @@ class _PickUpAllowanceSliderState extends State<PickUpAllowanceSlider> {
                         keyboardType: TextInputType.number,
                         controller: _textController,
                         maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                        maxLength: 60,
+                        maxLength: 2,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "Enter your pick up allowance time here",
@@ -81,7 +81,7 @@ class _PickUpAllowanceSliderState extends State<PickUpAllowanceSlider> {
                         onChanged: (p0) {
                           context
                               .read<PickUpAllowanceTimeController>()
-                              .setPickUpAllowanceTime(int.parse(p0));
+                              .setPickUpAllowanceTime(int.parse(p0 == ""?"0":valueLimit(p0, "60")));
                         },
                       ),
                     ),

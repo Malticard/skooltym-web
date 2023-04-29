@@ -1,12 +1,12 @@
 import '/exports/exports.dart';
 
-class DropOffAllowanceController extends Cubit<double> {
+class DropOffAllowanceController extends Cubit<int> {
   DropOffAllowanceController() : super(_time);
-  static final double _time = 0;
-  setDropOffAllowanceTime(double time) {
+  static final int _time = 0;
+  setDropOffAllowanceTime(int time) {
     SharedPreferences.getInstance().then(
       (value) {
-        value.setDouble("drop_off_time_allowance", time);
+        value.setInt("drop_off_time_allowance", time);
       },
     );
     emit(time);
@@ -14,7 +14,7 @@ class DropOffAllowanceController extends Cubit<double> {
   getDropOffAllowance(){
      SharedPreferences.getInstance().then(
       (value) {
-        emit(value.getDouble("drop_off_time_allowance") ?? 0.0);
+        emit(value.getInt("drop_off_time_allowance") ?? 0);
       }
     );
   }

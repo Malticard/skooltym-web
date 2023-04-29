@@ -292,13 +292,25 @@ List<Map<String, dynamic>> financeViews = [
     'icon': "assets/icons/password-reset.svg"
   },
 ];
-
+// value limit
+String valueLimit(String actual,String max){
+  return int.parse(actual) > int.parse(max) ? max : actual;
+}
 // valid text controllers
 bool validateTextControllers(List<TextEditingController> controllers) {
   var ct = controllers.where((element) => element.text.isEmpty).toList();
   return ct.isEmpty ? true : false;
 }
 
+// method to fetch available classes
+Future<List<ClassModel>> fetchClasses(String id) async {
+    var response = await Client().get(Uri.parse(AppUrls.getClasses + id));
+    // if(value.statusCode == 200){
+    return response.statusCode == 200 ? classModelFromJson(response.body) :[];
+      // notifyListeners();
+    // }
+  
+}
 /// show snackbar message
 /// @param type = 'danger' | 'info' | warning
 ///

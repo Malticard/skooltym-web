@@ -32,21 +32,18 @@ class _IntervalSliderState extends State<IntervalSlider> {
                 padding: const EdgeInsets.only(
                     top: 8.0, bottom: 8.0, right: 26, left: 26),
                 child: SfSlider(
-                    min: 0.0,
-                    max: 100.0,
+                    min: 0,
+                    max: 60,
                     value: state,
                     stepSize: 5,
-                    // showTicks: true,
+                    showTicks: true,
                     showLabels: true,
                     enableTooltip: true,
                     minorTicksPerInterval: 1,
                     onChanged: (v) {
                       context
                           .read<IntervalController>()
-                          .computeInterval(v.toDouble());
-                      // setState(() {
-                      //   widget.currentValue = v.toDouble();
-                      // });
+                          .computeInterval(v.toInt());
                     }),
               ),
                const Space(space: 0.03),
@@ -60,6 +57,7 @@ class _IntervalSliderState extends State<IntervalSlider> {
                       width: MediaQuery.of(context).size.width * 0.1,
                       child: TextField(
                         keyboardType: TextInputType.number,
+                        maxLength: 2,
                         controller: textController,
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -71,7 +69,7 @@ class _IntervalSliderState extends State<IntervalSlider> {
                         onChanged: (p0) {
                           context
                               .read<IntervalController>()
-                              .computeInterval(int.parse(p0));
+                              .computeInterval(int.parse(p0 == ""?"0":valueLimit(p0, "60")));
                         },
                       ),
                     ),
