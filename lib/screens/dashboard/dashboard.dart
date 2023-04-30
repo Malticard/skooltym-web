@@ -10,13 +10,23 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
-    // context.read<MainController>().fetchDashboardClasses(context.read<SchoolController>().state['id']);
+    context.read<SchoolController>().getSchoolData();
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    BlocProvider.of<SchoolController>(context).getSchoolData();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    context.read<MainController>().fetchDashboardClasses(context.read<SchoolController>().state['id']);
+    BlocProvider.of<SchoolController>(context).getSchoolData();
+
+    // context
+    //     .read<MainController>()
+    //     .fetchDashboardClasses(context.read<SchoolController>().state['id']);
 
     return Column(
       children: [
@@ -27,50 +37,49 @@ class _DashboardState extends State<Dashboard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Classes Summary",
-                  style: TextStyles(context).getTitleStyle(),
+              if (context.read<SchoolController>().state['role'] == 'Admin')
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Classes Summary",
+                    style: TextStyles(context).getTitleStyle(),
+                  ),
                 ),
-              ),
-              FutureBuilder(
-                future: Client().get(Uri.parse(AppUrls.dashboard +
-                    context.read<SchoolController>().state['school'])),
-                builder: (context, snapshot) {
-                  // print("Dashboard data => ${snapshot.data?.body}");
-                  // var classes =
-                  //     dashboardModelFromJson(snapshot.data?.body ?? "");
-                  return snapshot.connectionState == ConnectionState.waiting
-                      ? const Center(
-                        child: Loader(
-                            text: "Classes",
-                          ),
-                      )
-                      : snapshot.hasError
-                          ? Center(
-                              child: Text(
-                                "No classes saved",
-                                style: TextStyles(context).getTitleStyle(),
-                              ),
-                            )
-                          : Expanded(
-                              child: GridView.builder(
-                                shrinkWrap: true,
-                                itemCount: context.read<MainController>().dashboardClasses.length,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  crossAxisSpacing: defaultPadding,
-                                  mainAxisSpacing: 20,
-                                  childAspectRatio: 1,
+              if (context.read<SchoolController>().state['role'] == 'Admin')
+                FutureBuilder(
+                  future: fetchDashboardClassData(
+                      context.read<SchoolController>().state['school']),
+                  builder: (context, snapshot) {
+                    return snapshot.connectionState == ConnectionState.waiting
+                        ? const Center(
+                            child: Loader(
+                              text: "Classes",
+                            ),
+                          )
+                        : snapshot.hasError
+                            ? Center(
+                                child: Text(
+                                  "${snapshot.error}",
+                                  style: TextStyles(context).getTitleStyle(),
                                 ),
-                                itemBuilder: (context, index) =>
-                                    FileInfoCard(info: context.read<MainController>().dashboardClasses[index]),
-                              ),
-                            );
-                },
-              ),
+                              )
+                            : Expanded(
+                                child: GridView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data!.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 4,
+                                    crossAxisSpacing: defaultPadding,
+                                    mainAxisSpacing: 20,
+                                    childAspectRatio: 1,
+                                  ),
+                                  itemBuilder: (context, index) =>
+                                      FileInfoCard(info: snapshot.data![index]),
+                                ),
+                              );
+                  },
+                ),
             ],
           ),
         ),

@@ -1,13 +1,20 @@
 import '/exports/exports.dart';
 
-class Header extends StatelessWidget {
+class Header extends StatefulWidget {
   // final GlobalKey<ScaffoldState> scaffoldKey;
   const Header({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<Header> {
+  @override
   Widget build(BuildContext context) {
+    BlocProvider.of<SchoolController>(context).getSchoolData();
+
     return Row(
       children: [
         if (!Responsive.isDesktop(context))
@@ -62,7 +69,14 @@ class ProfileCard extends StatefulWidget {
 
 class _ProfileCardState extends State<ProfileCard> {
   @override
+  void initState() { 
+    BlocProvider.of<SchoolController>(context).getSchoolData();
+    super.initState();
+    
+  }
+  @override
   Widget build(BuildContext context) {
+    BlocProvider.of<SchoolController>(context).getSchoolData();
     return Container(
         margin: const EdgeInsets.only(left: defaultPadding),
         padding: const EdgeInsets.symmetric(

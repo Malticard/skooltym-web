@@ -35,9 +35,9 @@ class FileInfoCard extends StatelessWidget {
                                 ),
                               );
                             },
-                            leading: const Icon(Icons.home),
+                            leading: SvgPicture.asset("assets/vectors/class_room.svg"),
                             title: Text(
-                              "North",
+                              info.classStreams[index].streamName,
                               style: TextStyles(context).getRegularStyle(),
                             ),
                             subtitle: Text(
@@ -113,7 +113,7 @@ class FileInfoCard extends StatelessWidget {
                   ),
                   RichText(
                     text: TextSpan(
-                      text: "${info.classStudents}",
+                      text: "${info.classStudents.length}",
                       style: TextStyles(context).getBoldStyle(),
                       children: [
                         TextSpan(

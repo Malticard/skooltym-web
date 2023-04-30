@@ -44,9 +44,7 @@ class _RateSliderState extends State<RateSlider> {
                       context
                           .read<OvertimeRateController>()
                           .setOvertimeRate(v.Int());
-                      // setState(() {
-                      //   widget.currentValue = v.toDouble();
-                      // });
+                     
                     }),
               ),
                    const Space(space: 0.03),

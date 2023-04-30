@@ -9,14 +9,18 @@ import '/exports/exports.dart';
 loginUser(BuildContext context, String email, String password) async {
   showProgress(context, msg: "Login in progress");
 
-  Client().post(Uri.parse(AppUrls.login),headers:  {
-      "Access-Control-Allow-Origin": "*",
-      'Content-Type': 'application/json',
-      'Accept': '*/*'
-    } ,body:json.encode({
-    "staff_contact": email,
-    "staff_password": password,
-  })).then((value) {
+  Client()
+      .post(Uri.parse(AppUrls.login),
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*'
+          },
+          body: json.encode({
+            "staff_contact": email,
+            "staff_password": password,
+          }))
+      .then((value) {
     if (value.statusCode == 200 || value.statusCode == 201) {
       var data = jsonDecode(value.body);
 
@@ -24,10 +28,12 @@ loginUser(BuildContext context, String email, String password) async {
       debugPrint("Login response ${data}");
 
       BlocProvider.of<SchoolController>(context).setSchoolData(data);
-      // 
+      //
       Routes.namedRemovedUntilRoute(
         context,
-        data['role'] == 'Admin' ||  data['role'] == 'SuperAdmin' || data['role'] == 'Finance'
+        data['role'] == 'Admin' ||
+                data['role'] == 'SuperAdmin' ||
+                data['role'] == 'Finance'
             ? Routes.home
             : Routes.login,
       );
@@ -74,13 +80,20 @@ String greetUser() {
 
   return greet;
 }
+
 // return students
 Future<List<StudentModel>> fetchStudents(String id) async {
   var res = await Client().get(Uri.parse(AppUrls.students + id));
   return studentModelFromJson(res.body);
 }
 
-Future<StudentModel> getSpecificStudent(String n,String school) async {
+// fetching dashboard classes
+Future<List<DashboardModel>> fetchDashboardClassData(String schoolId)async {
+ var response = await Client().get(Uri.parse(AppUrls.dashboard + schoolId));
+ return dashboardModelFromJson(response.body);
+}
+
+Future<StudentModel> getSpecificStudent(String n, String school) async {
   var st = await fetchStudents(school);
   return st.firstWhere((element) => element.studentFname == n);
 }
@@ -108,7 +121,7 @@ void showSuccessDialog(String name, BuildContext context,
                 // context.read<TitleController>().setTitle("Classes");
                 // Routes.namedRoute(context, Routes.dashboard);
               },
-          child:const Text("Okay"),
+          child: const Text("Okay"),
         )
       ],
     ),
@@ -169,42 +182,45 @@ bool validateEmail(String email, BuildContext context) {
 
 // action buttons
 // build Action Buttons
-Widget buildActionButtons(BuildContext context,VoidCallback
-edit,VoidCallback delete) {
-  return context.read<SchoolController>().state['role'] == 'Finance'?
-  TextButton(
-        onPressed: edit,
-        style: TextButton.styleFrom(
-          
-          backgroundColor: Colors.blue,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        ),
-        child: const Icon(
-          Icons.edit,
-          color: Colors.white,
-        ),
-      ): Row(
-    children: [
-      CommonButton(
-        onTap: edit,
-        width: 50,height: 50,
-          // padding: const EdgeInsets.only(top: 15, bottom: 15),
-        buttonTextWidget: const Icon(
-          Icons.edit,
-          color: Colors.white,size: 20,
-        ),
-      ),
-      const SizedBox(
-        width: 10,
-      ),
-      CommonButton(
-        width: 50,height: 50,
-        onTap: delete,
-          backgroundColor: Colors.red,
-        buttonTextWidget: const Icon(Icons.delete_outline_rounded, color: Colors.white),
-      ),
-    ],
-  );
+Widget buildActionButtons(
+    BuildContext context, VoidCallback edit, VoidCallback delete) {
+  return context.read<SchoolController>().state['role'] == 'Finance'
+      ? TextButton(
+          onPressed: edit,
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.blue,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          ),
+          child: const Icon(
+            Icons.edit,
+            color: Colors.white,
+          ),
+        )
+      : Row(
+          children: [
+            CommonButton(
+              onTap: edit,
+              width: 50, height: 50,
+              // padding: const EdgeInsets.only(top: 15, bottom: 15),
+              buttonTextWidget: const Icon(
+                Icons.edit,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            CommonButton(
+              width: 50,
+              height: 50,
+              onTap: delete,
+              backgroundColor: Colors.red,
+              buttonTextWidget:
+                  const Icon(Icons.delete_outline_rounded, color: Colors.white),
+            ),
+          ],
+        );
 }
 // build dashboard cards
 
@@ -223,7 +239,7 @@ List<Map<String, dynamic>> options = [
   {
     "icon": "assets/icons/staff.svg",
     "title": "Staff",
-    "page":  const StaffView(),
+    "page": const StaffView(),
   },
   {
     "title": "Guardians",
@@ -234,20 +250,27 @@ List<Map<String, dynamic>> options = [
     "icon": "assets/vectors/class.svg",
     "title": "Classes",
     "page": const Classes(),
-  },{
+  },
+  {
     "icon": "assets/icons/staff.svg",
     "title": "Streams",
     "page": const Streams(),
   },
   {
     "title": "Pending Overtimes",
-    "page": const OvertimeReports(overtimeStatus: "Pending",label: "Pending",),
+    "page": const OvertimeReports(
+      overtimeStatus: "Pending",
+      label: "Pending",
+    ),
     'icon': "assets/icons/menu_store.svg"
   },
   {
     "icon": "assets/icons/menu_store.svg",
     "title": "Cleared Overtimes",
-    "page": const OvertimeReports(overtimeStatus: "Cleared",label: "Cleared",),
+    "page": const OvertimeReports(
+      overtimeStatus: "Cleared",
+      label: "Cleared",
+    ),
   },
   {
     "title": "Drop Offs",
@@ -279,23 +302,29 @@ List<Map<String, dynamic>> financeViews = [
   },
   {
     "title": "Pending Overtimes",
-    "page": const OvertimeReports(overtimeStatus: "Pending",),
+    "page": const OvertimeReports(
+      overtimeStatus: "Pending",
+    ),
     'icon': "assets/icons/menu_store.svg"
   },
   {
     "icon": "assets/icons/menu_store.svg",
     "title": "Cleared Overtimes",
-    "page": const OvertimeReports(overtimeStatus: "Cleared",),
-  },{
+    "page": const OvertimeReports(
+      overtimeStatus: "Cleared",
+    ),
+  },
+  {
     "title": "Change Password",
     "page": const ChangePassword(),
     'icon': "assets/icons/password-reset.svg"
   },
 ];
 // value limit
-String valueLimit(String actual,String max){
+String valueLimit(String actual, String max) {
   return int.parse(actual) > int.parse(max) ? max : actual;
 }
+
 // valid text controllers
 bool validateTextControllers(List<TextEditingController> controllers) {
   var ct = controllers.where((element) => element.text.isEmpty).toList();
@@ -304,14 +333,13 @@ bool validateTextControllers(List<TextEditingController> controllers) {
 
 // method to fetch available classes
 Future<List<ClassModel>> fetchClasses(String id) async {
-  
-    var response = await Client().get(Uri.parse(AppUrls.getClasses + id));
-    // if(value.statusCode == 200){
-    return response.statusCode == 200 ? classModelFromJson(response.body) :[];
-      // notifyListeners();
-    // }
-  
+  var response = await Client().get(Uri.parse(AppUrls.getClasses + id));
+  // if(value.statusCode == 200){
+  return response.statusCode == 200 ? classModelFromJson(response.body) : [];
+  // notifyListeners();
+  // }
 }
+
 /// show snackbar message
 /// @param type = 'danger' | 'info' | warning
 ///
@@ -335,7 +363,8 @@ void showMessage(
               : type == 'danger'
                   ? Colors.red[800]!.withOpacity(opacity)
                   : type == 'success'
-                      ? const Color.fromARGB(255, 2, 104, 7).withOpacity(opacity)
+                      ? const Color.fromARGB(255, 2, 104, 7)
+                          .withOpacity(opacity)
                       : Colors.grey[600]!.withOpacity(opacity),
       duration: Duration(seconds: duration),
     ),
@@ -457,9 +486,11 @@ Future<List<DropOffModel>> dropOffs(String id) async {
 /// Dashboard cards
 
 // fetch overtimes
-Future<List<OvertimeModel>> fetchOvertimeData(String status,String id) async {
+Future<List<OvertimeModel>> fetchOvertimeData(String status, String id) async {
   var response = await Client().get(Uri.parse(AppUrls.overtime + id));
-  return overtimeModelFromJson(response.body).where((element) => element.status == status).toList();
+  return overtimeModelFromJson(response.body)
+      .where((element) => element.status == status)
+      .toList();
   // return response;
 }
 
@@ -475,14 +506,15 @@ String handSanIntervals() {
 }
 
 // fetch dashboard meta data
-Future<List<Map<String, dynamic>>> fetchDashboardMetaData(String school_id,String role) async {
+Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
+    String schoolId, String role) async {
   // get students total
   // ignore: unused_local_variable
-  int students = await computeStudentsTotal(school_id);
-  var drops = await dropOffs(school_id);
-  var picks = await pickUps(school_id);
-  var clearedOvertimes = await fetchOvertimeData("Cleared",school_id);
-  var pendingOvertimes = await fetchOvertimeData("Pending",school_id);
+  int students = await computeStudentsTotal(schoolId);
+  var drops = await dropOffs(schoolId);
+  var picks = await pickUps(schoolId);
+  var clearedOvertimes = await fetchOvertimeData("Cleared", schoolId);
+  var pendingOvertimes = await fetchOvertimeData("Pending", schoolId);
 
   List<Map<String, dynamic>> dashboardData = [
     {
@@ -530,9 +562,7 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(String school_id,Strin
       "last_updated": "14:45"
     },
   ];
-  return role == 'Admin'
-      ? dashboardData
-      : financeData;
+  return role == 'Admin' ? dashboardData : financeData;
 }
 
 // logic to fetch a specific guardian from the scanners

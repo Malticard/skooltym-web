@@ -82,18 +82,17 @@ class _AddStaffState extends State<AddStaff> {
             errorMsgs: errorFields,
             onSubmit: () {
               if (validateEmail(_formControllers[1].text, context) != false) {
-                Routes.popPage(context);
-                showProgress(context, msg: "Adding new staff");
+                showProgress(context, msg: "Adding new staff member...");
                 _handleFormUpload().then((value) {
-                  debugPrint("Staff data -> ${value.reasonPhrase}");
+                  // debugPrint("Staff data -> ${value.reasonPhrase}");
                   if (value.statusCode == 200 || value.statusCode == 201) {
+                      Routes.popPage(context);
                     //  bottom msg
                     showMessage(
                       context: context,
                       type: 'success',
                       msg: "Added new staff successfully",
                     );
-
                     //  end of bottom msg
                   } else {
                     showMessage(
@@ -106,8 +105,8 @@ class _AddStaffState extends State<AddStaff> {
                     //     _formControllers[0].text.trim().split(" ")[1],
                     //     context);
                   }
-                  showSuccessDialog(
-                      _formControllers[0].text.trim().split(" ")[1], context);
+                  // showSuccessDialog(
+                  //     _formControllers[0].text.trim().split(" ")[1], context);
                 }).whenComplete(() {
                   Routes.popPage(context);
                 });

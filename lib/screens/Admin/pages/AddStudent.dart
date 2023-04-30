@@ -94,7 +94,7 @@ class _AddStudentState extends State<AddStudent> {
             buttonText: "Save Student Details",
             onSubmit: () {
               if (true) {
-                showProgress(context);
+                showProgress(context,msg: "Adding new student...");
                 _handleStudentRegistration()
                     .then(
                       (value) {
@@ -105,10 +105,9 @@ class _AddStudentState extends State<AddStudent> {
                             type: 'success',
                             msg: "Added new student successfully",
                           );
-                          formControllers.forEach((v) => v.clear());
-                          showSuccessDialog(
-                              formControllers[0].text.trim(),
-                              context);
+                          for (var v in formControllers) {
+                            v.clear();
+                          }
                         } else {
                           showMessage(
                             msg:

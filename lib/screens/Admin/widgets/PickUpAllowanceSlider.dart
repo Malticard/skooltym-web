@@ -45,7 +45,7 @@ class _PickUpAllowanceSliderState extends State<PickUpAllowanceSlider> {
                     onChanged: (v) {
                       context
                           .read<PickUpAllowanceTimeController>()
-                          .setPickUpAllowanceTime(v.toDouble());
+                          .setPickUpAllowanceTime(v.toInt());
 
                       setState(() {
                         _textController.value = TextEditingValue(

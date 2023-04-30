@@ -1,4 +1,4 @@
-import 'package:skool_web/exports/exports.dart';
+import '/exports/exports.dart';
 
 class FirstTimeUserController extends Cubit<bool>{
   FirstTimeUserController() : super(true);
@@ -8,7 +8,7 @@ class FirstTimeUserController extends Cubit<bool>{
     });
     emit(checker);
   }
-  // retive saved state
+  // retrieve saved state
   void getFirstTimeUser() {
     SharedPreferences.getInstance().then((value) {
       emit(value.getBool('firstTimeUser') ?? true);

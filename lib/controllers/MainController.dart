@@ -11,6 +11,8 @@ class MainController extends ChangeNotifier {
   List<StaffModel> _availableStaff = [];
   List<StreamModel> _streams = [];
   List<DashboardModel> _dashboardClasses = [];
+  // loader 
+  bool _isLoading = true;
   // searching arrays
   List<StaffModel> _searchStaff = [];
   List<StudentModel> _searchStudent = [];
@@ -34,7 +36,8 @@ class MainController extends ChangeNotifier {
   List<DropOffModel> get sdropOff => _searchDropOff;
   List<PickUpModel> get sPickUp => _searchPickUp;
   List<DashboardModel> get  dashboardClasses => _dashboardClasses;
-
+// get loader
+  bool get isLoading => _isLoading;
   // end of search
   List<Guardians> get guardians => _guardians;
   List<DropOffModel> get dropOffData => _drops;
@@ -65,6 +68,9 @@ class MainController extends ChangeNotifier {
   void getAllStudents(BuildContext context) {
    Client().get(Uri.parse(AppUrls.students + context.read<SchoolController>().state['school'])).then((v) {
       _students = studentModelFromJson(v.body);
+      if (v.statusCode == 200 || v.statusCode == 201) {
+        _isLoading = false;
+      } 
       notifyListeners();
     });
   }

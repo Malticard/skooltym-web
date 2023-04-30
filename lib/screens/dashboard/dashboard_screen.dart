@@ -10,7 +10,15 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
+  void initState() {
+  context.read<SchoolController>().getSchoolData();
+    super.initState();
+    
+  }
+  @override
   Widget build(BuildContext context) {
+  context.read<SchoolController>().getSchoolData();
+
     Size size = MediaQuery.of(context).size;
     return Container(
       color: Theme.of(context).brightness == Brightness.light
@@ -41,20 +49,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (context.read<SchoolController>().state['role'] ==
+                      'Finance')
+                        BlocBuilder<FinanceViewController, Widget>(
+                            builder: (context, child) {
+                          return Expanded(
+                            flex: 5,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width / 2,
+                              height: Responsive.isDesktop(context)
+                                  ? MediaQuery.of(context).size.width / 2.2
+                                  : MediaQuery.of(context).size.height / 1.2,
+                              child: child,
+                            ),
+                          );
+                        }),
                   if (context.read<SchoolController>().state['role'] == 'Admin')
-                    BlocBuilder<WidgetController, Widget>(
-                        builder: (context, child) {
-                      return Expanded(
-                        flex: 5,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: Responsive.isDesktop(context)
-                              ? MediaQuery.of(context).size.width / 2.2
-                              : MediaQuery.of(context).size.height / 1.2,
-                          child: child,
-                        ),
-                      );
-                    }),
+                        BlocBuilder<WidgetController, Widget>(
+                            builder: (context, child) {
+                          return Expanded(
+                            flex: 5,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width / 2,
+                              height: Responsive.isDesktop(context)
+                                  ? MediaQuery.of(context).size.width / 2.2
+                                  : MediaQuery.of(context).size.height / 1.2,
+                              child: child,
+                            ),
+                          );
+                        }),
                   // if (!Responsive.isMobile(context))
                   //   const SizedBox(width: defaultPadding),
                   // // On Mobile means if the screen is less than 850 we don't want to show it

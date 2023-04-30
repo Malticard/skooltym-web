@@ -56,14 +56,14 @@ class _UpdateStudentState extends State<UpdateStudent> {
         'icon': Icons.person_2_outlined
       },
       {
-        "title": "Student's Othername*",
+        "title": "Student's Othername *",
         "hint": "e.g Paul",
         "password": false,
         'icon': Icons.person_3_outlined
       },
       {'title': 'Student Profile', 'profile': 5},
       {
-        "title": "Gender*",
+        "title": "Gender *",
         "hint": "Select gender",
         "data": [
           "Select gender",
@@ -83,19 +83,34 @@ class _UpdateStudentState extends State<UpdateStudent> {
               .toList(),
         ],
         'icon': Icons.home_work_outlined
+      },
+      {
+        "title": "Stream *",
+        "hint": "e.g North",
+        "data": [
+          "Select stream",
+          ...context
+              .read<MainController>()
+              .streams
+              .map((e) => e.streamName)
+              .toList(),
+        ],
+        'icon': Icons.home_work_outlined
       }
     ];
-
     return Column(
       children: [
-        Text("Add Student", style: TextStyles(context).getTitleStyle()),
+        Text(
+          "Update Student Details",
+          style: TextStyles(context).getRegularStyle().copyWith(fontSize: 19),
+        ),
         SingleChildScrollView(
           child: CommonFormFields(
             initialPic: widget.studentModel.studentProfilePic,
             padding: _padding,
             formFields: formFields,
             formControllers: _formControllers,
-            buttonText: "Save Student Details",
+            buttonText: "Update Student Details",
             onSubmit: () {
               if (true) {
                 showProgress(context, msg: "Updating student details");

@@ -19,7 +19,15 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool _pass = false;
   var formKey = GlobalKey<FormState>();
   @override
+  void initState() {
+    context.read<SchoolController>().getSchoolData();
+    super.initState();
+    
+  }
+  @override
   Widget build(BuildContext context) {
+    context.read<SchoolController>().getSchoolData();
+
     return Padding(
       padding: EdgeInsets.only(
           // top: MediaQuery.of(context).size.width * 0.1,
@@ -153,6 +161,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       .setTitle("Dashboard");
                                   BlocProvider.of<SideBarController>(context)
                                       .changeSelected(0);
+                                      context.read<FinanceFirstTimeController>().setFirstTime(false);
                                 } else {
                                   // for admins after changing the password are redirected to system settings
                                   context

@@ -62,18 +62,19 @@ class FileInfoCardGridView extends StatefulWidget {
 class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   @override
   void initState() {
+    BlocProvider.of<SchoolController>(context).getSchoolData();
     Provider.of<MainController>(context, listen: false).fetchUpdates(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     super.initState();
   }
-
-  @override
-  void didUpdateWidget(oldWidget) {
-    context.watch<MainController>().fetchUpdates(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
-    super.didUpdateWidget(oldWidget);
-  }
-
+@override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  BlocProvider.of<SchoolController>(context).getSchoolData();
+}
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<SchoolController>(context).getSchoolData();
+    context.watch<MainController>().fetchUpdates(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     var dash = context.watch<MainController>().dashboardData;
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),

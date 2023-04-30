@@ -56,12 +56,20 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Responsive(
                 mobile: Padding(
                   padding: EdgeInsets.only(top: size.width * 0.180),
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.23),
-                        child: Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            height: MediaQuery.of(context).size.width * 0.9,
+                            child: SvgPicture.asset(
+                              "assets/vectors/mother_child.svg",
+                            ),
+                          ),
+                        Container(
+                          height: MediaQuery.of(context).size.height,
+                          margin: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.13),
                           decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(50),
@@ -73,25 +81,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                   : Colors.white),
                           child: _buildForm(),
                         ),
-                      ),
-                      Positioned(
-                        top: MediaQuery.of(context).size.height * 0.021,
-                        left: MediaQuery.of(context).size.height * 0.031,
-                        right: MediaQuery.of(context).size.height * 0.031,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 1.3,
-                          height: MediaQuery.of(context).size.width * 0.5,
-                          child: SvgPicture.asset(
-                            "assets/images/back2Skool.svg",
-                          ),
-                        ),
-                      ),
-                    ],
+                        // Positioned(
+                        //   top: MediaQuery.of(context).size.height * 0.021,
+                        //   left: MediaQuery.of(context).size.height * 0.031,
+                        //   right: MediaQuery.of(context).size.height * 0.031,
+                        //   child: 
+                        // ),
+                      ],
+                    ),
                   ),
                 ),
                 desktop: Padding(
                   padding: EdgeInsets.only(
-                      top: size.width * 0.030, bottom: size.width * 0.03),
+                      top: size.width * 0.020, bottom: size.width * 0.03),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -99,38 +101,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         flex: 5,
                         child: Column(
                           children: [
-                            // if (context
-                            //         .read<SchoolController>()
-                            //         .state['fname'] !=
-                            //     null)
-                              // Padding(
-                              //   padding: EdgeInsets.only(
-                              //     top: size.width * 0.015,
-                              //   ),
-                              //   child: Text(
-                              //     "Welcome back ${context.read<SchoolController>().state['fname']}",
-                              //     style: TextStyles(context)
-                              //         .getTitleStyle()
-                              //         .copyWith(
-                              //           color: Colors.white,
-                              //           fontSize: Responsive.isMobile(context)
-                              //               ? 30
-                              //               : 40,
-                              //         ),
-                              //   ),
-                              // ),
                             Padding(
-                              padding: EdgeInsets.only(
-                                top: size.width * 0.0150,
+                              padding: const  EdgeInsets.only(
                                 left: 60,
                                 right: 60,
                               ),
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.43,
+                                    MediaQuery.of(context).size.height / 1.5,
                                 child: SvgPicture.asset(
-                                  "assets/images/back2Skool.svg",
+                                  "assets/vectors/mother_child.svg",
                                 ),
                               ),
                             ),
@@ -197,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height * 0.3,
                         child: SvgPicture.asset(
-                          "assets/vectors/forgot_pass.svg",
+                          "assets/vectors/mother_child.svg",
                         ),
                       ),
                     ],

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import '/exports/exports.dart';
 
 class SideMenu extends StatefulWidget {
@@ -15,19 +17,18 @@ class _SideMenuState extends State<SideMenu> {
   var store;
   @override
   void initState() {
-     context.read<SchoolController>().getSchoolData();
-   
+    context.read<SchoolController>().getSchoolData();
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-     context.read<SchoolController>().getSchoolData();
- store = context.read<SchoolController>().state['role'] == 'Admin'
+    context.read<SchoolController>().getSchoolData();
+    store = context.read<SchoolController>().state['role'] == 'Admin'
         ? options
-        : context.read<SchoolController>().state['role'] == 'Finance'? financeViews :[];
+        : context.read<SchoolController>().state['role'] == 'Finance'
+            ? financeViews
+            : [];
     return Drawer(
       key: widget.scaffoldKey,
       backgroundColor: Theme.of(context).brightness == Brightness.light
@@ -71,26 +72,13 @@ class _SideMenuState extends State<SideMenu> {
                       svgSrc: store[index]['icon'],
                       press: () {
                         context.read<SideBarController>().changeSelected(index);
-                        // setState(() => selected = index);
-                        // update page title
-                      if(context.read<SchoolController>().state['role'] == 'Finance') {
                         context
-                              .read<FinanceTitleController>()
-                              .setTitle(store[index]['title']);
-                                // update rendered page
-                        context
-                            .read<FinanceViewController>()
-                            .pushWidget(store[index]['page']);
-                      } else {
-                         context
-                              .read<TitleController>()
-                              .setTitle(store[index]['title']);
-                                // update rendered page
+                            .read<TitleController>()
+                            .setTitle(store[index]['title']);
+                        // update rendered page
                         context
                             .read<WidgetController>()
                             .pushWidget(store[index]['page']);
-                      }
-                      
                       },
                     ),
                   ),
@@ -140,7 +128,8 @@ class _SideMenuState extends State<SideMenu> {
 }
 
 class DrawerListTile extends StatelessWidget {
-  const DrawerListTile({super.key, 
+  const DrawerListTile({
+    super.key,
     this.selected = false,
     // For selecting those three line once press "Command+D"
     required this.title,
