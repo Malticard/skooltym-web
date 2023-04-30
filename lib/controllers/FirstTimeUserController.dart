@@ -1,17 +1,17 @@
 import 'package:skool_web/exports/exports.dart';
 
 class FirstTimeUserController extends Cubit<bool>{
-  FirstTimeUserController() : super(false);
-  void setFirstTimeUser(bool value) {
+  FirstTimeUserController() : super(true);
+  void setFirstTimeUser(bool checker) {
     SharedPreferences.getInstance().then((value) {
-      value.setBool('firstTimeUser', value.getBool('firstTimeUser') ?? false);
+      value.setBool('firstTimeUser',checker );
     });
-    emit(value);
+    emit(checker);
   }
   // retive saved state
   void getFirstTimeUser() {
     SharedPreferences.getInstance().then((value) {
-      emit(value.getBool('firstTimeUser') ?? false);
+      emit(value.getBool('firstTimeUser') ?? true);
     });
   }
 }

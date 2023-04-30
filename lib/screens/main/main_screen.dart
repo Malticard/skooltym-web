@@ -21,7 +21,18 @@ class _MainScreenState extends State<MainScreen> {
 
     super.initState();
   }
-
+@override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  context.read<ThemeController>().getTheme();
+    // retrive session state
+    context.read<SchoolController>().getSchoolData();
+    context.read<MainController>().fetchUpdates(
+        context.read<SchoolController>().state['school'] ?? "",
+        context.read<SchoolController>().state['role'] ?? "");
+    BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
+  
+}
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -34,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
         context.read<SchoolController>().state['school'] ?? "",
         context.read<SchoolController>().state['role'] ?? "");
 
-    context.read<FirstTimeUserController>().getFirstTimeUser();
+    BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
     return Scaffold(
       drawer: SideMenu(
         scaffoldKey: _scaffoldKey,
@@ -47,7 +58,12 @@ class _MainScreenState extends State<MainScreen> {
             if (Responsive.isDesktop(context))
               BlocBuilder<FirstTimeUserController, bool>(
                 builder: (context, state) {
-                  return state ? Expanded(
+                  if (state == false) {
+                    BlocProvider.of<WidgetController>(context).pushWidget(const Dashboard());
+                    BlocProvider.of<TitleController>(context).setTitle( "Dashboard");
+                    BlocProvider.of<SideBarController>(context).changeSelected(0);
+                  }
+                  return state == false ? Expanded(
                     // default flex = 1
                     // and it takes 1/6 part of the screen
                     child: SideMenu(

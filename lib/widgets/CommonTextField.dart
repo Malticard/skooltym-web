@@ -11,6 +11,7 @@ class CommonTextField extends StatelessWidget {
   final TextEditingController? controller;
   final Color? fieldColor;
   final IconData? icon;
+  final TextInputAction? textInputAction;
   final bool enableSuffix;
   final IconData? suffixIcon;
   final bool enableBorder;
@@ -35,7 +36,7 @@ class CommonTextField extends StatelessWidget {
     this.suffixIcon,
     this.onTapSuffix,
     this.enableSuffix = false,
-    this.icon,
+    this.icon, this.textInputAction,
   }) : super(key: key);
 
   @override
@@ -79,6 +80,7 @@ class CommonTextField extends StatelessWidget {
                 height: 45,
                 child: Center(
                   child: TextFormField(
+                    textInputAction: textInputAction,
                     controller: controller,
                     maxLines: 1,
                     onChanged: onChanged,
@@ -119,6 +121,7 @@ class CommonTextField extends StatelessWidget {
                       ),
                     ),
                     keyboardType: keyboardType,
+                    
                   ),
                 ),
               ),

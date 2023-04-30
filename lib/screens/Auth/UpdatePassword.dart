@@ -51,7 +51,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                     width: MediaQuery.of(context).size.width / 1.3,
                     height: MediaQuery.of(context).size.width * 0.5,
                     child: SvgPicture.asset(
-                      "assets/images/back2Skool.svg",
+                      "assets/vectors/confirm_pass.svg",
                     ),
                   ),
                 ),
@@ -78,7 +78,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height * 0.43,
                           child: SvgPicture.asset(
-                            "assets/images/back2Skool.svg",
+                            "assets/vectors/confirm_pass.svg",
                           ),
                         ),
                       ),
@@ -143,7 +143,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.3,
                   child: SvgPicture.asset(
-                    "assets/images/back2Skool.svg",
+                    "assets/vectors/confirm_pass.svg",
                   ),
                 ),
               ],

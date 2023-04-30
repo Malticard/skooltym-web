@@ -72,6 +72,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                     // Space(space: 0.06,),
                     CommonTextField(
+                      textInputAction: TextInputAction.next,
                       enableSuffix: true,
                       suffixIcon: _confirm
                           ? Icons.remove_red_eye_rounded
@@ -92,6 +93,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       errorText: _errorNewPassword,
                     ),
                     CommonTextField(
+                      textInputAction: TextInputAction.done,
                       controller: _confirmController,
                       icon: Icons.lock_outline_rounded,
                       enableSuffix: true,
@@ -128,33 +130,45 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 "confirm_password":
                                     _confirmController.text.trim(),
                               }).then((value) {
-                                var data = jsonDecode(value.body);
+                            var data = jsonDecode(value.body);
                             debugPrint("Change response => ${value.body}");
                             if (value.statusCode == 200 ||
                                 value.statusCode == 201) {
                               Routes.popPage(context);
-                              
-                              // debugPrint(data.toString());
-                              // if (data['status'] == 200) {
                               _newController.clear();
                               _confirmController.clear();
                               showSuccessDialog(
                                   "Password changed successfully", context,
                                   onPressed: () {
                                 Routes.popPage(context);
-                                context
-                                    .read<WidgetController>()
-                                    .pushWidget(const SystemSettings());
-                                context
-                                    .read<TitleController>()
-                                    .setTitle("System Settings");
-                                context
-                                    .read<SideBarController>()
-                                    .changeSelected(11);
+
+                                if (context
+                                        .read<SchoolController>()
+                                        .state['role'] ==
+                                    'Finance') {
+                                      // for finance after changing the password are redirected to dashboard
+                                  BlocProvider.of<WidgetController>(context)
+                                      .pushWidget(const Dashboard());
+                                  BlocProvider.of<TitleController>(context)
+                                      .setTitle("Dashboard");
+                                  BlocProvider.of<SideBarController>(context)
+                                      .changeSelected(0);
+                                } else {
+                                  // for admins after changing the password are redirected to system settings
+                                  context
+                                      .read<WidgetController>()
+                                      .pushWidget(const SystemSettings());
+                                  context
+                                      .read<TitleController>()
+                                      .setTitle("System Settings");
+                                  context
+                                      .read<SideBarController>()
+                                      .changeSelected(11);
+                                }
                               });
                               showMessage(
                                   context: context,
-                                  msg: value.body,
+                                  msg: "Password Updated successfully",
                                   type: 'success');
                             } else {
                               Routes.popPage(context);
