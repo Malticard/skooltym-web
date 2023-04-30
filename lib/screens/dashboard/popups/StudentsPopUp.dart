@@ -3,7 +3,8 @@
 import '/exports/exports.dart';
 
 class StudentsPopUps extends StatefulWidget {
-  const StudentsPopUps({super.key});
+  final String stream;
+  const StudentsPopUps({super.key, required this.stream});
 
   @override
   State<StudentsPopUps> createState() => _StudentsPopUpsState();
@@ -17,7 +18,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).getAllStudents(context);
+    Provider.of<MainController>(context).getAllStudents(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 
@@ -67,7 +68,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Provider.of<MainController>(context).getAllStudents(context);
+    Provider.of<MainController>(context).getAllStudents(context.read<SchoolController>().state['school']);
     return SizedBox(
       height: size.width / 2.5,
       child: Stack(
@@ -96,32 +97,23 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
                     "",
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
-                  // ElevatedButton.icon(
-                  //   onPressed: () {
-                  //     showDialog(
-                  //         context: context,
-                  //         builder: (context) {
-                  //           return Dialog(
-                  //             child: SizedBox(
-                  //               width: MediaQuery.of(context).size.width / 3.5,
-                  //               height: MediaQuery.of(context).size.width / 2.2,
-                  //               child: const SingleChildScrollView(
-                  //                   child: AddStudent()),
-                  //             ),
-                  //           );
-                  //         });
-                  //   },
-                  //   icon: const Icon(Icons.add),
-                  //   label: const Text("Add Student"),
-                  // ),
                 ],
               ),
             ),
-            empty: const NoDataWidget(
-              text: "No "
-                  "Students added as "
-                  "yet...",
-            ),
+            empty: FutureBuilder(
+                future: Future.delayed(const Duration(seconds: 4)),
+                builder: (context, snap) {
+                  return snap.connectionState == ConnectionState.waiting
+                      ? const Center(
+                          child: Loader(
+                          text: "Student data",
+                        ))
+                      : const NoDataWidget(
+                          text: "No "
+                              "Students added as "
+                              "yet...",
+                        );
+                }),
             columns: List.generate(
               staffs.length,
               (index) => DataColumn(
@@ -130,14 +122,48 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
                 ),
               ),
             ),
-            rows:  List.generate(
-              context.watch<MainController>().sStudent.isEmpty
-                  ? context.watch<MainController>().students.length
-                  : context.watch<MainController>().sStudent.length,
+            rows: List.generate(
+              context
+                      .watch<MainController>()
+                      .sStudent
+                      .where((element) =>
+                          element.stream.streamName == widget.stream)
+                      .toList()
+                      .isEmpty
+                  ? context
+                      .watch<MainController>()
+                      .students
+                      .where((element) =>
+                          element.stream.streamName == widget.stream)
+                      .toList()
+                      .length
+                  : context
+                      .watch<MainController>()
+                      .sStudent
+                      .where((element) =>
+                          element.stream.streamName == widget.stream)
+                      .toList()
+                      .length,
               (index) => _dataRow(
-                  context.watch<MainController>().sStudent.isEmpty
-                      ? context.watch<MainController>().students[index]
-                      : context.watch<MainController>().sStudent[index],
+                  context
+                          .watch<MainController>()
+                          .sStudent
+                          .where((element) =>
+                              element.stream.streamName == widget.stream)
+                          .toList()
+                          .isEmpty
+                      ? context
+                          .watch<MainController>()
+                          .students
+                          .where((element) =>
+                              element.stream.streamName == widget.stream)
+                          .toList()[index]
+                      : context
+                          .watch<MainController>()
+                          .sStudent
+                          .where((element) =>
+                              element.stream.streamName == widget.stream)
+                          .toList()[index],
                   index),
             ),
           ),

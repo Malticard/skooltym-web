@@ -89,7 +89,10 @@ class _ClassesState extends State<Classes> {
                       () => showDialog(
                         context: context,
                         builder: (context) => UpdateClass(
-                          streams: context.read<MainController>().classes[index].classStreams,
+                          streams: context
+                              .read<MainController>()
+                              .classes[index]
+                              .classStreams,
                           className: context
                               .watch<MainController>()
                               .classes[index]
@@ -113,9 +116,17 @@ class _ClassesState extends State<Classes> {
                 ],
               );
             }),
-            empty: const Center(
-              child: Text("No classes added.."),
-            ),
+            empty: FutureBuilder(
+                future: Future.delayed(const Duration(seconds: 5)),
+                builder: (context, s) {
+                  return s.connectionState == ConnectionState.waiting
+                      ? const Loader(
+                          text: "Classes data",
+                        )
+                      : const Center(
+                          child: Text("No classes added.."),
+                        );
+                }),
           ),
         ),
         Positioned(

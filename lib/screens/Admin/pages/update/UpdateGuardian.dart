@@ -111,7 +111,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
   
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents(context);
+    context.watch<MainController>().getAllStudents(context.read<SchoolController>().state['school']);
     context.read<MultiStudentsController>().getMultiStudents();
 
     // Size size = MediaQuery.of(context).size;

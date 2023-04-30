@@ -19,7 +19,7 @@ class _TestWidgetState extends State<TestWidget> {
   var selected;
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents(context);
+    // context.watch<MainController>().getAllStudents(context);
     return Card(
       elevation: 0,
       color: widget.fieldColor,

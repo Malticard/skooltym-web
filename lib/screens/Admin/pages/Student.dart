@@ -17,7 +17,7 @@ class _ViewStudentsState extends State<ViewStudents> {
 
   @override
   void didChangeDependencies() {
-    // Provider.of<MainController>(context).getAllStudents(context);
+    Provider.of<MainController>(context,listen: false).getAllStudents(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 
@@ -71,38 +71,29 @@ class _ViewStudentsState extends State<ViewStudents> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     BlocProvider.of<SchoolController>(context,listen: false).getSchoolData();
+    Provider.of<MainController>(context,listen: false).getAllStudents(context.read<SchoolController>().state['school']);
     return Stack(
       children: [
         SizedBox(
           height: size.width / 2.39,
-          child: FutureBuilder(
-              future: fetchStudents(
-                  context.read<SchoolController>().state['school']),
-              builder: (context, snapshot) {
-                return snapshot.connectionState == ConnectionState.waiting
-                    ? const Center(
-                        child: Loader(
-                          text: "Fetching students",
-                        ),
-                      )
-                    : Data_Table(
+          child:Data_Table(
                         header: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // if (context.read<MainController>().students.isNotEmpty)
-                              // Expanded(
-                              //   child: SizedBox(
-                              //     width: 120,
-                              //     child: SearchField(
-                              //       onChanged: (value) {
-                              //         Provider.of<MainController>(context, listen: false)
-                              //             .searchStudents(value ?? "");
-                              //       },
-                              //     ),
-                              //   ),
-                              // ),
+                              if (context.read<MainController>().students.isNotEmpty)
+                              Expanded(
+                                child: SizedBox(
+                                  width: 120,
+                                  child: SearchField(
+                                    onChanged: (value) {
+                                      Provider.of<MainController>(context, listen: false)
+                                          .searchStudents(value ?? "");
+                                    },
+                                  ),
+                                ),
+                              ),
                               if (!Responsive.isMobile(context))
                                 Spacer(
                                     flex:
@@ -138,10 +129,19 @@ class _ViewStudentsState extends State<ViewStudents> {
                             ],
                           ),
                         ),
-                        empty: const NoDataWidget(
-                          text: "No "
-                              "Students added as "
-                              "yet...",
+                        empty: FutureBuilder(
+                          future: Future.delayed(const Duration(seconds: 6)),
+                          builder: (context,s) {
+                            return s.connectionState == ConnectionState.waiting? const Center(
+                        child: Loader(
+                          text: "Fetching students",
+                        ),
+                      ): const NoDataWidget(
+                              text: "No "
+                                  "Students added as "
+                                  "yet...",
+                            );
+                          }
                         ),
                         columns: List.generate(
                           staffs.length,
@@ -151,23 +151,21 @@ class _ViewStudentsState extends State<ViewStudents> {
                             ),
                           ),
                         ),
-                        rows:List.generate(snapshot.data!.length, (index) =>  _dataRow(snapshot.data![index],index)),
-                        // rows: List.generate(
-                        //   context.read<MainController>().sStudent.isEmpty
-                        //       ? context.read<MainController>().students.length
-                        //       : context.read<MainController>().sStudent.length,
-                        //   (index) => _dataRow(
-                        //       context.read<MainController>().sStudent.isEmpty
-                        //           ? context
-                        //               .read<MainController>()
-                        //               .students[index]
-                        //           : context
-                        //               .read<MainController>()
-                        //               .sStudent[index],
-                        //       index),
-                        // ),
-                      );
-              }),
+                        rows: List.generate(
+                          context.watch<MainController>().sStudent.isEmpty
+                              ? context.watch<MainController>().students.length
+                              : context.watch<MainController>().sStudent.length,
+                          (index) => _dataRow(
+                              context.watch<MainController>().sStudent.isEmpty
+                                  ? context
+                                      .watch<MainController>()
+                                      .students[index]
+                                  : context
+                                      .watch<MainController>()
+                                      .sStudent[index],
+                              index),
+                        ),
+                      ),
         ),
         Positioned(
           bottom: 10,

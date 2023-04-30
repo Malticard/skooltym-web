@@ -11,7 +11,7 @@ class MainController extends ChangeNotifier {
   List<StaffModel> _availableStaff = [];
   List<StreamModel> _streams = [];
   List<DashboardModel> _dashboardClasses = [];
-  // loader 
+  // loader
   bool _isLoading = true;
   // searching arrays
   List<StaffModel> _searchStaff = [];
@@ -35,7 +35,7 @@ class MainController extends ChangeNotifier {
   List<Guardians> get sGuardian => _searchGuardian;
   List<DropOffModel> get sdropOff => _searchDropOff;
   List<PickUpModel> get sPickUp => _searchPickUp;
-  List<DashboardModel> get  dashboardClasses => _dashboardClasses;
+  List<DashboardModel> get dashboardClasses => _dashboardClasses;
 // get loader
   bool get isLoading => _isLoading;
   // end of search
@@ -55,51 +55,60 @@ class MainController extends ChangeNotifier {
 
   void controlMenu(GlobalKey<ScaffoldState> scaffoldKey) {
     // if (!scaffoldKey.currentState!.isDrawerOpen) {
-      scaffoldKey.currentState!.openDrawer();
-    }
-  void fetchUpdates(String school,String role) {
-    fetchDashboardMetaData(school,role).then((v) {
-      _dashData = v;
-      notifyListeners();
+    scaffoldKey.currentState!.openDrawer();
+  }
+
+  void fetchUpdates(String school, String role) {
+    Timer.periodic(const Duration(seconds: 10), (v) {
+      fetchDashboardMetaData(school, role).then((v) {
+        _dashData = v;
+        notifyListeners();
+      });
     });
   }
 
   // getting available students
-  void getAllStudents(BuildContext context) {
-   Client().get(Uri.parse(AppUrls.students + context.read<SchoolController>().state['school'])).then((v) {
-      _students = studentModelFromJson(v.body);
-      if (v.statusCode == 200 || v.statusCode == 201) {
-        _isLoading = false;
-      } 
-      notifyListeners();
+  void getAllStudents(String school) {
+    Timer.periodic(const Duration(seconds: 4), (timer) {
+      Client().get(Uri.parse(AppUrls.students + school)).then((v) {
+        _students = studentModelFromJson(v.body);
+        notifyListeners();
+      });
     });
   }
 
 // check for new entries of students
   void staffUpdate(String school) {
-    Client().get(Uri.parse(AppUrls.staff + school)).then((response) {
-      _availableStaff = staffModelFromJson(response.body);
-      notifyListeners();
+    Timer.periodic(const Duration(seconds: 4), (v) {
+      Client().get(Uri.parse(AppUrls.staff + school)).then((value) {
+        _availableStaff = staffModelFromJson(value.body);
+        notifyListeners();
+      });
     });
   }
+
   // check new guardians
   void newGuardians(BuildContext context) {
     try {
-      Client().get(Uri.parse(AppUrls.getGuardians + context.read<SchoolController>().state['school'])).then((value) {
-      _guardians = guardiansFromJson(value.body);
-      notifyListeners();
-    });
+      Client()
+          .get(Uri.parse(AppUrls.getGuardians +
+              context.read<SchoolController>().state['school']))
+          .then((value) {
+        _guardians = guardiansFromJson(value.body);
+        notifyListeners();
+      });
     } on ClientException catch (_, e) {
-      showMessage(context: context,msg: _.message,type: 'warning');
+      showMessage(context: context, msg: _.message, type: 'warning');
     }
-    
   }
 
   // available picks and drops
   availableDropOffs(String school) {
-    dropOffs(school).then((drops) {
-      _drops = drops;
-      notifyListeners();
+    Timer.periodic(const Duration(seconds: 5), (c) {
+      dropOffs(school).then((drops) {
+        _drops = drops;
+        notifyListeners();
+      });
     });
   }
 
@@ -110,93 +119,126 @@ class MainController extends ChangeNotifier {
       notifyListeners();
     });
   }
+
 //  fetch pending overtimes
-void fetchPendingOvertime(String status, BuildContext context) {
-  Client().get(Uri.parse(AppUrls.overtime + context.read<SchoolController>().state['school'])).then((value) {
-    // debugPrint("Current overtime response => ${value.body}");
-    _pendingOvertime = overtimeModelFromJson((value.body)).where((element) => element.status == status).toList();
-    notifyListeners();
-  });
-}
+  void fetchPendingOvertime(String status, BuildContext context) {
+    Client()
+        .get(Uri.parse(AppUrls.overtime +
+            context.read<SchoolController>().state['school']))
+        .then((value) {
+      // debugPrint("Current overtime response => ${value.body}");
+      _pendingOvertime = overtimeModelFromJson((value.body))
+          .where((element) => element.status == status)
+          .toList();
+      notifyListeners();
+    });
+  }
+
 // stepper text count
-void setTextCount(int value){
+  void setTextCount(int value) {
     _stepCount = value;
     notifyListeners();
-}
+  }
+
 //
-void selectMultiGuardians(List<dynamic> selection){
-  // debugPrint("Selection => $selection");
+  void selectMultiGuardians(List<dynamic> selection) {
+    // debugPrint("Selection => $selection");
     _multiguardian = selection;
     notifyListeners();
-}
+  }
 
-void selectMultiStudent(List<dynamic> selection){
-  // debugPrint("Selection => $selection");
+  void selectMultiStudent(List<dynamic> selection) {
+    // debugPrint("Selection => $selection");
     _multistudent = selection;
     notifyListeners();
-}
+  }
 
 // method to fetch available classes
-void fetchClasses(String id){
-  try{
-  Client().get(Uri.parse(AppUrls.getClasses + id)).then((value) {
-    if(value.statusCode == 200){
-     _classes = classModelFromJson(value.body);
-      notifyListeners();
+  void fetchClasses(String id) {
+    Timer.periodic(Duration(seconds: 5), (timer) { 
+      try {
+      Client().get(Uri.parse(AppUrls.getClasses + id)).then((value) {
+        if (value.statusCode == 200) {
+          _classes = classModelFromJson(value.body);
+          notifyListeners();
+        }
+      });
+    } on ClientException catch (_, e) {
+      print(_.message);
     }
-  });
-   } on ClientException catch (_, e) {
-      print( _.message);
-    }
-}
+    });
+    
+  }
 
-void fetchStreams(String id){
-  try{
-  Client().get(Uri.parse(AppUrls.getStreams + id)).then((value) {
-    if(value.statusCode == 200){
-     _streams = streamModelFromJson(value.body);
-      notifyListeners();
+  void fetchStreams(String id) {
+    try {
+      Client().get(Uri.parse(AppUrls.getStreams + id)).then((value) {
+        if (value.statusCode == 200) {
+          _streams = streamModelFromJson(value.body);
+          notifyListeners();
+        }
+      });
+    } on ClientException catch (_, e) {
+      print(_.message);
     }
-  });
-   } on ClientException catch (_, e) {
-      print( _.message);
-    }
-}
+  }
+
 // dashboard class data
   void fetchDashboardClasses(String school) {
-    try{
-    Client().get(Uri.parse(AppUrls.dashboard + school)).then((value) {
-    if(value.statusCode == 200){
-     _dashboardClasses = dashboardModelFromJson(value.body);
-      notifyListeners();
-    }
-  });
-   } on ClientException catch (_, e) {
-      print( _.message);
+    try {
+      Client().get(Uri.parse(AppUrls.dashboard + school)).then((value) {
+        if (value.statusCode == 200) {
+          _dashboardClasses = dashboardModelFromJson(value.body);
+          notifyListeners();
+        }
+      });
+    } on ClientException catch (_, e) {
+      print(_.message);
     }
   }
   // function to search for staff members by  either first name or last nam
 
-  void searchStaff(String value){
-     _searchStaff = staffData.where((element) => element.staffFname == value || element.staffLname == value).toList();
-        notifyListeners();
+  void searchStaff(String value) {
+    _searchStaff = staffData
+        .where((element) =>
+            element.staffFname == value || element.staffLname == value)
+        .toList();
+    notifyListeners();
   }
+
   // function to search for guardians by either first name or last name
-  void searchGuardians(String value){
-    _searchGuardian = guardians.where((element) => element.guardianFname == value || element.guardianLname == value).toList();
+  void searchGuardians(String value) {
+    _searchGuardian = guardians
+        .where((element) =>
+            element.guardianFname == value || element.guardianLname == value)
+        .toList();
     notifyListeners();
   }
+
   // function to search for students by either first name or last name
-  void searchStudents(String value){
-    _searchStudent = students.where((element) => element.studentFname == value || element.studentLname == value).toList();
+  void searchStudents(String value) {
+    _searchStudent = students
+        .where((element) =>
+            element.studentFname == value || element.studentLname == value)
+        .toList();
     notifyListeners();
   }
+
   //  function to search for drops offs by first name or last name
-  void searchDropOffs(String value){
-    _searchDropOff = dropOffData.where((element) => element.studentName.studentLname == value || element.studentName.studentFname == value).toList();
+  void searchDropOffs(String value) {
+    _searchDropOff = dropOffData
+        .where((element) =>
+            element.studentName.studentLname == value ||
+            element.studentName.studentFname == value)
+        .toList();
   }
-  // function to search for pick ups by first name or last name 
-  void searchPickUps(String value){
-    _searchPickUp = pickUpData.where((element) => element.studentName_.studentFname == value || element.studentName_.studentLname == value).toList();
+
+  // function to search for pick ups by first name or last name
+  void searchPickUps(String value) {
+    _searchPickUp = pickUpData
+        .where((element) =>
+            element.studentName_.studentFname == value ||
+            element.studentName_.studentLname == value)
+        .toList();
   }
 }

@@ -16,7 +16,7 @@ class FileInfoCard extends StatelessWidget {
         builder: (context) => Dialog(
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.3,
-            height: MediaQuery.of(context).size.height * 0.9,
+            height: MediaQuery.of(context).size.height * 0.5,
             child: Column(
               children: [
                  CommonAppbarView(
@@ -30,8 +30,8 @@ class FileInfoCard extends StatelessWidget {
                               Navigator.pop(context);
                               showDialog(
                                 context: context,
-                                builder: (context) => const Dialog(
-                                  child: StudentsPopUps(),
+                                builder: (context) =>  Dialog(
+                                  child: StudentsPopUps(stream: info.classStreams[index].streamName,),
                                 ),
                               );
                             },
@@ -69,7 +69,7 @@ class FileInfoCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Class",
+                  info.className,
                   style: TextStyles(context)
                       .getRegularStyle()
                       .copyWith(fontSize: 18),
@@ -90,7 +90,7 @@ class FileInfoCard extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: SvgPicture.asset(
-                      "assets/vectors/class.svg",
+                      "assets/vectors/class_r.svg",
                       // color: Colors.red,
                     ),
                   ),

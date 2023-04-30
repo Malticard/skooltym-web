@@ -78,9 +78,12 @@ class _UpdateClassState extends State<UpdateClass> {
             CommonMenuWidget(
               // fieldColor: Colors.transparent,
               onChange: (v) {
-                setState(() {
+                if (v != null) {
+                    setState(() {
                   _updatedStreams = json.decode(v).join(",");
                 });
+                }
+              
               },
               hint: "Attach streams",
               padding: const EdgeInsets.only(
@@ -108,7 +111,7 @@ class _UpdateClassState extends State<UpdateClass> {
                   "class_streams": _updatedStreams
                 };
                 // debugPrint("Saved data $data");
-                showProgress(context, msg: 'Updating class in progress');
+                showProgress(context, msg: 'Updating ${widget.className} in progress');
                 // saving class data to db
                 Client()
                     .patch(Uri.parse(AppUrls.updateClass + widget.id),
@@ -119,7 +122,7 @@ class _UpdateClassState extends State<UpdateClass> {
                     Routes.popPage(context);
                     showMessage(
                         context: context,
-                        msg: "Class updated successfully",
+                        msg: "${widget.className} updated successfully",
                         type: 'success',
                         duration: 6);
                   } else {

@@ -676,3 +676,29 @@ void handleNetworkSession(BuildContext context) {
     context.read<OnlineCheckerController>().updateChecker(online);
   });
 }
+//  // Initialize the latest timestamp to null
+var latestTimestamp;
+
+// Define a function to check for new data
+// Future<bool> hasNewData() async {
+//   // Make a GET request to the server with the latest timestamp
+//   final response = await Client().get(
+//     Uri.parse('$serverUrl$endpointPath?timestamp=$latestTimestamp'),
+//   );
+
+//   // If the response is not successful, throw an exception
+//   if (response.statusCode != 200) {
+//     throw Exception('Failed to fetch data from server');
+//   }
+
+//   // Decode the JSON response
+//   final jsonData = jsonDecode(response.body);
+
+//   // If the response contains new data, update the latest timestamp and return true
+//   if (jsonData.isNotEmpty) {
+//     latestTimestamp = jsonData[0]['timestamp'];
+//     return true;
+//   }
+//   // Otherwise, return false
+//   return false;
+// }

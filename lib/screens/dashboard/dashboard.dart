@@ -23,11 +23,6 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<SchoolController>(context).getSchoolData();
-
-    // context
-    //     .read<MainController>()
-    //     .fetchDashboardClasses(context.read<SchoolController>().state['id']);
-
     return Column(
       children: [
         const MyFiles(),
