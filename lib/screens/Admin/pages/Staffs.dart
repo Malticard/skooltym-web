@@ -126,8 +126,18 @@ class _StaffViewState extends State<StaffView> {
                 ),
               ),
             ),
-            empty:
-                const NoDataWidget(text: "You currently have no staff records"),
+            empty: Center(
+              child: FutureBuilder(
+                  future: Future.delayed(const Duration(seconds: 5)),
+                  builder: (context, s) {
+                    return s.connectionState == ConnectionState.waiting
+                        ? const Loader(
+                            text: "Staff data",
+                          )
+                        : const NoDataWidget(
+                            text: "You currently have no staff records");
+                  }),
+            ),
             rows: List.generate(
               context.watch<MainController>().sStaff.isEmpty
                   ? context.watch<MainController>().staffData.length

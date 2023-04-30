@@ -106,7 +106,17 @@ class _ViewDropOffsState extends State<ViewDropOffs>
             label: Text("Time Of DropOff"),
           ),
         ],
-        empty: const NoDataWidget(text: "No drop offs captured yet"),
+        empty: Center(
+          child: FutureBuilder(
+              future: Future.delayed(const Duration(seconds: 5)),
+              builder: (context, f) {
+                return f.connectionState == ConnectionState.waiting
+                    ? const Loader(
+                        text: "DropOff data..",
+                      )
+                    : const NoDataWidget(text: "No drop offs captured yet");
+              }),
+        ),
         rows: List.generate(
           context.watch<MainController>().sdropOff.isEmpty
               ? context.watch<MainController>().dropOffData.length

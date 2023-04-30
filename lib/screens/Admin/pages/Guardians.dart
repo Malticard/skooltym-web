@@ -129,8 +129,19 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                 ),
               ),
             ),
-            empty: const NoDataWidget(text: "No guardians registered yet.."),
-            rows:  List.generate(
+            empty: Center(
+              child: FutureBuilder(
+                  future: Future.delayed(const Duration(seconds: 5)),
+                  builder: (context, d) {
+                    return d.connectionState == ConnectionState.waiting
+                        ? const Loader(
+                            text: "Guardians data ",
+                          )
+                        : const NoDataWidget(
+                            text: "No guardians registered yet..");
+                  }),
+            ),
+            rows: List.generate(
               context.watch<MainController>().sGuardian.isEmpty
                   ? context.watch<MainController>().guardians.length
                   : context.watch<MainController>().sGuardian.length,
@@ -143,28 +154,30 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           ),
         ),
         Positioned(
-                bottom: 10,
-                left: 10,
-                child: Row(
-                  children: [
-                    const Text("Continue to dashboard"),
-                    TextButton(
-                      onPressed: () {
-                        context
-                            .read<WidgetController>()
-                            .pushWidget(const Dashboard());
-                        context.read<TitleController>().setTitle("Dashboard");
-                        context.read<SideBarController>().changeSelected(0);
-                        context.read<FirstTimeUserController>().setFirstTimeUser(false);
-                      },
-                      child: Text(
-                        "Click here",
-                        style: TextStyles(context).getRegularStyle(),
-                      ),
-                    )
-                  ],
+          bottom: 10,
+          left: 10,
+          child: Row(
+            children: [
+              const Text("Continue to dashboard"),
+              TextButton(
+                onPressed: () {
+                  context
+                      .read<WidgetController>()
+                      .pushWidget(const Dashboard());
+                  context.read<TitleController>().setTitle("Dashboard");
+                  context.read<SideBarController>().changeSelected(0);
+                  context
+                      .read<FirstTimeUserController>()
+                      .setFirstTimeUser(false);
+                },
+                child: Text(
+                  "Click here",
+                  style: TextStyles(context).getRegularStyle(),
                 ),
               )
+            ],
+          ),
+        )
       ],
     );
   }

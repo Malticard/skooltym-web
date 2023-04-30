@@ -16,7 +16,8 @@ class _ViewPickUpsState extends State<ViewPickUps>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    Provider.of<MainController>(context,listen: false).availablePickUps(context.read<SchoolController>().state['school']);
+    Provider.of<MainController>(context, listen: false)
+        .availablePickUps(context.read<SchoolController>().state['school']);
   }
 
   @override
@@ -32,19 +33,22 @@ class _ViewPickUpsState extends State<ViewPickUps>
           Row(
             children: [
               Image.network(
-               AppUrls.liveImages + (pickUp.studentName_.studentProfilePic),
+                AppUrls.liveImages + (pickUp.studentName_.studentProfilePic),
                 height: 45,
                 width: 45,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text("${pickUp.studentName_.studentFname} ${pickUp.studentName_.studentLname}"),
+                child: Text(
+                    "${pickUp.studentName_.studentFname} ${pickUp.studentName_.studentLname}"),
               ),
             ],
           ),
         ),
-        DataCell(Text("${pickUp.pickedBy.guardianFname} ${pickUp.pickedBy.guardianLname}")),
-        DataCell(Text("${pickUp.authorizedBy_.staffFname} ${pickUp.authorizedBy_.staffLname}")),
+        DataCell(Text(
+            "${pickUp.pickedBy.guardianFname} ${pickUp.pickedBy.guardianLname}")),
+        DataCell(Text(
+            "${pickUp.authorizedBy_.staffFname} ${pickUp.authorizedBy_.staffLname}")),
         DataCell(Text(pickUp.pickUpTime.toString())),
       ],
     );
@@ -53,28 +57,29 @@ class _ViewPickUpsState extends State<ViewPickUps>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Provider.of<MainController>(context,listen: false).availablePickUps(context.read<SchoolController>().state['school']);
+    Provider.of<MainController>(context, listen: false)
+        .availablePickUps(context.read<SchoolController>().state['school']);
     return SizedBox(
       width: size.width,
       height: size.width / 2.39,
       child: Data_Table(
-        header:  Row(
+        header: Row(
           children: [
-
             Text(
               "Available PickUps",
               style: TextStyles(context).getTitleStyle(),
             ),
             if (!Responsive.isMobile(context))
               Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-            if(context.watch<MainController>().pickUpData.isNotEmpty)
-               Expanded(child: SearchField(
-                        onChanged: (value) {
-                          Provider.of<MainController>(context, listen: false)
-                              .searchPickUps(value ?? "");
-                        },
-                      ),),
-
+            if (context.watch<MainController>().pickUpData.isNotEmpty)
+              Expanded(
+                child: SearchField(
+                  onChanged: (value) {
+                    Provider.of<MainController>(context, listen: false)
+                        .searchPickUps(value ?? "");
+                  },
+                ),
+              ),
           ],
         ),
         columns: const [
@@ -91,17 +96,28 @@ class _ViewPickUpsState extends State<ViewPickUps>
             label: Text("Time Of PickOff"),
           ),
         ],
-        empty: const NoDataWidget(text: "No PickUps recorded..",),
-        rows:  List.generate(
+        empty: Center(
+            child: FutureBuilder(
+                future: Future.delayed(const Duration(seconds: 5)),
+                builder: (context, y) {
+                  return y.connectionState == ConnectionState.waiting
+                      ? const Loader(
+                          text: "PickUp data",
+                        )
+                      : const NoDataWidget(
+                          text: "No PickUps recorded..",
+                        );
+                })),
+        rows: List.generate(
+          context.watch<MainController>().sPickUp.isEmpty
+              ? context.watch<MainController>().pickUpData.length
+              : context.watch<MainController>().sPickUp.length,
+          (index) => _dataRow(
               context.watch<MainController>().sPickUp.isEmpty
-                  ? context.watch<MainController>().pickUpData.length
-                  : context.watch<MainController>().sPickUp.length,
-              (index) => _dataRow(
-                  context.watch<MainController>().sPickUp.isEmpty
-                      ? context.watch<MainController>().pickUpData[index]
-                      : context.watch<MainController>().sPickUp[index],
-                  index),
-            ),
+                  ? context.watch<MainController>().pickUpData[index]
+                  : context.watch<MainController>().sPickUp[index],
+              index),
+        ),
       ),
     );
   }

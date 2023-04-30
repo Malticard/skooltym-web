@@ -34,7 +34,6 @@ class _OvertimeReportsState extends State<OvertimeReports>
     super.didChangeDependencies();
   }
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -88,13 +87,23 @@ class _OvertimeReportsState extends State<OvertimeReports>
               label: Text("Actions"),
             ),
         ],
-        empty: SizedBox(
-          height: MediaQuery.of(context).size.width / 9,
-          child: NoDataWidget(
-              text: "No ${widget.overtimeStatus} overtime "
-                  "recorded "
-                  ""),
-        ),
+        empty: FutureBuilder(
+            future: Future.delayed(const Duration(seconds: 5)),
+            builder: (context, d) {
+              return d.connectionState == ConnectionState.waiting
+                  ? const Center(
+                      child: Loader(
+                        text: "Classes",
+                      ),
+                    )
+                  : SizedBox(
+                      height: MediaQuery.of(context).size.width / 9,
+                      child: NoDataWidget(
+                          text: "No ${widget.overtimeStatus} overtime "
+                              "recorded "
+                              ""),
+                    );
+            }),
         rows: List.generate(
           context.watch<MainController>().pendingOvertime.length,
           (index) => overtimeDataRow(
@@ -165,7 +174,9 @@ class _OvertimeReportsState extends State<OvertimeReports>
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width / 2.4,
                           height: MediaQuery.of(context).size.width / 4,
-                          child: ClearWindow(title:overtimeModel.student.username ,),
+                          child: ClearWindow(
+                            title: overtimeModel.student.username,
+                          ),
                         ),
                       );
                     });
