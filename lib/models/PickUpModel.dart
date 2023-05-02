@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final pickUpModel = pickUpModelFromJson(jsonString);
+//     final settingsModel = settingsModelFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
@@ -42,10 +42,10 @@ class PickUpModel {
         id: json["_id"],
         school: json["school"],
         settings: json["settings"],
-        studentN: StudentN.fromJson(json["student_n"] ?? {}),
+        studentN: StudentN.fromJson(json["student_name"] ?? {}),
         pickUpTime: json["pick_up_time"],
         pickedBy: PickedBy.fromJson(json["picked_by"] ?? {}),
-        authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
+        authorizedBy: AuthorizedBy.fromJson(json["authorized_by"] ?? {}),
         overtimeCharge: json["overtime_charge"],
         pickupKey: List<PickupKey>.from(json["pickup_key"].map((x) => PickupKey.fromJson(x))),
         createdAt: DateTime.parse(json["createdAt"]),
@@ -57,7 +57,7 @@ class PickUpModel {
         "_id": id,
         "school": school,
         "settings": settings,
-        "student_n": studentN.toJson(),
+        "student_name": studentN.toJson(),
         "pick_up_time": pickUpTime,
         "picked_by": pickedBy.toJson(),
         "authorized_by": authorizedBy.toJson(),
@@ -79,8 +79,8 @@ class AuthorizedBy {
     });
 
     factory AuthorizedBy.fromJson(Map<String, dynamic> json) => AuthorizedBy(
-        staffFname: json["staff_fname"],
-        staffLname: json["staff_lname"],
+        staffFname: json["staff_fname"] ?? "",
+        staffLname: json["staff_lname"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {

@@ -55,15 +55,17 @@ class _DropDownWidgetState extends State<DropDownWidget> {
           ),
           SizedBox(
             width: size.width,
-            height: size.height / 20,
+            height: size.height / 16,
             // height: 48,
             child: Card(
+               shadowColor:Colors.black26.withOpacity(
+              Theme.of(context).brightness == Brightness.dark ? 0.6 : 0.5,
+            ),
               color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.white
-                  : const Color.fromARGB(66, 75, 74, 74),
+                  ? Colors.white12
+                          : Colors.black12,
               borderOnForeground: false,
               shape: RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.grey, width: 0.5),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: DropdownButton<String>(

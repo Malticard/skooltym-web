@@ -13,6 +13,14 @@ class _StreamsState extends State<Streams> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<StreamsController>(context).getStreams(context);
+
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<StreamsController>(context).getStreams(context);
+    
   }
   // late List<TextEditingController> _ctrl;
 

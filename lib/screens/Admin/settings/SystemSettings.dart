@@ -192,9 +192,9 @@ class _SystemSettingsState extends State<SystemSettings> {
       "drop_off_end_time":
           context.read<DropOffTimeController>().state.split("-")[1],
       "pick_up_start_time":
-          "${DateTime.now().toString().split(" ")[0]} ${context.read<PickUpTimeController>().state.split("-")[0].trim()}",
+          context.read<PickUpTimeController>().state.split("-")[0].trim(),
       "pick_up_end_time":
-          "${DateTime.now().toString().split(" ")[0]}${context.read<PickUpTimeController>().state.split("-")[1]}",
+          context.read<PickUpTimeController>().state.split("-")[1],
       "drop_off_allowance":
           "${context.read<DropOffAllowanceController>().state}",
       "pick_up_allowance":

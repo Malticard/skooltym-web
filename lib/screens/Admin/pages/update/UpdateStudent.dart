@@ -40,7 +40,8 @@ class _UpdateStudentState extends State<UpdateStudent> {
   @override
   Widget build(BuildContext context) {
     List<String> errorFields = List.generate(7, (i) => '');
-
+  BlocProvider.of<ClassController>(context).getClasses(context);
+  BlocProvider.of<StreamsController>(context).getStreams(context);
 // form data
     List<Map<String, dynamic>> formFields = [
       {
@@ -76,9 +77,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
         "hint": "e.g grade 2",
         "data": [
           "Select class",
-          ...context
-              .read<MainController>()
-              .classes
+          ...BlocProvider.of<ClassController>(context).state
               .map((e) => e.className)
               .toList(),
         ],
@@ -89,9 +88,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
         "hint": "e.g North",
         "data": [
           "Select stream",
-          ...context
-              .read<MainController>()
-              .streams
+          ...BlocProvider.of<StreamsController>(context).state
               .map((e) => e.streamName)
               .toList(),
         ],

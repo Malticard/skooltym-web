@@ -13,12 +13,16 @@ class StudentsPopUps extends StatefulWidget {
 class _StudentsPopUpsState extends State<StudentsPopUps> {
   @override
   void initState() {
+    BlocProvider.of<FetchStudentsController>(context)
+        .getStudents(context.read<SchoolController>().state['school']);
+
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).getAllStudents(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
+    BlocProvider.of<FetchStudentsController>(context)
+        .getStudents(context.read<SchoolController>().state['school']);
     super.didChangeDependencies();
   }
 
@@ -68,127 +72,89 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Provider.of<MainController>(context).getAllStudents(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
+    BlocProvider.of<FetchStudentsController>(context)
+        .getStudents(context.read<SchoolController>().state['school']);
     return SizedBox(
       height: size.width / 2.5,
       child: Stack(
         children: [
-          Data_Table(
-            header: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (context.read<MainController>().students.isNotEmpty)
-                    Expanded(
-                      child: SizedBox(
-                        width: 120,
-                        child: SearchField(
-                          onChanged: (value) {
-                            Provider.of<MainController>(context, listen: false)
-                                .searchStudents(value ?? "");
-                          },
+          BlocBuilder<FetchStudentsController, List<StudentModel>>(
+            builder: (context, students) {
+              return Data_Table(
+                header: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (students.isNotEmpty)
+                        Expanded(
+                          child: SizedBox(
+                            width: 120,
+                            child: SearchField(
+                              onChanged: (value) {
+                                // Provider.of<MainController>(context,
+                                //         listen: false)
+                                //     .searchStudents(value ?? "");
+                              },
+                            ),
+                          ),
                         ),
+                      if (!Responsive.isMobile(context))
+                        Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                      Text(
+                        "",
+                        style: Theme.of(context).textTheme.subtitle1,
                       ),
-                    ),
-                  if (!Responsive.isMobile(context))
-                    Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                  Text(
-                    "",
-                    style: Theme.of(context).textTheme.subtitle1,
+                    ],
                   ),
-                ],
-              ),
-            ),
-            empty: FutureBuilder(
-                future: Future.delayed(const Duration(seconds: 5)),
-                builder: (context, snap) {
-                  return snap.connectionState == ConnectionState.waiting
-                      ? const Center(
-                          child: Loader(
-                          text: "Student data",
-                        ))
-                      : const NoDataWidget(
-                          text: "No "
-                              "Students added as "
-                              "yet...",
-                        );
-                }),
-            columns: List.generate(
-              staffs.length,
-              (index) => DataColumn(
-                label: Text(
-                  staffs[index],
                 ),
-              ),
-            ),
-            rows: List.generate(
-              context
-                      .watch<MainController>()
-                      .sStudent
-                      .where((element) =>
-                          element.stream.streamName == widget.stream)
-                      .toList()
-                      .isEmpty
-                  ? context
-                      .watch<MainController>()
-                      .students
-                      .where((element) =>
-                          element.stream.streamName == widget.stream)
-                      .toList()
-                      .length
-                  : context
-                      .watch<MainController>()
-                      .sStudent
-                      .where((element) =>
-                          element.stream.streamName == widget.stream)
-                      .toList()
-                      .length,
-              (index) => _dataRow(
-                  context
-                          .watch<MainController>()
-                          .sStudent
+                empty: FutureBuilder(
+                    future: Future.delayed(const Duration(seconds: 3)),
+                    builder: (context, snap) {
+                      return snap.connectionState == ConnectionState.waiting
+                          ? const Center(
+                              child: Loader(
+                              text: "Student data",
+                            ))
+                          :  NoDataWidget(
+                              text: "No "
+                                  "Students in ${widget.stream} "
+                                  "yet...",
+                            );
+                    }),
+                columns: List.generate(
+                  staffs.length,
+                  (index) => DataColumn(
+                    label: Text(
+                      staffs[index],
+                    ),
+                  ),
+                ),
+                rows: List.generate(
+                   students
                           .where((element) =>
                               element.stream.streamName == widget.stream)
                           .toList()
-                          .isEmpty
-                      ? context
-                          .watch<MainController>()
-                          .students
-                          .where((element) =>
-                              element.stream.streamName == widget.stream)
-                          .toList()[index]
-                      : context
-                          .watch<MainController>()
-                          .sStudent
-                          .where((element) =>
-                              element.stream.streamName == widget.stream)
-                          .toList()[index],
-                  index),
-            ),
+                          .length,
+                  (index) => _dataRow(
+                     students
+                              .where((element) =>
+                                  element.stream.streamName.trim() == widget.stream.trim())
+                              .toList()[index],
+                      index),
+                ),
+              );
+            },
           ),
-          // Positioned(
-          //   bottom: 10,
-          //   left: 10,
-          //   child: Row(
-          //     children: [
-          //       const Text("Continue to adding guardians"),
-          //       TextButton(
-          //         onPressed: () {
-          //           context
-          //               .read<WidgetController>()
-          //               .pushWidget(const ViewGuardians());
-          //           context.read<TitleController>().setTitle("Guardians");
-          //           context.read<SideBarController>().changeSelected(3);
-          //         },
-          //         child: Text(
-          //           "Click here",
-          //           style: TextStyles(context).getRegularStyle(),
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // )
+          Positioned(
+            bottom: 10,
+            left: 10,
+            child: Row(
+              children: [
+                 Text("Available students in stream ${widget.stream}"),
+              ],
+            ),
+          )
         ],
       ),
     );

@@ -15,11 +15,13 @@ class _UpdateStreamState extends State<UpdateStream> {
   late final  TextEditingController _updateStreamController;
   @override
   void initState() {
+    BlocProvider.of<StreamsController>(context).getStreams(context);
    _updateStreamController = TextEditingController(text: widget.stream);
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<StreamsController>(context).getStreams(context);
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.white

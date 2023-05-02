@@ -13,12 +13,15 @@ class _AddPaymentState extends State<AddPayment> {
     super.initState();
     BlocProvider.of<FetchStudentsController>(context)
         .getStudents(context.read<SchoolController>().state['school']);
+         BlocProvider.of<GuardianController>(context)
+        .getGuardians(context);
   }
 
   final _amountPaidController = TextEditingController();
   final _commentController = TextEditingController();
-  final _paymentMethodController = TextEditingController();
+  final _paymentMethodController = TextEditingController(text:"Cash");
   final _studentController = TextEditingController();
+  final _guardianController = TextEditingController();
   String? selected;
   // overall form padding
   EdgeInsets padding =
@@ -27,10 +30,12 @@ class _AddPaymentState extends State<AddPayment> {
   Widget build(BuildContext context) {
     BlocProvider.of<FetchStudentsController>(context)
         .getStudents(context.read<SchoolController>().state['school']);
+        BlocProvider.of<GuardianController>(context)
+        .getGuardians(context);
     return Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 3,
+        height: MediaQuery.of(context).size.width / 2.3,
         child: Column(
           children: [
             Padding(
@@ -65,6 +70,8 @@ class _AddPaymentState extends State<AddPayment> {
             ),
             CommonTextField(
               titleText: "Comment",
+              padding: padding,
+              contentPadding:const EdgeInsets.only(top: 12),
               hintText: "e.g school activities",
               controller: _commentController,
             ),
@@ -80,13 +87,34 @@ class _AddPaymentState extends State<AddPayment> {
                         });
                       }
                     },
-                    hint: "Select a student",
+                    hint: "Select one student",
                     padding: padding,
                     data: state
                         .map((e) => e.id)
                         .toList(),
                     dropdownList:state
                         .map((e) => "${e.studentFname} ${e.studentLname}")
+                        .toList());
+              },
+            ),
+            BlocBuilder<GuardianController, List<Guardians>>(
+              builder: (context, guardians) {
+                return CommonMenuWidget(
+                    fieldText: "Attach one guardian",
+                    onChange: (x) {
+                      if (x != null) {
+                        setState(() {
+                          _guardianController.text = json.decode(x).join(",");
+                        });
+                      }
+                    },
+                    hint: "Select a student",
+                    padding: padding,
+                    data: guardians
+                        .map((e) => e.id)
+                        .toList(),
+                    dropdownList:guardians
+                        .map((e) => "${e.guardianFname} ${e.guardianLname}")
                         .toList());
               },
             ),
@@ -119,7 +147,7 @@ class _AddPaymentState extends State<AddPayment> {
     showProgress(context, msg: "Recording new payment...");
     Client().post(Uri.parse(AppUrls.addPayment), body: {
       "school": context.read<SchoolController>().state['school'],
-      "guardian": "",
+      "guardian": _guardianController.text,
       "student": _studentController.text,
       "payment_method": _paymentMethodController.text,
       "staff": context.read<SchoolController>().state['id'],

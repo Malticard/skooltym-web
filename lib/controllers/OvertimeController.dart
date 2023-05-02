@@ -1,9 +1,9 @@
 
 import '/exports/exports.dart';
 
-class OvertimeController extends Cubit<dynamic> {
-  OvertimeController() : super(_overtime);
-  static OvertimeReports _overtime = OvertimeReports();
+class OvertimeController extends Cubit<List<OvertimeModel>> {
+  OvertimeController() : super([]);
+  // static OvertimeReports _overtime = OvertimeReports();
   // fetch available overtime
   void fetchOvertime() async {
     Client().get(Uri.parse(AppUrls.overtime)).then((value) {

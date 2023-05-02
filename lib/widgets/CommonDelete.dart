@@ -17,28 +17,33 @@ class _CommonDeleteState extends State<CommonDelete> {
         height: MediaQuery.of(context).size.width / 14,
         child: Column(
           children: [
-            Space(space: 0.02),
+            const Space(space: 0.02),
             Center(
               child: Text(
                   "Are you sure you want to delete ${widget.title}"),
             ),
-            Space(space: 0.032),
+            const Space(space: 0.032),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(),
+                const SizedBox(),
                 Row(
                   children: [
                     TextButton(
                       onPressed: () {
+                        showProgress(context,msg: "Deleting ${widget.title}....");
                         Client().delete(Uri.parse(widget.url)).then((value) {
                          
                           if(value.statusCode == 200 || value.statusCode == 201){
+                            Routes.popPage(context);
                             showMessage(context: context,type: 'success',msg: '${widget.title} removed successfully..');
                           } else{
                             showMessage(context: context,msg: 'Error ${value.reasonPhrase}',type: 'danger');
                           }
-                        }).whenComplete(() =>  Routes.popPage(context));
+                        }).whenComplete((){
+                            Routes.popPage(context);
+
+                        });
                       },
                       child: Text(
                         "Yes",
@@ -47,7 +52,7 @@ class _CommonDeleteState extends State<CommonDelete> {
                             .copyWith(color: Colors.red),
                       ),
                     ),
-                    TextButton(onPressed: () => Routes.popPage(context), child: Text("No")),
+                    TextButton(onPressed: () => Routes.popPage(context), child: const Text("No")),
                   ],
                 ),
               ],

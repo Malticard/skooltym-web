@@ -38,7 +38,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
               if (context.read<SchoolController>().state['role'] == 'Admin')
                 FutureBuilder(
-                  future: Future.delayed(Duration(seconds: 2)),
+                  future: Future.delayed(const Duration(seconds: 2)),
                   builder: (context, snapshot) {
                     return snapshot.connectionState == ConnectionState.waiting
                         ? const Center(

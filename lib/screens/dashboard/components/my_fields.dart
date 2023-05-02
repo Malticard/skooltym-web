@@ -62,24 +62,13 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   void initState() {
     BlocProvider.of<SchoolController>(context).getSchoolData();
     BlocProvider.of<DashboardCardsController>(context, listen: false)
-        .fetchUpdates(context.read<SchoolController>().state['school'],
-            context.read<SchoolController>().state['role']);
+        .fetchUpdates(context);
     super.initState();
   }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    BlocProvider.of<SchoolController>(context).getSchoolData();
-  }
-
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<SchoolController>(context).getSchoolData();
-    BlocProvider.of<DashboardCardsController>(context, listen: false)
-        .fetchUpdates(context.read<SchoolController>().state['school'],
-            context.read<SchoolController>().state['role']);
-    var dash = context.watch<MainController>().dashboardData;
+    
     return FutureBuilder(
         future: Future.delayed(const Duration(seconds: 1)),
         builder: (context, das) {
@@ -106,7 +95,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
                         value: cards[index]['value'],
                         icon: cards[index]['icon'],
                         color: cards[index]['color'],
-                        last_updated: cards[index]['last_updated'],
+                        last_updated: ""
                       ), //FileInfoCard(info: cards[index]),
                     );
                   },

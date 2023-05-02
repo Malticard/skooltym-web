@@ -41,7 +41,7 @@ class PaymentModel {
         id: json["_id"],
         school: json["school"],
         student: Studen_t.fromJson(json["student"] ?? {}),
-        staff: Staff_.fromJson(json["staff"]),
+        staff: Staff_.fromJson(json["staff"] ?? {}),
         dateOfPayment: json["date_of_payment"],
         paymentMethod: json["payment_method"],
         paidAmount: json["paid_amount"],
@@ -84,9 +84,9 @@ class Staff_ {
     });
 
     factory Staff_.fromJson(Map<String, dynamic> json) => Staff_(
-        id: json["_id"],
-        staffFname: json["staff_fname"],
-        staffLname: json["staff_lname"],
+        id: json["_id"] ?? "",
+        staffFname: json["staff_fname"] ?? "",
+        staffLname: json["staff_lname"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {

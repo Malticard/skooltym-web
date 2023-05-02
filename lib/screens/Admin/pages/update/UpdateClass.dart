@@ -41,7 +41,7 @@ class _UpdateClassState extends State<UpdateClass> {
           : Theme.of(context).canvasColor,
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 4,
+        height: MediaQuery.of(context).size.width / 3.4,
         child: Column(
           children: [
             Padding(
@@ -68,29 +68,29 @@ class _UpdateClassState extends State<UpdateClass> {
               // controller: _controllers[index],
               titleText: "Class Name",
             ),
-            CommonMenuWidget(
-              // fieldColor: Colors.transparent,
-              onChange: (v) {
-                if (v != null) {
-                    setState(() {
-                  _updatedStreams = json.decode(v).join(",");
-                });
-                }
-              
+             BlocBuilder<StreamsController, List<StreamModel>>(
+              builder: (context, streams) {
+                return CommonMenuWidget(
+                  // fieldColor: Colors.transparent,
+                  onChange: (v) {
+                    if (v != null) {
+                      setState(() {
+                        _updatedStreams = json.decode(v).join(",");
+                      });
+                    }
+                  },
+                  hint: "Attach streams",
+                  padding: const EdgeInsets.only(
+                      top: 10, bottom: 10, right: 10, left: 10),
+                  data: 
+                      streams
+                      .map((e) => e.id)
+                      .toList(),
+                  dropdownList:streams
+                      .map((e) => e.streamName)
+                      .toList(),
+                );
               },
-              hint: "Attach streams",
-              padding: const EdgeInsets.only(
-                  top: 10, bottom: 10, right: 10, left: 10),
-              data: context
-                  .read<MainController>()
-                  .streams
-                  .map((e) => e.id)
-                  .toList(),
-              dropdownList: context
-                  .read<MainController>()
-                  .streams
-                  .map((e) => e.streamName)
-                  .toList(),
             ),
             const SizedBox(height: defaultPadding),
             CommonButton(
@@ -104,13 +104,14 @@ class _UpdateClassState extends State<UpdateClass> {
                   "class_streams": _updatedStreams
                 };
                 // debugPrint("Saved data $data");
-                showProgress(context, msg: 'Updating ${widget.className} in progress');
+                showProgress(context,
+                    msg: 'Updating ${widget.className} in progress');
                 // saving class data to db
                 Client()
                     .patch(Uri.parse(AppUrls.updateClass + widget.id),
                         body: data)
                     .then((value) {
-                      debugPrint("Updated data ${value.body}");
+                  debugPrint("Updated data ${value.body}");
                   if (value.statusCode == 200) {
                     Routes.popPage(context);
                     showMessage(

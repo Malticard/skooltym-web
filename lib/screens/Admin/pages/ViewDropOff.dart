@@ -46,9 +46,7 @@ class _ViewDropOffsState extends State<ViewDropOffs>
             .toString()
             .split(" ")
             .last
-            .toString()
-            .split(".")
-            .first)),
+           )),
       ],
     );
   }

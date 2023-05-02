@@ -12,9 +12,6 @@ class ViewStudents extends StatefulWidget {
 class _ViewStudentsState extends State<ViewStudents> {
   @override
   void initState() {
-    // Provider.of<MainController>(context, listen: false).getAllStudents(
-    //     context.read<SchoolController>().state['school'],
-    //     context.read<SchoolController>().state['role']);
     super.initState();
   }
 

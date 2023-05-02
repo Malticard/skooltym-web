@@ -1,139 +1,121 @@
 // import 'package:flutter/src/animation/animation_controller.dart';
 import '/exports/exports.dart';
 
-class OvertimeReports extends StatefulWidget {
-  final String? overtimeStatus;
-  final String? label;
-  const OvertimeReports({super.key, this.overtimeStatus, this.label});
+class ClearedOvertime extends StatefulWidget {
+  const ClearedOvertime({super.key});
 
   @override
-  State<OvertimeReports> createState() => _OvertimeReportsState();
+  State<ClearedOvertime> createState() => _ClearedOvertimeState();
 }
 
-class _OvertimeReportsState extends State<OvertimeReports>
+class _ClearedOvertimeState extends State<ClearedOvertime>
     with SingleTickerProviderStateMixin {
-  // late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    // _controller = AnimationController(vsync: this);
-  }
-
-  @override
-  void dispose() {
-    // _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // Provider.of<MainController>(context, listen: false)
-    //     .fetchPendingOvertime(widget.overtimeStatus ?? "Pending");
-    // ies
-    super.didChangeDependencies();
+    BlocProvider.of<PaymentController>(context).getPayments(context);
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    //invoke new overtimes
-    // Provider.of<MainController>(context, listen: false).fetchPendingOvertime(
-    //     widget.overtimeStatus ?? "Pending",
-    //     context.read<SchoolController>().state['school']);
+    BlocProvider.of<PaymentController>(context).getPayments(context);
     return SizedBox(
       width: size.width,
       height: size.width / 2.5,
-      child: FutureBuilder(
-          future: fetchOvertimeData(widget.overtimeStatus ?? "Pending",
-              context.read<SchoolController>().state['school']),
-          builder: (context, o) {
-            return !o.hasData
-                ? Center(
-                    child: Loader(
-                      text: "${widget.overtimeStatus} overtime records",
-                    ),
-                  )
-                : Data_Table(
-                    header: Text(
-                      context.read<SchoolController>().state['role'] == 'Admin'
-                          ? widget.label ?? "Reports"
-                          : "Overtimes pending",
-                      style: TextStyles(context).getTitleStyle(),
-                    ),
-                    columns: [
-                      const DataColumn(
-                        label: Text(
-                          "Student Name",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                      const DataColumn(
-                        label:
-                            Text("Picked By", style: TextStyle(fontSize: 12)),
-                      ),
-                      const DataColumn(
-                        label: SizedBox(
-                            width: 800,
-                            child: Text("Default\nPickUpTime",
-                                style: TextStyle(fontSize: 12))),
-                      ),
-                      const DataColumn(
-                        label: Text("Current \nPickUp Time",
-                            style: TextStyle(fontSize: 12)),
-                      ),
-                      const DataColumn(
-                        label: Text("Authorized by",
-                            style: TextStyle(fontSize: 12)),
-                      ),
-                      const DataColumn(
-                        label: Text("Interval(mins)",
-                            style: TextStyle(fontSize: 12)),
-                      ),
-                      const DataColumn(
-                        label: Text("Overtime rate",
-                            style: TextStyle(fontSize: 12)),
-                      ),
-                      // const DataColumn(
-                      //   label: Text("Overtime\ncharge", style: TextStyle(fontSize: 13)),
-                      // ),
-                      if (context.read<SchoolController>().state['role'] ==
-                          'Finance')
-                        const DataColumn(
-                          label: Text("Actions"),
-                        ),
-                    ],
-                    empty: SizedBox(
-                      height: MediaQuery.of(context).size.width / 9,
-                      child: NoDataWidget(
-                          text: "No ${widget.overtimeStatus} overtime "
-                              "recorded "
-                              ""),
-                    ),
-                    rows: List.generate(
-                      o.data!.length,
-                      (index) => overtimeDataRow(o.data![index], index),
-                    ),
-                  );
-          }),
+      child: BlocBuilder<PaymentController, List<PaymentModel>>(
+        builder: (context, payment) {
+          return Data_Table(
+            header: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Payments",
+                  style: TextStyles(context).getTitleStyle(),
+                ),
+                // ElevatedButton(
+                //     onPressed: () {
+                //       showDialog(
+                //           context: context,
+                //           builder: (context) {
+                //             return const AddPayment();
+                //           });
+                //     },
+                //     child: Text(
+                //       "Add payment",
+                //       style: TextStyles(context).getRegularStyle(),
+                //     ))
+              ],
+            ),
+            columns: const [
+              DataColumn(
+                label: Text(
+                  "Student",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              
+              DataColumn(
+                label: Text("Cleared By", style: TextStyle(fontSize: 12)),
+              ),
+              DataColumn(
+                label: SizedBox(
+                    width: 800,
+                    child: Text("Date", style: TextStyle(fontSize: 12))),
+              ),
+              DataColumn(
+                label: Text("Cleared With", style: TextStyle(fontSize: 12)),
+              ),
+              DataColumn(
+                label: Text("Balance", style: TextStyle(fontSize: 12)),
+              ),
+              DataColumn(
+                label: Text("Comment", style: TextStyle(fontSize: 12)),
+              ),
+            ],
+            empty: FutureBuilder(
+                future: Future.delayed(const Duration(seconds: 2)),
+                builder: (context, d) {
+                  return d.connectionState == ConnectionState.waiting
+                      ? const Center(
+                          child: Loader(
+                            text: "Cleared overtimes",
+                          ),
+                        )
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.width / 9,
+                          child: const NoDataWidget(
+                              text: "No Cleared  overtimes captured"
+                                  ""),
+                        );
+                }),
+            rows: List.generate(
+              payment.where((element) => element.balance == 0).toList().length,
+              (index) => overtimeDataRow(
+                  payment.where((element) => element.balance == 0).toList()[index], index),
+            ),
+          );
+        },
+      ),
     );
   }
 
   // row data
-  DataRow overtimeDataRow(OvertimeModel overtimeModel, int i) {
+  DataRow overtimeDataRow(PaymentModel paymentModel, int i) {
     return DataRow(
       cells: [
         DataCell(
           Row(
             children: [
               Image.network(
-                AppUrls.liveImages + overtimeModel.student.studentProfilePic,
+                AppUrls.liveImages + paymentModel.student.studentProfilePic,
                 height: 33,
                 width: 33,
               ),
               Padding(
                 padding: const EdgeInsets.all(0),
-                child: Text(overtimeModel.student.username,
+                child: Text(paymentModel.student.username,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 11)),
               ),
@@ -141,56 +123,237 @@ class _OvertimeReportsState extends State<OvertimeReports>
           ),
         ),
         DataCell(Text(
-            "${overtimeModel.guardian.guardianFname} ${overtimeModel.guardian.guardianLname}",
+            "${paymentModel.staff.staffFname} ${paymentModel.staff.staffLname}",
             style: const TextStyle(fontSize: 11))),
-        DataCell(Text(
-            overtimeModel.settings.pickUpEndTime
-                .toString()
-                .split(" ")
-                .last
-                .split(".")
-                .first,
+        DataCell(Text(paymentModel.dateOfPayment.split(".").first,
             style: const TextStyle(fontSize: 11))),
-        DataCell(Text(
-            overtimeModel.actualTime
-                .toString()
-                .split(" ")
-                .last
-                .split(".")
-                .first,
+        DataCell(Text(paymentModel.paymentMethod,
             style: const TextStyle(fontSize: 11))),
-        DataCell(Text(
-            "${overtimeModel.staff.staffFname} ${overtimeModel.staff.staffLname}",
+        // DataCell(Text(
+        //     "${paymentModel.staff.staffFname} ${paymentModel.staff.staffLname}",
+        //     style: const TextStyle(fontSize: 11))),
+        DataCell(Text(paymentModel.balance.toString(),
             style: const TextStyle(fontSize: 11))),
-        DataCell(Text(overtimeModel.settings.overtimeInterval.toString(),
-            style: const TextStyle(fontSize: 11))),
-        DataCell(Text(overtimeModel.overtimeCharge.toString(),
+        DataCell(Text(paymentModel.comment.toString(),
             style: const TextStyle(fontSize: 11))),
 
-        // DataCell(Text(overtimeModel.status)),
-        if (context.read<SchoolController>().state['role'] == 'Finance')
-          DataCell(
-            buildActionButtons(
-              context,
-              () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 2.4,
-                          height: MediaQuery.of(context).size.width / 4,
-                          child: ClearWindow(
-                            id: '',
-                            title: overtimeModel.student.username,
-                          ),
-                        ),
-                      );
-                    });
-              },
-              () {},
+        // DataCell(Text(paymentModel.status)),
+        // if (context.read<SchoolController>().state['role'] == 'Finance')
+          // DataCell(
+          //   buildActionButtons(
+          //     context,
+          //     () {
+          //       showDialog(
+          //           context: context,
+          //           builder: (context) {
+          //             return Dialog(
+          //               child: SizedBox(
+          //                 width: MediaQuery.of(context).size.width / 2.4,
+          //                 height: MediaQuery.of(context).size.width / 4,
+          //                 child: ClearWindow(
+          //                   paymentModel: paymentModel,
+          //                   id: paymentModel.id,
+          //                   title: paymentModel.student.username,
+          //                 ),
+          //               ),
+          //             );
+          //           });
+          //     },
+          //     () {
+          //       showDialog(
+          //           context: context,
+          //           builder: (context) {
+          //             return SizedBox(
+          //               width: MediaQuery.of(context).size.width / 2.4,
+          //               height: MediaQuery.of(context).size.width / 4,
+          //               child: CommonDelete(
+          //                 url: AppUrls.deletePayment + paymentModel.id,
+          //                 title: paymentModel.student.username,
+          //               ),
+          //             );
+          //           });
+          //     },
+          //   ),
+          // ),
+      ],
+    );
+  }
+}
+//  pending overtimes
+class PendingOvertime extends StatefulWidget {
+  const PendingOvertime({super.key});
+
+  @override
+  State<PendingOvertime> createState() => _PendingOvertimeState();
+}
+
+class _PendingOvertimeState extends State<PendingOvertime>
+    with SingleTickerProviderStateMixin {
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<PaymentController>(context).getPayments(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    BlocProvider.of<PaymentController>(context).getPayments(context);
+    return SizedBox(
+      width: size.width,
+      height: size.width / 2.5,
+      child: BlocBuilder<PaymentController, List<PaymentModel>>(
+        builder: (context, payment) {
+          return Data_Table(
+            header: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Pending",
+                  style: TextStyles(context).getTitleStyle(),
+                ),
+                // ElevatedButton(
+                //     onPressed: () {
+                //       showDialog(
+                //           context: context,
+                //           builder: (context) {
+                //             return const AddPayment();
+                //           });
+                //     },
+                //     child: Text(
+                //       "Add payment",
+                //       style: TextStyles(context).getRegularStyle(),
+                //     ))
+              ],
             ),
+            columns: const [
+              DataColumn(
+                label: Text(
+                  "Student",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              
+              DataColumn(
+                label: Text("Cleared By", style: TextStyle(fontSize: 12)),
+              ),
+              DataColumn(
+                label: SizedBox(
+                    width: 800,
+                    child: Text("Date", style: TextStyle(fontSize: 12))),
+              ),
+              DataColumn(
+                label: Text("Cleared With", style: TextStyle(fontSize: 12)),
+              ),
+              DataColumn(
+                label: Text("Balance", style: TextStyle(fontSize: 12)),
+              ),
+              DataColumn(
+                label: Text("Comment", style: TextStyle(fontSize: 12)),
+              ),
+            ],
+            empty: FutureBuilder(
+                future: Future.delayed(const Duration(seconds: 3)),
+                builder: (context, d) {
+                  return d.connectionState == ConnectionState.waiting
+                      ? const Center(
+                          child: Loader(
+                            text: "Payment records",
+                          ),
+                        )
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.width / 9,
+                          child: const NoDataWidget(
+                              text: "No  payments recorded"
+                                  ""),
+                        );
+                }),
+            rows: List.generate(
+              payment.where((element) => element.balance > 0).toList().length,
+              (index) => overtimeDataRow(
+                  payment.where((element) => element.balance > 0).toList()[index], index),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // row data
+  DataRow overtimeDataRow(PaymentModel paymentModel, int i) {
+    return DataRow(
+      cells: [
+        DataCell(
+          Row(
+            children: [
+              Image.network(
+                AppUrls.liveImages + paymentModel.student.studentProfilePic,
+                height: 33,
+                width: 33,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(0),
+                child: Text(paymentModel.student.username,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 11)),
+              ),
+            ],
           ),
+        ),
+        DataCell(Text(
+            "${paymentModel.staff.staffFname} ${paymentModel.staff.staffLname}",
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(paymentModel.dateOfPayment.split(".").first,
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(paymentModel.paymentMethod,
+            style: const TextStyle(fontSize: 11))),
+        // DataCell(Text(
+        //     "${paymentModel.staff.staffFname} ${paymentModel.staff.staffLname}",
+        //     style: const TextStyle(fontSize: 11))),
+        DataCell(Text(paymentModel.balance.toString(),
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(paymentModel.comment.toString(),
+            style: const TextStyle(fontSize: 11))),
+
+        // DataCell(Text(paymentModel.status)),
+        // if (context.read<SchoolController>().state['role'] == 'Finance')
+          // DataCell(
+          //   buildActionButtons(
+          //     context,
+          //     () {
+          //       showDialog(
+          //           context: context,
+          //           builder: (context) {
+          //             return Dialog(
+          //               child: SizedBox(
+          //                 width: MediaQuery.of(context).size.width / 2.4,
+          //                 height: MediaQuery.of(context).size.width / 4,
+          //                 child: ClearWindow(
+          //                   paymentModel: paymentModel,
+          //                   id: paymentModel.id,
+          //                   title: paymentModel.student.username,
+          //                 ),
+          //               ),
+          //             );
+          //           });
+          //     },
+          //     () {
+          //       showDialog(
+          //           context: context,
+          //           builder: (context) {
+          //             return SizedBox(
+          //               width: MediaQuery.of(context).size.width / 2.4,
+          //               height: MediaQuery.of(context).size.width / 4,
+          //               child: CommonDelete(
+          //                 url: AppUrls.deletePayment + paymentModel.id,
+          //                 title: paymentModel.student.username,
+          //               ),
+          //             );
+          //           });
+          //     },
+          //   ),
+          // ),
       ],
     );
   }

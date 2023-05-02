@@ -80,6 +80,11 @@ class _AddGuardianState extends State<AddGuardian> {
 
 // form key
   final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<GuardianController>(context).getGuardians(context);
+  }
   // error fields
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
 
@@ -87,6 +92,7 @@ class _AddGuardianState extends State<AddGuardian> {
   Widget build(BuildContext context) {
     // context.watch<MainController>().getAllStudents(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     context.read<MultiStudentsController>().getMultiStudents();
+    BlocProvider.of<GuardianController>(context).getGuardians(context);
 
     Size size = MediaQuery.of(context).size;
     return Dialog(
@@ -95,27 +101,30 @@ class _AddGuardianState extends State<AddGuardian> {
         height: MediaQuery.of(context).size.width / 1.5,
         child: Padding(
           padding: padding,
-          child: CommonFormFields(
-            padding: padding,
-            formFields: _formFields,
-            lists: context
-                .watch<MainController>()
-                .students
-                .map((e) => e.id)
-                .toList(),
-            dropdownLists: context.watch<MainController>().students.map((item) {
-              return "${item.studentFname} ${item.studentLname}";
-            }).toList(),
-            onDropDownValue: (v) {
-              if (v != null) {
-                BlocProvider.of<MultiStudentsController>(context)
-                    .setMultiStudents((json.decode(v).join(",")));
-              }
+          child: BlocBuilder<FetchStudentsController, List<StudentModel>>(
+            builder: (context, students) {
+              return CommonFormFields(
+                padding: padding,
+                formFields: _formFields,
+                lists:students
+                    .map((e) => e.id)
+                    .toList(),
+                dropdownLists:
+                    students.map((item) {
+                  return "${item.studentFname} ${item.studentLname}";
+                }).toList(),
+                onDropDownValue: (v) {
+                  if (v != null) {
+                    BlocProvider.of<MultiStudentsController>(context)
+                        .setMultiStudents((json.decode(v).join(",")));
+                  }
+                },
+                formControllers: _formControllers,
+                buttonText: "Save Guardian Details",
+                onSubmit: () => addGuardian(),
+                errorMsgs: errorFields,
+              );
             },
-            formControllers: _formControllers,
-            buttonText: "Save Guardian Details",
-            onSubmit: () => addGuardian(),
-            errorMsgs: errorFields,
           ),
         ),
       ),
@@ -124,13 +133,12 @@ class _AddGuardianState extends State<AddGuardian> {
 
 // adding guardian
   void addGuardian() {
-
     if (validateEmail(_formControllers[1].text, context) != false) {
-       showProgress(context,msg: "Adding guardian...");
+      showProgress(context, msg: "Adding guardian...");
       handleGuardian().then((value) {
         // debugPrint("Status code ${value.statusCode}");
         Routes.popPage(context);
-       
+
         showMessage(
           context: context,
           type: 'success',

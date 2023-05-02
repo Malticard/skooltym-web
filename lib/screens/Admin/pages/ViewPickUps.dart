@@ -18,8 +18,8 @@ class _ViewPickUpsState extends State<ViewPickUps>
             children: [
               Image.network(
                 AppUrls.liveImages + (pickUp.studentN.studentProfilePic),
-                height: 45,
-                width: 45,
+                height: 35,
+                width: 35,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -32,8 +32,12 @@ class _ViewPickUpsState extends State<ViewPickUps>
         DataCell(Text(
             "${pickUp.pickedBy.guardianFname} ${pickUp.pickedBy.guardianLname}")),
         DataCell(Text(
+            "${pickUp.overtimeCharge}")),
+            DataCell(Text(
+            pickUp.pickUpTime.toString().split(" ").first)),
+            DataCell(Text(
             "${pickUp.authorizedBy.staffFname} ${pickUp.authorizedBy.staffLname}")),
-        DataCell(Text(pickUp.pickUpTime.toString())),
+        DataCell(Text(pickUp.pickUpTime.toString().split(" ").last)),
       ],
     );
   }
@@ -77,9 +81,13 @@ class _ViewPickUpsState extends State<ViewPickUps>
               ),
               DataColumn(
                 label: Text("Cleared by"),
+              ),  DataColumn(
+                label: Text("Overtime Charge"),
+              ),  DataColumn(
+                label: Text("Date"),
               ),
               DataColumn(
-                label: Text("Time Of PickOff"),
+                label: Text("Time Of PickUp"),
               ),
             ],
             empty: Center(

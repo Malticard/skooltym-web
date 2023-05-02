@@ -184,43 +184,31 @@ bool validateEmail(String email, BuildContext context) {
 // build Action Buttons
 Widget buildActionButtons(
     BuildContext context, VoidCallback edit, VoidCallback delete) {
-  return context.read<SchoolController>().state['role'] == 'Finance'
-      ? TextButton(
-          onPressed: edit,
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          ),
-          child: const Icon(
-            Icons.edit,
-            color: Colors.white,
-          ),
-        )
-      : Row(
-          children: [
-            CommonButton(
-              onTap: edit,
-              width: 50, height: 50,
-              // padding: const EdgeInsets.only(top: 15, bottom: 15),
-              buttonTextWidget: const Icon(
-                Icons.edit,
-                color: Colors.white,
-                size: 20,
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            CommonButton(
-              width: 50,
-              height: 50,
-              onTap: delete,
-              backgroundColor: Colors.red,
-              buttonTextWidget:
-                  const Icon(Icons.delete_outline_rounded, color: Colors.white),
-            ),
-          ],
-        );
+  return Row(
+    children: [
+      CommonButton(
+        onTap: edit,
+        width: 50, height: 50,
+        // padding: const EdgeInsets.only(top: 15, bottom: 15),
+        buttonTextWidget: const Icon(
+          Icons.edit,
+          color: Colors.white,
+          size: 20,
+        ),
+      ),
+      const SizedBox(
+        width: 10,
+      ),
+      CommonButton(
+        width: 50,
+        height: 50,
+        onTap: delete,
+        backgroundColor: Colors.red,
+        buttonTextWidget:
+            const Icon(Icons.delete_outline_rounded, color: Colors.white),
+      ),
+    ],
+  );
 }
 // build dashboard cards
 
@@ -258,19 +246,13 @@ List<Map<String, dynamic>> options = [
   },
   {
     "title": "Pending Overtimes",
-    "page": const OvertimeReports(
-      overtimeStatus: "Pending",
-      label: "Pending",
-    ),
+    "page": const PendingOvertime(),
     'icon': "assets/icons/menu_store.svg"
   },
   {
     "icon": "assets/icons/menu_store.svg",
     "title": "Cleared Overtimes",
-    "page": const OvertimeReports(
-      overtimeStatus: "Cleared",
-      label: "Cleared",
-    ),
+    "page": const ClearedOvertime(),
   },
   {
     "title": "Drop Offs",
@@ -302,17 +284,13 @@ List<Map<String, dynamic>> financeViews = [
   },
   {
     "title": "Pending Overtimes",
-    "page": const OvertimeReports(
-      overtimeStatus: "Pending",
-    ),
+    "page": const PendingOvertime(),
     'icon': "assets/icons/menu_store.svg"
   },
   {
     "icon": "assets/icons/menu_store.svg",
     "title": "Cleared Overtimes",
-    "page": const OvertimeReports(
-      overtimeStatus: "Cleared",
-    ),
+    "page": const ClearedOvertime(),
   },
   {
     "icon": "assets/vectors/payment.svg",
@@ -339,13 +317,15 @@ bool validateTextControllers(List<TextEditingController> controllers) {
 // method to fetch available classes
 Future<List<ClassModel>> fetchClasses(String id) async {
   var response = await Client().get(Uri.parse(AppUrls.getClasses + id));
-  return  classModelFromJson(response.body);
+  return classModelFromJson(response.body);
 }
+
 // method to fetch available classes
 Future<List<StreamModel>> fetchStreams(String id) async {
   var response = await Client().get(Uri.parse(AppUrls.getStreams + id));
   return streamModelFromJson(response.body);
 }
+
 /// show snackbar message
 /// @param type = 'danger' | 'info' | warning
 ///
@@ -513,59 +493,60 @@ String handSanIntervals() {
 
 // fetch dashboard meta data
 Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
-    String schoolId, String role) async {
-  // var drops = await dropOffs(schoolId);
-  // var picks = await pickUps(schoolId);
-  // var clearedOvertimes = await fetchOvertimeData("Cleared", schoolId);
-  // var pendingOvertimes = await fetchOvertimeData("Pending", schoolId);
+    BuildContext context) async {
+      context.read<PaymentController>().getPayments(context);
+  var drops = await dropOffs(context.read<SchoolController>().state['school']);
+  var picks = await pickUps(context.read<SchoolController>().state['school']);
+  var clearedOvertimes = context.read<PaymentController>().state.where((element) => element.balance == 0).toList();
+  var pendingOvertimes = context.read<PaymentController>().state.where((element) => element.balance == 0).toList();
 
   List<Map<String, dynamic>> dashboardData = [
     {
       "label": "DROP OFFS",
-      "value": 0,//drops.length,
+      "value": drops.length,
       "icon": "assets/icons/004-playtime.svg",
       'color': const Color.fromARGB(255, 106, 108, 235),
-      "last_updated": "14:45"
+      // "last_updated": "14:45"
     },
     {
       "label": "PICK UPS",
-      "value": 0,//picks.length,
+      "value": picks.length,
       "icon": "assets/icons/009-student.svg",
       'color': const Color.fromARGB(255, 181, 150, 253),
-      "last_updated": "14:45"
+      // "last_updated": "14:45"
     },
     {
       "label": "CLEARED OVERTIME",
-      "value": 0,//clearedOvertimes.length,
+      "value": clearedOvertimes.length,
       "icon": "assets/icons/002-all.svg",
       'color': const Color.fromARGB(255, 77, 154, 255),
-      "last_updated": "14:45"
+      // "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": 0,//pendingOvertimes.length,
+      "value": pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': const Color.fromARGB(255, 50, 66, 95),
-      "last_updated": "14:45"
+      // "last_updated": "14:45"
     },
   ];
   List<Map<String, dynamic>> financeData = [
     {
       "label": "CLEARED OVERTIME",
-      "value": 0,//clearedOvertimes.length,
+      "value": clearedOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": 0,//pendingOvertimes.length,
+      "value": pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
   ];
-  return role == 'Admin' ? dashboardData : financeData;
+  return context.read<SchoolController>().state['role'] == 'Admin' ? dashboardData : financeData;
 }
 
 // logic to fetch a specific guardian from the scanners

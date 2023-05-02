@@ -48,40 +48,31 @@ class _PaymentReportsState extends State<PaymentReports>
                     ))
               ],
             ),
-            columns: [
-              const DataColumn(
+            columns: const [
+              DataColumn(
                 label: Text(
                   "Student",
                   style: TextStyle(fontSize: 12),
                 ),
               ),
-              const DataColumn(
+              
+              DataColumn(
                 label: Text("Cleared By", style: TextStyle(fontSize: 12)),
               ),
-              const DataColumn(
+              DataColumn(
                 label: SizedBox(
                     width: 800,
                     child: Text("Date", style: TextStyle(fontSize: 12))),
               ),
-              const DataColumn(
+              DataColumn(
                 label: Text("Cleared With", style: TextStyle(fontSize: 12)),
               ),
-              const DataColumn(
+              DataColumn(
                 label: Text("Balance", style: TextStyle(fontSize: 12)),
               ),
-              const DataColumn(
+              DataColumn(
                 label: Text("Comment", style: TextStyle(fontSize: 12)),
               ),
-              // const DataColumn(
-              //   label: Text("Overtime rate", style: TextStyle(fontSize: 12)),
-              // ),
-              // const DataColumn(
-              //   label: Text("Overtime\ncharge", style: TextStyle(fontSize: 13)),
-              // ),
-              if (context.read<SchoolController>().state['role'] == 'Finance')
-                const DataColumn(
-                  label: Text("Actions"),
-                ),
             ],
             empty: FutureBuilder(
                 future: Future.delayed(const Duration(seconds: 2)),
@@ -147,29 +138,43 @@ class _PaymentReportsState extends State<PaymentReports>
             style: const TextStyle(fontSize: 11))),
 
         // DataCell(Text(paymentModel.status)),
-        if (context.read<SchoolController>().state['role'] == 'Finance')
-          DataCell(
-            buildActionButtons(
-              context,
-              () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 2.4,
-                          height: MediaQuery.of(context).size.width / 4,
-                          child: ClearWindow(
-                            id: paymentModel.id,
-                            title: paymentModel.student.username,
-                          ),
-                        ),
-                      );
-                    });
-              },
-              () {},
-            ),
-          ),
+        // if (context.read<SchoolController>().state['role'] == 'Finance')
+          // DataCell(
+          //   buildActionButtons(
+          //     context,
+          //     () {
+          //       showDialog(
+          //           context: context,
+          //           builder: (context) {
+          //             return Dialog(
+          //               child: SizedBox(
+          //                 width: MediaQuery.of(context).size.width / 2.4,
+          //                 height: MediaQuery.of(context).size.width / 4,
+          //                 child: ClearWindow(
+          //                   paymentModel: paymentModel,
+          //                   id: paymentModel.id,
+          //                   title: paymentModel.student.username,
+          //                 ),
+          //               ),
+          //             );
+          //           });
+          //     },
+          //     () {
+          //       showDialog(
+          //           context: context,
+          //           builder: (context) {
+          //             return SizedBox(
+          //               width: MediaQuery.of(context).size.width / 2.4,
+          //               height: MediaQuery.of(context).size.width / 4,
+          //               child: CommonDelete(
+          //                 url: AppUrls.deletePayment + paymentModel.id,
+          //                 title: paymentModel.student.username,
+          //               ),
+          //             );
+          //           });
+          //     },
+          //   ),
+          // ),
       ],
     );
   }

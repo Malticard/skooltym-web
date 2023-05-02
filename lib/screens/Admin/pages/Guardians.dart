@@ -70,6 +70,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<GuardianController>(context).getGuardians(context);
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [

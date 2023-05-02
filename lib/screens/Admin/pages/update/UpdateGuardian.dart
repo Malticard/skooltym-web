@@ -13,7 +13,7 @@ class UpdateGuardian extends StatefulWidget {
 }
 
 final List<Map<String, dynamic>> _formFields = [
-   {
+  {
     "title": "Guardian Name*",
     "hint": "e.g John Doe",
     "password": false,
@@ -80,18 +80,23 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
   @override
   void initState() {
     _formControllers = [
-      TextEditingController(text: "${widget.guardianModel.guardianFname} ${widget.guardianModel.guardianLname}"),
+      TextEditingController(
+          text:
+              "${widget.guardianModel.guardianFname} ${widget.guardianModel.guardianLname}"),
       TextEditingController(text: widget.guardianModel.guardianEmail),
-      TextEditingController(text: widget.guardianModel.guardianContact.toString()),
+      TextEditingController(
+          text: widget.guardianModel.guardianContact.toString()),
       TextEditingController(text: ""),
       TextEditingController(text: widget.guardianModel.guardianGender),
       TextEditingController(text: widget.guardianModel.type),
-      TextEditingController(text: widget.guardianModel.guardianDateOfEntry.toString()),
+      TextEditingController(
+          text: widget.guardianModel.guardianDateOfEntry.toString()),
       TextEditingController(),
       TextEditingController(text: widget.guardianModel.relationship),
-
     ];
-    // fetchStudents().then((value) => setState(() => students = value));
+    BlocProvider.of<FetchStudentsController>(context, listen: false)
+        .getStudents(context.read<SchoolController>().state['school']);
+
     super.initState();
   }
 
@@ -108,36 +113,45 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
   final formKey = GlobalKey<FormState>();
   // error fields
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
-  
+
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
+    BlocProvider.of<FetchStudentsController>(context, listen: false)
+        .getStudents(context.read<SchoolController>().state['school']);
     context.read<MultiStudentsController>().getMultiStudents();
 
     // Size size = MediaQuery.of(context).size;
-        return Dialog(
+    return Dialog(
       child: SizedBox(
-         width: MediaQuery.of(context).size.width / 3,
+        width: MediaQuery.of(context).size.width / 3,
         height: MediaQuery.of(context).size.width / 1.5,
         child: Padding(
           padding: padding,
-          child: CommonFormFields(
-            initialPic: widget.guardianModel.guardianProfilePic,
-            padding: padding,
-            formFields: _formFields,
-            lists: context.watch<MainController>().students.map((e) => e.id).toList(),
-            dropdownLists: context.watch<MainController>().students.map((item) {
-                    return "${item.studentFname} ${item.studentLname}";
-                  }).toList(),
+          child: BlocBuilder<FetchStudentsController, List<StudentModel>>(
+            builder: (context, students) {
+              return CommonFormFields(
+                initialPic: widget.guardianModel.guardianProfilePic,
+                padding: padding,
+                formFields: _formFields,
+                lists:students
+                    .map((e) => e.id)
+                    .toList(),
+                dropdownLists:
+                    students.map((item) {
+                  return "${item.studentFname} ${item.studentLname}";
+                }).toList(),
                 onDropDownValue: (v) {
-                 if (v != null) {
-                      BlocProvider.of<MultiStudentsController>(context).setMultiStudents((json.decode(v).join(",")));
-                 }
+                  if (v != null) {
+                    BlocProvider.of<MultiStudentsController>(context)
+                        .setMultiStudents((json.decode(v).join(",")));
+                  }
                 },
-            formControllers: _formControllers,
-            buttonText: "Update Guardian Details",
-            onSubmit:() =>  _addGuardian(),
-            errorMsgs: errorFields,
+                formControllers: _formControllers,
+                buttonText: "Update Guardian Details",
+                onSubmit: () => _addGuardian(),
+                errorMsgs: errorFields,
+              );
+            },
           ),
         ),
       ),
@@ -148,14 +162,12 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
   void _addGuardian() {
     if (validateEmail(_formControllers[1].text, context) != false) {
       showProgress(context, msg: "Updating guardian in progress");
-      _handleGuardian()
-          .then((value) {
-            debugPrint("Status code ${value.statusCode}");
-            Routes.popPage(context);
-          })
-          .whenComplete(() {
-            Routes.popPage(context);
-          });
+      _handleGuardian().then((value) {
+        debugPrint("Status code ${value.statusCode}");
+        Routes.popPage(context);
+      }).whenComplete(() {
+        Routes.popPage(context);
+      });
     }
   }
 
@@ -172,8 +184,9 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
       'Accept': 'application/json',
       // 'Authorization': 'Bearer ${context.read<TokenController>().state}'
     });
-  
-    request.fields['students'] = (context.read<MultiStudentsController>().state);
+
+    request.fields['students'] =
+        (context.read<MultiStudentsController>().state);
     request.fields['school'] = context.read<SchoolController>().state['school'];
     request.fields['type'] = _formControllers[5].text.trim();
     request.fields['relationship'] = _formControllers[8].text.trim();
@@ -184,15 +197,17 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     request.fields['guardian_contact'] = _formControllers[2].text.trim();
     request.fields['guardian_email'] = _formControllers[1].text.trim();
     request.fields['guardian_gender'] = _formControllers[4].text.trim();
-       if (kIsWeb) {
+    if (kIsWeb) {
       request.files.add(MultipartFile(
-        "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
-        filename: context.read<ImageUploadController>().state['name']));
+          "image",
+          context.read<ImageUploadController>().state['image'],
+          context.read<ImageUploadController>().state['size'],
+          filename: context.read<ImageUploadController>().state['name']));
     } else {
       if (uri.isNotEmpty) {
-      request.files.add(MultipartFile('image',
-        File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-        filename: uri.split("/").last));
+        request.files.add(MultipartFile(
+            'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
+            filename: uri.split("/").last));
       }
     }
 
@@ -201,7 +216,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     request.fields['fcmToken'] = "";
     request.fields['guardian_key[key]'] = "";
     var response = request.send();
-     debugPrint("Status code $response");
+    debugPrint("Status code $response");
     return response;
   }
 }

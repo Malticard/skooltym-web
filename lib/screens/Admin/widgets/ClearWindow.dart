@@ -3,7 +3,8 @@ import '/exports/exports.dart';
 class ClearWindow extends StatefulWidget {
   final String title;
   final String id;
-  const ClearWindow({super.key, required this.title, required this.id});
+  final PaymentModel paymentModel;
+  const ClearWindow({super.key, required this.title, required this.id, required this.paymentModel});
 
   @override
   State<ClearWindow> createState() => _ClearWindowState();
@@ -41,7 +42,8 @@ class _ClearWindowState extends State<ClearWindow> {
             CommonTextField(
               icon: Icons.attach_money,
               controller: clearedWithCashController,
-              hintText: "e.g 5000",keyboardType: TextInputType.number,
+              hintText: "e.g 5000",
+              keyboardType: TextInputType.number,
               titleText: "Amount paid",
               padding: const EdgeInsets.only(
                 left: 20,
@@ -84,15 +86,43 @@ class _ClearWindowState extends State<ClearWindow> {
               padding: const EdgeInsets.only(left: 20, right: 20),
               buttonText: "Clear",
               onTap: () {
+                showProgress(context,msg: "Updating ${widget.title}'s payment...");
+                
                 if (_paid == 1) {
                   //clear with cash
                   if (clearedWithCashController.text.isNotEmpty) {
-                    if(Validator_.isValidNumber(clearedWithCashController.text) == true){
-                      showMessage(context: context,msg: "Please enter valid amount",type: 'warning');
+                    if (Validator_.isValidNumber(
+                            clearedWithCashController.text) ==
+                        true) {
+                      showMessage(
+                          context: context,
+                          msg: "Please enter valid amount",
+                          type: 'warning');
                     } else {
+                      Client().patch(
+                        Uri.parse(AppUrls.updatePayment + widget.paymentModel.id),
+                        body: {
+                        "school": context.read<SchoolController>().state['school'],
+                        "guardian": "",
+                        "student":widget.paymentModel.student.id,
+                        "payment_method":widget.paymentModel.paymentMethod,
+                        "staff": context.read<SchoolController>().state['id'],
+                        "comment": widget.paymentModel.comment,
+                        "paid_amount": clearedWithCashController.text,
+                        "date_of_payment": DateTime.now().toString(),
+                        "payment_key[0]": "0"
+                        },
+                      ).then((value) {
+                        if (value.statusCode == 200) {
+                           Routes.popPage(context);
+                          showSuccessDialog(
+                              "Successfully cleared ${widget.title}", context);
+                        }
+                      }).whenComplete(() {
                       Routes.popPage(context);
-                    showSuccessDialog(
-                        "Successfully cleared ${widget.title}", context);
+                      });
+                      // showSuccessDialog(
+                      //     "Successfully cleared ${widget.title}", context);
                     }
                   } else {
                     showMessage(
@@ -103,10 +133,28 @@ class _ClearWindowState extends State<ClearWindow> {
                 } else {
                   //clear with comment
                   if (clearedWithCommentController.text.isNotEmpty) {
-                    
-                    Routes.popPage(context);
-                    showSuccessDialog(
-                        "Successfully cleared ${widget.title}", context);
+                     Client().patch(
+                        Uri.parse(AppUrls.updatePayment + widget.id),
+                        body: {
+                        "school": context.read<SchoolController>().state['school'],
+                        "guardian": "",
+                        "student":widget.paymentModel.student.id,
+                        "payment_method":widget.paymentModel.paymentMethod,
+                        "staff": context.read<SchoolController>().state['id'],
+                        "comment": clearedWithCommentController.text,
+                        "paid_amount": widget.paymentModel.paidAmount,
+                        "date_of_payment": DateTime.now().toString(),
+                        "payment_key[0]": "0"
+                        },
+                      ).then((value) {
+                        if (value.statusCode == 200) {
+                           Routes.popPage(context);
+                          showSuccessDialog(
+                              "Successfully cleared ${widget.title}", context);
+                        }
+                      }).whenComplete(() {
+                      Routes.popPage(context);
+                      });
                   } else {
                     showMessage(
                         context: context,

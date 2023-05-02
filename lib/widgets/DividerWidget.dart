@@ -9,7 +9,7 @@ class DividerWidget extends StatelessWidget {
               children: [
                 SizedBox(
                     width: size.width * 0.28,
-                    child: Divider(
+                    child: const Divider(
                       thickness: 1.3,
                     )),
                 Container(
@@ -19,8 +19,8 @@ class DividerWidget extends StatelessWidget {
                             width: 0.5,
                             color:
                                 Theme.of(context).brightness == Brightness.light
-                                    ? Colors.black
-                                    : Colors.white)),
+                                   ? Colors.white12
+                          : Colors.black12)),
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
@@ -35,7 +35,7 @@ class DividerWidget extends StatelessWidget {
                     )),
                 SizedBox(
                     width: size.width * 0.28,
-                    child: Divider(
+                    child: const Divider(
                       thickness: 1.3,
                     )),
               ],

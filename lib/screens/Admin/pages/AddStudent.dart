@@ -10,87 +10,102 @@ class AddStudent extends StatefulWidget {
   @override
   State<AddStudent> createState() => _AddStudentState();
 }
+
 class _AddStudentState extends State<AddStudent> {
- List<Map<String, dynamic>>? formFields;
- List<TextEditingController> formControllers =  List.generate(7, (index) => TextEditingController());
- @override
+  List<Map<String, dynamic>>? formFields;
+  List<TextEditingController> formControllers =
+      List.generate(7, (index) => TextEditingController());
+  @override
 
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
 // form key
   final formKey = GlobalKey<FormState>();
-  
+  @override
+  void initState() { 
+    super.initState();
+     BlocProvider.of<ClassController>(context).getClasses(context);
+    BlocProvider.of<StreamsController>(context).getStreams(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    // context.read<MainController>().fetchClasses(context.read<SchoolController>().state['school']);
-    // context.read<MainController>().fetchStreams(context.read<SchoolController>().state['school']);
+    BlocProvider.of<ClassController>(context).getClasses(context);
+    BlocProvider.of<StreamsController>(context).getStreams(context);
+// form data
 // error fields
-  List<String> errorFields = List.generate(7, (i) => '');
- formFields = [
-  {
-    "title": "Student's Firstname *",
-    "hint": "e.g John",
-    "password": false,
-    'icon': Icons.person_outlined
-  },
-  {
-    "title": "Student's Lastname *",
-    "hint": "e.g Doe",
-    "password": false,
-    'icon': Icons.person_2_outlined
-  },
-  {
-    "title": "Student's Othername *",
-    "hint": "e.g Paul",
-    "password": false,
-    'icon': Icons.person_3_outlined
-  },
-  {'title': 'Student Profile', 'profile': 5},
-  {
-    "title": "Gender *",
-    "hint": "Select gender",
-    "data": [
-      "Select gender",
-      "Male",
-      "Female",
-    ]
-  },
-  {
-    "title": "Class *",
-    "hint": "e.g grade 2",
-    "data": [
-      "Select class",
-      ...context.read<MainController>().classes.map((e) => e.className).toList(),
-    ],
-    'icon': Icons.home_work_outlined
-  },
-  {
-    "title": "Stream *",
-    "hint": "e.g North",
-    "data": [
-      "Select stream",
-      ...context.read<MainController>().streams.map((e) => e.streamName).toList(),
-    ],
-    'icon': Icons.home_work_outlined
-  }
-];
+    List<String> errorFields = List.generate(7, (i) => '');
+    formFields = [
+      {
+        "title": "Student's Firstname *",
+        "hint": "e.g John",
+        "password": false,
+        'icon': Icons.person_outlined
+      },
+      {
+        "title": "Student's Lastname *",
+        "hint": "e.g Doe",
+        "password": false,
+        'icon': Icons.person_2_outlined
+      },
+      {
+        "title": "Student's Othername *",
+        "hint": "e.g Paul",
+        "password": false,
+        'icon': Icons.person_3_outlined
+      },
+      {'title': 'Student Profile', 'profile': 5},
+      {
+        "title": "Gender *",
+        "hint": "Select gender",
+        "data": [
+          "Select gender",
+          "Male",
+          "Female",
+        ]
+      },
+      {
+        "title": "Class *",
+        "hint": "e.g grade 2",
+        "data": [
+          "Select class",
+          ...BlocProvider.of<ClassController>(context)
+              .state
+              .map((e) => e.className)
+              .toList(),
+        ],
+        'icon': Icons.home_work_outlined
+      },
+      {
+        "title": "Stream *",
+        "hint": "e.g North",
+        "data": [
+          "Select stream",
+          ...BlocProvider.of<StreamsController>(context)
+              .state
+              .map((e) => e.streamName)
+              .toList(),
+        ],
+        'icon': Icons.home_work_outlined
+      }
+    ];
 
     return Column(
       children: [
         Text("Add Student", style: TextStyles(context).getTitleStyle()),
         SingleChildScrollView(
-          child: CommonFormFields(
-            padding: _padding,
-            formFields: formFields ?? [],
-            formControllers: formControllers,
-           
-            buttonText: "Save Student Details",
-            onSubmit: () {
-              if (true) {
-                showProgress(context,msg: "Adding new student...");
-                _handleStudentRegistration()
-                    .then(
+          child: BlocBuilder<GuardianController, List<Guardians>>(
+            builder: (context, guardians) {
+              return CommonFormFields(
+                padding: _padding,
+                formFields: formFields ?? [],
+                formControllers: formControllers,
+                buttonText: "Save Student Details",
+                onSubmit: () {
+                  if (true) {
+                    showProgress(context, msg: "Adding new student...");
+                    _handleStudentRegistration().then(
                       (value) {
                         if (value.statusCode == 200) {
                           Routes.popPage(context);
@@ -104,30 +119,30 @@ class _AddStudentState extends State<AddStudent> {
                           }
                         } else {
                           showMessage(
-                            msg:
-                                "Failed to add student ${value.reasonPhrase}",
+                            msg: "Failed to add student ${value.reasonPhrase}",
                             context: context,
                             type: "danger",
                           );
                         }
                       },
-                    )
-                    .whenComplete(() {
+                    ).whenComplete(() {
                       Routes.popPage(context);
                     });
-              }
+                  }
+                },
+                errorMsgs: errorFields,
+                lists: guardians,
+                onDropDownValue: (p0) {
+                  // if (p0 != null) {
+                  //   Provider.of<MainController>(context).guardians;
+                  // }
+                },
+                dropdownLists:
+                    context.watch<MainController>().students.map((item) {
+                  return "${item.studentFname} ${item.studentLname}";
+                }).toList(),
+              );
             },
-            errorMsgs: errorFields,
-             lists:context.watch<MainController>().guardians,
-              onDropDownValue: (p0) {
-                if (p0 != null) {
-                 Provider.of<MainController>(context).guardians;
-                }
-              },
-              dropdownLists: context.watch<MainController>().students.map((item) {
-                    return "${item.studentFname} ${item.studentLname}";
-                  }).toList(),
-                
           ),
         ),
       ],
@@ -136,18 +151,20 @@ class _AddStudentState extends State<AddStudent> {
 
   Future<StreamedResponse> _handleStudentRegistration() async {
     String uri = formControllers[3].text;
- 
+
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStudent));
     debugPrint("${request.headers}");
     //  ============================== student details ============================
-     request.fields['guardians'] = "";//json.encode(context.watch()<MainController>().multiselect);
+    request.fields['guardians'] =
+        ""; //json.encode(context.watch()<MainController>().multiselect);
     request.fields['school'] =
         "${context.read<SchoolController>().state['school']}";
     request.fields['student_fname'] =
         formControllers[0].text.trim().split(" ").first;
     request.fields['student_lname'] =
         formControllers[1].text.trim().split(" ").last;
-    request.fields['username'] = "${formControllers[0].text.trim().split(" ").first}_256";//_formControllers[2].text.trim();
+    request.fields['username'] =
+        "${formControllers[0].text.trim().split(" ").first}_256"; //_formControllers[2].text.trim();
     request.fields['other_name'] = formControllers[2].text.trim();
     request.fields['_class'] = formControllers[5].text.trim();
     request.fields['stream'] = formControllers[6].text.trim();
@@ -155,15 +172,17 @@ class _AddStudentState extends State<AddStudent> {
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
     if (kIsWeb) {
-    request.files.add(MultipartFile(
-        "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
-        filename: context.read<ImageUploadController>().state['name']));
+      request.files.add(MultipartFile(
+          "image",
+          context.read<ImageUploadController>().state['image'],
+          context.read<ImageUploadController>().state['size'],
+          filename: context.read<ImageUploadController>().state['name']));
     } else {
-      request.files.add(MultipartFile('image',
-        File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-        filename: uri.split("/").last));
+      request.files.add(MultipartFile(
+          'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
+          filename: uri.split("/").last));
     }
-    
+
     //  ============================== student key ============================
     request.fields['student_key[key]'] = "0";
     //  ============================== student key ============================
