@@ -16,9 +16,6 @@ class _MainScreenState extends State<MainScreen> {
     context.read<ThemeController>().getTheme();
     // retrive session state
     context.read<SchoolController>().getSchoolData();
-    context.read<MainController>().fetchUpdates(
-        context.read<SchoolController>().state['school'] ?? "",
-        context.read<SchoolController>().state['role'] ?? "");
 
     super.initState();
   }
@@ -29,9 +26,7 @@ class _MainScreenState extends State<MainScreen> {
     context.read<ThemeController>().getTheme();
     // retrive session state
     context.read<SchoolController>().getSchoolData();
-    context.read<MainController>().fetchUpdates(
-        context.read<SchoolController>().state['school'] ?? "",
-        context.read<SchoolController>().state['role'] ?? "");
+  
     BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
   }
 
@@ -43,9 +38,7 @@ class _MainScreenState extends State<MainScreen> {
     context.read<ThemeController>().getTheme();
     // retrive session state
     context.read<SchoolController>().getSchoolData();
-    context.read<MainController>().fetchUpdates(
-        context.read<SchoolController>().state['school'] ?? "",
-        context.read<SchoolController>().state['role'] ?? "");
+  
 
     BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
     BlocProvider.of<FinanceFirstTimeController>(context).getFirstTime();
@@ -86,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
                         BlocBuilder<FirstTimeUserController, bool>(
                           builder: (context, state) {
                             // redirect to dashboard if not first time user
-                            if (state == false) {
+                            if (state == false && context.read<SchoolController>().state['role'] == 'Admin') {
                               // Admin redirection
                                 BlocProvider.of<WidgetController>(context)
                                     .pushWidget(const Dashboard());
@@ -95,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
                                 BlocProvider.of<SideBarController>(context)
                                     .changeSelected(0);
                             }
-                            return state == false
+                            return state == false&& context.read<SchoolController>().state['role'] == 'Admin'
                                 ? Expanded(
                                     // default flex = 1
                                     // and it takes 1/6 part of the screen

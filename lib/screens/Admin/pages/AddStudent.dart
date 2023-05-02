@@ -10,17 +10,11 @@ class AddStudent extends StatefulWidget {
   @override
   State<AddStudent> createState() => _AddStudentState();
 }
-
-
 class _AddStudentState extends State<AddStudent> {
  List<Map<String, dynamic>>? formFields;
  List<TextEditingController> formControllers =  List.generate(7, (index) => TextEditingController());
  @override
- void initState() {
-    context.read<MainController>().fetchClasses(context.read<SchoolController>().state['school']);
-    context.read<MainController>().fetchStreams(context.read<SchoolController>().state['school']);
-   super.initState();
- }
+
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);

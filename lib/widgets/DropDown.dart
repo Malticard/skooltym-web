@@ -43,11 +43,12 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                 style: TextStyles(context).getDescriptionStyle(),
                 children: [
                   WidgetSpan(
-                      child: Icon(
-                    widget.mustIcon,
-                    size: 12,
-                    color: Colors.red,
-                  ))
+                    child: Icon(
+                      widget.mustIcon,
+                      size: 12,
+                      color: Colors.red,
+                    ),
+                  )
                 ],
               ),
             ),
@@ -59,10 +60,10 @@ class _DropDownWidgetState extends State<DropDownWidget> {
             child: Card(
               color: Theme.of(context).brightness == Brightness.light
                   ? Colors.white
-                  : Color.fromARGB(66, 75, 74, 74),
+                  : const Color.fromARGB(66, 75, 74, 74),
               borderOnForeground: false,
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.grey, width: 0.5),
+                side: const BorderSide(color: Colors.grey, width: 0.5),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: DropdownButton<String>(
@@ -74,6 +75,7 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                 items: List.generate(
                   widget.elements.length,
                   (index) => DropdownMenuItem(
+                    value: widget.elements[index],
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
@@ -81,7 +83,6 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                         style: TextStyles(context).getDescriptionStyle(),
                       ),
                     ),
-                    value: widget.elements[index],
                   ),
                 ),
                 onChanged: widget.selectedValue ?? (value) {},

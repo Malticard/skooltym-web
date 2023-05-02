@@ -16,7 +16,7 @@ class AppUrls {
   static String addDropOff = "${devURL}post/dropoff/create";
   static String registerOvertime = "${devURL}post/overtime/create";
   static String addStream = "${devURL}post/stream/create";
-  // static String registerOvertime = devURL + "post/overtime/create";
+  static String addPayment = "${devURL}post/payments/create";
   // get urls
   static String roles = "${devURL}get/roles/";
   static String schools = "${devURL}get/schools";
@@ -31,6 +31,7 @@ class AppUrls {
   static String getDropOffs = "${devURL}get/dropoff/";
   static String getClasses = "${devURL}get/class/";
   static String getStreams = "${devURL}get/stream/";
+  static String getPayment = "${devURL}get/payments/";
   // fetch specific
   static String specficOvertime = "${devURL}specific/overtime/";
   static String getGuardian = "${devURL}specific/guardians/";
@@ -40,6 +41,8 @@ class AppUrls {
   static String getOtherGaurdians = "${devURL}specific/otherGuardians/";
   static String specificClass = "${devURL}specific/class/";
   static String specificStream = "${devURL}specific/stream/";
+  static String specificPayment = "${devURL}specific/payments/";
+
   // delete
   static String deleteStaff = "${devURL}delete/staff/";
   static String deleteStudent = "${devURL}delete/students/";
@@ -48,7 +51,7 @@ class AppUrls {
   static String deleteDropOff = "${devURL}delete/dropoff/";
   static String deleteClass = "${devURL}delete/class/";
   static String deleteStream = "${devURL}delete/stream/";
-  // static String deleteClass = "${devURL}delete/class/";
+  static String deletePayment = "${devURL}delete/payments/";
   // update
   static String updateStaff = "${devURL}update/staff/";
   static String updateStudent = "${devURL}update/students/";
@@ -59,6 +62,7 @@ class AppUrls {
   static String updateStream = "${devURL}update/stream/";
   static String updateSettings = "${devURL}update/settings/";
   static String updateOvertime = "${devURL}update/overtime/";
+  static String updatePayment = "${devURL}update/payments/";
 // 
 static String setPass = "${devURL}password/set-password/";
 static String forgotPassword = "${devURL}password/forgot-password";

@@ -2,8 +2,6 @@
 //
 //     final pickUpModel = pickUpModelFromJson(jsonString);
 
-// ignore_for_file: camel_case_types
-
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -12,41 +10,44 @@ List<PickUpModel> pickUpModelFromJson(String str) => List<PickUpModel>.from(json
 String pickUpModelToJson(List<PickUpModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class PickUpModel {
+    final String id;
+    final String school;
+    final String settings;
+    final StudentN studentN;
+    final String pickUpTime;
+    final PickedBy pickedBy;
+    final AuthorizedBy authorizedBy;
+    final int overtimeCharge;
+    final List<PickupKey> pickupKey;
+    final DateTime createdAt;
+    final DateTime updatedAt;
+    final int v;
+
     PickUpModel({
         required this.id,
-        required this.schoolName,
-        required this.studentName_,
+        required this.school,
+        required this.settings,
+        required this.studentN,
         required this.pickUpTime,
         required this.pickedBy,
-        required this.authorizedBy_,
-        required this.comments,
+        required this.authorizedBy,
+        required this.overtimeCharge,
         required this.pickupKey,
         required this.createdAt,
         required this.updatedAt,
         required this.v,
     });
 
-    final String id;
-    final String schoolName;
-    final StudentName_ studentName_;
-    final DateTime pickUpTime;
-    final PickedBy pickedBy;
-    final AuthorizedBy_ authorizedBy_;
-    final String comments;
-    final List<dynamic> pickupKey;
-    final DateTime createdAt;
-    final DateTime updatedAt;
-    final int v;
-
     factory PickUpModel.fromJson(Map<String, dynamic> json) => PickUpModel(
         id: json["_id"],
-        schoolName: json["school_name"],
-        studentName_: StudentName_.fromJson(json["student_name"] ?? {}),
-        pickUpTime: DateTime.parse(json["pick_up_time"]),
+        school: json["school"],
+        settings: json["settings"],
+        studentN: StudentN.fromJson(json["student_n"] ?? {}),
+        pickUpTime: json["pick_up_time"],
         pickedBy: PickedBy.fromJson(json["picked_by"] ?? {}),
-        authorizedBy_: AuthorizedBy_.fromJson(json["authorized_by"] ?? {}),
-        comments: json["comments"],
-        pickupKey: List<dynamic>.from(json["pickup_key"].map((x) => x)),
+        authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
+        overtimeCharge: json["overtime_charge"],
+        pickupKey: List<PickupKey>.from(json["pickup_key"].map((x) => PickupKey.fromJson(x))),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
@@ -54,31 +55,32 @@ class PickUpModel {
 
     Map<String, dynamic> toJson() => {
         "_id": id,
-        "school_name": schoolName,
-        "student_name": studentName_.toJson(),
-        "pick_up_time": pickUpTime.toIso8601String(),
+        "school": school,
+        "settings": settings,
+        "student_n": studentN.toJson(),
+        "pick_up_time": pickUpTime,
         "picked_by": pickedBy.toJson(),
-        "authorized_by": authorizedBy_.toJson(),
-        "comments": comments,
-        "pickup_key": List<dynamic>.from(pickupKey.map((x) => x)),
+        "authorized_by": authorizedBy.toJson(),
+        "overtime_charge": overtimeCharge,
+        "pickup_key": List<dynamic>.from(pickupKey.map((x) => x.toJson())),
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
     };
 }
 
-class AuthorizedBy_ {
-    AuthorizedBy_({
+class AuthorizedBy {
+    final String staffFname;
+    final String staffLname;
+
+    AuthorizedBy({
         required this.staffFname,
         required this.staffLname,
     });
 
-    final String staffFname;
-    final String staffLname;
-
-    factory AuthorizedBy_.fromJson(Map<String, dynamic> json) => AuthorizedBy_(
-        staffFname: json["staff_fname"] ?? "",
-        staffLname: json["staff_lname"] ?? "",
+    factory AuthorizedBy.fromJson(Map<String, dynamic> json) => AuthorizedBy(
+        staffFname: json["staff_fname"],
+        staffLname: json["staff_lname"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -88,17 +90,17 @@ class AuthorizedBy_ {
 }
 
 class PickedBy {
+    final String guardianFname;
+    final String guardianLname;
+
     PickedBy({
         required this.guardianFname,
         required this.guardianLname,
     });
 
-    final String guardianFname;
-    final String guardianLname;
-
     factory PickedBy.fromJson(Map<String, dynamic> json) => PickedBy(
         guardianFname: json["guardian_fname"] ?? "",
-        guardianLname: json["guardian_lname"]??"",
+        guardianLname: json["guardian_lname"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {
@@ -107,21 +109,41 @@ class PickedBy {
     };
 }
 
-class StudentName_ {
-    StudentName_({
+class PickupKey {
+    final dynamic key;
+    final String id;
+
+    PickupKey({
+        required this.key,
+        required this.id,
+    });
+
+    factory PickupKey.fromJson(Map<String, dynamic> json) => PickupKey(
+        key: json["key"],
+        id: json["_id"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "key": key,
+        "_id": id,
+    };
+}
+
+class StudentN {
+    final String studentFname;
+    final String studentLname;
+    final String studentProfilePic;
+
+    StudentN({
         required this.studentFname,
         required this.studentLname,
         required this.studentProfilePic,
     });
 
-    final String studentFname;
-    final String studentLname;
-    final String studentProfilePic;
-
-    factory StudentName_.fromJson(Map<String, dynamic> json) => StudentName_(
+    factory StudentN.fromJson(Map<String, dynamic> json) => StudentN(
         studentFname: json["student_fname"] ?? "",
         studentLname: json["student_lname"] ?? "",
-        studentProfilePic: json["student_profile_pic"] ?? "",
+        studentProfilePic: json["student_profile_pic"] ?? "profile.png",
     );
 
     Map<String, dynamic> toJson() => {

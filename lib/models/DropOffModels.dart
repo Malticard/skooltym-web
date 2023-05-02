@@ -30,7 +30,7 @@ class DropOffModel {
     final StudentName studentName;
     final DateTime dropOffTime;
     final DroppedBy droppedBy;
-    final AuthorizedBy authorizedBy;
+    final AuthorizedBy_ authorizedBy;
     final String comments;
     final bool isComplete;
     final List<dynamic> dropoffKey;
@@ -44,7 +44,7 @@ class DropOffModel {
         studentName: StudentName.fromJson(json["student_name"] ?? {}),
         dropOffTime: DateTime.parse(json["drop_off_time"] == "19:58"?"2023-04-12 09:56:40":json["drop_off_time"]),
         droppedBy: DroppedBy.fromJson(json["dropped_by"] ?? {}),
-        authorizedBy: AuthorizedBy.fromJson(json["authorized_by"] ?? {}),
+        authorizedBy: AuthorizedBy_.fromJson(json["authorized_by"] ?? {}),
         comments: json["comments"],
         isComplete: json["isComplete"],
         dropoffKey: List<dynamic>.from(json["dropoff_key"].map((x) => x)),
@@ -69,8 +69,8 @@ class DropOffModel {
     };
 }
 
-class AuthorizedBy {
-    AuthorizedBy({
+class AuthorizedBy_ {
+    AuthorizedBy_({
         required this.staffFname,
         required this.staffLname,
     });
@@ -78,7 +78,7 @@ class AuthorizedBy {
     final String staffFname;
     final String staffLname;
 
-    factory AuthorizedBy.fromJson(Map<String, dynamic> json) => AuthorizedBy(
+    factory AuthorizedBy_.fromJson(Map<String, dynamic> json) => AuthorizedBy_(
         staffFname: json["staff_fname"] ?? "",
         staffLname: json["staff_lname"] ?? "",
     );

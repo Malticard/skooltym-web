@@ -2,7 +2,8 @@ import '/exports/exports.dart';
 
 class ClearWindow extends StatefulWidget {
   final String title;
-  const ClearWindow({super.key, required this.title});
+  final String id;
+  const ClearWindow({super.key, required this.title, required this.id});
 
   @override
   State<ClearWindow> createState() => _ClearWindowState();

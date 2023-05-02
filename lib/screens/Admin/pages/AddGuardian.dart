@@ -85,7 +85,7 @@ class _AddGuardianState extends State<AddGuardian> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents(context.read<SchoolController>().state['school']);
+    // context.watch<MainController>().getAllStudents(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     context.read<MultiStudentsController>().getMultiStudents();
 
     Size size = MediaQuery.of(context).size;
@@ -124,15 +124,13 @@ class _AddGuardianState extends State<AddGuardian> {
 
 // adding guardian
   void addGuardian() {
-    context.read<MultiStudentsController>().getMultiStudents();
 
     if (validateEmail(_formControllers[1].text, context) != false) {
        showProgress(context,msg: "Adding guardian...");
       handleGuardian().then((value) {
         // debugPrint("Status code ${value.statusCode}");
         Routes.popPage(context);
-        showSuccessDialog(
-            _formControllers[0].text.trim().split(" ")[1], context);
+       
         showMessage(
           context: context,
           type: 'success',
@@ -182,9 +180,6 @@ class _AddGuardianState extends State<AddGuardian> {
           'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
           filename: uri.split("/").last));
     }
-    // request.files.add(MultipartFile('image',
-    //     File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-    //     filename: uri.split("/").last));
     request.fields['guardian_dateOfEntry'] = _formControllers[6].text.trim();
     request.fields['passcode'] = "";
     request.fields['fcmToken'] = "";

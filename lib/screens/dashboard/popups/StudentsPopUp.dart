@@ -18,7 +18,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context).getAllStudents(context.read<SchoolController>().state['school']);
+    Provider.of<MainController>(context).getAllStudents(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     super.didChangeDependencies();
   }
 
@@ -68,7 +68,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Provider.of<MainController>(context).getAllStudents(context.read<SchoolController>().state['school']);
+    Provider.of<MainController>(context).getAllStudents(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     return SizedBox(
       height: size.width / 2.5,
       child: Stack(
@@ -101,7 +101,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
               ),
             ),
             empty: FutureBuilder(
-                future: Future.delayed(const Duration(seconds: 4)),
+                future: Future.delayed(const Duration(seconds: 5)),
                 builder: (context, snap) {
                   return snap.connectionState == ConnectionState.waiting
                       ? const Center(
@@ -167,28 +167,28 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
                   index),
             ),
           ),
-          Positioned(
-            bottom: 10,
-            left: 10,
-            child: Row(
-              children: [
-                const Text("Continue to adding guardians"),
-                TextButton(
-                  onPressed: () {
-                    context
-                        .read<WidgetController>()
-                        .pushWidget(const ViewGuardians());
-                    context.read<TitleController>().setTitle("Guardians");
-                    context.read<SideBarController>().changeSelected(3);
-                  },
-                  child: Text(
-                    "Click here",
-                    style: TextStyles(context).getRegularStyle(),
-                  ),
-                )
-              ],
-            ),
-          )
+          // Positioned(
+          //   bottom: 10,
+          //   left: 10,
+          //   child: Row(
+          //     children: [
+          //       const Text("Continue to adding guardians"),
+          //       TextButton(
+          //         onPressed: () {
+          //           context
+          //               .read<WidgetController>()
+          //               .pushWidget(const ViewGuardians());
+          //           context.read<TitleController>().setTitle("Guardians");
+          //           context.read<SideBarController>().changeSelected(3);
+          //         },
+          //         child: Text(
+          //           "Click here",
+          //           style: TextStyles(context).getRegularStyle(),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // )
         ],
       ),
     );

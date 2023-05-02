@@ -9,24 +9,12 @@ class ViewDropOffs extends StatefulWidget {
 
 class _ViewDropOffsState extends State<ViewDropOffs>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  // late AnimationController _controller;
 
   @override
   void didChangeDependencies() {
-    Provider.of<MainController>(context)
-        .availableDropOffs(context.read<SchoolController>().state['school']);
+    BlocProvider.of<DropOffController>(context)
+        .getDropOff(context);
     super.didChangeDependencies();
   }
 
@@ -68,65 +56,66 @@ class _ViewDropOffsState extends State<ViewDropOffs>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    BlocProvider.of<DropOffController>(context)
+        .getDropOff(context);
     return SizedBox(
       width: size.width,
       height: size.width / 2.39,
-      child: Data_Table(
-        header: Row(
-          children: [
-            Text(
-              "Available Drops Recorded",
-              style: TextStyles(context).getTitleStyle(),
-            ),
-            if (!Responsive.isMobile(context))
-              Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-            if (context.read<MainController>().dropOffData.isNotEmpty)
-              Expanded(
-                child: SearchField(
-                  onChanged: (value) {
-                    Provider.of<MainController>(context, listen: false)
-                        .searchDropOffs(value ?? "");
-                  },
+      child: BlocBuilder<DropOffController, List<DropOffModel>>(
+        builder: (context, dropOffs) {
+          return Data_Table(
+            header: Row(
+              children: [
+                Text(
+                  "Available Drops Recorded",
+                  style: TextStyles(context).getTitleStyle(),
                 ),
+                if (!Responsive.isMobile(context))
+                  Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                if (context.read<MainController>().dropOffData.isNotEmpty)
+                  Expanded(
+                    child: SearchField(
+                      onChanged: (value) {
+                        // Provider.of<MainController>(context, listen: false)
+                        //     .searchDropOffs(value ?? "");
+                      },
+                    ),
+                  ),
+              ],
+            ),
+            columns: const [
+              DataColumn(
+                label: Text("Student Name"),
               ),
-          ],
-        ),
-        columns: const [
-          DataColumn(
-            label: Text("Student Name"),
-          ),
-          DataColumn(
-            label: Text("Dropped by"),
-          ),
-          DataColumn(
-            label: Text("Cleared by"),
-          ),
-          DataColumn(
-            label: Text("Time Of DropOff"),
-          ),
-        ],
-        empty: Center(
-          child: FutureBuilder(
-              future: Future.delayed(const Duration(seconds: 5)),
-              builder: (context, f) {
-                return f.connectionState == ConnectionState.waiting
-                    ? const Loader(
-                        text: "DropOff data..",
-                      )
-                    : const NoDataWidget(text: "No drop offs captured yet");
-              }),
-        ),
-        rows: List.generate(
-          context.watch<MainController>().sdropOff.isEmpty
-              ? context.watch<MainController>().dropOffData.length
-              : context.watch<MainController>().sdropOff.length,
-          (index) => _dataRow(
-              context.watch<MainController>().sdropOff.isEmpty
-                  ? context.watch<MainController>().dropOffData[index]
-                  : context.watch<MainController>().sdropOff[index],
-              index),
-        ),
+              DataColumn(
+                label: Text("Dropped by"),
+              ),
+              DataColumn(
+                label: Text("Cleared by"),
+              ),
+              DataColumn(
+                label: Text("Time Of DropOff"),
+              ),
+            ],
+            empty: Center(
+              child: FutureBuilder(
+                  future: Future.delayed(const Duration(seconds: 5)),
+                  builder: (context, f) {
+                    return f.connectionState == ConnectionState.waiting
+                        ? const Loader(
+                            text: "DropOff data..",
+                          )
+                        : const NoDataWidget(text: "No drop offs captured yet");
+                  }),
+            ),
+            rows: List.generate(
+              dropOffs.length,
+              (index) => _dataRow(
+                  dropOffs[index],
+                  index),
+            ),
+          );
+        },
       ),
     );
   }

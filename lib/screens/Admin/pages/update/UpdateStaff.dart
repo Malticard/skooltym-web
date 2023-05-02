@@ -107,6 +107,7 @@ class _UpdateStaffState extends State<UpdateStaff> {
                   );
                   //  end of bottom msg
                 } else {
+                  showProgress(context,msg: "Updating staff in progress");
                   showMessage(
                     context: context,
                     type: 'danger',

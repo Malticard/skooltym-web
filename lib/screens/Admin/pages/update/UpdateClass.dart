@@ -32,16 +32,9 @@ class _UpdateClassState extends State<UpdateClass> {
   }
 
   @override
-  void didChangeDependencies() {
-    Provider.of<MainController>(context)
-        .staffUpdate(context.read<SchoolController>().state['school']);
-    Provider.of<MainController>(context)
-        .fetchStreams(context.read<SchoolController>().state['school']);
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ClassController>(context).getClasses(context);
+
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.white

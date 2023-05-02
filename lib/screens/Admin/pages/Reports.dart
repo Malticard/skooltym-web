@@ -12,17 +12,17 @@ class OvertimeReports extends StatefulWidget {
 
 class _OvertimeReportsState extends State<OvertimeReports>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  // late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this);
+    // _controller = AnimationController(vsync: this);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
@@ -38,78 +38,84 @@ class _OvertimeReportsState extends State<OvertimeReports>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     //invoke new overtimes
-    Provider.of<MainController>(context, listen: false)
-        .fetchPendingOvertime(widget.overtimeStatus ?? "Pending", context);
+    // Provider.of<MainController>(context, listen: false).fetchPendingOvertime(
+    //     widget.overtimeStatus ?? "Pending",
+    //     context.read<SchoolController>().state['school']);
     return SizedBox(
       width: size.width,
       height: size.width / 2.5,
-      child: Data_Table(
-        header: Text(
-          context.read<SchoolController>().state['role'] == 'Admin'
-              ? widget.label ?? "Reports"
-              : "Overtimes pending",
-          style: TextStyles(context).getTitleStyle(),
-        ),
-        columns: [
-          const DataColumn(
-            label: Text(
-              "Student Name",
-              style: TextStyle(fontSize: 12),
-            ),
-          ),
-          const DataColumn(
-            label: Text("Picked By", style: TextStyle(fontSize: 12)),
-          ),
-          const DataColumn(
-            label: SizedBox(
-                width: 800,
-                child: Text("Default\nPickUpTime",
-                    style: TextStyle(fontSize: 12))),
-          ),
-          const DataColumn(
-            label:
-                Text("Current \nPickUp Time", style: TextStyle(fontSize: 12)),
-          ),
-          const DataColumn(
-            label: Text("Authorized by", style: TextStyle(fontSize: 12)),
-          ),
-          const DataColumn(
-            label: Text("Interval(mins)", style: TextStyle(fontSize: 12)),
-          ),
-          const DataColumn(
-            label: Text("Overtime rate", style: TextStyle(fontSize: 12)),
-          ),
-          // const DataColumn(
-          //   label: Text("Overtime\ncharge", style: TextStyle(fontSize: 13)),
-          // ),
-          if (context.read<SchoolController>().state['role'] == 'Finance')
-            const DataColumn(
-              label: Text("Actions"),
-            ),
-        ],
-        empty: FutureBuilder(
-            future: Future.delayed(const Duration(seconds: 5)),
-            builder: (context, d) {
-              return d.connectionState == ConnectionState.waiting
-                  ? const Center(
-                      child: Loader(
-                        text: "Classes",
+      child: FutureBuilder(
+          future: fetchOvertimeData(widget.overtimeStatus ?? "Pending",
+              context.read<SchoolController>().state['school']),
+          builder: (context, o) {
+            return !o.hasData
+                ? Center(
+                    child: Loader(
+                      text: "${widget.overtimeStatus} overtime records",
+                    ),
+                  )
+                : Data_Table(
+                    header: Text(
+                      context.read<SchoolController>().state['role'] == 'Admin'
+                          ? widget.label ?? "Reports"
+                          : "Overtimes pending",
+                      style: TextStyles(context).getTitleStyle(),
+                    ),
+                    columns: [
+                      const DataColumn(
+                        label: Text(
+                          "Student Name",
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
-                    )
-                  : SizedBox(
+                      const DataColumn(
+                        label:
+                            Text("Picked By", style: TextStyle(fontSize: 12)),
+                      ),
+                      const DataColumn(
+                        label: SizedBox(
+                            width: 800,
+                            child: Text("Default\nPickUpTime",
+                                style: TextStyle(fontSize: 12))),
+                      ),
+                      const DataColumn(
+                        label: Text("Current \nPickUp Time",
+                            style: TextStyle(fontSize: 12)),
+                      ),
+                      const DataColumn(
+                        label: Text("Authorized by",
+                            style: TextStyle(fontSize: 12)),
+                      ),
+                      const DataColumn(
+                        label: Text("Interval(mins)",
+                            style: TextStyle(fontSize: 12)),
+                      ),
+                      const DataColumn(
+                        label: Text("Overtime rate",
+                            style: TextStyle(fontSize: 12)),
+                      ),
+                      // const DataColumn(
+                      //   label: Text("Overtime\ncharge", style: TextStyle(fontSize: 13)),
+                      // ),
+                      if (context.read<SchoolController>().state['role'] ==
+                          'Finance')
+                        const DataColumn(
+                          label: Text("Actions"),
+                        ),
+                    ],
+                    empty: SizedBox(
                       height: MediaQuery.of(context).size.width / 9,
                       child: NoDataWidget(
                           text: "No ${widget.overtimeStatus} overtime "
                               "recorded "
                               ""),
-                    );
-            }),
-        rows: List.generate(
-          context.watch<MainController>().pendingOvertime.length,
-          (index) => overtimeDataRow(
-              context.watch<MainController>().pendingOvertime[index], index),
-        ),
-      ),
+                    ),
+                    rows: List.generate(
+                      o.data!.length,
+                      (index) => overtimeDataRow(o.data![index], index),
+                    ),
+                  );
+          }),
     );
   }
 
@@ -175,6 +181,7 @@ class _OvertimeReportsState extends State<OvertimeReports>
                           width: MediaQuery.of(context).size.width / 2.4,
                           height: MediaQuery.of(context).size.width / 4,
                           child: ClearWindow(
+                            id: '',
                             title: overtimeModel.student.username,
                           ),
                         ),

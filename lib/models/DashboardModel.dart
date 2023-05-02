@@ -11,7 +11,7 @@ String dashboardModelToJson(List<DashboardModel> data) => json.encode(List<dynam
 
 class DashboardModel {
     final String className;
-    final List<ClassStream> classStreams;
+    final List<ClassStream_> classStreams;
     final List<ClassStudent> classStudents;
 
     DashboardModel({
@@ -22,7 +22,7 @@ class DashboardModel {
 
     factory DashboardModel.fromJson(Map<String, dynamic> json) => DashboardModel(
         className: json["class_name"],
-        classStreams: List<ClassStream>.from(json["class_streams"].map((x) => ClassStream.fromJson(x))),
+        classStreams: List<ClassStream_>.from(json["class_streams"].map((x) => ClassStream_.fromJson(x))),
         classStudents: List<ClassStudent>.from(json["class_students"].map((x) => ClassStudent.fromJson(x))),
     );
 
@@ -33,7 +33,7 @@ class DashboardModel {
     };
 }
 
-class ClassStream {
+class ClassStream_ {
     final String id;
     final String school;
     final String streamName;
@@ -42,7 +42,7 @@ class ClassStream {
     final DateTime updatedAt;
     final int v;
 
-    ClassStream({
+    ClassStream_({
         required this.id,
         required this.school,
         required this.streamName,
@@ -52,7 +52,7 @@ class ClassStream {
         required this.v,
     });
 
-    factory ClassStream.fromJson(Map<String, dynamic> json) => ClassStream(
+    factory ClassStream_.fromJson(Map<String, dynamic> json) => ClassStream_(
         id: json["_id"],
         school: json["school"],
         streamName: json["stream_name"],

@@ -280,9 +280,10 @@ void main(List<String> args) {
   };
   // var st = data.toList().where((element) => element['stream'] == "644c3568b17d046bb47edecd").toList();
   // print("644c3568b17d046bb47edecd" == "644c3568b17d046bb47edecd");
+  var f = {"oo":0};
  for (var element in data) {
   for (var d in element.where((element) => element['stream'] == "644c3568b17d046bb47edecd").toList()) {
-    print(d['student_fname']);
+    print({...f,"pp":0});
   }
  }
 }

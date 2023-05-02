@@ -15,14 +15,10 @@ class _DashboardState extends State<Dashboard> {
   }
 
   @override
-  void didChangeDependencies() {
-    BlocProvider.of<SchoolController>(context).getSchoolData();
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     BlocProvider.of<SchoolController>(context).getSchoolData();
+    BlocProvider.of<DashboardDataController>(context)
+        .getDashBoardData(context.read<SchoolController>().state['school']);
     return Column(
       children: [
         const MyFiles(),
@@ -42,13 +38,12 @@ class _DashboardState extends State<Dashboard> {
                 ),
               if (context.read<SchoolController>().state['role'] == 'Admin')
                 FutureBuilder(
-                  future: fetchDashboardClassData(
-                      context.read<SchoolController>().state['school']),
+                  future: Future.delayed(Duration(seconds: 2)),
                   builder: (context, snapshot) {
                     return snapshot.connectionState == ConnectionState.waiting
                         ? const Center(
                             child: Loader(
-                              text: "Classes",
+                              text: "Classes data",
                             ),
                           )
                         : snapshot.hasError
@@ -58,20 +53,25 @@ class _DashboardState extends State<Dashboard> {
                                   style: TextStyles(context).getTitleStyle(),
                                 ),
                               )
-                            : Expanded(
-                                child: GridView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data!.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4,
-                                    crossAxisSpacing: defaultPadding,
-                                    mainAxisSpacing: 20,
-                                    childAspectRatio: 1,
-                                  ),
-                                  itemBuilder: (context, index) =>
-                                      FileInfoCard(info: snapshot.data![index]),
-                                ),
+                            : BlocBuilder<DashboardDataController, List<DashboardModel>>(
+                                builder: (context, dashClasses) {
+                                  return Expanded(
+                                    child: GridView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: dashClasses.length,
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        crossAxisSpacing: defaultPadding,
+                                        mainAxisSpacing: 20,
+                                        childAspectRatio: 1,
+                                      ),
+                                      itemBuilder: (context, index) =>
+                                          FileInfoCard(
+                                              info: dashClasses[index]),
+                                    ),
+                                  );
+                                },
                               );
                   },
                 ),

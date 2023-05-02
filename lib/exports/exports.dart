@@ -100,6 +100,7 @@ export 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 export '/models/PopUpOptions.dart'; 
 export '/models/StaffPopUpOptions.dart';
 export '/models/Roles.dart';
+export '/models/PaymentModel.dart';
 export '/models/StaffModel.dart';
 export '/models/OvertimeModel.dart';
 export '/models/Students.dart';
@@ -147,10 +148,22 @@ export '/controllers/SettingsController.dart';
 export '/controllers/FinanceViewController.dart';
 export '/controllers/MultiStudentsController.dart';
 export '/controllers/FinanceTitleController.dart';
+export '/controllers/FetchStudents.dart';
 export '/controllers/PickUpTimeController.dart';
 export '/controllers/DropOffTimeController.dart';
 export '/controllers/FirstTimeUserController.dart';
 export '/controllers/FinanceFirstTimeController.dart';
+export '/controllers/PaymentController.dart';
+// util controllers
+export '/controllers/utils/ClassesController.dart';
+export '/controllers/utils/DropOffController.dart';
+export '/controllers/utils/GuardianController.dart';
+export '/controllers/utils/StaffController.dart';
+export '/controllers/utils/StreamController.dart';
+export '/controllers/utils/PickUpsController.dart';
+export '/controllers/utils/DashboardData.dart';
+export '/controllers/utils/DashboardCardController.dart';
+
 
 // themes
 export '/Themes/Themes.dart';
@@ -162,14 +175,16 @@ export '/screens/Admin/pages/AccountProfile.dart';
 export '/screens/Admin/pages/AddGuardian.dart';
 export '/screens/Admin/pages/AddStudent.dart';
 export '/screens/Admin/pages/Reports.dart';
+export '/screens/Admin/pages/Payment.dart';
 export '/screens/Admin/pages/Staffs.dart';
 export '/screens/Admin/pages/Test.dart';
 export '/screens/Admin/pages/Student.dart';
 export '/screens/Admin/pages/Guardians.dart';
 export '/screens/Admin/pages/AddStaff.dart';
+export '/screens/Admin/pages/AddPayment.dart';
 export '/screens/Admin/pages/ViewDropOff.dart';
 export '/screens/Admin/pages/ViewPickUps.dart';
-export '../screens/Admin/pages/Classes.dart';
+export '/screens/Admin/pages/Classes.dart';
 export '/screens/Admin/settings/AppSettings.dart';
 export '/screens/Admin/settings/SystemSettings.dart';
 export '/screens/Admin/settings/privacy_policy.dart';

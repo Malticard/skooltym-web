@@ -72,7 +72,11 @@ class _ProfileCardState extends State<ProfileCard> {
   void initState() { 
     BlocProvider.of<SchoolController>(context).getSchoolData();
     super.initState();
-    
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<SchoolController>(context).getSchoolData();
   }
   @override
   Widget build(BuildContext context) {

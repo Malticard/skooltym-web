@@ -111,7 +111,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
   
   @override
   Widget build(BuildContext context) {
-    context.watch<MainController>().getAllStudents(context.read<SchoolController>().state['school']);
+    context.watch<MainController>().getAllStudents(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     context.read<MultiStudentsController>().getMultiStudents();
 
     // Size size = MediaQuery.of(context).size;
@@ -152,16 +152,9 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
           .then((value) {
             debugPrint("Status code ${value.statusCode}");
             Routes.popPage(context);
-            showSuccessDialog(
-                _formControllers[0].text.trim().split(" ")[1], context,onPressed: () => Routes.popPage(context));
           })
           .whenComplete(() {
             Routes.popPage(context);
-            // showMessage(
-            //   context: context,
-            //   type: 'success',
-            //   msg: "Added new guardian successfully",
-            // );
           });
     }
   }

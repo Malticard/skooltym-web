@@ -18,10 +18,8 @@ class _MyFilesState extends State<MyFiles> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
             Row(
               children: const [
-
                 SizedBox(
                   width: 20,
                 ),
@@ -63,36 +61,56 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   @override
   void initState() {
     BlocProvider.of<SchoolController>(context).getSchoolData();
-    Provider.of<MainController>(context, listen: false).fetchUpdates(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
+    BlocProvider.of<DashboardCardsController>(context, listen: false)
+        .fetchUpdates(context.read<SchoolController>().state['school'],
+            context.read<SchoolController>().state['role']);
     super.initState();
   }
-@override
-void didChangeDependencies() {
-  super.didChangeDependencies();
-  BlocProvider.of<SchoolController>(context).getSchoolData();
-}
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<SchoolController>(context).getSchoolData();
+  }
+
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<SchoolController>(context).getSchoolData();
-    context.watch<MainController>().fetchUpdates(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
+    BlocProvider.of<DashboardCardsController>(context, listen: false)
+        .fetchUpdates(context.read<SchoolController>().state['school'],
+            context.read<SchoolController>().state['role']);
     var dash = context.watch<MainController>().dashboardData;
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: dash.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: widget.crossAxisCount,
-        crossAxisSpacing: defaultPadding,
-        mainAxisSpacing: defaultPadding,
-        childAspectRatio: widget.childAspectRatio,
-      ),
-      itemBuilder: (context, index) => DashboardCard(
-        label: dash[index]['label'],
-        value: dash[index]['value'],
-        icon: dash[index]['icon'],
-        color: dash[index]['color'],
-        last_updated: dash[index]['last_updated'],
-      ), //FileInfoCard(info: dash[index]),
-    );
+    return FutureBuilder(
+        future: Future.delayed(const Duration(seconds: 1)),
+        builder: (context, das) {
+          return das.connectionState == ConnectionState.waiting
+              ? const Center(
+                  child: Loader(
+                    text: "Dashboard cards..",
+                  ),
+                )
+              : BlocBuilder<DashboardCardsController, List<Map<String,dynamic>>>(
+                  builder: (context, cards) {
+                    return GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: cards.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: widget.crossAxisCount,
+                        crossAxisSpacing: defaultPadding,
+                        mainAxisSpacing: defaultPadding,
+                        childAspectRatio: widget.childAspectRatio,
+                      ),
+                      itemBuilder: (context, index) => DashboardCard(
+                        label: cards[index]['label'],
+                        value: cards[index]['value'],
+                        icon: cards[index]['icon'],
+                        color: cards[index]['color'],
+                        last_updated: cards[index]['last_updated'],
+                      ), //FileInfoCard(info: cards[index]),
+                    );
+                  },
+                );
+        });
   }
 }

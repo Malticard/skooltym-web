@@ -35,9 +35,12 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            widget.fieldText,
-            style: TextStyles(context).getDescriptionStyle(),
+          Padding(
+            padding: widget.padding,
+            child: Text(
+              widget.fieldText,
+              style: TextStyles(context).getDescriptionStyle(),
+            ),
           ),
           Card(
             elevation: 0,

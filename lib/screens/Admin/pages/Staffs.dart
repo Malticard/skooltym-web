@@ -15,13 +15,6 @@ class _StaffViewState extends State<StaffView> {
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    Provider.of<MainController>(context)
-        .staffUpdate(context.read<SchoolController>().state['school']);
-    super.didChangeDependencies();
-  }
-
   List<String> staffs = ["Staff Name", "Role", "Email", "Gender", "Actions"];
   DataRow _dataRow(StaffModel staffModel, int i) {
     return DataRow(
@@ -77,78 +70,87 @@ class _StaffViewState extends State<StaffView> {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<StaffController>(context).getStaffs(context);
     Size size = MediaQuery.of(context).size;
-    // Provider.of<MainController>(context).staffUpdate();
     return Stack(
       children: [
         SizedBox(
           height: size.width / 2.39,
-          child: Data_Table(
-            header: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (context.watch<MainController>().staffData.isNotEmpty)
-                    Expanded(
-                      child: SearchField(
-                        onChanged: (value) {
-                          Provider.of<MainController>(context, listen: false)
-                              .searchStaff(value ?? "");
+          child: FutureBuilder(
+              future: Future.delayed(const Duration(seconds: 2)),
+              builder: (context, st) {
+                return st.connectionState == ConnectionState.waiting
+                    ? const Center(
+                        child: Loader(
+                          text: "Staff data",
+                        ),
+                      )
+                    : BlocBuilder<StaffController, List<StaffModel>>(
+                        builder: (context, staff) {
+                          return Data_Table(
+                            header: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  if (staff
+                                      .isNotEmpty)
+                                    Expanded(
+                                      child: SearchField(
+                                        onChanged: (value) {
+                                          // Provider.of<MainController>(context,
+                                          //         listen: false)
+                                          //     .searchStaff(value ?? "");
+                                        },
+                                      ),
+                                    ),
+                                  if (!Responsive.isMobile(context))
+                                    Spacer(
+                                        flex: Responsive.isDesktop(context)
+                                            ? 2
+                                            : 1),
+                                  Text(
+                                    "",
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
+                                  ),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return const AddStaff();
+                                          });
+                                    },
+                                    icon: const Icon(Icons.add),
+                                    label: const Text("Add Staff"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            columns: List.generate(
+                              staffs.length,
+                              (index) => DataColumn(
+                                label: Text(
+                                  staffs[index],
+                                ),
+                              ),
+                            ),
+                            empty: const Center(
+                              child: NoDataWidget(
+                                  text: "You currently have no staff records"),
+                            ),
+                            rows: List.generate(
+                              staff.length,
+                              (index) => _dataRow(
+                                  staff[index],
+                                  index),
+                            ),
+                          );
                         },
-                      ),
-                    ),
-                  if (!Responsive.isMobile(context))
-                    Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                  Text(
-                    "",
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return const AddStaff();
-                          });
-                    },
-                    icon: const Icon(Icons.add),
-                    label: const Text("Add Staff"),
-                  ),
-                ],
-              ),
-            ),
-            columns: List.generate(
-              staffs.length,
-              (index) => DataColumn(
-                label: Text(
-                  staffs[index],
-                ),
-              ),
-            ),
-            empty: Center(
-              child: FutureBuilder(
-                  future: Future.delayed(const Duration(seconds: 5)),
-                  builder: (context, s) {
-                    return s.connectionState == ConnectionState.waiting
-                        ? const Loader(
-                            text: "Staff data",
-                          )
-                        : const NoDataWidget(
-                            text: "You currently have no staff records");
-                  }),
-            ),
-            rows: List.generate(
-              context.watch<MainController>().sStaff.isEmpty
-                  ? context.watch<MainController>().staffData.length
-                  : context.watch<MainController>().sStaff.length,
-              (index) => _dataRow(
-                  context.watch<MainController>().sStaff.isEmpty
-                      ? context.watch<MainController>().staffData[index]
-                      : context.watch<MainController>().sStaff[index],
-                  index),
-            ),
-          ),
+                      );
+              }),
         ),
         Positioned(
           bottom: 10,

@@ -22,12 +22,15 @@ class _ChangePasswordState extends State<ChangePassword> {
   void initState() {
     context.read<SchoolController>().getSchoolData();
     super.initState();
-    
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<SchoolController>().getSchoolData();
   }
   @override
   Widget build(BuildContext context) {
     context.read<SchoolController>().getSchoolData();
-
     return Padding(
       padding: EdgeInsets.only(
           // top: MediaQuery.of(context).size.width * 0.1,

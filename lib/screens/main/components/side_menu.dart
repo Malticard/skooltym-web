@@ -72,13 +72,24 @@ class _SideMenuState extends State<SideMenu> {
                       svgSrc: store[index]['icon'],
                       press: () {
                         context.read<SideBarController>().changeSelected(index);
-                        context
+                        if (context.read<SchoolController>().state['role'] == 'Admin') {
+                           context
                             .read<TitleController>()
                             .setTitle(store[index]['title']);
                         // update rendered page
                         context
                             .read<WidgetController>()
                             .pushWidget(store[index]['page']);
+                        } else {
+                           context
+                            .read<FinanceTitleController>()
+                            .setTitle(store[index]['title']);
+                        // update rendered page
+                        context
+                            .read<FinanceViewController>()
+                            .pushWidget(store[index]['page']);
+                        }
+                       
                       },
                     ),
                   ),

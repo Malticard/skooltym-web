@@ -8,6 +8,16 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        BlocProvider(create: (context) => DashboardCardsController()),
+        BlocProvider(create: (context) => FetchStudentsController()),
+        BlocProvider(create: (context) => DashboardDataController()),
+        BlocProvider(create: (context) => PickUpsController()),
+        BlocProvider(create: (context) => StreamsController()),
+        BlocProvider(create: (context) => StaffController()),
+        BlocProvider(create: (context) => GuardianController()),
+        BlocProvider(create: (context) => DropOffController()),
+        BlocProvider(create: (context) => ClassController()),
+        BlocProvider(create: (context) => PaymentController()),
         BlocProvider(create: (context) => WidgetController()),
         BlocProvider(create: (context) => ImageUploadController()),
         BlocProvider(create: (context) => SideBarController()),
@@ -36,30 +46,34 @@ Future<void> main() async {
         BlocProvider(create: (context) => DropOffTimeController()),
         BlocProvider(create: (context) => PickUpTimeController()),
       ],
-      child: BlocBuilder<ThemeController, ThemeData>(builder: (context, theme) {
-        return MaterialApp(
-          // debugShowCheckedModeBanner: false,
-          themeMode: theme.brightness == Brightness.light
-              ? ThemeMode.light
-              : ThemeMode.dark,
-          theme: theme.copyWith(
-            textTheme:
-                GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
-                    .apply(
-              bodyColor: theme.brightness == Brightness.light
-                  ? Colors.black
-                  : Colors.white,
-              displayColor: theme.brightness == Brightness.light
-                  ? Colors.black
-                  : Colors.white,
+      child: BlocBuilder<ThemeController, ThemeData>(
+        builder: (context, theme) {
+          BlocProvider.of<SchoolController>(context).getSchoolData();
+          return MaterialApp(
+            // debugShowCheckedModeBanner: false,xs
+            themeMode: theme.brightness == Brightness.light
+                ? ThemeMode.light
+                : ThemeMode.dark,
+            theme: theme.copyWith(
+              textTheme:
+                  GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
+                      .apply(
+                bodyColor: theme.brightness == Brightness.light
+                    ? Colors.black
+                    : Colors.white,
+                displayColor: theme.brightness == Brightness.light
+                    ? Colors.black
+                    : Colors.white,
+              ),
             ),
-          ),
-          initialRoute: prefs.containsKey('schoolData') == true
-              ? Routes.home
-              : Routes.login,
-          routes: routes(context),
-        );
-      }),
+            initialRoute: prefs.containsKey('schoolData') == true &&
+                    context.read<SchoolController>().state['role'] != null
+                ? Routes.home
+                : Routes.login,
+            routes: routes(context),
+          );
+        },
+      ),
     ),
   );
 }

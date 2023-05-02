@@ -88,15 +88,15 @@ Future<List<StudentModel>> fetchStudents(String id) async {
 }
 
 // fetching dashboard classes
-Future<List<DashboardModel>> fetchDashboardClassData(String schoolId)async {
- var response = await Client().get(Uri.parse(AppUrls.dashboard + schoolId));
- return dashboardModelFromJson(response.body);
+Future<List<DashboardModel>> fetchDashboardClassData(String schoolId) async {
+  var response = await Client().get(Uri.parse(AppUrls.dashboard + schoolId));
+  return dashboardModelFromJson(response.body);
 }
 
-Future<StudentModel> getSpecificStudent(String n, String school) async {
-  var st = await fetchStudents(school);
-  return st.firstWhere((element) => element.studentFname == n);
-}
+// Future<StudentModel> getSpecificStudent(String n, String school) async {
+//   var st = await fetchStudents(school);
+//   return st.firstWhere((element) => element.studentFname == n);
+// }
 
 // show successDialog
 void showSuccessDialog(String name, BuildContext context,
@@ -315,6 +315,11 @@ List<Map<String, dynamic>> financeViews = [
     ),
   },
   {
+    "icon": "assets/vectors/payment.svg",
+    "title": "Payments",
+    "page": const PaymentReports(),
+  },
+  {
     "title": "Change Password",
     "page": const ChangePassword(),
     'icon': "assets/icons/password-reset.svg"
@@ -334,12 +339,13 @@ bool validateTextControllers(List<TextEditingController> controllers) {
 // method to fetch available classes
 Future<List<ClassModel>> fetchClasses(String id) async {
   var response = await Client().get(Uri.parse(AppUrls.getClasses + id));
-  // if(value.statusCode == 200){
-  return response.statusCode == 200 ? classModelFromJson(response.body) : [];
-  // notifyListeners();
-  // }
+  return  classModelFromJson(response.body);
 }
-
+// method to fetch available classes
+Future<List<StreamModel>> fetchStreams(String id) async {
+  var response = await Client().get(Uri.parse(AppUrls.getStreams + id));
+  return streamModelFromJson(response.body);
+}
 /// show snackbar message
 /// @param type = 'danger' | 'info' | warning
 ///
@@ -508,39 +514,36 @@ String handSanIntervals() {
 // fetch dashboard meta data
 Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
     String schoolId, String role) async {
-  // get students total
-  // ignore: unused_local_variable
-  int students = await computeStudentsTotal(schoolId);
-  var drops = await dropOffs(schoolId);
-  var picks = await pickUps(schoolId);
-  var clearedOvertimes = await fetchOvertimeData("Cleared", schoolId);
-  var pendingOvertimes = await fetchOvertimeData("Pending", schoolId);
+  // var drops = await dropOffs(schoolId);
+  // var picks = await pickUps(schoolId);
+  // var clearedOvertimes = await fetchOvertimeData("Cleared", schoolId);
+  // var pendingOvertimes = await fetchOvertimeData("Pending", schoolId);
 
   List<Map<String, dynamic>> dashboardData = [
     {
       "label": "DROP OFFS",
-      "value": drops.length,
+      "value": 0,//drops.length,
       "icon": "assets/icons/004-playtime.svg",
       'color': const Color.fromARGB(255, 106, 108, 235),
       "last_updated": "14:45"
     },
     {
       "label": "PICK UPS",
-      "value": picks.length,
+      "value": 0,//picks.length,
       "icon": "assets/icons/009-student.svg",
       'color': const Color.fromARGB(255, 181, 150, 253),
       "last_updated": "14:45"
     },
     {
       "label": "CLEARED OVERTIME",
-      "value": clearedOvertimes.length,
+      "value": 0,//clearedOvertimes.length,
       "icon": "assets/icons/002-all.svg",
       'color': const Color.fromARGB(255, 77, 154, 255),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": pendingOvertimes.length,
+      "value": 0,//pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
@@ -549,14 +552,14 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
   List<Map<String, dynamic>> financeData = [
     {
       "label": "CLEARED OVERTIME",
-      "value": clearedOvertimes.length,
+      "value": 0,//clearedOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": pendingOvertimes.length,
+      "value": 0,//pendingOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
       'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"
@@ -676,6 +679,7 @@ void handleNetworkSession(BuildContext context) {
     context.read<OnlineCheckerController>().updateChecker(online);
   });
 }
+
 //  // Initialize the latest timestamp to null
 var latestTimestamp;
 
