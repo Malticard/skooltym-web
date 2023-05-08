@@ -97,58 +97,50 @@ class _UpdateStudentState extends State<UpdateStudent> {
     ];
     return Column(
       children: [
-        Text(
-          "Update Student Details",
-          style: TextStyles(context).getRegularStyle().copyWith(fontSize: 19),
-        ),
-        SingleChildScrollView(
-          child: CommonFormFields(
-            initialPic: widget.studentModel.studentProfilePic,
-            padding: _padding,
-            formFields: formFields,
-            formControllers: _formControllers,
-            buttonText: "Update Student Details",
-            onSubmit: () {
-              if (true) {
-                showProgress(context, msg: "Updating student details");
-                _handleStudentRegistration().then(
-                  (value) {
-                    if (value.statusCode == 200 || value.statusCode == 201) {
-                      Routes.popPage(context);
-                      showMessage(
-                        context: context,
-                        type: 'success',
-                        msg: "Student details updated successfully",
-                      );
-                      for (var v in _formControllers) {
-                        v.clear();
-                      }
-                      // showSuccessDialog(
-                      //     _formControllers[0].text.trim(), context);
-                    } else {
-                      showMessage(
-                        msg: "Failed to update student ${value.reasonPhrase}",
-                        context: context,
-                        type: "danger",
-                      );
-                    }
-                  },
-                ).whenComplete(() {
-                  Routes.popPage(context);
-                });
-              }
-            },
-            errorMsgs: errorFields,
-            lists: context.watch<MainController>().students,
-            onDropDownValue: (p0) {
-              if (p0 != null) {
-                Provider.of<MainController>(context).guardians;
-              }
-            },
-            dropdownLists: context.watch<MainController>().students.map((item) {
-              return "${item.studentFname} ${item.studentLname}";
-            }).toList(),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Update Student Details",
+            style: TextStyles(context).getRegularStyle().copyWith(fontSize: 19),
           ),
+        ),
+        CommonFormFields(
+          initialPic: widget.studentModel.studentProfilePic,
+          padding: _padding,
+          formFields: formFields,
+          formControllers: _formControllers,
+          buttonText: "Update Student Details",
+          onSubmit: () {
+            if (true) {
+              showProgress(context, msg: "Updating student details");
+              _handleStudentRegistration().then(
+                (value) {
+                  if (value.statusCode == 200 || value.statusCode == 201) {
+                    Routes.popPage(context);
+                    showMessage(
+                      context: context,
+                      type: 'success',
+                      msg: "Student details updated successfully",
+                    );
+                    for (var v in _formControllers) {
+                      v.clear();
+                    }
+                    // showSuccessDialog(
+                    //     _formControllers[0].text.trim(), context);
+                  } else {
+                    showMessage(
+                      msg: "Failed to update student ${value.reasonPhrase}",
+                      context: context,
+                      type: "danger",
+                    );
+                  }
+                },
+              ).whenComplete(() {
+                Routes.popPage(context);
+              });
+            }
+          },
+          errorMsgs: errorFields,
         ),
       ],
     );

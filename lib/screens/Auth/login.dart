@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import '/exports/exports.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -127,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               bottom: size.width / 46,
                               top: size.width / 26),
                           child: Container(
-                            height: size.height * 0.78,
+                            height: size.height * 1.8,
                             decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(50),
@@ -147,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 tablet: Padding(
-                  padding: EdgeInsets.only(top: size.width * 0.170),
+                  padding: EdgeInsets.only(top: size.width * 0.070),
                   child: GridView.count(
                     crossAxisCount: 2,
                     children: [
@@ -159,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           left: size.width / 17,
                         ),
                         child: Container(
-                          height: size.height * 0.55,
+                          height: size.height * 0.35,
                           decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(50),
@@ -176,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.2,
                         child: SvgPicture.asset(
                           "assets/vectors/mother_child.svg",
                         ),
@@ -204,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyles(context).getBoldStyle().copyWith(
                             color: Colors.white,
                             fontSize: 20,
-                          ),
+                          ), 
                     ),
                   ],
                 ),
@@ -220,66 +222,68 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildForm() {
     return Form(
       key: formKey,
-      child: Flex(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        direction: Axis.vertical,
-        children: <Widget>[
-          Space(
-            space: Responsive.isDesktop(context) ? 0.085 : 0.07,
-          ),
-          CommonTextField(
-            fieldColor: Theme.of(context).cardColor,
-            icon: Icons.email_outlined,
-            controller: _emailController,
-            errorText: _errorEmail,
-            titleText: "Contact",
-            padding: padding,
-            enableSuffix: true,
-            hintText: "Provider your registered contact",
-            keyboardType: TextInputType.number,
-          ),
-          const Space(space: 0.01),
-          CommonTextField(
-            fieldColor: Theme.of(context).cardColor,
-            icon: Icons.lock_outline,
-            enableSuffix: true,
-            suffixIcon: showPassword
-                ? Icons.remove_red_eye_rounded
-                : Icons.visibility_off,
-            titleText: "Password", //AppLocalizations(context).of("password"),
-            padding: padding,
-            hintText: "************",
-            isObscureText: !showPassword,
-            errorText: _errorPassword,
-            keyboardType: TextInputType.text,
-            onTapSuffix: () {
-              setState(() {
-                showPassword = !showPassword;
-              });
-            },
-            controller: _passwordController,
-          ),
-          _forgotYourPasswordUI(),
-          CommonButton(
-            height: 55,
-            padding: padding.copyWith(left: 30, right: 30),
-            buttonText: "Sign in", //AppLocalizations(context).of("login"),
-            onTap: () {
-              // if (context.watch<OnlineCheckerController>().state == true) {
-              if ( formKey.currentState!.validate()) {
-                loginUser(
-                    context, _emailController.text, _passwordController.text);
-              }
-              // } else {
-              //   showMessage(
-              //       context: context, msg: "Your offline..", type: 'warning');
-              // }
-            },
-          ),
-          Space(
-            space: Responsive.isDesktop(context) ? 0.045 : 0.01,
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Flex(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          direction: Axis.vertical,
+          children: <Widget>[
+            Space(
+              space: Responsive.isDesktop(context) ? 0.035 : 0.07,
+            ),
+            CommonTextField(
+              fieldColor: Theme.of(context).cardColor,
+              icon: Icons.email_outlined,
+              controller: _emailController,
+              errorText: _errorEmail,
+              titleText: "Contact",
+              padding: padding,
+              enableSuffix: true,
+              hintText: "Provider your registered contact",
+              keyboardType: TextInputType.number,
+            ),
+            const Space(space: 0.01),
+            CommonTextField(
+              fieldColor: Theme.of(context).cardColor,
+              icon: Icons.lock_outline,
+              enableSuffix: true,
+              suffixIcon: showPassword
+                  ? Icons.remove_red_eye_rounded
+                  : Icons.visibility_off,
+              titleText: "Password", //AppLocalizations(context).of("password"),
+              padding: padding,
+              hintText: "************",
+              isObscureText: !showPassword,
+              errorText: _errorPassword,
+              keyboardType: TextInputType.text,
+              onTapSuffix: () {
+                setState(() {
+                  showPassword = !showPassword;
+                });
+              },
+              controller: _passwordController,
+            ),
+            _forgotYourPasswordUI(),
+            CommonButton(
+              height: 55,
+              padding: padding.copyWith(left: 30, right: 30),
+              buttonText: "Sign in", //AppLocalizations(context).of("login"),
+              onTap: () {
+                // if (context.watch<OnlineCheckerController>().state == true) {
+                if ( formKey.currentState!.validate()) {
+                  loginUser(
+                      context, _emailController.text, _passwordController.text);
+                }
+                // } else {
+                //   showMessage(
+                //       context: context, msg: "Your offline..", type: 'warning');
+                // }
+              },
+            ),
+            Space(
+              space: Responsive.isDesktop(context) ? 0.045 : 0.01,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -137,10 +137,7 @@ class _AddStudentState extends State<AddStudent> {
                   //   Provider.of<MainController>(context).guardians;
                   // }
                 },
-                dropdownLists:
-                    context.watch<MainController>().students.map((item) {
-                  return "${item.studentFname} ${item.studentLname}";
-                }).toList(),
+               
               );
             },
           ),

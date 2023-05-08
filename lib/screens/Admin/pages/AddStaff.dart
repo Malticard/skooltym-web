@@ -137,16 +137,15 @@ class _AddStaffState extends State<AddStaff> {
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
-    // if (kIsWeb) {
-    //  request.files.add(MultipartFile(
-    //     "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
-    //     filename: context.read<ImageUploadController>().state['name']));
-    // } else {
+    if (kIsWeb) {
+     request.files.add(MultipartFile(
+        "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
+        filename: context.read<ImageUploadController>().state['name']));
+    } else {
     request.files.add(MultipartFile(
         'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
         filename: uri.split("/").last));
-    // }
-
+    }
     //
     request.fields['staff_password'] = "qwerty";
     request.fields['staff_key[key]'] = "";
