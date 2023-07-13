@@ -24,15 +24,6 @@ class Data_Table extends StatefulWidget {
 }
 
 class _Data_TableState extends State<Data_Table> {
-   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-  bool _sortAscending = true;
-  int? _sortColumnIndex;
-  // DessertDataSourceAsync? _dessertsDataSource;
-  final PaginatorController _controller = PaginatorController();
-
-  bool _dataSourceLoading = false;
-  int _initialRow = 0;
-
   @override
   void didChangeDependencies() {
     // initState is to early to access route options, context is invalid at that stage
@@ -43,7 +34,6 @@ class _Data_TableState extends State<Data_Table> {
     //         : DessertDataSourceAsync();
 
     if (getCurrentRouteOption(context) == goToLast) {
-      _dataSourceLoading = true;
       // _dessertsDataSource!.getTotalRecords().then((count) => setState(() {
       //       _initialRow = count - _rowsPerPage;
       //       _dataSourceLoading = false;

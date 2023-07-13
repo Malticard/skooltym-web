@@ -1,14 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
 import 'dart:ui';
-
+import 'package:intl/intl.dart';
 import '/exports/exports.dart';
 
 // login logic for the user
 loginUser(BuildContext context, String email, String password) async {
   showProgress(context, msg: "Login in progress");
-
   Client()
       .post(Uri.parse(AppUrls.login),
           headers: {
@@ -406,6 +404,9 @@ String amPm() {
   return time.hour > 0 && time.hour < 12 ? "am" : "pm";
 }
 
+String formatDateTime(DateTime date) {
+  return DateFormat('dd_MM_yyyy hh:mm a').format(date);
+}
 // Days of the week
 List<String> days = <String>["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
 // months of the year
@@ -560,7 +561,7 @@ Future<Map<String, dynamic>> fetchSpecificGuardian(String id) async {
   var studentData = studentModelFromJson(student.body)[0];
   //  fetch the corresponding guardians or other guardians
   var otherGuardians = await Client()
-      .get(Uri.parse(AppUrls.getOtherGaurdians + guardianData.student));
+      .get(Uri.parse(AppUrls.getOtherGuardians + guardianData.student));
   var otherGuardianData = guardiansFromJson(otherGuardians.body);
   // output resonse of data
   Map<String, dynamic> results = {

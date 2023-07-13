@@ -39,24 +39,31 @@ class _SideMenuState extends State<SideMenu> {
           DrawerHeader(
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.2,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const Space(space: 0.04),
-                    Image.network(
-                        "${AppUrls.liveImages}${context.read<SchoolController>().state['school_badge']}",
-                        height: 40,
-                        width: 40),
-                    const Space(), //
-                    Text(
-                      "${context.read<SchoolController>().state['schoolName']}",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyles(context)
-                          .getBoldStyle()
-                          .copyWith(color: Colors.white, fontSize: 19),
-                    )
-                  ],
-                ),
+              child: BlocConsumer<SchoolController,Map<String,dynamic>>(
+                listener: (context, state) {
+                  // TODO: implement listener
+                },
+                builder: (context, school) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const Space(space: 0.04),
+                        Image.network(
+                            "${AppUrls.liveImages}${school['school_badge']}",
+                            height: 40,
+                            width: 40),
+                        const Space(), //
+                        Text(
+                          "${school['schoolName']}",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles(context)
+                              .getBoldStyle()
+                              .copyWith(color: Colors.white, fontSize: 19),
+                        )
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -72,24 +79,24 @@ class _SideMenuState extends State<SideMenu> {
                       svgSrc: store[index]['icon'],
                       press: () {
                         context.read<SideBarController>().changeSelected(index);
-                        if (context.read<SchoolController>().state['role'] == 'Admin') {
-                           context
-                            .read<TitleController>()
-                            .setTitle(store[index]['title']);
-                        // update rendered page
-                        context
-                            .read<WidgetController>()
-                            .pushWidget(store[index]['page']);
+                        if (context.read<SchoolController>().state['role'] ==
+                            'Admin') {
+                          context
+                              .read<TitleController>()
+                              .setTitle(store[index]['title']);
+                          // update rendered page
+                          context
+                              .read<WidgetController>()
+                              .pushWidget(store[index]['page']);
                         } else {
-                           context
-                            .read<FinanceTitleController>()
-                            .setTitle(store[index]['title']);
-                        // update rendered page
-                        context
-                            .read<FinanceViewController>()
-                            .pushWidget(store[index]['page']);
+                          context
+                              .read<FinanceTitleController>()
+                              .setTitle(store[index]['title']);
+                          // update rendered page
+                          context
+                              .read<FinanceViewController>()
+                              .pushWidget(store[index]['page']);
                         }
-                       
                       },
                     ),
                   ),

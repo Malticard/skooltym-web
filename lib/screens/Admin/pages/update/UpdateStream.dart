@@ -15,13 +15,18 @@ class _UpdateStreamState extends State<UpdateStream> {
   late final  TextEditingController _updateStreamController;
   @override
   void initState() {
-    BlocProvider.of<StreamsController>(context).getStreams(context);
+   initStreams();
    _updateStreamController = TextEditingController(text: widget.stream);
     super.initState();
   }
+
+  void initStreams(){
+       var  stream = Provider.of<StreamsController>(context);
+       stream.getStreams(context.read<SchoolController>().state['school']);
+}
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<StreamsController>(context).getStreams(context);
+    initStreams();
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.white
@@ -29,6 +34,7 @@ class _UpdateStreamState extends State<UpdateStream> {
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,
         height: MediaQuery.of(context).size.width / 5,
+        
         child: BlocBuilder<StepperController, StepperModel>(
             builder: (context, inx) {
           return Column(
@@ -38,6 +44,7 @@ class _UpdateStreamState extends State<UpdateStream> {
                 child: Text("Update ${widget.stream}",
                     style: TextStyles(context).getTitleStyle()),
               ),
+
               CommonTextField(
                 icon: Icons.home_work_outlined,
                 hintText: "Stream Name",
@@ -56,7 +63,9 @@ class _UpdateStreamState extends State<UpdateStream> {
                 // controller: _controllers[index],
                 titleText: "Stream Name",
               ),
+
               const SizedBox(height: defaultPadding),
+              
               CommonButton(
                   buttonText:"Update stream",
                   padding: const EdgeInsets.only(

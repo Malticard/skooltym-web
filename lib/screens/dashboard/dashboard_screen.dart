@@ -14,6 +14,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     context.read<SchoolController>().getSchoolData();
     super.initState();
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -51,40 +52,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   left: size.width * 0.061,
                   right: size.width * 0.061),
               // ======= body section =======
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (context.read<SchoolController>().state['role'] ==
-                      'Finance')
-                    BlocBuilder<FinanceViewController, Widget>(
-                        builder: (context, child) {
-                      return Expanded(
-                        flex: 5,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: Responsive.isDesktop(context)
-                              ? MediaQuery.of(context).size.width / 2.2
-                              : MediaQuery.of(context).size.height / 1.2,
-                          child: child,
+              child: BlocConsumer<SchoolController, Map<String, dynamic>>(
+                listener: (context, state) {
+                  // TODO: implement listener
+                },
+                builder: (context, school) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (school['role'] == 'Finance')
+                        BlocBuilder<FinanceViewController, Widget>(
+                            builder: (context, child) {
+                          return Expanded(
+                            flex: 5,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width / 2,
+                              height: Responsive.isDesktop(context)
+                                  ? MediaQuery.of(context).size.width / 2.2
+                                  : MediaQuery.of(context).size.height / 1.2,
+                              child: child,
+                            ),
+                          );
+                        }),
+                      if (school['role'] == 'Admin')
+                        BlocBuilder<WidgetController, Widget>(
+                          builder: (context, child) {
+                            return Expanded(
+                              flex: 5,
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width / 2,
+                                height: Responsive.isDesktop(context)
+                                    ? MediaQuery.of(context).size.width / 2.2
+                                    : MediaQuery.of(context).size.height / 1.2,
+                                child: child,
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    }),
-                  if (context.read<SchoolController>().state['role'] == 'Admin')
-                    BlocBuilder<WidgetController, Widget>(
-                      builder: (context, child) {
-                        return Expanded(
-                          flex: 5,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: Responsive.isDesktop(context)
-                                ? MediaQuery.of(context).size.width / 2.2
-                                : MediaQuery.of(context).size.height / 1.2,
-                            child: child,
-                          ),
-                        );
-                      },
-                    ),
-                ],
+                    ],
+                  );
+                },
               ),
               // ====== end of body section ======
             ),

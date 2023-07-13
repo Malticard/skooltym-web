@@ -33,7 +33,8 @@ class _UpdateClassState extends State<UpdateClass> {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ClassController>(context).getClasses(context);
+       Provider.of<ClassController>(context,listen: true).getClasses(context.read<SchoolController>().state['school']);
+
 
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
@@ -68,8 +69,8 @@ class _UpdateClassState extends State<UpdateClass> {
               // controller: _controllers[index],
               titleText: "Class Name",
             ),
-             BlocBuilder<StreamsController, List<StreamModel>>(
-              builder: (context, streams) {
+             Consumer<StreamsController>(
+              builder: (context, s,x) {
                 return CommonMenuWidget(
                   // fieldColor: Colors.transparent,
                   onChange: (v) {
@@ -83,10 +84,10 @@ class _UpdateClassState extends State<UpdateClass> {
                   padding: const EdgeInsets.only(
                       top: 10, bottom: 10, right: 10, left: 10),
                   data: 
-                      streams
+                      s.streams
                       .map((e) => e.id)
                       .toList(),
-                  dropdownList:streams
+                  dropdownList:s.streams
                       .map((e) => e.streamName)
                       .toList(),
                 );

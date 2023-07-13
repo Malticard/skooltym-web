@@ -57,25 +57,25 @@ class _AddClassState extends State<AddClass> {
               // controller: _controllers[index],
               titleText: "Class Name",
             ),
-            BlocBuilder<StreamsController, List<StreamModel>>(
-              builder: (context, streams) {
+            Consumer<StreamsController>(
+              builder: (context,controller,widget) {
                 return CommonMenuWidget(
                   // fieldColor: Colors.transparent,
                   onChange: (v) {
                     setState(() {
                       _selectedStreams = json
                           .decode(v)
-                          .join(","); // [jjjjk].join(",") => j,j,jj
+                          .join(","); // [jjjjk].join(",") => j,j,j,j
                     });
                   },
                   hint: "Attach streams",
                   padding: const EdgeInsets.only(
                       top: 10, bottom: 10, right: 10, left: 10),
                   data: 
-                      streams
+                      controller.streams
                       .map((e) => e.id)
                       .toList(),
-                  dropdownList: streams
+                  dropdownList: controller.streams
                       .map((e) => e.streamName)
                       .toList(),
                 );

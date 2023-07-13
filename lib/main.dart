@@ -6,17 +6,16 @@ Future<void> main() async {
   Bloc.observer = const Observer();
   var prefs = await SharedPreferences.getInstance();
   runApp(
-    MultiProvider(
+    MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DashboardCardsController()),
         BlocProvider(create: (context) => FetchStudentsController()),
         BlocProvider(create: (context) => DashboardDataController()),
         BlocProvider(create: (context) => PickUpsController()),
-        BlocProvider(create: (context) => StreamsController()),
         BlocProvider(create: (context) => StaffController()),
         BlocProvider(create: (context) => GuardianController()),
         BlocProvider(create: (context) => DropOffController()),
-        BlocProvider(create: (context) => ClassController()),
+        ChangeNotifierProvider(create: (context) => ClassController()),
         BlocProvider(create: (context) => PaymentController()),
         BlocProvider(create: (context) => WidgetController()),
         BlocProvider(create: (context) => ImageUploadController()),
@@ -24,6 +23,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => FirstTimeUserController()),
         BlocProvider(create: (context) => FinanceFirstTimeController()),
         ChangeNotifierProvider(create: (context) => MainController()),
+        ChangeNotifierProvider(create: (context) => StreamsController()),
         BlocProvider(create: (context) => ThemeController()),
         BlocProvider(create: (context) => IntervalController()),
         BlocProvider(create: (context) => OvertimeRateController()),

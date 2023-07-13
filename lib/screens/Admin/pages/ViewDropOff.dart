@@ -13,8 +13,7 @@ class _ViewDropOffsState extends State<ViewDropOffs>
 
   @override
   void didChangeDependencies() {
-    BlocProvider.of<DropOffController>(context)
-        .getDropOff(context);
+    BlocProvider.of<DropOffController>(context).getDropOff(context);
     super.didChangeDependencies();
   }
 
@@ -42,11 +41,9 @@ class _ViewDropOffsState extends State<ViewDropOffs>
             "${dropOff.droppedBy.guardianFname} ${dropOff.droppedBy.guardianLname}")),
         DataCell(Text(
             "${dropOff.authorizedBy.staffFname} ${dropOff.authorizedBy.staffLname}")),
-        DataCell(Text(dropOff.dropOffTime
-            .toString()
-            .split(" ")
-            .last
-           )),
+        DataCell(
+          Text(formatDateTime(dropOff.dropOffTime)),
+        ),
       ],
     );
   }
@@ -54,8 +51,7 @@ class _ViewDropOffsState extends State<ViewDropOffs>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    BlocProvider.of<DropOffController>(context)
-        .getDropOff(context);
+    BlocProvider.of<DropOffController>(context).getDropOff(context);
     return SizedBox(
       width: size.width,
       height: size.width / 2.39,
@@ -108,9 +104,7 @@ class _ViewDropOffsState extends State<ViewDropOffs>
             ),
             rows: List.generate(
               dropOffs.length,
-              (index) => _dataRow(
-                  dropOffs[index],
-                  index),
+              (index) => _dataRow(dropOffs[index], index),
             ),
           );
         },

@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: '>=3.0.5 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -42,13 +42,13 @@ dependencies:
   adaptive_theme: ^3.2.0
   flutter_native_splash: ^2.2.19
   flutter_svg: ^2.0.4
-  flutter_launcher_icons: ^0.12.0
-  google_fonts: ^4.0.3
-  fl_chart: ^0.61.0
-  http: ^0.13.5
+  flutter_launcher_icons: ^0.13.1
+  google_fonts: ^5.1.0
+  fl_chart: ^0.63.0
+  http: ^1.1.0
   animations: ^2.0.7
   file_picker: ^5.2.6
-  syncfusion_flutter_sliders: ^20.4.54
+  syncfusion_flutter_sliders: ^22.1.38
   internet_connection_checker: ^1.0.0+1
   flutter_spinkit: ^5.1.0
   currency_picker: ^2.0.16
@@ -65,7 +65,6 @@ dev_dependencies:
     sdk: flutter
 # splash screen
 flutter_native_splash:
-
   color: "#4c6c7c"
 
   image: assets/images/app_icon.png

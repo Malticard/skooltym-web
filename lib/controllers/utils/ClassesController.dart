@@ -1,11 +1,17 @@
 import '/exports/exports.dart';
-class ClassController extends Cubit<List<ClassModel>>{
-  ClassController() : super([]);
-  getClasses(BuildContext ctx){
-    Client().get(Uri.parse(AppUrls.getClasses + ctx.read<SchoolController>().state['school'])).then((value) {
-      if (value.statusCode == 200 || value.statusCode == 201) {
-        emit(classModelFromJson(value.body));
+class ClassController with ChangeNotifier {
+List<ClassModel> _classes = [];
+Timer? _timer;
+List<ClassModel> get classes => _classes;
+ Future<void> getClasses(String schoolId) async {
+    Response response = await Client().get(Uri.parse(AppUrls.getClasses + schoolId));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+       _classes = classModelFromJson(response.body);
+       notifyListeners();
       }
-    });
-  }
+}
+
+void clearCache(){
+  _timer?.cancel();
+}
 }

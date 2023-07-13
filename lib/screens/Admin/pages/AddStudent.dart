@@ -15,8 +15,6 @@ class _AddStudentState extends State<AddStudent> {
   List<Map<String, dynamic>>? formFields;
   List<TextEditingController> formControllers =
       List.generate(7, (index) => TextEditingController());
-  @override
-
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
@@ -24,15 +22,20 @@ class _AddStudentState extends State<AddStudent> {
   final formKey = GlobalKey<FormState>();
   @override
   void initState() { 
+    Provider.of<ClassController>(context,listen: false).getClasses(context.read<SchoolController>().state['school']);
     super.initState();
-     BlocProvider.of<ClassController>(context).getClasses(context);
-    BlocProvider.of<StreamsController>(context).getStreams(context);
+    initStreams();
   }
+  void initStreams(){
+       var  stream = Provider.of<StreamsController>(context);
+       stream.getStreams(context.read<SchoolController>().state['school']);
+}
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ClassController>(context).getClasses(context);
-    BlocProvider.of<StreamsController>(context).getStreams(context);
+    Provider.of<ClassController>(context,listen: true).getClasses(context.read<SchoolController>().state['school']);
+
+    // BlocProvider.of<StreamsController>(context).getStreams(context);
 // form data
 // error fields
     List<String> errorFields = List.generate(7, (i) => '');
@@ -70,8 +73,8 @@ class _AddStudentState extends State<AddStudent> {
         "hint": "e.g grade 2",
         "data": [
           "Select class",
-          ...BlocProvider.of<ClassController>(context)
-              .state
+          ...Provider.of<ClassController>(context)
+              .classes
               .map((e) => e.className)
               .toList(),
         ],
@@ -82,8 +85,8 @@ class _AddStudentState extends State<AddStudent> {
         "hint": "e.g North",
         "data": [
           "Select stream",
-          ...BlocProvider.of<StreamsController>(context)
-              .state
+          ...Provider.of<StreamsController>(context,listen: false)
+              .streams
               .map((e) => e.streamName)
               .toList(),
         ],

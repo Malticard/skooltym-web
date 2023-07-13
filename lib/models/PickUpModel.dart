@@ -43,7 +43,7 @@ class PickUpModel {
         school: json["school"],
         settings: json["settings"],
         studentN: StudentN.fromJson(json["student_name"] ?? {}),
-        pickUpTime: json["pick_up_time"],
+        pickUpTime: json["pick_up_time"] ?? "",
         pickedBy: PickedBy.fromJson(json["picked_by"] ?? {}),
         authorizedBy: AuthorizedBy.fromJson(json["authorized_by"] ?? {}),
         overtimeCharge: json["overtime_charge"],
