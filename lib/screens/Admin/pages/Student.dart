@@ -22,8 +22,8 @@ class _ViewStudentsState extends State<ViewStudents> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     BlocProvider.of<SchoolController>(context, listen: false).getSchoolData();
-    BlocProvider.of<FetchStudentsController>(context, listen: false)
-        .getStudents(context.read<SchoolController>().state['school']);
+    // BlocProvider.of<FetchStudentsController>(context, listen: false)
+    //     .getStudents(context.read<SchoolController>().state['school']);
     Provider.of<MainController>(context, listen: true).getAllStudents(
         context.read<SchoolController>().state['school'],
         context.read<SchoolController>().state['role']);
@@ -32,8 +32,9 @@ class _ViewStudentsState extends State<ViewStudents> {
         SizedBox(
           height: size.width / 2.39,
           child: CustomDataTable(
+            asyncTable: true,
             source: StudentsDataSource(
-                studentModel: context.watch<MainController>().sStudent,
+                studentModel: context.watch<MainController>().students,
                 context: context),
             header: Padding(
               padding: const EdgeInsets.all(10.0),
@@ -86,13 +87,13 @@ class _ViewStudentsState extends State<ViewStudents> {
             ),
             columns: List.generate(
               staffs.length,
-              (index) => DataColumn(
+              (index) => DataColumn2(
+                numeric: true,
                 label: Text(
                   staffs[index],
                 ),
               ),
             ),
-
             // List.generate(
             //   context.watch<MainController>().sStudent.isEmpty
             //       ? context.watch<MainController>().students.length

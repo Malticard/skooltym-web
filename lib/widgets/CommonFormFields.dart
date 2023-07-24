@@ -1,10 +1,12 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, invalid_use_of_visible_for_testing_member
+
+import 'package:image_picker_for_web/image_picker_for_web.dart';
 
 import '/exports/exports.dart';
 
 class CommonFormFields extends StatefulWidget {
   final EdgeInsets padding;
-  final String? initialPic; 
+  final String? initialPic;
   final List<Map<String, dynamic>> formFields;
   final List<String> errorMsgs;
   final List<TextEditingController> formControllers;
@@ -33,7 +35,10 @@ class CommonFormFields extends StatefulWidget {
       this.lists,
       this.numberOfDropDowns,
       this.dropdownLists,
-       this.onDropDownValue, this.onSelectedValue, this.initialPic, this.selectedData });
+      this.onDropDownValue,
+      this.onSelectedValue,
+      this.initialPic,
+      this.selectedData});
 
   @override
   State<CommonFormFields> createState() => _CommonFormFieldsState();
@@ -57,32 +62,39 @@ class _CommonFormFieldsState extends State<CommonFormFields>
 
   // var _cropController = CropController();
   var _imageBytes;
-  PlatformFile ? _imageFile;
+  PlatformFile? _imageFile;
   _handleImageUpload(int a) async {
     FilePicker.platform.pickFiles(
       dialogTitle: "${widget.formFields[a]['title']}",
-      type: FileType.custom,
+      type: FileType.image,
       withReadStream: true,
       allowedExtensions: ['jpg', 'png,', 'jpeg'],
     ).then((value) {
       // var file = value;
-      // if (kIsWeb) {
+      if (!kIsWeb) {
         setState(() {
-         _imageBytes = File(value!.files.first.path!).readAsBytesSync();
-        widget.formControllers[a].text = value.files.first.path!;
-
+          _imageBytes = File(value!.files.first.path!).readAsBytesSync();
+          widget.formControllers[a].text = value.files.first.path!;
         });
-        //   context.read<ImageUploadController>().uploadImage({
-        //   "image":value!.files.first.readStream,
-        //   "name":value.files.first.name,
-        //   "size":value.files.first.size
-        //  });
-      // } else {
-      //    setState(() {
-      //   _imageBytes = File(file!.files.first.path!).readAsBytesSync();
-      // });
-      // }
-     
+      } else {
+        ImagePickerPlugin().getFiles(accept: 'image').then((value) {
+          value.forEach((element) {
+            setState(() {
+              _imageBytes = element.readAsBytes();
+            });
+            context.read<ImageUploadController>().uploadImage({
+              "image": element.readAsBytes().asStream(),
+              "name": element.name,
+              "size": element.length()
+            });
+          });
+        });
+
+        //    setState(() {
+        //   _imageBytes = File(file!.files.first.path!).readAsBytesSync();
+        // });
+      }
+
       // showDialog(
       //   context: context,
       //   builder: (context) => Dialog(
@@ -108,7 +120,9 @@ class _CommonFormFieldsState extends State<CommonFormFields>
 
   Object drawImage(var url) {
     if (url.isEmpty) {
-      return widget.initialPic != null ? NetworkImage(AppUrls.liveImages + widget.initialPic!) : const AssetImage("assets/icons/001-profile.png");
+      return widget.initialPic != null
+          ? MemoryImage(processImage(widget.initialPic!))
+          : const AssetImage("assets/icons/001-profile.png");
     }
     return MemoryImage(url);
   }
@@ -128,7 +142,8 @@ class _CommonFormFieldsState extends State<CommonFormFields>
           SizedBox(
             child: CircleAvatar(
               radius: 35,
-              backgroundImage: drawImage(_imageBytes ?? '') as ImageProvider<Object>,
+              backgroundImage:
+                  drawImage(_imageBytes ?? '') as ImageProvider<Object>,
             ),
           ),
           // code for uploading profile picture  using file picker
@@ -185,7 +200,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                           // controller: widget.formControllers[index -1],
                           elements: widget.formFields[index - 1]['data'],
                           selectedValue: (value) {
-                              print("Selected data ${value}");
+                            print("Selected data ${value}");
                             // context.read<ClassNameController>().setClass(value?? '');
                             debugPrint("Selected => ${value.toString()}");
                             // widget.onSelectedValue!;
@@ -248,17 +263,21 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                         ['title'],
                                     hint: widget.formFields[index - 1]['hint'],
                                     padding: widget.padding,
-                                    onChange: widget.onDropDownValue ?? (v) {
-                                      print("Selected => $v");
-                                      if (v != null) {
-                                        Provider.of<MainController>(context,listen:false)
-                                            .selectMultiStudent(json.decode(v));
-                                        setState(() {
-                                          // dropMsg![index - 1] = v;
-                                          widget.formControllers[index - 1].text = v!;
-                                        });
-                                      }
-                                    },
+                                    onChange: widget.onDropDownValue ??
+                                        (v) {
+                                          print("Selected => $v");
+                                          if (v != null) {
+                                            Provider.of<MainController>(context,
+                                                    listen: false)
+                                                .selectMultiStudent(
+                                                    json.decode(v));
+                                            setState(() {
+                                              // dropMsg![index - 1] = v;
+                                              widget.formControllers[index - 1]
+                                                  .text = v!;
+                                            });
+                                          }
+                                        },
                                     data: widget.lists ?? [],
                                     dropdownList: widget.dropdownLists ?? [],
                                   ),
@@ -336,10 +355,10 @@ class _CommonFormFieldsState extends State<CommonFormFields>
             ),
           )
         : SingleChildScrollView(
-          child: Column(
+            child: Column(
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: buildForm(),
             ),
-        );
+          );
   }
 }

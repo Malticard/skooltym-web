@@ -2,7 +2,6 @@
 //
 //     final guardians = guardiansFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 List<Guardians> guardiansFromJson(String str) => List<Guardians>.from(json.decode(str).map((x) => Guardians.fromJson(x)));

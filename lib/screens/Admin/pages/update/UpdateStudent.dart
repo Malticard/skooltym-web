@@ -41,7 +41,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
   Widget build(BuildContext context) {
     List<String> errorFields = List.generate(7, (i) => '');
       Provider.of<ClassController>(context,listen: true).getClasses(context.read<SchoolController>().state['school']);
-  Provider.of<StreamsController>(context);
+  Provider.of<StreamsController>(context,listen: true);
 // form data
     List<Map<String, dynamic>> formFields = [
       {

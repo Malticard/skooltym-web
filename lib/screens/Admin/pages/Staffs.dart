@@ -28,6 +28,7 @@ class _StaffViewState extends State<StaffView> {
           child: BlocBuilder<StaffController, List<StaffModel>>(
             builder: (context, staff) {
               return CustomDataTable(
+                asyncTable: true,
                 loaderText: "Staff data",
                 header: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -72,10 +73,10 @@ class _StaffViewState extends State<StaffView> {
                     ),
                   ),
                 ),
-                empty: const Center(
-                  child:
-                      NoDataWidget(text: "You currently have no staff records"),
-                ),
+                // empty: const Center(
+                //   child:
+                //       NoDataWidget(text: "You currently have no staff records"),
+                // ),
                 source: StaffDataSource(
                   staffModel: staff,
                   context: context,

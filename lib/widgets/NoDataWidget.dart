@@ -12,7 +12,7 @@ class NoDataWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(StaffIcons.empty),
+          // Image.asset(StaffIcons.empty),
           const Space(space: 0.06),
           Text(
             text,

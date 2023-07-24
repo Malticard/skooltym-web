@@ -60,13 +60,14 @@ class MainController extends ChangeNotifier {
     // if (!scaffoldKey.currentState!.isDrawerOpen) {
     scaffoldKey.currentState!.openDrawer();
   }
+
   // getting available students
   void getAllStudents(String school, String role) {
-        Client().get(Uri.parse(AppUrls.students + school)).then((v) {
-          _students = studentModelFromJson(v.body);
-          notifyListeners();
-        });
-    }
+    Client().get(Uri.parse(AppUrls.students + school)).then((v) {
+      _students = studentModelFromJson(v.body);
+      notifyListeners();
+    });
+  }
 
 // check for new entries of students
   void staffUpdate(String school) {
@@ -81,26 +82,18 @@ class MainController extends ChangeNotifier {
 
   // check new guardians
   void newGuardians(BuildContext context) {
-    if (context.read<SchoolController>().state['role'] == 'Admin') {
-      
-        Client()
-            .get(
-          Uri.parse(
-            AppUrls.getGuardians +
-                context.read<SchoolController>().state['school'],
-          ),
-        )
-            .then((value) {
-          _guardians = guardiansFromJson(value.body);
-          notifyListeners();
-        });
-      // } on ClientException catch (_, e) {
-      //   showMessage(context: context, msg: _.message, type: 'warning');
-      // }
-    }
+      Client()
+          .get(
+        Uri.parse(AppUrls.getGuardians +
+            context.read<SchoolController>().state['school'])
+      )
+          .then((value) {
+        _guardians = guardiansFromJson(value.body);
+        notifyListeners();
+      });
   }
 
-  // // available picks and drops
+  // available picks and drops
   availableDropOffs(String school) {
     dropOffs(school).then((drops) {
       _drops = drops;
@@ -176,9 +169,7 @@ class MainController extends ChangeNotifier {
 
 // dashboard class data
   void fetchDashboardClasses(String school) {
-    try {
-    
-    } on ClientException catch (_) {
+    try {} on ClientException catch (_) {
       print(_.message);
     }
   }
@@ -229,7 +220,5 @@ class MainController extends ChangeNotifier {
   }
 
   // fetching payments
-  void fetchPayments(BuildContext context) {
-    
-  }
+  void fetchPayments(BuildContext context) {}
 }

@@ -23,7 +23,6 @@ loginUser(BuildContext context, String email, String password) async {
       var data = jsonDecode(value.body);
 
       Routes.popPage(context);
-      debugPrint("Login response ${data}");
 
       BlocProvider.of<SchoolController>(context).setSchoolData(data);
       //

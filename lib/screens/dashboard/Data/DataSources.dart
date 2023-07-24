@@ -1,60 +1,9 @@
 import '/exports/exports.dart';
 
-
-class StudentsDataSource extends DataTableSource {
+class StudentsDataSource extends AsyncDataTableSource {
   final List<StudentModel> studentModel;
   final BuildContext context;
   StudentsDataSource({required this.studentModel, required this.context});
-  @override
-  DataRow? getRow(int index) {
-    StudentModel studentData = studentModel[index];
-    return DataRow2.byIndex(
-      index: index,
-      cells: [
-        DataCell(Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: CircleAvatar(
-                radius: 24,
-                backgroundImage: MemoryImage(
-                  processImage(studentData.studentProfilePic),
-                ),
-              ),
-            ),
-            Text("${studentData.studentFname} ${studentData.studentLname}"),
-          ],
-        )),
-        DataCell(Text(studentData.studentModelClass.className)),
-        DataCell(Text(studentData.studentGender)),
-        DataCell(
-          buildActionButtons(context, () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return Dialog(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 3.5,
-                      height: MediaQuery.of(context).size.width / 1.3,
-                      child: UpdateStudent(studentModel: studentData),
-                    ),
-                  );
-                });
-          }, () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return CommonDelete(
-                    title:
-                        '${studentData.studentFname} ${studentData.studentLname}',
-                    url: AppUrls.deleteStudent + studentData.id);
-              },
-            );
-          }),
-        ),
-      ],
-    );
-  }
 
   @override
   int get rowCount => studentModel.length;
@@ -63,12 +12,66 @@ class StudentsDataSource extends DataTableSource {
 
   @override
   bool get isRowCountApproximate => false;
-  
-  // @override
-  // Future<AsyncRowsResponse> getRows(int start, int end) {
-  //   // TODO: implement getRows
-  //   throw UnimplementedError();
-  // }
+
+  @override
+  Future<AsyncRowsResponse> getRows(int start, int end) async {
+    return AsyncRowsResponse(
+      studentModel.length,
+      List.generate(
+        studentModel.length,
+        (index) {
+          StudentModel studentData = studentModel[index];
+          return DataRow2.byIndex(
+            index: index,
+            cells: [
+              DataCell(Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: CircleAvatar(
+                      radius: 24,
+                      backgroundImage: MemoryImage(
+                        processImage(studentData.studentProfilePic),
+                      ),
+                    ),
+                  ),
+                  Text(
+                      "${studentData.studentFname} ${studentData.studentLname}"),
+                ],
+              )),
+              DataCell(Text(studentData.studentModelClass.className)),
+              DataCell(Text(studentData.studentGender)),
+              DataCell(
+                buildActionButtons(context, () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width / 3.5,
+                            height: MediaQuery.of(context).size.width / 1.3,
+                            child: UpdateStudent(studentModel: studentData),
+                          ),
+                        );
+                      });
+                }, () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CommonDelete(
+                          title:
+                              '${studentData.studentFname} ${studentData.studentLname}',
+                          url: AppUrls.deleteStudent + studentData.id);
+                    },
+                  );
+                }),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }
 
 // Guardian DataSource
@@ -236,7 +239,7 @@ class StreamDataSource extends DataTableSource {
 }
 
 // Streams Datasource
-class StaffDataSource extends DataTableSource {
+class StaffDataSource extends AsyncDataTableSource {
   final List<StaffModel> staffModel;
   final BuildContext context;
   StaffDataSource({required this.staffModel, required this.context});
@@ -307,6 +310,7 @@ class StaffDataSource extends DataTableSource {
         })),
       ],
     );
+ 
   }
 
   @override
@@ -316,6 +320,77 @@ class StaffDataSource extends DataTableSource {
 
   @override
   bool get isRowCountApproximate => false;
+  
+  @override
+  Future<AsyncRowsResponse> getRows(int start, int end) async {
+   return AsyncRowsResponse(staffModel.length, staffModel.map((staffData){
+        return DataRow2.byIndex(
+      index: start,
+      cells: [
+        DataCell(
+          Row(
+            children: [
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: FutureBuilder(
+              //     future: fetchAndDisplayImage(AppUrls.liveImages + staffData.staffProfilePic),
+              //     builder: (context,snapshot) {
+              //       return snapshot.hasData ? CircleAvatar(
+              //         radius: 24,
+              //         backgroundImage: MemoryImage(
+              //           processImage(staffData.staffProfilePic),
+              //         ),
+              //       ):CircularProgressIndicator.adaptive();
+              //     }
+              //   ),
+              // ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: CircleAvatar(
+                  radius: 24,
+                  backgroundImage: MemoryImage(
+                    processImage(staffData.staffProfilePic),
+                  ),
+                ),
+              ),
+              Text(
+                staffData.staffFname,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+        DataCell(Text((staffData.staffRole.roleType))),
+        DataCell(Text(staffData.staffEmail)),
+        DataCell(Text(staffData.staffGender)),
+        DataCell(buildActionButtons(context, () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 3,
+                    height: MediaQuery.of(context).size.width / 2.3,
+                    child: UpdateStaff(staff: staffData),
+                  ),
+                );
+              });
+        }, () {
+          // delete functionality
+          showDialog(
+              context: context,
+              builder: (context) {
+                return CommonDelete(
+                  title: '${staffData.staffFname} ${staffData.staffLname}',
+                  url: AppUrls.deleteStaff + staffData.id,
+                );
+              });
+        })),
+      ],
+    );
+ 
+   }).toList());
+  }
 }
 
 // Reports Datasource

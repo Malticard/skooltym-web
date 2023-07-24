@@ -52,7 +52,7 @@ class StaffModel {
         staffRole: StaffRole.fromJson(json["staff_role"]),
         staffGender: json["staff_gender"],
         staffProfilePic: json["staff_profilePic"],
-        staffPassword: json["staff_password"],
+        staffPassword: json["staff_password"] ?? "",
         isComplete: json["isComplete"] ?? false,
         createdAt: DateTime.now(),//DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.now(),//DateTime.parse(json["updatedAt"]),
