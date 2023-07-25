@@ -2,10 +2,12 @@
 
 import 'dart:io';
 
+import '../../../../models/Guardians.dart';
+import '../../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 class UpdateGuardian extends StatefulWidget {
-  final Guardians guardianModel;
+  final Guardian guardianModel;
   const UpdateGuardian({super.key, required this.guardianModel});
 
   @override
@@ -127,7 +129,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width / 3,
           height: MediaQuery.of(context).size.width / 1.5,
-          child: BlocBuilder<FetchStudentsController, List<StudentModel>>(
+          child: BlocBuilder<FetchStudentsController, List<Student>>(
             builder: (context, students) {
               return CommonFormFields(
                 initialPic: widget.guardianModel.guardianProfilePic,

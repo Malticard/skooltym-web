@@ -2,10 +2,11 @@
 
 import 'dart:io';
 
+import '../../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 class UpdateStudent extends StatefulWidget {
-  final StudentModel studentModel;
+  final Student studentModel;
   const UpdateStudent({super.key, required this.studentModel});
 
   @override
@@ -27,7 +28,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
       TextEditingController(text: ""),
       TextEditingController(text: widget.studentModel.studentGender),
       TextEditingController(
-          text: widget.studentModel.studentModelClass.className),
+          text: widget.studentModel.resultClass.className),
     ];
   }
 

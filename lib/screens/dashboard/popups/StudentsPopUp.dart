@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import '../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 class StudentsPopUps extends StatefulWidget {
@@ -27,7 +28,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
   }
 
   List<String> staffs = ["Student Name", "Class", "Gender", "Actions"];
-  DataRow _dataRow(StudentModel studentModel, int i) {
+  DataRow _dataRow(Student studentModel, int i) {
     return DataRow(
       cells: [
         DataCell(Row(
@@ -44,7 +45,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
             Text("${studentModel.studentFname} ${studentModel.studentLname}"),
           ],
         )),
-        DataCell(Text(studentModel.studentModelClass.className)),
+        DataCell(Text(studentModel.resultClass.className)),
         DataCell(Text(studentModel.studentGender)),
         DataCell(buildActionButtons(context, () {
           showDialog(
@@ -81,7 +82,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
       height: size.width / 2.5,
       child: Stack(
         children: [
-          BlocBuilder<FetchStudentsController, List<StudentModel>>(
+          BlocBuilder<FetchStudentsController, List<Student>>(
             builder: (context, students) {
               return CustomDataTable(
                 header: Padding(
@@ -141,7 +142,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
                 source: StudentsDataSource(
                     studentModel: students.where((element) =>
                           element.stream.streamName == widget.stream)
-                      .toList(), context: context),
+                      .toList(), context: context, currentPage: 0, totalDocuments: 0),
               );
             },
           ),

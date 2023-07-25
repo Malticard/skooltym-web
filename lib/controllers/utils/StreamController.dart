@@ -5,9 +5,8 @@ class StreamsController with ChangeNotifier{
   
   Future<void> getStreams(String school) async {
     // function to fetch streams
-     fetchStreams(school).asStream().listen((event) {
-       streams = event;
+       streams = await fetchStreams(school);
        notifyListeners();
-     });
+     
   }
 }

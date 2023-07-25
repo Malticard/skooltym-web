@@ -12,7 +12,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => FetchStudentsController()),
         BlocProvider(create: (context) => DashboardDataController()),
         BlocProvider(create: (context) => PickUpsController()),
-        BlocProvider(create: (context) => StaffController()),
+        ChangeNotifierProvider(create: (context) => StaffController()),
         BlocProvider(create: (context) => GuardianController()),
         BlocProvider(create: (context) => DropOffController()),
         ChangeNotifierProvider(create: (context) => ClassController()),

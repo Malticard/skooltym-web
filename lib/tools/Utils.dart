@@ -2,6 +2,9 @@
 
 import 'dart:ui';
 import 'package:intl/intl.dart';
+import '../models/Guardians.dart';
+import '../models/OvertimeModel.dart';
+import '../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 // login logic for the user
@@ -62,7 +65,8 @@ Future<String> assignRole(String role) async {
 
 Future<Uint8List?> fetchAndDisplayImage(String imageURL) async {
   Uint8List? processedImageBytes;
-  final response = await Client().get(Uri.parse(imageURL),headers: {
+  final response =
+      await Client().get(Uri.parse(AppUrls.liveImages + imageURL), headers: {
     "Access-Control-Allow-Origin": "*",
     'Content-Type': 'application/json',
     'Accept': '*/*'
@@ -95,9 +99,21 @@ String greetUser() {
 }
 
 // return students
-Future<List<StudentModel>> fetchStudents(String id) async {
-  var res = await Client().get(Uri.parse(AppUrls.students + id));
+Future<StudentModel> fetchStudents(String id,
+    {int page = 1, int limit = 20}) async {
+  var res = await Client()
+      .get(Uri.parse(AppUrls.students + id + "?page=$page&pageSize=$limit"));
   return studentModelFromJson(res.body);
+}
+
+// fetching guardians
+Future<Guardians> fetchGuardians(BuildContext context, {int page = 1, int limit = 20}) async {
+  Response response = await Client().get(
+    Uri.parse(AppUrls.getGuardians +
+        context.read<SchoolController>().state['school'] +
+        "?page=$page&pageSize=$limit"),
+  );
+  return gaurdiansFromJson(response.body);
 }
 
 // fetching dashboard classes
@@ -106,10 +122,14 @@ Future<List<DashboardModel>> fetchDashboardClassData(String schoolId) async {
   return dashboardModelFromJson(response.body);
 }
 
-// Future<StudentModel> getSpecificStudent(String n, String school) async {
-//   var st = await fetchStudents(school);
-//   return st.firstWhere((element) => element.studentFname == n);
-// }
+Future<StaffModel> fetchStaffs(BuildContext context,
+    {int page = 1, int limit = 20}) async {
+  Response response = await Client().get(Uri.parse(AppUrls.staff +
+      context.read<SchoolController>().state['school'] +
+      "?page=$page&pageSize=$limit"));
+
+  return staffModelFromJson(response.body);
+}
 
 // show successDialog
 void showSuccessDialog(String name, BuildContext context,
@@ -422,9 +442,11 @@ String amPm() {
 String formatDateTime(DateTime date) {
   return DateFormat('hh:mm a').format(date);
 }
+
 String formatDate(DateTime date) {
-  return DateFormat('dd/MM/yyyy').format(date);
+  return DateFormat('dd-MM-yyyy').format(date);
 }
+
 // Days of the week
 List<String> days = <String>["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
 // months of the year
@@ -446,8 +468,7 @@ List<String> months = <String>[
 Future<int> computeStudentsTotal(String id) async {
   int students = 0;
   var response = await fetchStudents(id);
-  students = response.length;
-  // debugPrint("Total => $students");
+  students = response.results.length;
   return students;
 }
 
@@ -513,11 +534,19 @@ String handSanIntervals() {
 // fetch dashboard meta data
 Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
     BuildContext context) async {
-      context.read<PaymentController>().getPayments(context);
+  context.read<PaymentController>().getPayments(context);
   var drops = await dropOffs(context.read<SchoolController>().state['school']);
   var picks = await pickUps(context.read<SchoolController>().state['school']);
-  var clearedOvertimes = context.read<PaymentController>().state.where((element) => element.balance == 0).toList();
-  var pendingOvertimes = context.read<PaymentController>().state.where((element) => element.balance == 0).toList();
+  var clearedOvertimes = context
+      .read<PaymentController>()
+      .state
+      .where((element) => element.balance == 0)
+      .toList();
+  var pendingOvertimes = context
+      .read<PaymentController>()
+      .state
+      .where((element) => element.balance == 0)
+      .toList();
 
   List<Map<String, dynamic>> dashboardData = [
     {
@@ -554,7 +583,7 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "label": "CLEARED OVERTIME",
       "value": clearedOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 56, 212, 48), 
+      'color': Color.fromARGB(255, 56, 212, 48),
       "last_updated": "14:45"
     },
     {
@@ -565,12 +594,15 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "last_updated": "14:45"
     },
   ];
-  return context.read<SchoolController>().state['role'] == 'Admin' ? dashboardData : financeData;
+  return context.read<SchoolController>().state['role'] == 'Admin'
+      ? dashboardData
+      : financeData;
 }
 
 // function to process images
-Uint8List processImage(String data){
+Uint8List processImage(String data) {
   return Uri.parse(data).data!.contentAsBytes();
 }
+
 // Initialize the latest timestamp to null
 var latestTimestamp;

@@ -3,7 +3,7 @@ import '/exports/exports.dart';
 // export 'package:flutter/cupertino.dart';
 
 class UpdateStaff extends StatefulWidget {
-  final StaffModel staff;
+  final Staff staff;
   const UpdateStaff({super.key, required this.staff});
 
   @override
@@ -19,10 +19,10 @@ class _UpdateStaffState extends State<UpdateStaff> {
       TextEditingController(
           text: "${widget.staff.staffFname} ${widget.staff.staffLname}"),
       TextEditingController(text: widget.staff.staffEmail),
-      TextEditingController(text: widget.staff.staffContact),
+      TextEditingController(text: widget.staff.staffContact.toString()),
       TextEditingController(text: ""),
       TextEditingController(text: widget.staff.staffGender),
-      TextEditingController(text: widget.staff.staffRole.roleType),
+      TextEditingController(text: widget.staff.staffRole/*.roleType*/),
     ];
   }
 

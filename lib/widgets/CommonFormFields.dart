@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison, invalid_use_of_visible_for_testing_member
 
-import 'package:image_picker_for_web/image_picker_for_web.dart';
+// import 'package:image_picker_for_web/image_picker_for_web.dart';
 
 import '/exports/exports.dart';
 
@@ -62,7 +62,6 @@ class _CommonFormFieldsState extends State<CommonFormFields>
 
   // var _cropController = CropController();
   var _imageBytes;
-  PlatformFile? _imageFile;
   _handleImageUpload(int a) async {
     FilePicker.platform.pickFiles(
       dialogTitle: "${widget.formFields[a]['title']}",
@@ -77,18 +76,18 @@ class _CommonFormFieldsState extends State<CommonFormFields>
           widget.formControllers[a].text = value.files.first.path!;
         });
       } else {
-        ImagePickerPlugin().getFiles(accept: 'image').then((value) {
-          value.forEach((element) {
-            setState(() {
-              _imageBytes = element.readAsBytes();
-            });
-            context.read<ImageUploadController>().uploadImage({
-              "image": element.readAsBytes().asStream(),
-              "name": element.name,
-              "size": element.length()
-            });
-          });
-        });
+        // ImagePickerPlugin().getFiles(accept: 'image').then((value) {
+        //   value.forEach((element) {
+        //     setState(() {
+        //       _imageBytes = element.readAsBytes();
+        //     });
+        //     context.read<ImageUploadController>().uploadImage({
+        //       "image": element.readAsBytes().asStream(),
+        //       "name": element.name,
+        //       "size": element.length()
+        //     });
+        //   });
+        // });
 
         //    setState(() {
         //   _imageBytes = File(file!.files.first.path!).readAsBytesSync();

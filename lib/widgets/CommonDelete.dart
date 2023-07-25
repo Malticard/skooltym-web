@@ -42,7 +42,6 @@ class _CommonDeleteState extends State<CommonDelete> {
                           }
                         }).whenComplete((){
                             Routes.popPage(context);
-
                         });
                       },
                       child: Text(

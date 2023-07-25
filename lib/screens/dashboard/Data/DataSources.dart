@@ -1,12 +1,23 @@
+import '../../../models/Guardians.dart';
+import '../../../models/StudentModel.dart';
+import '../../../widgets/FutureImage.dart';
 import '/exports/exports.dart';
 
-class StudentsDataSource extends AsyncDataTableSource {
-  final List<StudentModel> studentModel;
+class StudentsDataSource extends DataTableSource {
+  final List<Student> studentModel;
   final BuildContext context;
-  StudentsDataSource({required this.studentModel, required this.context});
+  final PaginatorController? paginatorController;
+  final int totalDocuments;
+  final int currentPage;
+  StudentsDataSource(
+      {this.paginatorController,
+      required this.totalDocuments,
+      required this.currentPage,
+      required this.studentModel,
+      required this.context});
 
   @override
-  int get rowCount => studentModel.length;
+  int get rowCount => totalDocuments;
   @override
   int get selectedRowCount => 0;
 
@@ -14,74 +25,93 @@ class StudentsDataSource extends AsyncDataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  Future<AsyncRowsResponse> getRows(int start, int end) async {
-    return AsyncRowsResponse(
-      studentModel.length,
-      List.generate(
-        studentModel.length,
-        (index) {
-          StudentModel studentData = studentModel[index];
-          return DataRow2.byIndex(
-            index: index,
-            cells: [
-              DataCell(Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: CircleAvatar(
-                      radius: 24,
-                      backgroundImage: MemoryImage(
-                        processImage(studentData.studentProfilePic),
-                      ),
-                    ),
-                  ),
-                  Text(
-                      "${studentData.studentFname} ${studentData.studentLname}"),
-                ],
-              )),
-              DataCell(Text(studentData.studentModelClass.className)),
-              DataCell(Text(studentData.studentGender)),
-              DataCell(
-                buildActionButtons(context, () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width / 3.5,
-                            height: MediaQuery.of(context).size.width / 1.3,
-                            child: UpdateStudent(studentModel: studentData),
-                          ),
-                        );
-                      });
-                }, () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return CommonDelete(
-                          title:
-                              '${studentData.studentFname} ${studentData.studentLname}',
-                          url: AppUrls.deleteStudent + studentData.id);
-                    },
-                  );
-                }),
+  DataRow? getRow(int index) {
+    final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
+    final int dataIndex = index % paginatorController!.rowsPerPage;
+    final int dataLength = studentModel.length;
+
+    if (pageIndex * paginatorController!.rowsPerPage + dataIndex >=
+        dataLength) {
+      return null;
+    }
+
+    Student studentData =
+        studentModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
+
+    return DataRow2.byIndex(
+      index: index,
+      cells: [
+        DataCell(Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: CircleAvatar(
+                radius: 24,
+                backgroundImage: MemoryImage(
+                  processImage(studentData.studentProfilePic),
+                ),
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Text("${studentData.studentFname} ${studentData.studentLname}"),
+          ],
+        )),
+        DataCell(Text(studentData.resultClass.className)),
+        DataCell(Text(studentData.studentGender)),
+        DataCell(
+          buildActionButtons(context, () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 3.5,
+                      height: MediaQuery.of(context).size.width / 1.3,
+                      child: UpdateStudent(studentModel: studentData),
+                    ),
+                  );
+                });
+          }, () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return CommonDelete(
+                    title:
+                        '${studentData.studentFname} ${studentData.studentLname}',
+                    url: AppUrls.deleteStudent + studentData.id);
+              },
+            );
+          }),
+        ),
+      ],
     );
   }
 }
 
 // Guardian DataSource
 class GuardianDataSource extends DataTableSource {
-  final List<Guardians> guardianModel;
+  final List<Guardian> guardianModel;
   final BuildContext context;
-  GuardianDataSource({required this.guardianModel, required this.context});
+  final int totalDocuments;
+  final int currentPage;
+  final PaginatorController? paginatorController;
+  GuardianDataSource(
+      {required this.totalDocuments,
+      required this.currentPage,
+      this.paginatorController,
+      required this.guardianModel,
+      required this.context});
   @override
   DataRow? getRow(int index) {
-    Guardians guardianData = guardianModel[index];
+    final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
+    final int dataIndex = index % paginatorController!.rowsPerPage;
+    final int dataLength = guardianModel.length;
+
+    if (pageIndex * paginatorController!.rowsPerPage + dataIndex >=
+        dataLength) {
+      return null;
+    }
+    Guardian guardianData =
+        guardianModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
     return DataRow2.byIndex(
       index: index,
       cells: [
@@ -136,7 +166,7 @@ class GuardianDataSource extends DataTableSource {
   }
 
   @override
-  int get rowCount => guardianModel.length;
+  int get rowCount => totalDocuments;
   @override
   int get selectedRowCount => 0;
 
@@ -239,42 +269,31 @@ class StreamDataSource extends DataTableSource {
 }
 
 // Streams Datasource
-class StaffDataSource extends AsyncDataTableSource {
-  final List<StaffModel> staffModel;
+class StaffDataSource extends DataTableSource {
+  final List<Staff> staffModel;
   final BuildContext context;
-  StaffDataSource({required this.staffModel, required this.context});
+  final int totalDocuments;
+  final int currentPage;
+  final PaginatorController? paginatorController;
+  StaffDataSource(
+      {required this.totalDocuments,
+      required this.currentPage,
+      this.paginatorController,
+      required this.staffModel,
+      required this.context});
   @override
   DataRow? getRow(int index) {
-    StaffModel staffData = staffModel[index];
+    Staff staffData = staffModel[index];
     return DataRow2.byIndex(
       index: index,
       cells: [
         DataCell(
           Row(
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: FutureBuilder(
-              //     future: fetchAndDisplayImage(AppUrls.liveImages + staffData.staffProfilePic),
-              //     builder: (context,snapshot) {
-              //       return snapshot.hasData ? CircleAvatar(
-              //         radius: 24,
-              //         backgroundImage: MemoryImage(
-              //           processImage(staffData.staffProfilePic),
-              //         ),
-              //       ):CircularProgressIndicator.adaptive();
-              //     }
-              //   ),
-              // ),
               Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: MemoryImage(
-                    processImage(staffData.staffProfilePic),
-                  ),
-                ),
-              ),
+                  padding: const EdgeInsets.all(10.0),
+                  child: FutureImage(
+                      future: fetchAndDisplayImage(staffData.staffProfilePic))),
               Text(
                 staffData.staffFname,
                 overflow: TextOverflow.ellipsis,
@@ -282,7 +301,7 @@ class StaffDataSource extends AsyncDataTableSource {
             ],
           ),
         ),
-        DataCell(Text((staffData.staffRole.roleType))),
+        // DataCell(Text((staffData.staffRole))),
         DataCell(Text(staffData.staffEmail)),
         DataCell(Text(staffData.staffGender)),
         DataCell(buildActionButtons(context, () {
@@ -310,87 +329,15 @@ class StaffDataSource extends AsyncDataTableSource {
         })),
       ],
     );
- 
   }
 
   @override
-  int get rowCount => staffModel.length;
+  int get rowCount => totalDocuments;
   @override
   int get selectedRowCount => 0;
 
   @override
   bool get isRowCountApproximate => false;
-  
-  @override
-  Future<AsyncRowsResponse> getRows(int start, int end) async {
-   return AsyncRowsResponse(staffModel.length, staffModel.map((staffData){
-        return DataRow2.byIndex(
-      index: start,
-      cells: [
-        DataCell(
-          Row(
-            children: [
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: FutureBuilder(
-              //     future: fetchAndDisplayImage(AppUrls.liveImages + staffData.staffProfilePic),
-              //     builder: (context,snapshot) {
-              //       return snapshot.hasData ? CircleAvatar(
-              //         radius: 24,
-              //         backgroundImage: MemoryImage(
-              //           processImage(staffData.staffProfilePic),
-              //         ),
-              //       ):CircularProgressIndicator.adaptive();
-              //     }
-              //   ),
-              // ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: MemoryImage(
-                    processImage(staffData.staffProfilePic),
-                  ),
-                ),
-              ),
-              Text(
-                staffData.staffFname,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
-        DataCell(Text((staffData.staffRole.roleType))),
-        DataCell(Text(staffData.staffEmail)),
-        DataCell(Text(staffData.staffGender)),
-        DataCell(buildActionButtons(context, () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: MediaQuery.of(context).size.width / 2.3,
-                    child: UpdateStaff(staff: staffData),
-                  ),
-                );
-              });
-        }, () {
-          // delete functionality
-          showDialog(
-              context: context,
-              builder: (context) {
-                return CommonDelete(
-                  title: '${staffData.staffFname} ${staffData.staffLname}',
-                  url: AppUrls.deleteStaff + staffData.id,
-                );
-              });
-        })),
-      ],
-    );
- 
-   }).toList());
-  }
 }
 
 // Reports Datasource
@@ -480,15 +427,15 @@ class DropOffDataSource extends DataTableSource {
               //     width: 30,
               //   ),
               // ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: MemoryImage(
-                    processImage(dropOffData.studentName.studentProfilePic),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: CircleAvatar(
+              //     radius: 24,
+              //     backgroundImage: MemoryImage(
+              //       processImage(dropOffData.studentName.studentProfilePic),
+              //     ),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: Text(
@@ -536,15 +483,15 @@ class PickUpDataSource extends DataTableSource {
               //   height: 25,
               //   width: 25,
               // ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: MemoryImage(
-                    processImage(pickUp.studentN.studentProfilePic),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: CircleAvatar(
+              //     radius: 24,
+              //     backgroundImage: MemoryImage(
+              //       processImage(pickUp.studentN.studentProfilePic),
+              //     ),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: Text(
@@ -558,10 +505,11 @@ class PickUpDataSource extends DataTableSource {
         DataCell(Text(
             "${pickUp.authorizedBy.staffFname} ${pickUp.authorizedBy.staffLname}")),
         DataCell(Text(pickUp.overtimeCharge.toString().split(" ").first)),
-        DataCell(Text("${formatDate(pickUp.createdAt)}")),
-        DataCell(
-          Text(pickUp.pickUpTime),
-        ),
+        DataCell(Text(formatDate(pickUp.createdAt))),
+        DataCell(Text(formatDateTime(pickUp.createdAt))),
+        // DataCell(
+        //   Text(pickUp.pickUpTime),
+        // ),
       ],
     );
   }

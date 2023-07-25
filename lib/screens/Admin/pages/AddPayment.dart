@@ -1,3 +1,5 @@
+import '../../../models/Guardians.dart';
+import '../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 class AddPayment extends StatefulWidget {
@@ -76,7 +78,7 @@ class _AddPaymentState extends State<AddPayment> {
               controller: _commentController,
             ),
             // const SizedBox(height: defaultPadding),
-            BlocBuilder<FetchStudentsController, List<StudentModel>>(
+            BlocBuilder<FetchStudentsController, List<Student>>(
               builder: (context, state) {
                 return CommonMenuWidget(
                     fieldText: "Attach a student",
@@ -97,7 +99,7 @@ class _AddPaymentState extends State<AddPayment> {
                         .toList());
               },
             ),
-            BlocBuilder<GuardianController, List<Guardians>>(
+            BlocBuilder<GuardianController, List<Guardian>>(
               builder: (context, guardians) {
                 return CommonMenuWidget(
                     fieldText: "Attach one guardian",

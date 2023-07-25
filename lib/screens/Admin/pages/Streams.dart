@@ -35,7 +35,6 @@ class _StreamsState extends State<Streams> {
         SizedBox(
           width: size.width,
           height: size.width / 2.39,
-          
           child: Consumer<StreamsController>(
               builder: (context, controller, widget) {
             return CustomDataTable(
@@ -73,9 +72,16 @@ class _StreamsState extends State<Streams> {
                   label: Text("Action"),
                 ),
               ],
-              empty: const Center(
-                child: Text("No Streams added.."),
-              ),
+              empty: FutureBuilder(
+                  future: fetchStreams(
+                      context.read<SchoolController>().state['school']),
+                  builder: (context, snapshot) {
+                    return snapshot.connectionState == ConnectionState.waiting
+                        ? const Loader(text: "Streams data")
+                        : const Center(
+                            child: Text("No Streams added.."),
+                          );
+                  }),
               source: StreamDataSource(
                   context: context, streamModel: controller.streams),
             );

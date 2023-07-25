@@ -9,6 +9,9 @@ class CustomDataTable extends StatefulWidget {
   final String? title;
   final bool asyncTable;
   final DataTableSource source;
+  final ValueChanged<int>? onPageChanged;
+  final ValueChanged<int?>? onRowsPerPageChanged;
+  final PaginatorController? paginatorController;
   const CustomDataTable({
     Key? key,
     this.columns,
@@ -19,6 +22,9 @@ class CustomDataTable extends StatefulWidget {
     required this.source,
     this.loaderText = "Data",
     this.asyncTable = false,
+    this.onPageChanged,
+    this.onRowsPerPageChanged,
+    this.paginatorController,
   }) : super(key: key);
 
   @override
@@ -31,43 +37,27 @@ class _CustomDataTableState extends State<CustomDataTable> {
     Size size = MediaQuery.of(context).size;
 
     return SizedBox(
-      width: size.width,
-      height: size.width / 1.4,
-      child: widget.asyncTable == false
-          ? PaginatedDataTable2(
-              header: widget.header,
-              // loading:Loader(text: widget.loaderText),
-              horizontalMargin: 20,
-              columnSpacing: 5, //defaultPadding,
-              dividerThickness:
-                  1, // this one will be ignored if [border] is set above
-              minWidth: 900,
-              dataRowHeight: 60,
-              sortColumnIndex: 2,
-              sortAscending: true,
-              sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
-              sortArrowAnimationDuration: const Duration(milliseconds: 500),
-              columns: widget.columns ?? [],
-              empty: widget.empty,
-              source: widget.source,
-            )
-          : AsyncPaginatedDataTable2(
-              header: widget.header,
-              loading: Loader(text: widget.loaderText),
-              horizontalMargin: 20,
-              columnSpacing: 5, //defaultPadding,
-              dividerThickness:
-                  1, // this one will be ignored if [border] is set above
-              minWidth: 900,
-              dataRowHeight: 60,
-              sortColumnIndex: 2,
-              sortAscending: true,
-              sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
-              sortArrowAnimationDuration: const Duration(milliseconds: 500),
-              columns: widget.columns ?? [],
-              empty: widget.empty,
-              source: widget.source,
-            ),
-    );
+        width: size.width,
+        height: size.width / 1.4,
+        child: PaginatedDataTable2(
+          controller: widget.paginatorController,
+          onPageChanged: widget.onPageChanged,
+          onRowsPerPageChanged: widget.onRowsPerPageChanged,
+          header: widget.header,
+          // loading:Loader(text: widget.loaderText),
+          horizontalMargin: 20,
+          columnSpacing: 5, //defaultPadding,
+          dividerThickness:
+              1, // this one will be ignored if [border] is set above
+          minWidth: 900,
+          dataRowHeight: 60,
+          sortColumnIndex: 2,
+          sortAscending: true,
+          sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
+          sortArrowAnimationDuration: const Duration(milliseconds: 500),
+          columns: widget.columns ?? [],
+          empty: widget.empty,
+          source: widget.source,
+        ));
   }
 }

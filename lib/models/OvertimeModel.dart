@@ -1,8 +1,4 @@
 // To parse this JSON data, do
-//
-//     final overtimeModel = overtimeModelFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 List<OvertimeModel> overtimeModelFromJson(String str) => List<OvertimeModel>.from(json.decode(str).map((x) => OvertimeModel.fromJson(x)));
@@ -29,9 +25,9 @@ class OvertimeModel {
     });
 
     final String id;
-    final Student student;
+    final Student_ student;
     final String school;
-    final Guardian guardian;
+    final Guardian_ guardian;
     final Settings settings;
     final Staff staff;
     final String actualTime;
@@ -46,9 +42,9 @@ class OvertimeModel {
 
     factory OvertimeModel.fromJson(Map<String, dynamic> json) => OvertimeModel(
         id: json["_id"],
-        student: Student.fromJson(json["student"] ?? {}),
+        student: Student_.fromJson(json["student"] ?? {}),
         school: json["school"],
-        guardian: Guardian.fromJson(json["guardian"] ?? {}),
+        guardian: Guardian_.fromJson(json["guardian"] ?? {}),
         settings: Settings.fromJson(json["settings"]),
         staff: Staff.fromJson(json["staff"] ?? {}),
         actualTime: json["actual_time"],
@@ -81,8 +77,8 @@ class OvertimeModel {
     };
 }
 
-class Guardian {
-    Guardian({
+class Guardian_ {
+    Guardian_({
         required this.guardianFname,
         required this.guardianLname,
     });
@@ -90,7 +86,7 @@ class Guardian {
     final String guardianFname;
     final String guardianLname;
 
-    factory Guardian.fromJson(Map<String, dynamic> json) => Guardian(
+    factory Guardian_.fromJson(Map<String, dynamic> json) => Guardian_(
         guardianFname: json["guardian_fname"] ?? "",
         guardianLname: json["guardian_lname"] ?? "",
     );
@@ -149,8 +145,8 @@ class Staff {
     };
 }
 
-class Student {
-    Student({
+class Student_ {
+    Student_({
         required this.username,
         required this.studentProfilePic,
     });
@@ -158,7 +154,7 @@ class Student {
     final String username;
     final String studentProfilePic;
 
-    factory Student.fromJson(Map<String, dynamic> json) => Student(
+    factory Student_.fromJson(Map<String, dynamic> json) => Student_(
         username: json["username"] ?? "",
         studentProfilePic: json["student_profile_pic"] ?? "profile.png",
     );

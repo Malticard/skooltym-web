@@ -103,9 +103,7 @@ class _AddStudentState extends State<AddStudent> {
           style: TextStyles(context).getTitleStyle(),
         ),
         SingleChildScrollView(
-          child: BlocBuilder<GuardianController, List<Guardians>>(
-            builder: (context, guardians) {
-              return CommonFormFields(
+          child: CommonFormFields(
                 padding: _padding,
                 formFields: formFields ?? [],
                 formControllers: formControllers,
@@ -139,14 +137,8 @@ class _AddStudentState extends State<AddStudent> {
                   }
                 },
                 errorMsgs: errorFields,
-                lists: guardians,
-                onDropDownValue: (p0) {
-                  // if (p0 != null) {
-                  //   Provider.of<MainController>(context).guardians;
-                  // }
-                },
-              );
-            },
+                lists: [],
+             
           ),
         ),
       ],

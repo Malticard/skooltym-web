@@ -71,9 +71,14 @@ class _ClassesState extends State<Classes> {
                     label: Text("Action"),
                   ),
                 ],
-                empty: const Center(
-                  child: Text("No classes added.."),
-                ),
+                empty: FutureBuilder(
+                future:fetchClasses(context.read<SchoolController>().state['school']),
+                builder: (context, snapshot) {
+                  return snapshot.connectionState == ConnectionState.waiting? const Loader(text: "Classes data"): const Center(
+                    child: Text("No Classes added.."),
+                  );
+                }
+              ),
                 source: ClassDataSource(
                   classModel: controller.classes,
                   context: context,

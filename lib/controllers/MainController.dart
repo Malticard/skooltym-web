@@ -2,12 +2,12 @@
 
 import '/exports/exports.dart';
 
-class MainController extends ChangeNotifier {
+class MainController with ChangeNotifier {
   List<Map<String, dynamic>> _dashData = [];
-  List<StudentModel> _students = [];
+  // List<StudentModel> _students = [];
   List<DropOffModel> _drops = [];
   List<PickUpModel> _picks = [];
-  List<Guardians> _guardians = [];
+  // List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
   List<StreamModel> _streams = [];
   List<PaymentModel> _payments = [];
@@ -16,8 +16,8 @@ class MainController extends ChangeNotifier {
   bool _isLoading = true;
   // searching arrays
   List<StaffModel> _searchStaff = [];
-  List<StudentModel> _searchStudent = [];
-  List<Guardians> _searchGuardian = [];
+  // List<StudentModel> _searchStudent = [];
+  // List<Guardians> _searchGuardian = [];
   List<DropOffModel> _searchDropOff = [];
   List<PickUpModel> _searchPickUp = [];
   // end of searching arrays
@@ -25,15 +25,15 @@ class MainController extends ChangeNotifier {
   int _stepCount = 0;
   List<dynamic> _multiguardian = [];
   List<dynamic> _multistudent = [];
-  List<OvertimeModel> _pendingOvertime = [];
+  // List<OvertimeModel> _pendingOvertime = [];
 
 // getters
-  List<StudentModel> get students => _students;
+  // List<StudentModel> get students => _students;
   List<StaffModel> get staffData => _availableStaff;
   // search getters
   List<StaffModel> get sStaff => _searchStaff;
-  List<StudentModel> get sStudent => _searchStudent;
-  List<Guardians> get sGuardian => _searchGuardian;
+  // List<StudentModel> get sStudent => _searchStudent;
+  // List<Guardians> get sGuardian => _searchGuardian;
   List<DropOffModel> get sdropOff => _searchDropOff;
   List<PickUpModel> get sPickUp => _searchPickUp;
   List<DashboardModel> get dashboardClasses => _dashboardClasses;
@@ -42,13 +42,13 @@ class MainController extends ChangeNotifier {
 // get loader
   bool get isLoading => _isLoading;
   // end of search
-  List<Guardians> get guardians => _guardians;
+  // List<Guardians> get guardians => _guardians;
   List<DropOffModel> get dropOffData => _drops;
   int get stepCount => _stepCount;
   List<PickUpModel> get pickUpData => _picks;
   // GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   List<Map<String, dynamic>> get dashboardData => _dashData;
-  List<OvertimeModel> get pendingOvertime => _pendingOvertime;
+  // List<OvertimeModel> get pendingOvertime => _pendingOvertime;
   List<dynamic> get multistudent => _multistudent;
   List<dynamic> get multiguardian => _multiguardian;
   List<ClassModel> get classes => _classes;
@@ -60,39 +60,6 @@ class MainController extends ChangeNotifier {
     // if (!scaffoldKey.currentState!.isDrawerOpen) {
     scaffoldKey.currentState!.openDrawer();
   }
-
-  // getting available students
-  void getAllStudents(String school, String role) {
-    Client().get(Uri.parse(AppUrls.students + school)).then((v) {
-      _students = studentModelFromJson(v.body);
-      notifyListeners();
-    });
-  }
-
-// check for new entries of students
-  void staffUpdate(String school) {
-    Timer.periodic(const Duration(seconds: 2), (v) {
-      // print("staff timer => $v");
-      Client().get(Uri.parse(AppUrls.staff + school)).then((value) {
-        _availableStaff = staffModelFromJson(value.body);
-        notifyListeners();
-      });
-    });
-  }
-
-  // check new guardians
-  void newGuardians(BuildContext context) {
-      Client()
-          .get(
-        Uri.parse(AppUrls.getGuardians +
-            context.read<SchoolController>().state['school'])
-      )
-          .then((value) {
-        _guardians = guardiansFromJson(value.body);
-        notifyListeners();
-      });
-  }
-
   // available picks and drops
   availableDropOffs(String school) {
     dropOffs(school).then((drops) {
@@ -110,14 +77,14 @@ class MainController extends ChangeNotifier {
   }
 
 //  fetch pending overtimes
-  void fetchPendingOvertime(String status, String id) {
-    fetchOvertimeData(status, id).then((value) {
-      _pendingOvertime =
-          value.where((element) => element.status == status).toList();
-      notifyListeners();
-    });
-    // debugPrint("Current overtime response => ${value.body}");
-  }
+  // void fetchPendingOvertime(String status, String id) {
+  //   fetchOvertimeData(status, id).then((value) {
+  //     _pendingOvertime =
+  //         value.where((element) => element.status == status).toList();
+  //     notifyListeners();
+  //   });
+  //   // debugPrint("Current overtime response => ${value.body}");
+  // }
 
 // stepper text count
   void setTextCount(int value) {
@@ -175,31 +142,31 @@ class MainController extends ChangeNotifier {
   }
   // function to search for staff members by  either first name or last nam
 
-  void searchStaff(String value) {
-    _searchStaff = staffData
-        .where((element) =>
-            element.staffFname == value || element.staffLname == value)
-        .toList();
-    notifyListeners();
-  }
+  // void searchStaff(String value) {
+  //   _searchStaff = staffData
+  //       .where((element) =>
+  //           element.staffFname == value || element.staffLname == value)
+  //       .toList();
+  //   notifyListeners();
+  // }
 
   // function to search for guardians by either first name or last name
-  void searchGuardians(String value) {
-    _searchGuardian = guardians
-        .where((element) =>
-            element.guardianFname == value || element.guardianLname == value)
-        .toList();
-    notifyListeners();
-  }
+  // void searchGuardians(String value) {
+  //   _searchGuardian = guardians
+  //       .where((element) =>
+  //           element.guardianFname == value || element.guardianLname == value)
+  //       .toList();
+  //   notifyListeners();
+  // }
 
   // function to search for students by either first name or last name
-  void searchStudents(String value) {
-    _searchStudent = students
-        .where((element) =>
-            element.studentFname == value || element.studentLname == value)
-        .toList();
-    notifyListeners();
-  }
+  // void searchStudents(String value) {
+  //   _searchStudent = students
+  //       .where((element) =>
+  //           element.studentFname == value || element.studentLname == value)
+  //       .toList();
+  //   notifyListeners();
+  // }
 
   //  function to search for drops offs by first name or last name
   void searchDropOffs(String value) {

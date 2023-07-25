@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_return_type_for_catch_error
 import 'dart:io';
 
+import '../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 class AddGuardian extends StatefulWidget {
@@ -101,7 +102,7 @@ class _AddGuardianState extends State<AddGuardian> {
         height: MediaQuery.of(context).size.width / 1.5,
         child: Padding(
           padding: padding,
-          child: BlocBuilder<FetchStudentsController, List<StudentModel>>(
+          child: BlocBuilder<FetchStudentsController, List<Student>>(
             builder: (context, students) {
               return CommonFormFields(
                 padding: padding,

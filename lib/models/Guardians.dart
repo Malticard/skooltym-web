@@ -1,16 +1,64 @@
 // To parse this JSON data, do
-//
-//     final guardians = guardiansFromJson(jsonString);
-
 import 'dart:convert';
 
-List<Guardians> guardiansFromJson(String str) => List<Guardians>.from(json.decode(str).map((x) => Guardians.fromJson(x)));
+Guardians gaurdiansFromJson(String str) => Guardians.fromJson(json.decode(str));
 
-String guardiansToJson(List<Guardians> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String gaurdiansToJson(Guardians data) => json.encode(data.toJson());
 
 class Guardians {
+    final int totalDocuments;
+    final int totalPages;
+    final int currentPage;
+    final int pageSize;
+    final List<Guardian> results;
+
     Guardians({
+        required this.totalDocuments,
+        required this.totalPages,
+        required this.currentPage,
+        required this.pageSize,
+        required this.results,
+    });
+
+    factory Guardians.fromJson(Map<String, dynamic> json) => Guardians(
+        totalDocuments: json["totalDocuments"],
+        totalPages: json["totalPages"],
+        currentPage: json["currentPage"],
+        pageSize: json["pageSize"],
+        results: List<Guardian>.from(json["results"].map((x) => Guardian.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "totalDocuments": totalDocuments,
+        "totalPages": totalPages,
+        "currentPage": currentPage,
+        "pageSize": pageSize,
+        "results": List<dynamic>.from(results.map((x) => x.toJson())),
+    };
+}
+
+class Guardian {
+    final String id;
+    final List<String> students;
+    final String school;
+    final String relationship;
+    final String type;
+    final String guardianFname;
+    final String guardianLname;
+    final int guardianContact;
+    final String guardianEmail;
+    final String guardianGender;
+    final String guardianProfilePic;
+    final String guardianDateOfEntry;
+    final List<GuardianKey> guardianKey;
+    final bool isComplete;
+    final DateTime createdAt;
+    final DateTime updatedAt;
+    final int v;
+
+    Guardian({
         required this.id,
+        required this.students,
         required this.school,
         required this.relationship,
         required this.type,
@@ -28,31 +76,15 @@ class Guardians {
         required this.v,
     });
 
-    final String id;
-    final String school;
-    final String relationship;
-    final String type;
-    final String guardianFname;
-    final String guardianLname;
-    final String guardianContact;
-    final String guardianEmail;
-    final String guardianGender;
-    final String guardianProfilePic;
-    final String guardianDateOfEntry;
-    final List<GuardianKey> guardianKey;
-    final bool isComplete;
-    final DateTime createdAt;
-    final DateTime updatedAt;
-    final int v;
-
-    factory Guardians.fromJson(Map<String, dynamic> json) => Guardians(
+    factory Guardian.fromJson(Map<String, dynamic> json) => Guardian(
         id: json["_id"],
+        students: List<String>.from(json["students"].map((x) => x)),
         school: json["school"],
         relationship: json["relationship"],
         type: json["type"],
         guardianFname: json["guardian_fname"],
         guardianLname: json["guardian_lname"],
-        guardianContact: json["guardian_contact"].toString(),
+        guardianContact: json["guardian_contact"],
         guardianEmail: json["guardian_email"],
         guardianGender: json["guardian_gender"],
         guardianProfilePic: json["guardian_profile_pic"],
@@ -66,6 +98,7 @@ class Guardians {
 
     Map<String, dynamic> toJson() => {
         "_id": id,
+        "students": List<dynamic>.from(students.map((x) => x)),
         "school": school,
         "relationship": relationship,
         "type": type,
@@ -85,13 +118,13 @@ class Guardians {
 }
 
 class GuardianKey {
+    final dynamic key;
+    final String id;
+
     GuardianKey({
         required this.key,
         required this.id,
     });
-
-    final dynamic key;
-    final String id;
 
     factory GuardianKey.fromJson(Map<String, dynamic> json) => GuardianKey(
         key: json["key"],

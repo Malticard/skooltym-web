@@ -1,24 +1,52 @@
 // To parse this JSON data, do
-//
-//     final studentModel = studentModelFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<StudentModel> studentModelFromJson(String str) => List<StudentModel>.from(json.decode(str).map((x) => StudentModel.fromJson(x)));
+StudentModel studentModelFromJson(String str) => StudentModel.fromJson(json.decode(str));
 
-String studentModelToJson(List<StudentModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String studentModelToJson(StudentModel data) => json.encode(data.toJson());
 
 class StudentModel {
+    final int totalDocuments;
+    final int totalPages;
+    final int currentPage;
+    final int pageSize;
+    final List<Student> results;
+
+    StudentModel({
+        required this.totalDocuments,
+        required this.totalPages,
+        required this.currentPage,
+        required this.pageSize,
+        required this.results,
+    });
+
+    factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
+        totalDocuments: json["totalDocuments"],
+        totalPages: json["totalPages"],
+        currentPage: json["currentPage"],
+        pageSize: json["pageSize"],
+        results: List<Student>.from(json["results"].map((x) => Student.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "totalDocuments": totalDocuments,
+        "totalPages": totalPages,
+        "currentPage": currentPage,
+        "pageSize": pageSize,
+        "results": List<dynamic>.from(results.map((x) => x.toJson())),
+    };
+}
+
+class Student {
     final String id;
     final String school;
-    final Class studentModelClass;
+    final Class resultClass;
     final List<dynamic> guardians;
     final String studentFname;
     final String studentLname;
     final String otherName;
     final String username;
-    final Stream_ stream;
+    final Stream stream;
     final String studentGender;
     final String studentProfilePic;
     final List<StudentKey> studentKey;
@@ -27,10 +55,10 @@ class StudentModel {
     final DateTime updatedAt;
     final int v;
 
-    StudentModel({
+    Student({
         required this.id,
         required this.school,
-        required this.studentModelClass,
+        required this.resultClass,
         required this.guardians,
         required this.studentFname,
         required this.studentLname,
@@ -46,29 +74,29 @@ class StudentModel {
         required this.v,
     });
 
-    factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
-        id: json["student_id"] ?? "",
+    factory Student.fromJson(Map<String, dynamic> json) => Student(
+        id: json["_id"],
         school: json["school"],
-        studentModelClass: Class.fromJson(json["_class"] ?? {}),
+        resultClass: Class.fromJson(json["_class"]),
         guardians: List<dynamic>.from(json["guardians"].map((x) => x)),
         studentFname: json["student_fname"],
         studentLname: json["student_lname"],
         otherName: json["other_name"],
         username: json["username"],
-        stream: Stream_.fromJson(json["stream"] ?? {}),
+        stream: Stream.fromJson(json["stream"]),
         studentGender: json["student_gender"],
         studentProfilePic: json["student_profile_pic"],
         studentKey: List<StudentKey>.from(json["student_key"].map((x) => StudentKey.fromJson(x))),
-        isComplete: json["isComplete"] ?? false,
-        createdAt:DateTime.now(), //DateTime.parse(json["createdAt"]),
-        updatedAt:DateTime.now(), //DateTime.parse(json["updatedAt"]),
-        v: json["__v"] ?? 0,
+        isComplete: json["isComplete"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        v: json["__v"],
     );
 
     Map<String, dynamic> toJson() => {
-        "student_id": id,
+        "_id": id,
         "school": school,
-        "_class": studentModelClass.toJson(),
+        "_class": resultClass.toJson(),
         "guardians": List<dynamic>.from(guardians.map((x) => x)),
         "student_fname": studentFname,
         "student_lname": studentLname,
@@ -85,15 +113,31 @@ class StudentModel {
     };
 }
 
-class Stream_ {
+class Class {
+    final String className;
+
+    Class({
+        required this.className,
+    });
+
+    factory Class.fromJson(Map<String, dynamic> json) => Class(
+        className: json["class_name"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "class_name": className,
+    };
+}
+
+class Stream {
     final String streamName;
 
-    Stream_({
+    Stream({
         required this.streamName,
     });
 
-    factory Stream_.fromJson(Map<String, dynamic> json) => Stream_(
-        streamName: json["stream_name"] ?? "",
+    factory Stream.fromJson(Map<String, dynamic> json) => Stream(
+        streamName: json["stream_name"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -118,21 +162,5 @@ class StudentKey {
     Map<String, dynamic> toJson() => {
         "key": key,
         "_id": id,
-    };
-}
-
-class Class {
-    final String className;
-
-    Class({
-        required this.className,
-    });
-
-    factory Class.fromJson(Map<String, dynamic> json) => Class(
-        className: json["class_name"] ?? "",
-    );
-
-    Map<String, dynamic> toJson() => {
-        "class_name": className,
     };
 }
