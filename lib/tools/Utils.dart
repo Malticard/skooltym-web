@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 import 'package:intl/intl.dart';
+import '../models/DropOffModels.dart';
 import '../models/Guardians.dart';
 import '../models/OvertimeModel.dart';
 import '../models/StudentModel.dart';
@@ -474,36 +475,28 @@ Future<int> computeStudentsTotal(String id) async {
 
 // fetch overtimes
 // fetch pickups
-Future<List<PickUpModel>> fetchPickups(String id) async {
+Future<PickUpModel> fetchSpecificPickups(String id) async {
   var response = await Client().get(Uri.parse(AppUrls.pickUps + id));
-  return response.statusCode == 201 || response.statusCode == 200
-      ? pickUpModelFromJson(response.body)
-      : [];
-  // return;
-  // return response;
+  return pickUpModelFromJson(response.body);
 }
 
 // fetch pickups
-Future<List<PickUpModel>> pickUps(String id) async {
-  var response = await Client().get(Uri.parse(AppUrls.getPickUps + id));
+Future<PickUpModel> fetchPickUps(String id,{int page = 1, int limit = 20}) async {
+  var response = await Client().get(Uri.parse(AppUrls.getPickUps + id+"?page=$page&pageSize=$limit"));
   // debugPrint("response => ${response.body}");
-  return response.statusCode == 201 || response.statusCode == 200
-      ? pickUpModelFromJson(response.body)
-      : [];
-  // return;
-  // return response;
+  return pickUpModelFromJson(response.body);
 }
 
 // drop offs
-Future<List<DropOffModel>> fetchDropOffs(String id) async {
-  var response = await Client().get(Uri.parse(AppUrls.dropOffs + id));
+Future<DropOffModel> fetchSpecificDropOffs(String id) async {
+  var response = await Client().get(Uri.parse(AppUrls.specificDropOffs + id));
   return dropOffModelFromJson(response.body);
   // return response;
 }
 
 // drop offs
-Future<List<DropOffModel>> dropOffs(String id) async {
-  var response = await Client().get(Uri.parse(AppUrls.getDropOffs + id));
+Future<DropOffModel> fetchDropOffs(String id,{int page = 1, int limit = 20}) async {
+  var response = await Client().get(Uri.parse(AppUrls.getDropOffs + id+"?page=$page&pageSize=$limit"));
   return dropOffModelFromJson(response.body);
   // return response;
 }
@@ -535,8 +528,8 @@ String handSanIntervals() {
 Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
     BuildContext context) async {
   context.read<PaymentController>().getPayments(context);
-  var drops = await dropOffs(context.read<SchoolController>().state['school']);
-  var picks = await pickUps(context.read<SchoolController>().state['school']);
+  var drops = await fetchDropOffs(context.read<SchoolController>().state['school']);
+  var picks = await fetchPickUps(context.read<SchoolController>().state['school']);
   var clearedOvertimes = context
       .read<PaymentController>()
       .state
@@ -551,14 +544,14 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
   List<Map<String, dynamic>> dashboardData = [
     {
       "label": "DROP OFFS",
-      "value": drops.length,
+      "value": drops.totalDocuments,
       "icon": "assets/icons/004-playtime.svg",
       'color': const Color.fromARGB(255, 106, 108, 235),
       // "last_updated": "14:45"
     },
     {
       "label": "PICK UPS",
-      "value": picks.length,
+      "value": picks.totalDocuments,
       "icon": "assets/icons/009-student.svg",
       'color': const Color.fromARGB(255, 181, 150, 253),
       // "last_updated": "14:45"

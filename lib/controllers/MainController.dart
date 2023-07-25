@@ -1,12 +1,13 @@
 // ignore_for_file: unrelated_type_equality_checks
 
+import '../models/DropOffModels.dart';
 import '/exports/exports.dart';
 
 class MainController with ChangeNotifier {
   List<Map<String, dynamic>> _dashData = [];
   // List<StudentModel> _students = [];
-  List<DropOffModel> _drops = [];
-  List<PickUpModel> _picks = [];
+  // List<DropOffModel> _drops = [];
+  // List<PickUpModel> _picks = [];
   // List<Guardians> _guardians = [];
   List<StaffModel> _availableStaff = [];
   List<StreamModel> _streams = [];
@@ -43,9 +44,9 @@ class MainController with ChangeNotifier {
   bool get isLoading => _isLoading;
   // end of search
   // List<Guardians> get guardians => _guardians;
-  List<DropOffModel> get dropOffData => _drops;
+  // List<DropOffModel> get dropOffData => _drops;
   int get stepCount => _stepCount;
-  List<PickUpModel> get pickUpData => _picks;
+  // List<PickUpModel> get pickUpData => _picks;
   // GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   List<Map<String, dynamic>> get dashboardData => _dashData;
   // List<OvertimeModel> get pendingOvertime => _pendingOvertime;
@@ -60,21 +61,21 @@ class MainController with ChangeNotifier {
     // if (!scaffoldKey.currentState!.isDrawerOpen) {
     scaffoldKey.currentState!.openDrawer();
   }
-  // available picks and drops
-  availableDropOffs(String school) {
-    dropOffs(school).then((drops) {
-      _drops = drops;
-      notifyListeners();
-    });
-  }
+  // // available picks and drops
+  // availableDropOffs(String school) {
+  //   dropOffs(school).then((drops) {
+  //     _drops = drops;
+  //     notifyListeners();
+  //   });
+  // }
 
-  availablePickUps(String school) {
-    pickUps(school).then((picks) {
-      // debugPrint("Picks => $picks");
-      _picks = picks;
-      notifyListeners();
-    });
-  }
+  // availablePickUps(String school) {
+  //   pickUps(school).then((picks) {
+  //     // debugPrint("Picks => $picks");
+  //     _picks = picks;
+  //     notifyListeners();
+  //   });
+  // }
 
 //  fetch pending overtimes
   // void fetchPendingOvertime(String status, String id) {
@@ -169,22 +170,22 @@ class MainController with ChangeNotifier {
   // }
 
   //  function to search for drops offs by first name or last name
-  void searchDropOffs(String value) {
-    _searchDropOff = dropOffData
-        .where((element) =>
-            element.studentName.studentLname == value ||
-            element.studentName.studentFname == value)
-        .toList();
-  }
+  // void searchDropOffs(String value) {
+  //   _searchDropOff = dropOffData
+  //       .where((element) =>
+  //           element.studentName.studentLname == value ||
+  //           element.studentName.studentFname == value)
+  //       .toList();
+  // }
 
   // function to search for pick ups by first name or last name
-  void searchPickUps(String value) {
-    _searchPickUp = pickUpData
-        .where((element) =>
-            element.studentN.studentFname == value ||
-            element.studentN.studentLname == value)
-        .toList();
-  }
+  // void searchPickUps(String value) {
+  //   _searchPickUp = pickUpData
+  //       .where((element) =>
+  //           element.studentN.studentFname == value ||
+  //           element.studentN.studentLname == value)
+  //       .toList();
+  // }
 
   // fetching payments
   void fetchPayments(BuildContext context) {}

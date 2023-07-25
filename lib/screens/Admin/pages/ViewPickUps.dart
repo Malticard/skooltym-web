@@ -9,18 +9,36 @@ class ViewPickUps extends StatefulWidget {
 }
 
 class _ViewPickUpsState extends State<ViewPickUps> {
+  List<PickUp> pickUpData = [];
+  int _currentPage = 1;
+  int rowsPerPage = 20;
+  final PaginatorController _controller = PaginatorController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    BlocProvider.of<PickUpsController>(context, listen: true)
-        .getPickUps(context.read<SchoolController>().state['school']);
+    // BlocProvider.of<PickUpsController>(context, listen: true)
+    //     .getPickUps(context.read<SchoolController>().state['school']);
     return SizedBox(
       width: size.width,
       height: size.width / 2.39,
-      child: BlocConsumer<PickUpsController, List<PickUpModel>>(
-        listener: (context, pickups) {},
-        builder: (context, pickups) {
+      child: StreamBuilder(
+        stream: fetchPickUps(context.read<SchoolController>().state['school'],
+                page: _currentPage, limit: rowsPerPage)
+            .asStream(),
+        builder: (context, snapshot) {
+          var pickups = snapshot.data;
           return CustomDataTable(
+            paginatorController: _controller,
+            onPageChanged: (page) {
+              setState(() {
+                _currentPage = (page ~/ rowsPerPage) + 1;
+              });
+            },
+            onRowsPerPageChanged: (rows) {
+              setState(() {
+                rowsPerPage = rows ?? 20;
+              });
+            },
             header: Row(
               children: [
                 Text(
@@ -29,7 +47,7 @@ class _ViewPickUpsState extends State<ViewPickUps> {
                 ),
                 if (!Responsive.isMobile(context))
                   Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                if (context.watch<MainController>().pickUpData.isNotEmpty)
+                if (pickUpData.isNotEmpty)
                   Expanded(
                     child: SearchField(
                       onChanged: (value) {
@@ -79,7 +97,11 @@ class _ViewPickUpsState extends State<ViewPickUps> {
                           );
                   }),
             ),
-            source: PickUpDataSource(pickUpModel: pickups, context: context),
+            source: PickUpDataSource(
+                pickUpModel: pickUpData,
+                context: context,
+                currentPage: _currentPage,
+                totalDocuments: pickups?.totalDocuments ?? 0),
           );
         },
       ),

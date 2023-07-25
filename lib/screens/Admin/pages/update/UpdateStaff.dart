@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+
 import '/exports/exports.dart';
 // export 'package:flutter/cupertino.dart';
 
@@ -22,7 +23,7 @@ class _UpdateStaffState extends State<UpdateStaff> {
       TextEditingController(text: widget.staff.staffContact.toString()),
       TextEditingController(text: ""),
       TextEditingController(text: widget.staff.staffGender),
-      TextEditingController(text: widget.staff.staffRole/*.roleType*/),
+      TextEditingController(text: widget.staff.staffRole.roleType),
     ];
   }
 

@@ -8,6 +8,7 @@ class CustomDataTable extends StatefulWidget {
   final Widget? empty;
   final String? title;
   final bool asyncTable;
+  final int rowsPerPage;
   final DataTableSource source;
   final ValueChanged<int>? onPageChanged;
   final ValueChanged<int?>? onRowsPerPageChanged;
@@ -24,7 +25,7 @@ class CustomDataTable extends StatefulWidget {
     this.asyncTable = false,
     this.onPageChanged,
     this.onRowsPerPageChanged,
-    this.paginatorController,
+    this.paginatorController,  this.rowsPerPage = 20,
   }) : super(key: key);
 
   @override
@@ -52,6 +53,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
           minWidth: 900,
           dataRowHeight: 60,
           sortColumnIndex: 2,
+          rowsPerPage: widget.rowsPerPage,
           sortAscending: true,
           sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
           sortArrowAnimationDuration: const Duration(milliseconds: 500),

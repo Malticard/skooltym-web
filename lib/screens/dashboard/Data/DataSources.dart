@@ -1,3 +1,4 @@
+import '../../../models/DropOffModels.dart';
 import '../../../models/Guardians.dart';
 import '../../../models/StudentModel.dart';
 import '../../../widgets/FutureImage.dart';
@@ -283,7 +284,17 @@ class StaffDataSource extends DataTableSource {
       required this.context});
   @override
   DataRow? getRow(int index) {
-    Staff staffData = staffModel[index];
+    final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
+    final int dataIndex = index % paginatorController!.rowsPerPage;
+    final int dataLength = staffModel.length;
+
+    if (pageIndex * paginatorController!.rowsPerPage + dataIndex >=
+        dataLength) {
+      return null;
+    }
+    Staff staffData =
+        staffModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
+
     return DataRow2.byIndex(
       index: index,
       cells: [
@@ -406,12 +417,31 @@ class ReportsDataSource extends DataTableSource {
 
 // DropOff Datasource
 class DropOffDataSource extends DataTableSource {
-  final List<DropOffModel> dropOffModel;
+  final List<DropOff> dropOffModel;
   final BuildContext context;
-  DropOffDataSource({required this.dropOffModel, required this.context});
+  final int totalDocuments;
+  final int currentPage;
+  final PaginatorController? paginatorController;
+  DropOffDataSource(
+      {required this.totalDocuments,
+      required this.currentPage,
+      this.paginatorController,
+      required this.dropOffModel,
+      required this.context});
   @override
   DataRow? getRow(int index) {
-    DropOffModel dropOffData = dropOffModel[index];
+    final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
+    final int dataIndex = index % paginatorController!.rowsPerPage;
+    final int dataLength = dropOffModel.length;
+
+    if (pageIndex * paginatorController!.rowsPerPage + dataIndex >=
+        dataLength) {
+      return null;
+    }
+    DropOff dropOffData =
+        dropOffModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
+
+    //  dropOffModel[index];
     return DataRow2.byIndex(
       index: index,
       cells: [
@@ -466,12 +496,31 @@ class DropOffDataSource extends DataTableSource {
 
 // PickUp Datasource
 class PickUpDataSource extends DataTableSource {
-  final List<PickUpModel> pickUpModel;
+  final List<PickUp> pickUpModel;
   final BuildContext context;
-  PickUpDataSource({required this.pickUpModel, required this.context});
+  final int totalDocuments;
+  final int currentPage;
+  final PaginatorController? paginatorController;
+  PickUpDataSource(
+      {required this.totalDocuments,
+      required this.currentPage,
+      this.paginatorController,
+      required this.pickUpModel,
+      required this.context});
   @override
   DataRow? getRow(int index) {
-    PickUpModel pickUp = pickUpModel[index];
+    final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
+    final int dataIndex = index % paginatorController!.rowsPerPage;
+    final int dataLength = pickUpModel.length;
+
+    if (pageIndex * paginatorController!.rowsPerPage + dataIndex >=
+        dataLength) {
+      return null;
+    }
+    PickUp pickUp =
+        pickUpModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
+
+    // PickUp pickUp = pickUpModel[index];
     return DataRow2.byIndex(
       index: index,
       cells: [
@@ -495,7 +544,7 @@ class PickUpDataSource extends DataTableSource {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: Text(
-                    "${pickUp.studentN.studentFname} ${pickUp.studentN.studentLname}"),
+                    "${pickUp.studentName.studentFname} ${pickUp.studentName.studentLname}"),
               ),
             ],
           ),
@@ -515,7 +564,7 @@ class PickUpDataSource extends DataTableSource {
   }
 
   @override
-  int get rowCount => pickUpModel.length;
+  int get rowCount => totalDocuments;
   @override
   int get selectedRowCount => 0;
 

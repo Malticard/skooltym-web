@@ -1,8 +1,4 @@
 // To parse this JSON data, do
-//
-//     final staffModel = staffModelFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 StaffModel staffModelFromJson(String str) => StaffModel.fromJson(json.decode(str));
@@ -48,7 +44,7 @@ class Staff {
     final String staffLname;
     final int staffContact;
     final String staffEmail;
-    final String staffRole;
+    final StaffRole staffRole;
     final String staffGender;
     final String staffProfilePic;
     final String staffPassword;
@@ -83,7 +79,7 @@ class Staff {
         staffLname: json["staff_lname"],
         staffContact: json["staff_contact"],
         staffEmail: json["staff_email"],
-        staffRole: json["staff_role"],
+        staffRole: StaffRole.fromJson(json["staff_role"]),
         staffGender: json["staff_gender"],
         staffProfilePic: json["staff_profilePic"],
         staffPassword: json["staff_password"],
@@ -101,7 +97,7 @@ class Staff {
         "staff_lname": staffLname,
         "staff_contact": staffContact,
         "staff_email": staffEmail,
-        "staff_role": staffRole,
+        "staff_role": staffRole.toJson(),
         "staff_gender": staffGender,
         "staff_profilePic": staffProfilePic,
         "staff_password": staffPassword,
@@ -130,5 +126,21 @@ class StaffKey {
     Map<String, dynamic> toJson() => {
         "key": key,
         "_id": id,
+    };
+}
+
+class StaffRole {
+    final String roleType;
+
+    StaffRole({
+        required this.roleType,
+    });
+
+    factory StaffRole.fromJson(Map<String, dynamic> json) => StaffRole(
+        roleType: json["role_type"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "role_type": roleType,
     };
 }

@@ -1,20 +1,47 @@
 // To parse this JSON data, do
-//
-//     final settingsModel = settingsModelFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<PickUpModel> pickUpModelFromJson(String str) => List<PickUpModel>.from(json.decode(str).map((x) => PickUpModel.fromJson(x)));
+PickUpModel pickUpModelFromJson(String str) => PickUpModel.fromJson(json.decode(str));
 
-String pickUpModelToJson(List<PickUpModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String pickUpModelToJson(PickUpModel data) => json.encode(data.toJson());
 
 class PickUpModel {
+    final int totalDocuments;
+    final int totalPages;
+    final int currentPage;
+    final int pageSize;
+    final List<PickUp> results;
+
+    PickUpModel({
+        required this.totalDocuments,
+        required this.totalPages,
+        required this.currentPage,
+        required this.pageSize,
+        required this.results,
+    });
+
+    factory PickUpModel.fromJson(Map<String, dynamic> json) => PickUpModel(
+        totalDocuments: json["totalDocuments"],
+        totalPages: json["totalPages"],
+        currentPage: json["currentPage"],
+        pageSize: json["pageSize"],
+        results: List<PickUp>.from(json["results"].map((x) => PickUp.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "totalDocuments": totalDocuments,
+        "totalPages": totalPages,
+        "currentPage": currentPage,
+        "pageSize": pageSize,
+        "results": List<dynamic>.from(results.map((x) => x.toJson())),
+    };
+}
+
+class PickUp {
     final String id;
     final String school;
     final String settings;
-    final StudentN studentN;
-    final String pickUpTime;
+    final StudentName studentName;
     final PickedBy pickedBy;
     final AuthorizedBy authorizedBy;
     final int overtimeCharge;
@@ -23,12 +50,11 @@ class PickUpModel {
     final DateTime updatedAt;
     final int v;
 
-    PickUpModel({
+    PickUp({
         required this.id,
         required this.school,
         required this.settings,
-        required this.studentN,
-        required this.pickUpTime,
+        required this.studentName,
         required this.pickedBy,
         required this.authorizedBy,
         required this.overtimeCharge,
@@ -38,14 +64,13 @@ class PickUpModel {
         required this.v,
     });
 
-    factory PickUpModel.fromJson(Map<String, dynamic> json) => PickUpModel(
+    factory PickUp.fromJson(Map<String, dynamic> json) => PickUp(
         id: json["_id"],
         school: json["school"],
         settings: json["settings"],
-        studentN: StudentN.fromJson(json["student_name"] ?? {}),
-        pickUpTime: json["pick_up_time"] ?? "",
-        pickedBy: PickedBy.fromJson(json["picked_by"] ?? {}),
-        authorizedBy: AuthorizedBy.fromJson(json["authorized_by"] ?? {}),
+        studentName: StudentName.fromJson(json["student_name"]),
+        pickedBy: PickedBy.fromJson(json["picked_by"]),
+        authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
         overtimeCharge: json["overtime_charge"],
         pickupKey: List<PickupKey>.from(json["pickup_key"].map((x) => PickupKey.fromJson(x))),
         createdAt: DateTime.parse(json["createdAt"]),
@@ -57,8 +82,7 @@ class PickUpModel {
         "_id": id,
         "school": school,
         "settings": settings,
-        "student_name": studentN.toJson(),
-        "pick_up_time": pickUpTime,
+        "student_name": studentName.toJson(),
         "picked_by": pickedBy.toJson(),
         "authorized_by": authorizedBy.toJson(),
         "overtime_charge": overtimeCharge,
@@ -79,8 +103,8 @@ class AuthorizedBy {
     });
 
     factory AuthorizedBy.fromJson(Map<String, dynamic> json) => AuthorizedBy(
-        staffFname: json["staff_fname"] ?? "",
-        staffLname: json["staff_lname"] ?? "",
+        staffFname: json["staff_fname"],
+        staffLname: json["staff_lname"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -99,8 +123,8 @@ class PickedBy {
     });
 
     factory PickedBy.fromJson(Map<String, dynamic> json) => PickedBy(
-        guardianFname: json["guardian_fname"] ?? "",
-        guardianLname: json["guardian_lname"] ?? "",
+        guardianFname: json["guardian_fname"],
+        guardianLname: json["guardian_lname"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -129,21 +153,21 @@ class PickupKey {
     };
 }
 
-class StudentN {
+class StudentName {
     final String studentFname;
     final String studentLname;
     final String studentProfilePic;
 
-    StudentN({
+    StudentName({
         required this.studentFname,
         required this.studentLname,
         required this.studentProfilePic,
     });
 
-    factory StudentN.fromJson(Map<String, dynamic> json) => StudentN(
-        studentFname: json["student_fname"] ?? "",
-        studentLname: json["student_lname"] ?? "",
-        studentProfilePic: json["student_profile_pic"] ?? "profile.png",
+    factory StudentName.fromJson(Map<String, dynamic> json) => StudentName(
+        studentFname: json["student_fname"],
+        studentLname: json["student_lname"],
+        studentProfilePic: json["student_profile_pic"],
     );
 
     Map<String, dynamic> toJson() => {

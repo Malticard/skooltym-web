@@ -37,7 +37,7 @@ class AppUrls {
   static String getGuardian = "${devURL}specific/guardians/";
   static String getStudent = "${devURL}specific/students/";
   static String pickUps = "${devURL}specific/pickup/";
-  static String dropOffs = "${devURL}specific/dropoff/";
+  static String specificDropOffs = "${devURL}specific/dropoff/";
   static String getOtherGuardians = "${devURL}specific/otherGuardians/";
   static String specificClass = "${devURL}specific/class/";
   static String specificStream = "${devURL}specific/stream/";
