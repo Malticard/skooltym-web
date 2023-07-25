@@ -21,11 +21,14 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
       width: size.width,
       height: size.width / 2.39,
       child: StreamBuilder(
-        stream: fetchDropOffs(context.read<SchoolController>().state['school'])
-            .asStream(),
+        stream: fetchDropOffs(
+          context.read<SchoolController>().state['school'],
+          page: _currentPage,
+          limit: rowsPerPage,
+        ).asStream(),
         builder: (context, snapshot) {
           var drops = snapshot.data;
-          drop_offs = drops!.results;
+          drop_offs = drops?.results ?? [];
           return CustomDataTable(
             paginatorController: _controller,
             onPageChanged: (page) {
@@ -51,8 +54,9 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
                   Expanded(
                     child: SearchField(
                       onChanged: (value) {
-                        // Provider.of<MainController>(context, listen: false)
-                        //     .searchDropOffs(value ?? "");
+                        setState(() {
+                          
+                        });
                       },
                     ),
                   ),
@@ -79,10 +83,17 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
                 dropOffModel: drop_offs,
                 context: context,
                 currentPage: _currentPage,
-                totalDocuments: drops.totalDocuments),
+                paginatorController: _controller,
+                totalDocuments: drops?.totalDocuments ?? 0),
           );
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

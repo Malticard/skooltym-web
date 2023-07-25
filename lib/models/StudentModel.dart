@@ -77,13 +77,13 @@ class Student {
     factory Student.fromJson(Map<String, dynamic> json) => Student(
         id: json["_id"],
         school: json["school"],
-        resultClass: Class.fromJson(json["_class"]),
+        resultClass: Class.fromJson(json["_class"] ?? {}),
         guardians: List<dynamic>.from(json["guardians"].map((x) => x)),
         studentFname: json["student_fname"],
         studentLname: json["student_lname"],
         otherName: json["other_name"],
         username: json["username"],
-        stream: Stream.fromJson(json["stream"]),
+        stream: Stream.fromJson(json["stream"] ?? {}),
         studentGender: json["student_gender"],
         studentProfilePic: json["student_profile_pic"],
         studentKey: List<StudentKey>.from(json["student_key"].map((x) => StudentKey.fromJson(x))),
@@ -121,7 +121,7 @@ class Class {
     });
 
     factory Class.fromJson(Map<String, dynamic> json) => Class(
-        className: json["class_name"],
+        className: json["class_name"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {
@@ -137,7 +137,7 @@ class Stream {
     });
 
     factory Stream.fromJson(Map<String, dynamic> json) => Stream(
-        streamName: json["stream_name"],
+        streamName: json["stream_name"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {

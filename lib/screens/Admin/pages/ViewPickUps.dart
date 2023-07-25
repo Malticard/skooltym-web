@@ -16,8 +16,6 @@ class _ViewPickUpsState extends State<ViewPickUps> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // BlocProvider.of<PickUpsController>(context, listen: true)
-    //     .getPickUps(context.read<SchoolController>().state['school']);
     return SizedBox(
       width: size.width,
       height: size.width / 2.39,
@@ -27,6 +25,7 @@ class _ViewPickUpsState extends State<ViewPickUps> {
             .asStream(),
         builder: (context, snapshot) {
           var pickups = snapshot.data;
+          pickUpData = pickups?.results ?? [];
           return CustomDataTable(
             paginatorController: _controller,
             onPageChanged: (page) {
@@ -86,7 +85,7 @@ class _ViewPickUpsState extends State<ViewPickUps> {
             ],
             empty: Center(
               child: FutureBuilder(
-                  future: Future.delayed(const Duration(seconds: 5)),
+                  future: Future.delayed(const Duration(seconds: 7)),
                   builder: (context, y) {
                     return y.connectionState == ConnectionState.waiting
                         ? const Loader(
@@ -100,6 +99,7 @@ class _ViewPickUpsState extends State<ViewPickUps> {
             source: PickUpDataSource(
                 pickUpModel: pickUpData,
                 context: context,
+                paginatorController: _controller,
                 currentPage: _currentPage,
                 totalDocuments: pickups?.totalDocuments ?? 0),
           );

@@ -46,11 +46,8 @@ class StudentsDataSource extends DataTableSource {
           children: [
             Padding(
               padding: const EdgeInsets.all(5.0),
-              child: CircleAvatar(
-                radius: 24,
-                backgroundImage: MemoryImage(
-                  processImage(studentData.studentProfilePic),
-                ),
+              child: FutureImage(
+                future: fetchAndDisplayImage(studentData.studentProfilePic),
               ),
             ),
             Text("${studentData.studentFname} ${studentData.studentLname}"),
@@ -120,11 +117,8 @@ class GuardianDataSource extends DataTableSource {
           children: [
             Padding(
               padding: const EdgeInsets.all(5.0),
-              child: CircleAvatar(
-                radius: 24,
-                backgroundImage: MemoryImage(
-                  processImage(guardianData.guardianProfilePic),
-                ),
+              child: FutureImage(
+                future: fetchAndDisplayImage(guardianData.guardianProfilePic),
               ),
             ),
             Padding(
@@ -312,7 +306,7 @@ class StaffDataSource extends DataTableSource {
             ],
           ),
         ),
-        // DataCell(Text((staffData.staffRole))),
+        DataCell(Text((staffData.staffRole.roleType))),
         DataCell(Text(staffData.staffEmail)),
         DataCell(Text(staffData.staffGender)),
         DataCell(buildActionButtons(context, () {

@@ -97,6 +97,7 @@ class _StaffViewState extends State<StaffView> {
                         staffModel: staffData,
                         context: context,
                         currentPage: _currentPage,
+                         paginatorController: _controller,
                         totalDocuments: staffs?.totalDocuments ?? 0,
                       ),
                     )

@@ -47,6 +47,7 @@ class _ViewStudentsState extends State<ViewStudents>{
                     });
                   },
                   source: StudentsDataSource(
+                    paginatorController: _controller,
                     studentModel: studentData,
                     context: context,
                     currentPage: _currentPage,
