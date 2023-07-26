@@ -13,6 +13,49 @@ class _ViewPickUpsState extends State<ViewPickUps> {
   int _currentPage = 1;
   int rowsPerPage = 20;
   final PaginatorController _controller = PaginatorController();
+// stream controller
+  StreamController<PickUpModel> _pickUpController =
+      StreamController<PickUpModel>();
+  Timer? timer;
+  @override
+  void initState() {
+    super.initState();
+    fetchRealTimeData();
+  }
+
+  @override
+  void dispose() {
+    if (_pickUpController.hasListener) {
+      _pickUpController.close();
+    }
+    timer?.cancel();
+    super.dispose();
+  }
+
+  void fetchRealTimeData() async {
+    try {
+      // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+        var drops = await fetchPickUps(context.read<SchoolController>().state['school'],
+                page: _currentPage, limit: rowsPerPage);
+        _pickUpController.add(drops);
+      }
+      // Listen to the stream and update the UI
+      Timer.periodic(Duration(seconds: 3), (timer) async {
+        this.timer = timer;
+        // Add a check to see if the widget is still mounted before updating the state
+        if (mounted) {
+          var drops = await fetchPickUps(context.read<SchoolController>().state['school'],
+                page: _currentPage, limit: rowsPerPage);
+          _pickUpController.add(drops);
+        }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -20,9 +63,7 @@ class _ViewPickUpsState extends State<ViewPickUps> {
       width: size.width,
       height: size.width / 2.39,
       child: StreamBuilder(
-        stream: fetchPickUps(context.read<SchoolController>().state['school'],
-                page: _currentPage, limit: rowsPerPage)
-            .asStream(),
+        stream: _pickUpController.stream,
         builder: (context, snapshot) {
           var pickups = snapshot.data;
           pickUpData = pickups?.results ?? [];

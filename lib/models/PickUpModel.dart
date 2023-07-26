@@ -70,7 +70,7 @@ class PickUp {
         id: json["_id"],
         school: json["school"],
         settings: json["settings"],
-        studentName: StudentName.fromJson(json["student_name"]),
+        studentName: StudentName.fromJson(json["student_name"] ?? {}),
         pickedBy: PickedBy.fromJson(json["picked_by"] ?? {}),
         authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
         overtimeCharge: json["overtime_charge"],
@@ -168,9 +168,9 @@ class StudentName {
   });
 
   factory StudentName.fromJson(Map<String, dynamic> json) => StudentName(
-        studentFname: json["student_fname"],
-        studentLname: json["student_lname"],
-        studentProfilePic: json["student_profile_pic"],
+        studentFname: json["student_fname"] ?? "",
+        studentLname: json["student_lname"] ?? "",
+        studentProfilePic: json["student_profile_pic"] ?? "profile.png",
       );
 
   Map<String, dynamic> toJson() => {

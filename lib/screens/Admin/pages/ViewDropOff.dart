@@ -14,6 +14,57 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
   final _controller = PaginatorController();
   int _currentPage = 1;
   int rowsPerPage = 20;
+
+  // REALTIME DATA PPLLING
+
+  // stream controller
+  StreamController<DropOffModel> _dropOffController =
+      StreamController<DropOffModel>();
+  Timer? timer;
+  @override
+  void initState() {
+    super.initState();
+    fetchRealTimeData();
+  }
+
+  @override
+  void dispose() {
+    if (_dropOffController.hasListener) {
+      _dropOffController.close();
+    }
+    timer?.cancel();
+    super.dispose();
+  }
+
+  void fetchRealTimeData() async {
+    try {
+      // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+        var drops = await fetchDropOffs(
+          context.read<SchoolController>().state['school'],
+          page: _currentPage,
+          limit: rowsPerPage,
+        );
+        _dropOffController.add(drops);
+      }
+      // Listen to the stream and update the UI
+      Timer.periodic(Duration(seconds: 3), (timer) async {
+        this.timer = timer;
+        // Add a check to see if the widget is still mounted before updating the state
+        if (mounted) {
+          var drops = await fetchDropOffs(
+            context.read<SchoolController>().state['school'],
+            page: _currentPage,
+            limit: rowsPerPage,
+          );
+          _dropOffController.add(drops);
+        }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -21,11 +72,7 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
       width: size.width,
       height: size.width / 2.39,
       child: StreamBuilder(
-        stream: fetchDropOffs(
-          context.read<SchoolController>().state['school'],
-          page: _currentPage,
-          limit: rowsPerPage,
-        ).asStream(),
+        stream: _dropOffController.stream,
         builder: (context, snapshot) {
           var drops = snapshot.data;
           drop_offs = drops?.results ?? [];
@@ -75,13 +122,21 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
               ),
               DataColumn(
                 label: Text("Date"),
-              ),  DataColumn(
+              ),
+              DataColumn(
                 label: Text("Time Of DropOff"),
               ),
             ],
-            empty: Center(
-              child: const NoDataWidget(text: "No drop offs captured yet"),
-            ),
+            empty: FutureBuilder(
+                future: Future.delayed(Duration(seconds: 3)),
+                builder: (context, snapshot) {
+                  return snapshot.connectionState == ConnectionState.waiting
+                      ? Loader(text: "DropOffs ..",)
+                      : Center(
+                          child: const NoDataWidget(
+                              text: "No drop offs captured yet"),
+                        );
+                }),
             source: DropOffDataSource(
                 dropOffModel: drop_offs,
                 context: context,
@@ -92,11 +147,5 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
         },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }

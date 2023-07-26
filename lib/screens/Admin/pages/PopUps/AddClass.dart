@@ -12,18 +12,51 @@ class _AddClassState extends State<AddClass> {
   // text controllers
   final streamErrorController = TextEditingController();
   final TextEditingController _classController = TextEditingController();
+
+  // stream controller
+  StreamController<List<StreamModel>> _streamController =
+      StreamController<List<StreamModel>>();
+  Timer? timer;
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    BlocProvider.of<FetchStudentsController>(context, listen: false)
-        .getStudents(context.read<SchoolController>().state['school']);
+  void initState() {
+    super.initState();
+    fetchRealTimeData();
+  }
+
+  @override
+  void dispose() {
+    if (_streamController.hasListener) {
+      _streamController.close();
+    }
+    timer?.cancel();
+    super.dispose();
+  }
+
+  void fetchRealTimeData() async {
+    try {
+      // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+        var streams = await fetchStreams(
+            context.read<SchoolController>().state['school']);
+        _streamController.add(streams);
+      }
+      // Listen to the stream and update the UI
+      Timer.periodic(Duration(seconds: 3), (timer) async {
+        this.timer = timer;
+        // Add a check to see if the widget is still mounted before updating the state
+        if (mounted) {
+          var streams = await fetchStreams(
+              context.read<SchoolController>().state['school']);
+          _streamController.add(streams);
+        }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<FetchStudentsController>(context, listen: false)
-        .getStudents(context.read<SchoolController>().state['school']);
-
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.white
@@ -45,8 +78,8 @@ class _AddClassState extends State<AddClass> {
                 controller: _classController,
                 contentPadding:
                     const EdgeInsets.only(top: 10, left: 10, bottom: 5),
-                padding:
-                    const EdgeInsets.only(top: 5, bottom: 5, right: 15, left: 15),
+                padding: const EdgeInsets.only(
+                    top: 5, bottom: 5, right: 15, left: 15),
                 validate: (valid) {
                   setState(() {
                     streamErrorController.text = "Class "
@@ -58,30 +91,26 @@ class _AddClassState extends State<AddClass> {
                 // controller: _controllers[index],
                 titleText: "Class Name",
               ),
-              Consumer<StreamsController>(
-                builder: (context,controller,widget) {
+              StreamBuilder(
+                stream: _streamController.stream,
+                builder: (context, snapshot) {
+                  var controller = snapshot.data ?? [];
                   return CommonMenuWidget(
                     // fieldColor: Colors.transparent,
                     onChange: (v) {
-                      if (v!= null && v.isNotEmpty) {
+                      if (v != null && v.isNotEmpty) {
                         setState(() {
-                        _selectedStreams = json
-                            .decode(v)
-                            .join(","); // [jjjjk].join(",") => j,j,j,j
-                      });
+                          _selectedStreams = json
+                              .decode(v)
+                              .join(","); // [jjjjk].join(",") => j,j,j,j
+                        });
                       }
-                      
                     },
                     hint: "Attach streams",
                     padding: const EdgeInsets.only(
                         top: 10, bottom: 10, right: 10, left: 10),
-                    data: 
-                        controller.streams
-                        .map((e) => e.id)
-                        .toList(),
-                    dropdownList: controller.streams
-                        .map((e) => e.streamName)
-                        .toList(),
+                    data: controller.map((e) => e.id).toList(),
+                    dropdownList: controller.map((e) => e.streamName).toList(),
                   );
                 },
               ),
@@ -93,7 +122,8 @@ class _AddClassState extends State<AddClass> {
                   onTap: () {
                     // _stepText = [];
                     Map<String, dynamic> data = {
-                      "school": context.read<SchoolController>().state['school'],
+                      "school":
+                          context.read<SchoolController>().state['school'],
                       "class_name": _classController.text,
                       "class_streams": _selectedStreams
                     };

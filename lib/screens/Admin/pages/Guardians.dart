@@ -21,12 +21,53 @@ class _ViewGuardiansState extends State<ViewGuardians> {
   int _currentPage = 1;
   int rowsPerPage = 20;
   final PaginatorController _controller = PaginatorController();
+    // stream controller
+  StreamController<Guardians> _guardianController =
+      StreamController<Guardians>();
+      Timer? timer;
+  @override
+  void initState() {
+    super.initState();
+    _fetchRealTimeData();
+  }
+
+  @override
+  void dispose() {
+     if (_guardianController.hasListener) {
+      _guardianController.close();
+    }
+    timer?.cancel();
+    super.dispose();
+    
+  }
+
+  void _fetchRealTimeData() async {
+    try {
+       // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+          var guardians = await fetchGuardians(context, page: _currentPage, limit: rowsPerPage);
+        _guardianController.add(guardians);
+      }
+      // Listen to the stream and update the UI
+      
+    Timer.periodic(Duration(seconds: 3), (timer) async {
+       this.timer = timer;
+               // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+        var guardians = await fetchGuardians(context, page: _currentPage, limit: rowsPerPage);
+        _guardianController.add(guardians);
+      }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return StreamBuilder(
-        stream: fetchGuardians(context, page: _currentPage, limit: rowsPerPage)
-            .asStream(),
+        stream:_guardianController.stream,
         builder: (context, snapshot) {
           var guardians = snapshot.data;
           guardianData = guardians?.results ?? [];

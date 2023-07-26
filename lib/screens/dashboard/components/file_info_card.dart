@@ -27,7 +27,7 @@ class FileInfoCard extends StatelessWidget {
                   child: ListView.separated(
                     itemBuilder: (context, index) => ListTile(
                       onTap: () {
-                        print("Stream ${info.classStreams[index].streamName}");
+                       
                         Navigator.pop(context);
                         showDialog(
                           context: context,
@@ -38,8 +38,8 @@ class FileInfoCard extends StatelessWidget {
                           ),
                         );
                       },
-                      leading:
-                          SvgPicture.asset("assets/vectors/class_room.svg"),
+                      // leading:
+                      //     SvgPicture.asset("assets/vectors/groups.svg"),
                       title: Text(
                         info.classStreams[index].streamName,
                         style: TextStyles(context).getRegularStyle(),

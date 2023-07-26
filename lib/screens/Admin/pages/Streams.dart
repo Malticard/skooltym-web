@@ -10,33 +10,68 @@ class Streams extends StatefulWidget {
 }
 
 class _StreamsState extends State<Streams> {
-  @override
-  void initState() {
-    initStreams();
-    super.initState();
-  }
-
   List<String> staffs = ["Student Name", "Class", "Gender", "Actions"];
 
   int currentStep = 0;
   final streamErrorController = TextEditingController();
-  void initStreams() async {
-    var stream = Provider.of<StreamsController>(context, listen: false);
-    await stream.getStreams(context.read<SchoolController>().state['school']);
+ 
+  // stream controller
+  StreamController<List<StreamModel>> _streamController =
+      StreamController<List<StreamModel>>();
+  Timer? timer;
+  @override
+  void initState() {
+    super.initState();
+    fetchRealTimeData();
   }
+
+  @override
+  void dispose() {
+    if (_streamController.hasListener) {
+      _streamController.close();
+    }
+    timer?.cancel();
+    super.dispose();
+  }
+
+  void fetchRealTimeData() async {
+    try {
+      // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+        var streams = await fetchStreams(
+            context.read<SchoolController>().state['school']);
+        _streamController.add(streams);
+      }
+      // Listen to the stream and update the UI
+      Timer.periodic(Duration(seconds: 3), (timer) async {
+        this.timer = timer;
+        // Add a check to see if the widget is still mounted before updating the state
+        if (mounted) {
+          var streams = await fetchStreams(
+              context.read<SchoolController>().state['school']);
+          _streamController.add(streams);
+        }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
 
   //text controllers
   @override
   Widget build(BuildContext context) {
-    initStreams();
+
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
         SizedBox(
           width: size.width,
           height: size.width / 2.39,
-          child: Consumer<StreamsController>(
-              builder: (context, controller, widget) {
+          child: StreamBuilder(
+            stream: _streamController.stream,
+              builder: (context, snapshot) {
+                var streams = snapshot.data;
             return CustomDataTable(
               loaderText: "Streams data",
               header: Row(
@@ -83,7 +118,7 @@ class _StreamsState extends State<Streams> {
                           );
                   }),
               source: StreamDataSource(
-                  context: context, streamModel: controller.streams),
+                  context: context, streamModel: streams ?? []),
             );
           }),
         ),

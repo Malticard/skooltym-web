@@ -45,7 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(height: defaultPadding),
           // ====== end of header section ======
-          Expanded(
+          SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(
                   top: size.width * 0.011,
@@ -80,9 +80,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             return Expanded(
                               flex: 5,
                               child: SizedBox(
-                                width: MediaQuery.of(context).size.width / 2,
+                                width: MediaQuery.of(context).size.width,
                                 height: Responsive.isDesktop(context)
-                                    ? MediaQuery.of(context).size.width / 2.2
+                                    ? MediaQuery.of(context).size.width / 2
                                     : MediaQuery.of(context).size.height / 1.2,
                                 child: child,
                               ),
@@ -96,6 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               // ====== end of body section ======
             ),
           ),
+        
         ],
       ),
     );

@@ -65,7 +65,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
   _handleImageUpload(int a) async {
     FilePicker.platform.pickFiles(
       dialogTitle: "${widget.formFields[a]['title']}",
-      type: FileType.image,
+      type: FileType.media,
       withReadStream: true,
       allowedExtensions: ['jpg', 'png,', 'jpeg'],
     ).then((value) {
@@ -120,7 +120,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
   Object drawImage(var url) {
     if (url.isEmpty) {
       return widget.initialPic != null
-          ? MemoryImage(processImage(widget.initialPic!))
+          ? NetworkImage(AppUrls.liveImages+ widget.initialPic!)
           : const AssetImage("assets/icons/001-profile.png");
     }
     return MemoryImage(url);

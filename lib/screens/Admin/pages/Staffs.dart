@@ -20,6 +20,47 @@ class _StaffViewState extends State<StaffView> {
     "Gender",
     "Actions"
   ];
+  // stream controller
+  StreamController<StaffModel> _staffController =
+      StreamController<StaffModel>();
+      Timer? timer;
+  @override
+  void initState() {
+    super.initState();
+    fetchStudentsRealTimeData();
+  }
+
+  @override
+  void dispose() {
+     if (_staffController.hasListener) {
+      _staffController.close();
+    }
+    timer?.cancel();
+    super.dispose();
+    
+  }
+
+  void fetchStudentsRealTimeData() async {
+    try {
+       // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+          var staff = await fetchStaffs(context, page: _currentPage, limit: rowsPerPage);
+        _staffController.add(staff);
+      }
+      // Listen to the stream and update the UI
+      
+    Timer.periodic(Duration(seconds: 3), (timer) async {
+       this.timer = timer;
+               // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+        var staffs = await fetchStaffs(context, page: _currentPage, limit: rowsPerPage);
+        _staffController.add(staffs);
+      }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +70,7 @@ class _StaffViewState extends State<StaffView> {
         SizedBox(
           height: size.width / 2.39,
           child: StreamBuilder(
-            stream: fetchStaffs(context, page: _currentPage, limit: rowsPerPage)
-                .asStream(),
+            stream:_staffController.stream,
             builder: (context, snapshot) {
               var staffs = snapshot.data;
               var staffData = staffs?.results ?? [];

@@ -25,7 +25,8 @@ class CustomDataTable extends StatefulWidget {
     this.asyncTable = false,
     this.onPageChanged,
     this.onRowsPerPageChanged,
-    this.paginatorController,  this.rowsPerPage = 20,
+    this.paginatorController,
+    this.rowsPerPage = 20,
   }) : super(key: key);
 
   @override
@@ -38,28 +39,29 @@ class _CustomDataTableState extends State<CustomDataTable> {
     Size size = MediaQuery.of(context).size;
 
     return SizedBox(
-        width: size.width,
-        height: size.width / 1.4,
-        child: PaginatedDataTable2(
-          controller: widget.paginatorController,
-          onPageChanged: widget.onPageChanged,
-          onRowsPerPageChanged: widget.onRowsPerPageChanged,
-          header: widget.header,
-          // loading:Loader(text: widget.loaderText),
-          horizontalMargin: 20,
-          columnSpacing: 5, //defaultPadding,
-          dividerThickness:
-              1, // this one will be ignored if [border] is set above
-          minWidth: 900,
-          dataRowHeight: 60,
-          sortColumnIndex: 2,
-          rowsPerPage: widget.rowsPerPage,
-          sortAscending: true,
-          sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
-          sortArrowAnimationDuration: const Duration(milliseconds: 500),
-          columns: widget.columns ?? [],
-          empty: widget.empty,
-          source: widget.source,
-        ));
+      width: size.width,
+      height: size.width / 1.4,
+      child: PaginatedDataTable2(
+        controller: widget.paginatorController,
+        onPageChanged: widget.onPageChanged,
+        onRowsPerPageChanged: widget.onRowsPerPageChanged,
+        header: widget.header,
+        // loading:Loader(text: widget.loaderText),
+        horizontalMargin: 20,
+        columnSpacing: 5, //defaultPadding,
+        dividerThickness:
+            1, // this one will be ignored if [border] is set above
+        minWidth: 900,
+        dataRowHeight: 60,
+        sortColumnIndex: 2,
+        rowsPerPage: widget.rowsPerPage,
+        sortAscending: true,
+        sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
+        sortArrowAnimationDuration: const Duration(milliseconds: 500),
+        columns: widget.columns ?? [],
+        empty: widget.empty,
+        source: widget.source,
+      ),
+    );
   }
 }

@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 import 'package:intl/intl.dart';
+import 'package:web/screens/Admin/pages/Sample.dart';
 import '../models/DropOffModels.dart';
 import '../models/Guardians.dart';
 import '../models/OvertimeModel.dart';
@@ -220,6 +221,9 @@ Widget buildActionButtons(
     BuildContext context, VoidCallback edit, VoidCallback delete) {
   return Row(
     children: [
+       const SizedBox(
+        width: 30,
+      ),
       CommonButton(
         onTap: edit,
         width: 50, height: 50,
@@ -593,9 +597,9 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
 }
 
 // function to process images
-Uint8List processImage(String data) {
-  return Uri.parse(data).data!.contentAsBytes();
-}
-
+Future<List<DashboardModel>> fetchDashBoardData(String school) async {
+     Response response = await Client().get(Uri.parse(AppUrls.dashboard + school));
+   return  (dashboardModelFromJson(response.body));
+  }
 // Initialize the latest timestamp to null
 var latestTimestamp;

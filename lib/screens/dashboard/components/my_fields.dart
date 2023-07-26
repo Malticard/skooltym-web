@@ -15,18 +15,18 @@ class _MyFilesState extends State<MyFiles> {
     final Size _size = MediaQuery.of(context).size;
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: const [
-                SizedBox(
-                  width: 20,
-                ),
-              ],
-            ),
-          ],
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Row(
+        //       children: const [
+        //         SizedBox(
+        //           width: 20,
+        //         ),
+        //       ],
+        //     ),
+        //   ],
+        // ),
         const SizedBox(height: defaultPadding),
         Responsive(
           mobile: FileInfoCardGridView(
@@ -58,29 +58,51 @@ class FileInfoCardGridView extends StatefulWidget {
 }
 
 class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
+  Timer? timer;
+
   @override
   void initState() {
     BlocProvider.of<SchoolController>(context).getSchoolData();
-    BlocProvider.of<DashboardCardsController>(context, listen: false)
-        .fetchUpdates(context);
+    fetchRealTimeData();
     super.initState();
+  }
+  StreamController<List<Map<String,dynamic>>> _dashboardController = StreamController<List<Map<String,dynamic>>>();
+  void fetchRealTimeData() async {
+    if(mounted){
+        var dashboardData = await fetchDashboardMetaData(context);
+        _dashboardController.add(dashboardData);
+
+    }
+
+        // query database every after 4 seconds
+        Timer.periodic(Duration(seconds: 4), (timer) async { 
+          this.timer = timer;
+          if(mounted){
+              var dashboardData = await fetchDashboardMetaData(context);
+        _dashboardController.add(dashboardData);
+
+          }
+        });
+  }
+
+  @override
+  void dispose() { 
+    super.dispose();
+    timer?.cancel();
+    if(_dashboardController.hasListener){
+      _dashboardController.close();
+    }
   }
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<SchoolController>(context).getSchoolData();
     
-    return FutureBuilder(
-        future: Future.delayed(const Duration(seconds: 1)),
-        builder: (context, das) {
-          return das.connectionState == ConnectionState.waiting
-              ? const Center(
-                  child: Loader(
-                    text: "Dashboard cards..",
-                  ),
-                )
-              : BlocBuilder<DashboardCardsController, List<Map<String,dynamic>>>(
-                  builder: (context, cards) {
-                    return GridView.builder(
+    return 
+            StreamBuilder(
+              stream:_dashboardController.stream,
+                  builder: (context, snapshot) {
+                    var cards = snapshot.data ?? [];
+                    return !snapshot.hasData ? Center(child: Loader(text: "Dashboard data",),): GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: cards.length,
@@ -100,6 +122,5 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
                     );
                   },
                 );
-        });
   }
 }

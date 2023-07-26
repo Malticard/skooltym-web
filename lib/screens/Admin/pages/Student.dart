@@ -10,13 +10,68 @@ class ViewStudents extends StatefulWidget {
   State<ViewStudents> createState() => _ViewStudentsState();
 }
 
-class _ViewStudentsState extends State<ViewStudents>{
-
-  List<String> staffs = ["Student Name", "Class", "Gender", "Actions"];
+class _ViewStudentsState extends State<ViewStudents> {
+  List<String> staffs = [
+    "Student's Image",
+    "Student Name",
+    "Class",
+    "Gender",
+    "Actions"
+  ];
   List<Student> studentData = [];
   int _currentPage = 1;
+  Timer? timer;
   int rowsPerPage = 20;
   final PaginatorController _controller = PaginatorController();
+  // stream controller
+  StreamController<StudentModel> _studentController =
+      StreamController<StudentModel>();
+  @override
+  void initState() {
+    super.initState();
+    fetchStudentsRealTimeData();
+  }
+
+  @override
+  void dispose() {
+     if (_studentController.hasListener) {
+      _studentController.close();
+    }
+    timer?.cancel();
+    super.dispose();
+    
+  }
+
+  void fetchStudentsRealTimeData() async {
+    try {
+      // Fetch the initial data from the server
+    
+       // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+          var students = await fetchStudents(
+          context.read<SchoolController>().state['school'],
+          page: _currentPage,
+          limit: rowsPerPage);
+        _studentController.add(students);
+      }
+      // Listen to the stream and update the UI
+      
+    Timer.periodic(Duration(seconds: 3), (timer) async {
+       this.timer = timer;
+               // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+        var students = await fetchStudents(
+            context.read<SchoolController>().state['school'],
+            page: _currentPage,
+            limit: rowsPerPage);
+        _studentController.add(students);
+      }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -26,11 +81,7 @@ class _ViewStudentsState extends State<ViewStudents>{
         SizedBox(
           height: size.width / 2.39,
           child: StreamBuilder(
-              stream: fetchStudents(
-                      context.read<SchoolController>().state['school'],
-                      page: _currentPage,
-                      limit: rowsPerPage)
-                  .asStream(),
+              stream: _studentController.stream,
               builder: (context, snapshot) {
                 var students = snapshot.data;
                 var studentData = students?.results ?? [];
@@ -120,20 +171,6 @@ class _ViewStudentsState extends State<ViewStudents>{
                       ),
                     ),
                   ),
-                  // List.generate(
-                  //   context.watch<MainController>().sStudent.isEmpty
-                  //       ? context.watch<MainController>().students.length
-                  //       : context.watch<MainController>().sStudent.length,
-                  //   (index) => _dataRow(
-                  //       context.watch<MainController>().sStudent.isEmpty
-                  //           ? context
-                  //               .watch<MainController>()
-                  //               .students[index]
-                  //           : context
-                  //               .watch<MainController>()
-                  //               .sStudent[index],
-                  //       index),
-                  // ),
                 );
               }),
         ),

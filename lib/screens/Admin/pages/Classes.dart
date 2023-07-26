@@ -10,17 +10,50 @@ class Classes extends StatefulWidget {
 }
 
 class _ClassesState extends State<Classes> {
+  // stream controller
+  StreamController<List<ClassModel>> _classController =
+      StreamController<List<ClassModel>>();
+  Timer? timer;
   @override
   void initState() {
-    initClassController();
     super.initState();
+    fetchStudentsRealTimeData();
   }
+  @override
+  void dispose() {
+    if (_classController.hasListener) {
+      _classController.close();
+    }
+    timer?.cancel();
+    super.dispose();
+  }
+  void fetchStudentsRealTimeData() async {
+    Response response = await Client().get(
+      Uri.parse(
+        AppUrls.getClasses + context.read<SchoolController>().state['school'],
+      ),
+    );
+    try {
+      // Add a check to see if the widget is still mounted before updating the state
+      if (mounted) {
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          _classController.add(classModelFromJson(response.body));
+        }
+      }
+      // Listen to the stream and update the UI
 
-  // late List<TextEditingController> _ctrl;
-  void initClassController() {
-    var classController = Provider.of<ClassController>(context, listen: false);
-    classController
-        .getClasses(context.read<SchoolController>().state['school']);
+      Timer.periodic(Duration(seconds: 3), (timer) async {
+        this.timer = timer;
+        // Add a check to see if the widget is still mounted before updating the state
+        if (mounted) {
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            _classController.add(classModelFromJson(response.body));
+          }
+        }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   List<String> staffs = ["Student Name", "Class", "Gender", "Actions"];
@@ -35,8 +68,10 @@ class _ClassesState extends State<Classes> {
         SizedBox(
           // width: size.width,
           height: size.width / 2.39,
-          child: Consumer<ClassController>(
-            builder: (context, controller, widget) {
+          child: StreamBuilder(
+            stream: _classController.stream,
+            builder: (context, snapshot) {
+              var controller = snapshot.data ?? [];
               return CustomDataTable(
                 header: Row(
                   children: [
@@ -72,15 +107,17 @@ class _ClassesState extends State<Classes> {
                   ),
                 ],
                 empty: FutureBuilder(
-                future:fetchClasses(context.read<SchoolController>().state['school']),
-                builder: (context, snapshot) {
-                  return snapshot.connectionState == ConnectionState.waiting? const Loader(text: "Classes data"): const Center(
-                    child: Text("No Classes added.."),
-                  );
-                }
-              ),
+                    future: fetchClasses(
+                        context.read<SchoolController>().state['school']),
+                    builder: (context, snapshot) {
+                      return snapshot.connectionState == ConnectionState.waiting
+                          ? const Loader(text: "Classes data")
+                          : const Center(
+                              child: Text("No Classes added.."),
+                            );
+                    }),
                 source: ClassDataSource(
-                  classModel: controller.classes,
+                  classModel: controller,
                   context: context,
                 ),
               );

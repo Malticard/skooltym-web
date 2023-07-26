@@ -42,17 +42,14 @@ class StudentsDataSource extends DataTableSource {
     return DataRow2.byIndex(
       index: index,
       cells: [
-        DataCell(Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: FutureImage(
-                future: fetchAndDisplayImage(studentData.studentProfilePic),
-              ),
-            ),
-            Text("${studentData.studentFname} ${studentData.studentLname}"),
-          ],
-        )),
+        DataCell(
+          FutureImage(
+            future: fetchAndDisplayImage(studentData.studentProfilePic),
+          ),
+        ),
+        DataCell(
+          Text("${studentData.studentFname} ${studentData.studentLname}"),
+        ),
         DataCell(Text(studentData.resultClass.className)),
         DataCell(Text(studentData.studentGender)),
         DataCell(
@@ -359,20 +356,12 @@ class ReportsDataSource extends DataTableSource {
         DataCell(
           Row(
             children: [
-              // Image.network(
-              //   AppUrls.liveImages + paymentData.student.studentProfilePic,
-              //   height: 33,
-              //   width: 33,
-              // ),
               Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: MemoryImage(
-                    processImage(paymentData.student.studentProfilePic),
-                  ),
-                ),
-              ),
+                  padding: const EdgeInsets.all(10.0),
+                  child: FutureImage(
+                    future: fetchAndDisplayImage(
+                        paymentData.student.studentProfilePic),
+                  )),
               Padding(
                 padding: const EdgeInsets.all(0),
                 child: Text(paymentData.student.username,
@@ -460,7 +449,8 @@ class DropOffDataSource extends DataTableSource {
             "${dropOffData.authorizedBy.staffFname} ${dropOffData.authorizedBy.staffLname}")),
         DataCell(
           Text(formatDate(dropOffData.dropOffTime)),
-        ), DataCell(
+        ),
+        DataCell(
           Text(formatDateTime(dropOffData.dropOffTime)),
         ),
       ],
