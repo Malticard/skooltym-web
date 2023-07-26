@@ -440,32 +440,18 @@ class DropOffDataSource extends DataTableSource {
       index: index,
       cells: [
         DataCell(
-          Row(
-            children: [
-              // Padding(
-              //   padding: const EdgeInsets.all(5.0),
-              //   child: Image.network(
-              //     AppUrls.liveImages +
-              //         (dropOffData.studentName.studentProfilePic),
-              //     height: 30,
-              //     width: 30,
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: CircleAvatar(
-              //     radius: 24,
-              //     backgroundImage: MemoryImage(
-              //       processImage(dropOffData.studentName.studentProfilePic),
-              //     ),
-              //   ),
-              // ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(
-                    "${dropOffData.studentName.studentFname} ${dropOffData.studentName.studentLname}"),
-              ),
-            ],
+          Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: FutureImage(
+                future: fetchAndDisplayImage(dropOffData.studentName
+                    .studentProfilePic), // dropOffData.studentName.studentProfilePic
+              )),
+        ),
+        DataCell(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+            child: Text(
+                "${dropOffData.studentName.studentFname} ${dropOffData.studentName.studentLname}"),
           ),
         ),
         DataCell(Text(
@@ -473,6 +459,8 @@ class DropOffDataSource extends DataTableSource {
         DataCell(Text(
             "${dropOffData.authorizedBy.staffFname} ${dropOffData.authorizedBy.staffLname}")),
         DataCell(
+          Text(formatDate(dropOffData.dropOffTime)),
+        ), DataCell(
           Text(formatDateTime(dropOffData.dropOffTime)),
         ),
       ],

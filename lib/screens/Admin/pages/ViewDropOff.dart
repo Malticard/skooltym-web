@@ -54,15 +54,16 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
                   Expanded(
                     child: SearchField(
                       onChanged: (value) {
-                        setState(() {
-                          
-                        });
+                        setState(() {});
                       },
                     ),
                   ),
               ],
             ),
             columns: const [
+              DataColumn(
+                label: Text("Student Profile"),
+              ),
               DataColumn(
                 label: Text("Student Name"),
               ),
@@ -73,6 +74,8 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
                 label: Text("Cleared by"),
               ),
               DataColumn(
+                label: Text("Date"),
+              ),  DataColumn(
                 label: Text("Time Of DropOff"),
               ),
             ],

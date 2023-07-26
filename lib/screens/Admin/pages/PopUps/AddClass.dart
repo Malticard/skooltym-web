@@ -63,11 +63,14 @@ class _AddClassState extends State<AddClass> {
                   return CommonMenuWidget(
                     // fieldColor: Colors.transparent,
                     onChange: (v) {
-                      setState(() {
+                      if (v!= null && v.isNotEmpty) {
+                        setState(() {
                         _selectedStreams = json
                             .decode(v)
                             .join(","); // [jjjjk].join(",") => j,j,j,j
                       });
+                      }
+                      
                     },
                     hint: "Attach streams",
                     padding: const EdgeInsets.only(
