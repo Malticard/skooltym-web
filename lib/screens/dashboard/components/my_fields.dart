@@ -79,8 +79,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
           this.timer = timer;
           if(mounted){
               var dashboardData = await fetchDashboardMetaData(context);
-        _dashboardController.add(dashboardData);
-
+            _dashboardController.add(dashboardData);
           }
         });
   }

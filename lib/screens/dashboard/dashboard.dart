@@ -19,7 +19,7 @@ class _DashboardState extends State<Dashboard> {
       StreamController<List<DashboardModel>>();
 // Polling data in realtime
   Timer? timer;
-  pollData() async {
+ void pollData() async {
     if (mounted) {
       var dashData = await fetchDashBoardData(
           context.read<SchoolController>().state['school']);
@@ -86,7 +86,7 @@ class _DashboardState extends State<Dashboard> {
                                     childAspectRatio: 1,
                                   ),
                                   itemBuilder: (context, index) =>
-                                      FileInfoCard(info: dashClasses[index]),
+                                      FileInfoCard(info: dashClasses[index], classId: index,),
                                 ),
                               );
                       },

@@ -1,3 +1,5 @@
+import 'package:web/screens/dashboard/popups/UpdateStudentDash.dart';
+
 import '../../../models/DropOffModels.dart';
 import '../../../models/Guardians.dart';
 import '../../../models/StudentModel.dart';
@@ -62,6 +64,91 @@ class StudentsDataSource extends DataTableSource {
                       width: MediaQuery.of(context).size.width / 3.5,
                       height: MediaQuery.of(context).size.width / 1.3,
                       child: UpdateStudent(studentModel: studentData),
+                    ),
+                  );
+                });
+          }, () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return CommonDelete(
+                    title:
+                        '${studentData.studentFname} ${studentData.studentLname}',
+                    url: AppUrls.deleteStudent + studentData.id);
+              },
+            );
+          }),
+        ),
+      ],
+    );
+  }
+}
+
+class StudentsDashboardDataSource extends DataTableSource {
+  final List<ClassStudent> studentModel;
+  final BuildContext context;
+  final String studentClass;
+  final String studentStream;
+  final PaginatorController? paginatorController;
+  final int totalDocuments;
+  final int currentPage;
+  StudentsDashboardDataSource(
+      {this.paginatorController,
+      required this.studentClass,
+      required this.studentStream,
+      required this.totalDocuments,
+      required this.currentPage,
+      required this.studentModel,
+      required this.context});
+
+  @override
+  int get rowCount => totalDocuments;
+  @override
+  int get selectedRowCount => 0;
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  DataRow? getRow(int index) {
+    final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
+    final int dataIndex = index % paginatorController!.rowsPerPage;
+    final int dataLength = studentModel.length;
+
+    if (pageIndex * paginatorController!.rowsPerPage + dataIndex >=
+        dataLength) {
+      return null;
+    }
+
+    ClassStudent studentData =
+        studentModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
+
+    return DataRow2.byIndex(
+      index: index,
+      cells: [
+        DataCell(
+          FutureImage(
+            future: fetchAndDisplayImage(studentData.studentProfilePic),
+          ),
+        ),
+        DataCell(
+          Text("${studentData.studentFname} ${studentData.studentLname}"),
+        ),
+        DataCell(Text(studentClass)),
+        DataCell(Text(studentData.studentGender)),
+        DataCell(
+          buildActionButtons(context, () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 3.5,
+                      height: MediaQuery.of(context).size.width / 1.3,
+                      child: UpdateStudentDash(
+                        studentModel: studentData,
+                        className: studentClass,
+                      ),
                     ),
                   );
                 });

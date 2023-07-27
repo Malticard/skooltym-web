@@ -4,10 +4,11 @@ class FileInfoCard extends StatelessWidget {
   const FileInfoCard({
     Key? key,
     required this.info,
+    required this.classId,
   }) : super(key: key);
 
   final DashboardModel info;
-
+  final int classId;
   @override
   Widget build(BuildContext context) {
     return TapEffect(
@@ -27,13 +28,13 @@ class FileInfoCard extends StatelessWidget {
                   child: ListView.separated(
                     itemBuilder: (context, index) => ListTile(
                       onTap: () {
-                       
                         Navigator.pop(context);
                         showDialog(
                           context: context,
                           builder: (context) => Dialog(
                             child: StudentsPopUps(
-                              stream: info.classStreams[index].streamName,
+                              id: index,
+                              classId: classId, className: info.className, streamName: info.classStreams[index].streamName,
                             ),
                           ),
                         );

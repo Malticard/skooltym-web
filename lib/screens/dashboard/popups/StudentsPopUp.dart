@@ -4,69 +4,65 @@ import '../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 class StudentsPopUps extends StatefulWidget {
-  final String stream;
-  const StudentsPopUps({super.key, required this.stream});
+
+final int classId;
+final int id;
+final String className;
+final String streamName;
+  const StudentsPopUps({super.key, required this.id, required this.className, required this.streamName, required this.classId,});
+
 
   @override
   State<StudentsPopUps> createState() => _StudentsPopUpsState();
 }
 
 class _StudentsPopUpsState extends State<StudentsPopUps> {
-  @override
-  void initState() {
-    BlocProvider.of<FetchStudentsController>(context)
-        .getStudents(context.read<SchoolController>().state['school']);
-fetchStudentsRealTimeData();
-    super.initState();
-  }
-
-
-  final PaginatorController _controller = PaginatorController();
-  List<String> staffs = ["Student's Image","Student Name", "Class", "Gender", "Actions"];
   List<Student> studentData = [];
   int _currentPage = 1;
   int rowsPerPage = 20;
-    // stream controller
-  StreamController<StudentModel> _studentController =
-      StreamController<StudentModel>();
-      Timer? timer;
+  Timer? timer;
+  StreamController<List<DashboardModel>> _dashDataController =
+      StreamController<List<DashboardModel>>();
   @override
-  void dispose() {
-     if (_studentController.hasListener) {
-      _studentController.close();
-    }
-    timer?.cancel();
-    super.dispose();
-    
+  void initState() {
+    context.read<SchoolController>().getSchoolData();
+    pollData();
+    super.initState();
   }
 
-  void fetchStudentsRealTimeData() async {
-    try {
-      // Fetch the initial data from the server
-    
-       // Add a check to see if the widget is still mounted before updating the state
+  final PaginatorController _controller = PaginatorController();
+  List<String> staffs = [
+    "Student's Image",
+    "Student Name",
+    "Class",
+    "Gender",
+    "Actions"
+  ];
+
+// Polling data in realtime
+
+ void pollData() async {
+    if (mounted) {
+      var dashData = await fetchDashBoardData(
+          context.read<SchoolController>().state['school']);
+      _dashDataController.add(dashData);
+    }
+    // fetch data periodically
+    timer = Timer.periodic(Duration(seconds: 3), (timer) async {
       if (mounted) {
-          var students = await fetchStudents(
-          context.read<SchoolController>().state['school'],
-          page: _currentPage,
-          limit: rowsPerPage);
-        _studentController.add(students);
+        var dashData = await fetchDashBoardData(
+            context.read<SchoolController>().state['school']);
+        _dashDataController.add(dashData);
       }
-      // Listen to the stream and update the UI
-      
-    Timer.periodic(Duration(seconds: 3), (timer) async {
-       this.timer = timer;
-               // Add a check to see if the widget is still mounted before updating the state
-      if (mounted) {
-        var students = await fetchStudents(
-            context.read<SchoolController>().state['school'],
-            page: _currentPage,
-            limit: rowsPerPage);
-        _studentController.add(students);
-      }
-      });
-    } on Exception catch (e) {
-      print(e);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
+    if (_dashDataController.hasListener) {
+      _dashDataController.close();
     }
   }
 
@@ -79,11 +75,11 @@ fetchStudentsRealTimeData();
       child: Stack(
         children: [
           StreamBuilder(
-            stream: _studentController.stream,
+            stream: _dashDataController.stream,
             builder: (context, snapshot) {
-              var students = snapshot.data;
-              var studentData = students?.results ?? [];
-              return CustomDataTable(
+              var dashboard = snapshot.data;
+              var studentData = dashboard?[widget.classId].classStudents ?? [];
+              return snapshot.hasData ? CustomDataTable(
                 paginatorController: _controller,
                 onPageChanged: (page) {
                   setState(() {
@@ -103,14 +99,12 @@ fetchStudentsRealTimeData();
                       if (studentData.isNotEmpty)
                         SizedBox(
                           width: 120,
-                          child: Expanded(
-                            child: SearchField(
-                              onChanged: (value) {
-                                // Provider.of<MainController>(context,
-                                //         listen: false)
-                                //     .searchStudents(value ?? "");
-                              },
-                            ),
+                          child: SearchField(
+                            onChanged: (value) {
+                              // Provider.of<MainController>(context,
+                              //         listen: false)
+                              //     .searchStudents(value ?? "");
+                            },
                           ),
                         ),
                       if (!Responsive.isMobile(context))
@@ -124,7 +118,7 @@ fetchStudentsRealTimeData();
                 ),
                 empty: NoDataWidget(
                   text: "No "
-                      "Students in ${widget.stream} "
+                      "Students in ${dashboard?[widget.classId].classStreams[widget.id].streamName} "
                       "yet...",
                 ),
                 columns: List.generate(
@@ -135,25 +129,22 @@ fetchStudentsRealTimeData();
                     ),
                   ),
                 ),
-                source: StudentsDataSource(
-                    studentModel: studentData
-                        .where((element) =>
-                            element.stream.streamName == widget.stream)
-                        .toList(),
+                source: StudentsDashboardDataSource(
+                  studentClass:widget.className,
+                  studentStream:widget.streamName,
+                    studentModel: studentData,
                     context: context,
                     currentPage: _currentPage,
                     paginatorController: _controller,
-                    totalDocuments: students?.totalDocuments ?? 0),
-              );
+                    totalDocuments: studentData.length),
+              ): Loader(text: "Students in ${widget.streamName}",);
             },
           ),
-          
-             Positioned(
-              bottom: 20,
-              left: 10,
-              child: Text("Available students in stream ${widget.stream}"),
-            ),
-        
+          Positioned(
+            bottom: 20,
+            left: 10,
+            child: Text("Available students in stream ${widget.streamName}"),
+          ),
         ],
       ),
     );

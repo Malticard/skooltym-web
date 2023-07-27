@@ -5,15 +5,16 @@ import 'dart:io';
 import '../../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
-class UpdateStudent extends StatefulWidget {
-  final Student studentModel;
-  const UpdateStudent({super.key, required this.studentModel});
+class UpdateStudentDash extends StatefulWidget {
+  final ClassStudent studentModel;
+  final String className;
+  const UpdateStudentDash({super.key, required this.studentModel, required this.className});
 
   @override
-  State<UpdateStudent> createState() => _UpdateStudentState();
+  State<UpdateStudentDash> createState() => _UpdateStudentDashState();
 }
 
-class _UpdateStudentState extends State<UpdateStudent> {
+class _UpdateStudentDashState extends State<UpdateStudentDash> {
   List<TextEditingController> _formControllers = <TextEditingController>[];
   //  = <Map<String, dynamic>>[];
 
@@ -28,7 +29,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
       TextEditingController(text: ""),
       TextEditingController(text: widget.studentModel.studentGender),
       TextEditingController(
-          text: widget.studentModel.resultClass.className),
+          text: widget.className),
     ];
   }
 
