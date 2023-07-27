@@ -1,7 +1,6 @@
 import '/exports/exports.dart';
 
 class Header extends StatefulWidget {
-  // final GlobalKey<ScaffoldState> scaffoldKey;
   const Header({
     Key? key,
   }) : super(key: key);
@@ -11,49 +10,60 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
+  Map<String, dynamic> schoolData = {};
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<SchoolController>(context).getSchoolData();
+    BlocProvider.of<SchoolController>(context, listen: true).getSchoolData();
 
-    return Row(
-      children: [
-        if (!Responsive.isDesktop(context))
-          IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed:() {
-              // debugPrint("Scaffold state => ${scaffoldKey.currentWidget}");
-            } //context.read<MainController>().controlMenu(scaffoldKey),
-          ),
-        if (!Responsive.isMobile(context))
-          if(context.read<SchoolController>().state['role'] == 'Finance')
-             BlocBuilder<FinanceTitleController, String>(builder: (context, title) {
-            return Text(
-              title,
-              style: TextStyles(context).getTitleStyle(),
-            );
-          }),
-          if(context.read<SchoolController>().state['role'] != 'Finance')
-             BlocBuilder<TitleController, String>(builder: (context, title) {
-            return Text(
-              title,
-              style: TextStyles(context).getTitleStyle(),
-            );
-          }),
-        if (!Responsive.isMobile(context))
-          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-
-        CommonButton(
-          width: 50,
-          buttonTextWidget: Icon(
-            Theme.of(context).brightness == Brightness.light
-                ? Icons.dark_mode
-                : Icons.light_mode,
-            color: Colors.white70,
-          ),
-          onTap: () => context.read<ThemeController>().toggleDarkLightTheme(),
-        ),
-        const ProfileCard()
-      ],
+    return BlocConsumer<SchoolController, Map<String, dynamic>>(
+      listener: (context, state) {
+        setState(() {
+          schoolData = state;
+        });
+      },
+      builder: (context, state) {
+        return Row(
+          children: [
+            if (!Responsive.isDesktop(context))
+              IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () {
+                    // debugPrint("Scaffold state => ${scaffoldKey.currentWidget}");
+                  } //context.read<MainController>().controlMenu(scaffoldKey),
+                  ),
+            if (!Responsive.isMobile(context))
+              if (schoolData['role'] == 'Finance')
+                BlocBuilder<FinanceTitleController, String>(
+                    builder: (context, title) {
+                  return Text(
+                    title,
+                    style: TextStyles(context).getTitleStyle(),
+                  );
+                }),
+            if (schoolData['role'] != 'Finance')
+              BlocBuilder<TitleController, String>(builder: (context, title) {
+                return Text(
+                  title,
+                  style: TextStyles(context).getTitleStyle(),
+                );
+              }),
+            if (!Responsive.isMobile(context))
+              Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+            CommonButton(
+              width: 50,
+              buttonTextWidget: Icon(
+                Theme.of(context).brightness == Brightness.light
+                    ? Icons.dark_mode
+                    : Icons.light_mode,
+                color: Colors.white70,
+              ),
+              onTap: () => BlocProvider.of<ThemeController>(context)
+                  .toggleDarkLightTheme(),
+            ),
+            const ProfileCard()
+          ],
+        );
+      },
     );
   }
 }
@@ -68,73 +78,77 @@ class ProfileCard extends StatefulWidget {
 }
 
 class _ProfileCardState extends State<ProfileCard> {
-  @override
-  void initState() { 
-    BlocProvider.of<SchoolController>(context).getSchoolData();
-    super.initState();
-  }
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    BlocProvider.of<SchoolController>(context).getSchoolData();
-  }
+  Map<String, dynamic> schoolData = {};
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<SchoolController>(context).getSchoolData();
-    return Container(
-        margin: const EdgeInsets.only(left: defaultPadding),
-        padding: const EdgeInsets.symmetric(
-          horizontal: defaultPadding,
-          vertical: defaultPadding / 2,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          border: Border.all(color: Colors.white10),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: Image.network("${AppUrls.liveImages}${context.read<SchoolController>().state['profile_pic']}",
-                        height: 35, width: 35),
+    BlocProvider.of<SchoolController>(context, listen: true).getSchoolData();
+    return BlocConsumer<SchoolController, Map<String, dynamic>>(
+      listener: (context, state) {
+        setState(() {
+          schoolData = state;
+        });
+      },
+      builder: (context, state) {
+        return Container(
+            margin: const EdgeInsets.only(left: defaultPadding),
+            padding: const EdgeInsets.symmetric(
+              horizontal: defaultPadding,
+              vertical: defaultPadding / 2,
             ),
-            if (!Responsive.isMobile(context))
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                child: Text(
-                    "${context.read<SchoolController>().state['fname']} ${context.read<SchoolController>().state['lname']}"),
-              ),
-            PopupMenuButton(
-              icon: const Icon(Icons.keyboard_arrow_down),
-              itemBuilder: (BuildContext context) {
-                return List.generate(
-                  StaffPopUpOptions.options.length,
-                  (index) => PopupMenuItem(
-                      child: ListTile(
-                    leading: Icon(StaffPopUpOptions.options[index].icon),
-                    title: Text(StaffPopUpOptions.options[index].title!),
-                    onTap: () {
-                      StaffPopUpOptions.options[index].title == 'Logout'
-                          ? Routes.logout(context)
-                          : context
-                              .read<WidgetController>()
-                              .pushWidget(const AdminProfile());
-                      Navigator.pop(context);
-                    },
-                  )),
-                );
-              },
+            decoration: BoxDecoration(
+              color: Theme.of(context).canvasColor,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.white10),
             ),
-          ],
-        ));
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Image.network(
+                      "${AppUrls.liveImages}${schoolData['profile_pic']}",
+                      height: 35,
+                      width: 35),
+                ),
+                if (!Responsive.isMobile(context))
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: defaultPadding / 2),
+                    child:
+                        Text("${schoolData['fname']} ${schoolData['lname']}"),
+                  ),
+                PopupMenuButton(
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  itemBuilder: (BuildContext context) {
+                    return List.generate(
+                      StaffPopUpOptions.options.length,
+                      (index) => PopupMenuItem(
+                          child: ListTile(
+                        leading: Icon(StaffPopUpOptions.options[index].icon),
+                        title: Text(StaffPopUpOptions.options[index].title!),
+                        onTap: () {
+                          StaffPopUpOptions.options[index].title == 'Logout'
+                              ? Routes.logout(context)
+                              : context
+                                  .read<WidgetController>()
+                                  .pushWidget(const AdminProfile());
+                          Navigator.pop(context);
+                        },
+                      )),
+                    );
+                  },
+                ),
+              ],
+            ));
+      },
+    );
   }
 }
 
 class SearchField extends StatefulWidget {
   final ValueChanged<String?>? onChanged;
   const SearchField({
-    Key? key,  this.onChanged,
+    Key? key,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -145,7 +159,7 @@ class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      onChanged:widget.onChanged ,
+      onChanged: widget.onChanged,
       decoration: InputDecoration(
         hintText: "Search",
         fillColor: Theme.of(context).canvasColor,

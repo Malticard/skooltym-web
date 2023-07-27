@@ -5,6 +5,7 @@
         "gaurdians",
         "Lname",
         "multiguardian",
-        "multistudent"
+        "multistudent",
+        "prefs"
     ]
 }

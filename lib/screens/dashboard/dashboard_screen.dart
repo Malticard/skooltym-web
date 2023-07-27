@@ -9,17 +9,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  @override
-  void initState() {
-    context.read<SchoolController>().getSchoolData();
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    context.read<SchoolController>().getSchoolData();
-  }
+  Map<String,dynamic> school = {};
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +44,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               // ======= body section =======
               child: BlocConsumer<SchoolController, Map<String, dynamic>>(
                 listener: (context, state) {
-                  // TODO: implement listener
+                  setState(() {
+                    school = state;
+                  });
                 },
-                builder: (context, school) {
+                builder: (context, state) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -96,7 +88,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               // ====== end of body section ======
             ),
           ),
-        
         ],
       ),
     );

@@ -68,7 +68,7 @@ class _UpdateStaffState extends State<UpdateStaff> {
       ]
     },
   ];
-
+ Map<String,dynamic> imageData = {};
   // overall form padding
   EdgeInsets padding =
       const EdgeInsets.only(left: 14, top: 0, right: 14, bottom: 5);
@@ -79,50 +79,59 @@ class _UpdateStaffState extends State<UpdateStaff> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Padding(
-      padding: padding,
-      child: CommonFormFields(
-        initialPic: widget.staff.staffProfilePic,
-        padding: padding,
-        formFields: formFields,
-        numberOfDropDowns: 2,
-        formControllers: _formControllers,
-        buttonText: "Submit Staff Details",
-        errorMsgs: errorFields,
-        onSubmit: () {
-          if (validateEmail(_formControllers[1].text, context) != false) {
-            if (_formControllers[0].text.trim().split(" ")[1] == '') {
-              showMessage(context: context, msg: "Staff last name is required");
-            } else {
-              showProgress(context,msg: "Updating staff in progress");
-              _handleFormUpload(widget.staff.id).then((value) {
-                // debugPrint("response code -> ${value.statusCode}");
-                // debugPrint("Staff data -> ${value.reasonPhrase}");
-                if (value.statusCode == 200 || value.statusCode == 201) {
-                   Routes.popPage(context);
-                  //  bottom msg
+    return BlocConsumer<ImageUploadController, Map<String, dynamic>>(
+      listener: (context, state) {
+       setState(() {
+         imageData = state;
+       });
+      },
+      builder: (context, state) {
+        return Padding(
+          padding: padding,
+          child: CommonFormFields(
+            initialPic: widget.staff.staffProfilePic,
+            padding: padding,
+            formFields: formFields,
+            numberOfDropDowns: 2,
+            formControllers: _formControllers,
+            buttonText: "Submit Staff Details",
+            errorMsgs: errorFields,
+            onSubmit: () {
+              if (validateEmail(_formControllers[1].text, context) != false) {
+                if (_formControllers[0].text.trim().split(" ")[1] == '') {
                   showMessage(
-                    context: context,
-                    type: 'success',
-                    msg: "Updated staff successfully",
-                  );
-                  //  end of bottom msg
+                      context: context, msg: "Staff last name is required");
                 } else {
-                  showProgress(context,msg: "Updating staff in progress");
-                  showMessage(
-                    context: context,
-                    type: 'danger',
-                    msg: "Error ${value.reasonPhrase}",
-                  );
-
+                  showProgress(context, msg: "Updating staff in progress");
+                  _handleFormUpload(widget.staff.id).then((value) {
+                    // debugPrint("response code -> ${value.statusCode}");
+                    // debugPrint("Staff data -> ${value.reasonPhrase}");
+                    if (value.statusCode == 200 || value.statusCode == 201) {
+                      Routes.popPage(context);
+                      //  bottom msg
+                      showMessage(
+                        context: context,
+                        type: 'success',
+                        msg: "Updated staff successfully",
+                      );
+                      //  end of bottom msg
+                    } else {
+                      showProgress(context, msg: "Updating staff in progress");
+                      showMessage(
+                        context: context,
+                        type: 'danger',
+                        msg: "Error ${value.reasonPhrase}",
+                      );
+                    }
+                  }).whenComplete(() {
+                    Routes.popPage(context);
+                  });
                 }
-              }).whenComplete(() {
-                  Routes.popPage(context);
-              });
-            }
-          }
-        },
-      ),
+              }
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -145,17 +154,18 @@ class _UpdateStaffState extends State<UpdateStaff> {
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
-     if (kIsWeb) {
-     request.files.add(MultipartFile(
-        "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
-        filename: context.read<ImageUploadController>().state['name']));
+    if (kIsWeb) {
+      request.files.add(MultipartFile(
+          "image",
+          imageData['image'],
+          imageData['size'],
+          filename: imageData['name']));
     } else {
       if (uri.isNotEmpty) {
-        request.files.add(MultipartFile('image',
-        File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-        filename: uri.split("/").last));
+        request.files.add(MultipartFile(
+            'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
+            filename: uri.split("/").last));
       }
-      
     }
     request.fields['staff_password'] = "qwerty";
     request.fields['staff_key[key]'] = "";

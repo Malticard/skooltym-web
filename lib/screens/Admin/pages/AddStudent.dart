@@ -113,6 +113,7 @@ class _AddStudentState extends State<AddStudent> {
                     showProgress(context, msg: "Adding new student...");
                     _handleStudentRegistration().then(
                       (value) {
+                        print("Response => ${value}");
                         if (value.statusCode == 200) {
                           Routes.popPage(context);
                           showMessage(

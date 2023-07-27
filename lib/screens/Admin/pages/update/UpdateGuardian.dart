@@ -101,7 +101,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
 
     super.initState();
   }
-
+  Map<String,dynamic> imageData = {};
   @override
   void dispose() {
     super.dispose();
@@ -126,35 +126,41 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     return Dialog(
       child: Padding(
         padding: padding,
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width / 3,
-          height: MediaQuery.of(context).size.width / 1.5,
-          child: BlocBuilder<FetchStudentsController, List<Student>>(
-            builder: (context, students) {
-              return CommonFormFields(
-                initialPic: widget.guardianModel.guardianProfilePic,
-                padding: padding,
-                formFields: _formFields,
-                lists:students
-                    .map((e) => e.id)
-                    .toList(),
-                dropdownLists:
-                    students.map((item) {
-                  return "${item.studentFname} ${item.studentLname}";
-                }).toList(),
-                onDropDownValue: (v) {
-                  if (v != null) {
-                    BlocProvider.of<MultiStudentsController>(context)
-                        .setMultiStudents((json.decode(v).join(",")));
-                  }
+        child: BlocConsumer<ImageUploadController, Map<String, dynamic>>(
+          listener: (context, state) {
+            setState(() {
+              imageData = state;
+            });
+          },
+          builder: (context, state) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width / 3,
+              height: MediaQuery.of(context).size.width / 1.5,
+              child: BlocBuilder<FetchStudentsController, List<Student>>(
+                builder: (context, students) {
+                  return CommonFormFields(
+                    initialPic: widget.guardianModel.guardianProfilePic,
+                    padding: padding,
+                    formFields: _formFields,
+                    lists: students.map((e) => e.id).toList(),
+                    dropdownLists: students.map((item) {
+                      return "${item.studentFname} ${item.studentLname}";
+                    }).toList(),
+                    onDropDownValue: (v) {
+                      if (v != null) {
+                        BlocProvider.of<MultiStudentsController>(context)
+                            .setMultiStudents((json.decode(v).join(",")));
+                      }
+                    },
+                    formControllers: _formControllers,
+                    buttonText: "Update Guardian Details",
+                    onSubmit: () => _addGuardian(),
+                    errorMsgs: errorFields,
+                  );
                 },
-                formControllers: _formControllers,
-                buttonText: "Update Guardian Details",
-                onSubmit: () => _addGuardian(),
-                errorMsgs: errorFields,
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -202,9 +208,9 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     if (kIsWeb) {
       request.files.add(MultipartFile(
           "image",
-          context.read<ImageUploadController>().state['image'],
-          context.read<ImageUploadController>().state['size'],
-          filename: context.read<ImageUploadController>().state['name']));
+          imageData['image'],
+          imageData['size'],
+          filename: imageData['name']));
     } else {
       if (uri.isNotEmpty) {
         request.files.add(MultipartFile(

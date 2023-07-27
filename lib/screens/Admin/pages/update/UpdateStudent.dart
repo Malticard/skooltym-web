@@ -27,11 +27,10 @@ class _UpdateStudentState extends State<UpdateStudent> {
       TextEditingController(text: ""),
       TextEditingController(text: ""),
       TextEditingController(text: widget.studentModel.studentGender),
-      TextEditingController(
-          text: widget.studentModel.resultClass.className),
+      TextEditingController(text: widget.studentModel.resultClass.className),
     ];
   }
-
+Map<String, dynamic> imageData = {};
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
@@ -41,8 +40,9 @@ class _UpdateStudentState extends State<UpdateStudent> {
   @override
   Widget build(BuildContext context) {
     List<String> errorFields = List.generate(7, (i) => '');
-      Provider.of<ClassController>(context,listen: true).getClasses(context.read<SchoolController>().state['school']);
-  var streams = Provider.of<StreamsController>(context,listen: true);
+    Provider.of<ClassController>(context, listen: true)
+        .getClasses(context.read<SchoolController>().state['school']);
+    var streams = Provider.of<StreamsController>(context, listen: true);
 // form data
     List<Map<String, dynamic>> formFields = [
       {
@@ -78,7 +78,8 @@ class _UpdateStudentState extends State<UpdateStudent> {
         "hint": "e.g grade 2",
         "data": [
           "Select class",
-          ...Provider.of<ClassController>(context).classes
+          ...Provider.of<ClassController>(context)
+              .classes
               .map((e) => e.className)
               .toList(),
         ],
@@ -89,63 +90,74 @@ class _UpdateStudentState extends State<UpdateStudent> {
         "hint": "e.g North",
         "data": [
           "Select stream",
-          ...streams.streams
-              .map((e) => e.streamName)
-              .toList(),
+          ...streams.streams.map((e) => e.streamName).toList(),
         ],
         'icon': Icons.home_work_outlined
       }
     ];
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Update Student Details",
-              style: TextStyles(context).getRegularStyle().copyWith(fontSize: 19),
-            ),
-          ),
-          CommonFormFields(
-            initialPic: widget.studentModel.studentProfilePic,
-            padding: _padding,
-            formFields: formFields,
-            formControllers: _formControllers,
-            buttonText: "Update Student Details",
-            onSubmit: () {
-              if (true) {
-                showProgress(context, msg: "Updating student details");
-                _handleStudentRegistration().then(
-                  (value) {
-                    if (value.statusCode == 200 || value.statusCode == 201) {
+    return BlocConsumer<ImageUploadController, Map<String,dynamic>>(
+      listener: (context, state) {
+        setState(() {
+          imageData = state;
+        });
+      },
+      builder: (context, state) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Update Student Details",
+                  style: TextStyles(context)
+                      .getRegularStyle()
+                      .copyWith(fontSize: 19),
+                ),
+              ),
+              CommonFormFields(
+                initialPic: widget.studentModel.studentProfilePic,
+                padding: _padding,
+                formFields: formFields,
+                formControllers: _formControllers,
+                buttonText: "Update Student Details",
+                onSubmit: () {
+                  if (true) {
+                    showProgress(context, msg: "Updating student details");
+                    _handleStudentRegistration().then(
+                      (value) {
+                        if (value.statusCode == 200 ||
+                            value.statusCode == 201) {
+                          Routes.popPage(context);
+                          showMessage(
+                            context: context,
+                            type: 'success',
+                            msg: "Student details updated successfully",
+                          );
+                          for (var v in _formControllers) {
+                            v.clear();
+                          }
+                          // showSuccessDialog(
+                          //     _formControllers[0].text.trim(), context);
+                        } else {
+                          showMessage(
+                            msg:
+                                "Failed to update student ${value.reasonPhrase}",
+                            context: context,
+                            type: "danger",
+                          );
+                        }
+                      },
+                    ).whenComplete(() {
                       Routes.popPage(context);
-                      showMessage(
-                        context: context,
-                        type: 'success',
-                        msg: "Student details updated successfully",
-                      );
-                      for (var v in _formControllers) {
-                        v.clear();
-                      }
-                      // showSuccessDialog(
-                      //     _formControllers[0].text.trim(), context);
-                    } else {
-                      showMessage(
-                        msg: "Failed to update student ${value.reasonPhrase}",
-                        context: context,
-                        type: "danger",
-                      );
-                    }
-                  },
-                ).whenComplete(() {
-                  Routes.popPage(context);
-                });
-              }
-            },
-            errorMsgs: errorFields,
+                    });
+                  }
+                },
+                errorMsgs: errorFields,
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -172,9 +184,9 @@ class _UpdateStudentState extends State<UpdateStudent> {
     if (kIsWeb) {
       request.files.add(MultipartFile(
           "image",
-          context.read<ImageUploadController>().state['image'],
-          context.read<ImageUploadController>().state['size'],
-          filename: context.read<ImageUploadController>().state['name']));
+          imageData['image'],
+          imageData['size'],
+          filename: imageData['name']));
     } else {
       if (uri.isNotEmpty) {
         request.files.add(MultipartFile(

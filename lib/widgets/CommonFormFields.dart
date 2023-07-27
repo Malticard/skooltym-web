@@ -2,6 +2,9 @@
 
 // import 'package:image_picker_for_web/image_picker_for_web.dart';
 
+import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_for_web/image_picker_for_web.dart';
+
 import '/exports/exports.dart';
 
 class CommonFormFields extends StatefulWidget {
@@ -47,80 +50,52 @@ class CommonFormFields extends StatefulWidget {
 class _CommonFormFieldsState extends State<CommonFormFields>
     with SingleTickerProviderStateMixin {
   // Error messages
-
+// StreamController<Uint8List> _uploadController = StreamController<Uint8List>();
   List<String?>? dropMsg;
 
   @override
   void initState() {
     // Error messages
-    // _errorMsg = List.generate(widget.formFields.length, (index -1) => '');
     dropMsg = List.generate(widget.formFields.length, (index) => null);
-
     super.initState();
-    // _controller = AnimationController(vsync: this,);
   }
 
   // var _cropController = CropController();
   var _imageBytes;
   _handleImageUpload(int a) async {
-    FilePicker.platform.pickFiles(
-      dialogTitle: "${widget.formFields[a]['title']}",
-      type: FileType.media,
-      withReadStream: true,
-      allowedExtensions: ['jpg', 'png,', 'jpeg'],
-    ).then((value) {
-      // var file = value;
-      if (!kIsWeb) {
+    if (kIsWeb) {
+    PickedFile? picker =  await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    if (picker != null) {
+      var element = await picker.readAsBytes();
+          setState(() {
+            _imageBytes = element;
+          });
+        BlocProvider.of<ImageUploadController>(context).uploadImage({
+          "image": picker.readAsBytes().asStream(),
+          "name": widget.formControllers[0].text,
+          "size": picker.readAsBytes().asStream().length,
+        });
+    }
+
+    } else {
+      FilePicker.platform.pickFiles(
+        dialogTitle: "${widget.formFields[a]['title']}",
+        type: FileType.custom,
+        withReadStream: true,
+        allowedExtensions: ['jpg', 'png,', 'jpeg', 'gif'],
+      ).then((value) {
         setState(() {
           _imageBytes = File(value!.files.first.path!).readAsBytesSync();
           widget.formControllers[a].text = value.files.first.path!;
         });
-      } else {
-        // ImagePickerPlugin().getFiles(accept: 'image').then((value) {
-        //   value.forEach((element) {
-        //     setState(() {
-        //       _imageBytes = element.readAsBytes();
-        //     });
-        //     context.read<ImageUploadController>().uploadImage({
-        //       "image": element.readAsBytes().asStream(),
-        //       "name": element.name,
-        //       "size": element.length()
-        //     });
-        //   });
-        // });
-
-        //    setState(() {
-        //   _imageBytes = File(file!.files.first.path!).readAsBytesSync();
-        // });
-      }
-
-      // showDialog(
-      //   context: context,
-      //   builder: (context) => Dialog(
-      //     child: SizedBox(
-      //       // width: MediaQuery.of(context).size.width / 4,
-      //       // height: MediaQuery.of(context).size.width / 4,
-      //       child: CropSample(
-      //         image: File(file!.files.first.path!).readAsBytesSync(),
-      //         controller: _cropController,
-      //         onCrop: (v) {
-      //           setState(() {
-      //             _imageBytes = v;
-      //           });
-      //           //
-      //         },
-      //       ),
-      //     ),
-      //   ),
-      // );
-    });
-    // widget.formControllers[a].text = = file!.files.first.pat
+      });
+    }
   }
 
   Object drawImage(var url) {
     if (url.isEmpty) {
       return widget.initialPic != null
-          ? NetworkImage(AppUrls.liveImages+ widget.initialPic!)
+          ? NetworkImage(AppUrls.liveImages + widget.initialPic!)
           : const AssetImage("assets/icons/001-profile.png");
     }
     return MemoryImage(url);
