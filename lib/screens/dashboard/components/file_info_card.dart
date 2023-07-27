@@ -96,7 +96,7 @@ class FileInfoCard extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: SvgPicture.asset(
-                      "assets/vectors/class_r.svg",
+                      "assets/vectors/groups.svg",
                       // color: Colors.red,
                     ),
                   ),

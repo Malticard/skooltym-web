@@ -19,7 +19,7 @@ class _DashboardState extends State<Dashboard> {
       StreamController<List<DashboardModel>>();
 // Polling data in realtime
   Timer? timer;
- void pollData() async {
+  void pollData() async {
     if (mounted) {
       var dashData = await fetchDashBoardData(
           context.read<SchoolController>().state['school']);
@@ -52,7 +52,7 @@ class _DashboardState extends State<Dashboard> {
         const MyFiles(),
         const SizedBox(height: defaultPadding),
         SizedBox(
-          height: MediaQuery.of(context).size.height / 2,
+          height: MediaQuery.of(context).size.height * 0.56,
           child: BlocBuilder<SchoolController, Map<String, dynamic>>(
             builder: (context, school) {
               return Column(
@@ -67,29 +67,39 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ),
                   if (school['role'] == 'Admin')
-                    StreamBuilder(
-                      stream: _dashDataController.stream,
-                      builder: (context, snapshot) {
-                        var dashClasses = snapshot.data ?? [];
-                        return !snapshot.hasData
-                            ? Loader(text: "Classes data..")
-                            : SizedBox(
-                                height: MediaQuery.of(context).size.width,
-                                child: GridView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: dashClasses.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4,
-                                    crossAxisSpacing: defaultPadding,
-                                    mainAxisSpacing: 20,
-                                    childAspectRatio: 1,
+                    Expanded(
+                      child: StreamBuilder(
+                        stream: _dashDataController.stream,
+                        builder: (context, snapshot) {
+                          var dashClasses = snapshot.data ?? [];
+                          return !snapshot.hasData
+                              ? Loader(text: "Classes data..")
+                              : SingleChildScrollView(
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height,
+                                    child: GridView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: dashClasses.length,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount:
+                                            Responsive.isMobile(context)
+                                                ? 2
+                                                : 4,
+                                        crossAxisSpacing: defaultPadding,
+                                        mainAxisSpacing: 20,
+                                        childAspectRatio: 1,
+                                      ),
+                                      itemBuilder: (context, index) =>
+                                          FileInfoCard(
+                                        info: dashClasses[index],
+                                        classId: index,
+                                      ),
+                                    ),
                                   ),
-                                  itemBuilder: (context, index) =>
-                                      FileInfoCard(info: dashClasses[index], classId: index,),
-                                ),
-                              );
-                      },
+                                );
+                        },
+                      ),
                     ),
                 ],
               );

@@ -83,12 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   : Colors.white),
                           child: _buildForm(),
                         ),
-                        // Positioned(
-                        //   top: MediaQuery.of(context).size.height * 0.021,
-                        //   left: MediaQuery.of(context).size.height * 0.031,
-                        //   right: MediaQuery.of(context).size.height * 0.031,
-                        //   child: 
-                        // ),
                       ],
                     ),
                   ),
@@ -100,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Expanded(
-                        flex: 5,
+                        flex: 3,
                         child: Column(
                           children: [
                             Padding(
@@ -109,9 +103,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 right: 60,
                               ),
                               child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
+                                width: MediaQuery.of(context).size.width ,
                                 height:
-                                    MediaQuery.of(context).size.height / 1.5,
+                                   MediaQuery.of(context).size.height /2,
                                 child: SvgPicture.asset(
                                   "assets/vectors/mother_child.svg",
                                 ),
@@ -121,47 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: EdgeInsets.only(
+                        flex: 3,
+                        child: Container(
+                          margin: EdgeInsets.only(
                               right: size.width / 16,
                               left: size.width / 16,
                               bottom: size.width / 46,
                               top: size.width / 26),
-                          child: Container(
-                            height: size.height * 1.8,
-                            decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(50),
-                                  topRight: Radius.circular(50),
-                                  bottomLeft: Radius.circular(50),
-                                  bottomRight: Radius.circular(50),
-                                ),
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? Colors.black26
-                                    : Colors.white.withOpacity(1)),
-                            child: _buildForm(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                tablet: Padding(
-                  padding: EdgeInsets.only(top: size.width * 0.070),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.03,
-                          bottom: size.height * 0.093,
-                          right: size.width / 17,
-                          left: size.width / 17,
-                        ),
-                        child: Container(
-                          height: size.height * 0.35,
+                          height: size.height * 1.8,
                           decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(50),
@@ -175,6 +136,35 @@ class _LoginScreenState extends State<LoginScreen> {
                                   : Colors.white.withOpacity(1)),
                           child: _buildForm(),
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+                tablet: Padding(
+                  padding: EdgeInsets.only(top: size.width * 0.070),
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    children: [
+                      Container(
+                       margin: EdgeInsets.only(
+                          top: size.height * 0.03,
+                          bottom: size.height * 0.093,
+                          right: size.width / 17,
+                          left: size.width / 17,
+                        ),
+                        height: size.height * 0.35,
+                        decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              topRight: Radius.circular(50),
+                              bottomLeft: Radius.circular(50),
+                              bottomRight: Radius.circular(50),
+                            ),
+                            color: Theme.of(context).brightness ==
+                                    Brightness.dark
+                                ? Colors.black26
+                                : Colors.white.withOpacity(1)),
+                        child: _buildForm(),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
