@@ -92,6 +92,8 @@ class _CommonFormFieldsState extends State<CommonFormFields>
     }
   }
 
+
+
   Object drawImage(var url) {
     if (url.isEmpty) {
       return widget.initialPic != null

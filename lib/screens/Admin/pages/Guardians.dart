@@ -38,7 +38,6 @@ class _ViewGuardiansState extends State<ViewGuardians> {
     }
     timer?.cancel();
     super.dispose();
-    
   }
 
   void _fetchRealTimeData() async {

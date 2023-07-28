@@ -52,7 +52,7 @@ class _DashboardState extends State<Dashboard> {
         const MyFiles(),
         const SizedBox(height: defaultPadding),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.56,
+          height: MediaQuery.of(context).size.height * 0.5,
           child: BlocBuilder<SchoolController, Map<String, dynamic>>(
             builder: (context, school) {
               return Column(
