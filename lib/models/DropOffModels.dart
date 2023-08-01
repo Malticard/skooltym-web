@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final dropOffModel = dropOffModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 DropOffModel dropOffModelFromJson(String str) => DropOffModel.fromJson(json.decode(str));
@@ -29,7 +25,7 @@ class DropOffModel {
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         pageSize: json["pageSize"],
-        results: List<DropOff>.from(json["results"].map((x) => DropOff.fromJson(x))),
+        results: List<DropOff>.from(json["dropoffs"].map((x) => DropOff.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -37,7 +33,7 @@ class DropOffModel {
         "totalPages": totalPages,
         "currentPage": currentPage,
         "pageSize": pageSize,
-        "results": List<dynamic>.from(results.map((x) => x.toJson())),
+        "dropoffs": List<dynamic>.from(results.map((x) => x.toJson())),
     };
 }
 

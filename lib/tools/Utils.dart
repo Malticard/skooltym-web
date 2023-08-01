@@ -33,7 +33,6 @@ loginUser(BuildContext context, String email, String password) async {
       Routes.namedRemovedUntilRoute(
         context,
         data['role'] == 'Admin' ||
-                data['role'] == 'SuperAdmin' ||
                 data['role'] == 'Finance'
             ? Routes.home
             : Routes.login,
@@ -52,8 +51,6 @@ loginUser(BuildContext context, String email, String password) async {
           type: 'danger');
     }
   }).whenComplete(() {});
-  // final prefs = await SharedPreferences.getInstance();
-  // prefs.setString('role', "${context.read<SchoolController>().state['role']}");
 }
 
 // global functions
@@ -66,6 +63,9 @@ Future<String> assignRole(String role) async {
 
 Future<Uint8List?> fetchAndDisplayImage(String imageURL) async {
   Uint8List? processedImageBytes;
+  try{
+
+  
   final response =
       await Client().get(Uri.parse(AppUrls.liveImages + imageURL), headers: {
     "Access-Control-Allow-Origin": "*",
@@ -78,6 +78,11 @@ Future<Uint8List?> fetchAndDisplayImage(String imageURL) async {
     // Display the image
     processedImageBytes = base64Decode(imageBase64);
   }
+} on ClientException catch (e) {
+  debugPrint(e.message);
+} on Exception catch (e) {
+  debugPrint(e.toString());
+}
   return processedImageBytes;
 }
 

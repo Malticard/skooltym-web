@@ -53,9 +53,9 @@ class _ViewGuardiansState extends State<ViewGuardians> {
        this.timer = timer;
                // Add a check to see if the widget is still mounted before updating the state
       if (mounted) {
-        _fetchRealTimeData();
-        // var guardians = await fetchGuardians(context, page: _currentPage, limit: rowsPerPage);
-        // _guardianController.add(guardians);
+        // _fetchRealTimeData();
+        var guardians = await fetchGuardians(context, page: _currentPage, limit: rowsPerPage);
+        _guardianController.add(guardians);
       }
       });
     } on Exception catch (e) {
@@ -71,8 +71,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
         builder: (context, snapshot) {
           var guardians = snapshot.data;
           guardianData = guardians?.results ?? [];
-          return snapshot.hasData
-              ? Stack(
+          return  Stack(
                   children: [
                     SizedBox(
                       width: size.width,
@@ -113,9 +112,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                                   showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return const SingleChildScrollView(
-                                        child: AddGuardian(),
-                                      );
+                                      return AddGuardian();
                                     },
                                   );
                                 },
@@ -135,8 +132,10 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                           ),
                         ),
                         empty: Center(
-                          child: const NoDataWidget(
-                              text: "No guardians registered yet.."),
+                          child: snapshot.hasData ?const NoDataWidget(
+                              text: "No guardians registered yet.."):Loader(
+                  text: "Guardians...",
+                ),
                         ),
                         source: GuardianDataSource(
                           paginatorController: _controller,
@@ -177,10 +176,8 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                       ),
                     )
                   ],
-                )
-              : Loader(
-                  text: "Guardians...",
                 );
+  
         });
   }
 }
