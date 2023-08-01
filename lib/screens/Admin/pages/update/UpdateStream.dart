@@ -15,18 +15,18 @@ class _UpdateStreamState extends State<UpdateStream> {
   late final  TextEditingController _updateStreamController;
   @override
   void initState() {
-   initStreams();
    _updateStreamController = TextEditingController(text: widget.stream);
     super.initState();
   }
-
-  void initStreams(){
-       var  stream = Provider.of<StreamsController>(context);
-       stream.getStreams(context.read<SchoolController>().state['school']);
+@override
+void dispose() {
+    _updateStreamController.dispose();
+  super.dispose();
 }
+
   @override
   Widget build(BuildContext context) {
-    initStreams();
+
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.white

@@ -8,6 +8,5 @@ class StreamsController with ChangeNotifier{
        var s = await fetchStreams(school);
        streams = s.streams;
        notifyListeners();
-     
   }
 }

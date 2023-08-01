@@ -74,8 +74,7 @@ class _StaffViewState extends State<StaffView> {
             builder: (context, snapshot) {
               var staffs = snapshot.data;
               var staffData = staffs?.results ?? [];
-              return snapshot.hasData
-                  ? CustomDataTable(
+              return  CustomDataTable(
                       paginatorController: _controller,
                       onPageChanged: (page) {
                         setState(() {
@@ -131,8 +130,9 @@ class _StaffViewState extends State<StaffView> {
                           ),
                         ),
                       ),
-                      empty: NoDataWidget(
-                          text: "You currently have no staff records"),
+                      empty:snapshot.hasData
+                  ? NoDataWidget(
+                          text: "You currently have no staff records"):Loader(text:"Staff data..."),
                       source: StaffDataSource(
                         staffModel: staffData,
                         context: context,
@@ -140,8 +140,7 @@ class _StaffViewState extends State<StaffView> {
                          paginatorController: _controller,
                         totalDocuments: staffs?.totalDocuments ?? 0,
                       ),
-                    )
-                  : Loader(text: "Staff...");
+                    );
             },
           ),
         ),

@@ -102,13 +102,16 @@ class _ProfileCardState extends State<ProfileCard> {
             ),
             child: Row(
               children: [
+                
                 CircleAvatar(
                   backgroundColor: Colors.transparent,
                   child: FutureBuilder(
-                      future: fetchAndDisplayImage(schoolData['profile_pic']),
-                      builder: (context, payload) => payload.hasData
-                          ? Image.memory(payload.data!)
-                          : CircularProgressIndicator.adaptive()),
+                    future: fetchAndDisplayImage(
+                        schoolData['profile_pic'] ?? "profile.png"),
+                    builder: (context, payload) => payload.hasData
+                        ? Image.memory(payload.data!)
+                        : CircularProgressIndicator.adaptive(),
+                  ),
                 ),
                 if (!Responsive.isMobile(context))
                   Padding(

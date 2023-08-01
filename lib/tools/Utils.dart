@@ -547,13 +547,13 @@ Future<PaymentModel> fetchPayments(String schoolId, {int page = 1, int limit = 5
 
 // fetch dashboard meta data
 Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
-    BuildContext context) async {
+    String schoolId,String role) async {
   // context.read<PaymentController>().getPayments(context);
   var drops =
-      await fetchDropOffs(context.read<SchoolController>().state['school']);
-  var picks =
-      await fetchPickUps(context.read<SchoolController>().state['school']);
-      var payments = await fetchPayments(context.read<SchoolController>().state['school'],limit: 100);
+      await fetchDropOffs(schoolId);
+  // var picks =
+  //     await fetchPickUps(schoolId);
+      var payments = await fetchPayments(schoolId,limit: 100);
   var clearedOvertimes = payments.results
       .where((element) => element.balance == 0)
       .toList();
@@ -571,7 +571,7 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
     },
     {
       "label": "PICK UPS",
-      "value": picks.totalDocuments,
+      "value": 0,//picks.totalDocuments,
       "icon": "assets/icons/009-student.svg",
       'color': const Color.fromARGB(255, 181, 150, 253),
       // "last_updated": "14:45"
@@ -607,7 +607,7 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "last_updated": "14:45"
     },
   ];
-  return context.read<SchoolController>().state['role'] == 'Admin'
+  return role == 'Admin'
       ? dashboardData
       : financeData;
 }

@@ -1,15 +1,10 @@
 import '/exports/exports.dart';
 
-class MyFiles extends StatefulWidget {
+class MyFiles extends StatelessWidget {
   const MyFiles({
     Key? key,
   }) : super(key: key);
 
-  @override
-  State<MyFiles> createState() => _MyFilesState();
-}
-
-class _MyFilesState extends State<MyFiles> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
@@ -58,8 +53,10 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   StreamController<List<Map<String, dynamic>>> _dashboardController =
       StreamController<List<Map<String, dynamic>>>();
   void fetchRealTimeData() async {
+   String schoolId = context.read<SchoolController>().state['school'];
+   String role = context.read<SchoolController>().state['role'];
     if (mounted) {
-      var dashboardData = await fetchDashboardMetaData(context);
+      var dashboardData = await fetchDashboardMetaData(schoolId,role);
       _dashboardController.add(dashboardData);
     }
 
@@ -67,7 +64,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
     Timer.periodic(Duration(seconds: 2), (timer) async {
       this.timer = timer;
       if (mounted) {
-        var dashboardData = await fetchDashboardMetaData(context);
+        var dashboardData = await fetchDashboardMetaData(schoolId,role);
         _dashboardController.add(dashboardData);
       }
     });
@@ -75,11 +72,12 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
 
   @override
   void dispose() {
-    super.dispose();
-    timer?.cancel();
+     timer?.cancel();
     if (_dashboardController.hasListener) {
       _dashboardController.close();
     }
+    super.dispose();
+   
   }
 
   @override
