@@ -74,7 +74,7 @@ class _DashboardState extends State<Dashboard> {
                           var dashClasses = snapshot.data ?? [];
                           return !snapshot.hasData
                               ? Loader(text: "Classes data..")
-                              : SingleChildScrollView(
+                              : snapshot.data!.isEmpty? NoDataWidget(text: "No classes available",): SingleChildScrollView(
                                   child: SizedBox(
                                     height: MediaQuery.of(context).size.height,
                                     child: GridView.builder(

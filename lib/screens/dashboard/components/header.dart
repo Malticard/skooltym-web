@@ -104,10 +104,11 @@ class _ProfileCardState extends State<ProfileCard> {
               children: [
                 CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Image.network(
-                      "${AppUrls.liveImages}${schoolData['profile_pic']}",
-                      height: 35,
-                      width: 35),
+                  child: FutureBuilder(
+                      future: fetchAndDisplayImage(schoolData['profile_pic']),
+                      builder: (context, payload) => payload.hasData
+                          ? Image.memory(payload.data!)
+                          : CircularProgressIndicator.adaptive()),
                 ),
                 if (!Responsive.isMobile(context))
                   Padding(

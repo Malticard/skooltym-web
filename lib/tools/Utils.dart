@@ -596,7 +596,7 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "label": "CLEARED OVERTIME",
       "value": clearedOvertimes.length,
       "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 56, 212, 48),
+      'color': Color.fromARGB(255, 27, 86, 24),
       "last_updated": "14:45"
     },
     {
