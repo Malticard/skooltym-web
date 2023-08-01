@@ -64,16 +64,16 @@ dev_dependencies:
 flutter_native_splash:
   color: "#4c6c7c"
 
-  image: assets/images/app_icon.png
+  image: assets/images/new_splash.png
   web: true
 
-  image_web: assets/images/app_icon.png
+  image_web: assets/images/new_splash.png
   #
   # web_image_mode can be one of the following modes: center, contain, stretch, and cover.
   web_image_mode: center
 
   # android_screen_orientation: sensorLandscape
-  fullscreen: true
+  # fullscreen: true
 
 # end of splash logic
 
