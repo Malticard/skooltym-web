@@ -1,8 +1,11 @@
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+
 import '/exports/exports.dart';
 
 Future<void> main() async {
   // Obtain shared preferences.
-  WidgetsFlutterBinding.ensureInitialized();
+    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer = const Observer();
   var prefs = await SharedPreferences.getInstance();
   runApp(
@@ -80,4 +83,7 @@ Future<void> main() async {
       ),
     ),
   );
+  // whenever your initialization is completed, remove the splash screen:
+    FlutterNativeSplash.remove();
+
 }

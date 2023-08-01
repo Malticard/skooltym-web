@@ -51,6 +51,7 @@ class StorageInfoCard extends StatelessWidget {
           ),
           Text(
             amountOfFiles,
+            // ignore: deprecated_member_use
             style: Theme.of(context).textTheme.bodyText1,
           )
         ],

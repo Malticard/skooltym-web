@@ -27,7 +27,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png">
 
-  <title>admin</title>
+  <title>Skooltym | Admin</title>
   <link rel="manifest" href="manifest.json">
 
   <script>
@@ -100,6 +100,8 @@
   <script id="splash-screen-script">
     function removeSplashFromWeb() {
       document.getElementById("splash")?.remove();
+      document.getElementById("splash")?.style.display="none";
+      document.getElementById("splash-branding")?.style.display="none";
       document.getElementById("splash-branding")?.remove();
       document.body.style.background = "transparent";
     }

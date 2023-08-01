@@ -9,7 +9,7 @@ import '../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 // login logic for the user
-loginUser(BuildContext context, String email, String password) async {
+void loginUser(BuildContext context, String email, String password) async {
   showProgress(context, msg: "Login in progress");
   Client()
       .post(Uri.parse(AppUrls.login),
@@ -400,33 +400,36 @@ void showMessage(
   );
 }
 
-// show progress widget
-void showProgress(BuildContext context, {String? msg}) {
-  showModal(
-    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+/// show progress widget
+void showProgress(BuildContext context, {String? msg = 'Task'}) {
+  showDialog(
+    barrierDismissible: false,
     context: context,
-    builder: (context) => BottomSheet(
-      enableDrag: false,
-      backgroundColor: Colors.black12,
-      onClosing: () {},
-      builder: (context) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SpinKitDualRing(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white
-                  : Theme.of(context).primaryColor),
-          const Space(
-            space: 0.03,
+    builder: (context) => Dialog(
+      backgroundColor: Colors.transparent,
+      child: Card(
+        child: SizedBox(
+          height: 90,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 18.0),
+                child: SpinKitDualRing(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Theme.of(context).primaryColor),
+              ),
+              const SizedBox(
+                width: 40,
+              ),
+              Text(
+                "$msg..",
+                textAlign: TextAlign.center,
+                style: TextStyles(context).getRegularStyle(),
+              ),
+            ],
           ),
-          Text(
-            msg ?? "Task in progress",
-            style: TextStyles(context)
-                .getRegularStyle()
-                .copyWith(color: Colors.white),
-          )
-        ],
+        ),
       ),
     ),
   );
