@@ -109,7 +109,7 @@ class _ProfileCardState extends State<ProfileCard> {
                     future: fetchAndDisplayImage(
                         schoolData['profile_pic'] ?? "profile.png"),
                     builder: (context, payload) => payload.hasData
-                        ? Image.memory(payload.data!)
+                        ? Image.network(payload.data!)
                         : CircularProgressIndicator.adaptive(),
                   ),
                 ),

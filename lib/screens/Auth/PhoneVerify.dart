@@ -76,7 +76,7 @@ class _PhoneVerifyState extends State<PhoneVerify>
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 5,
+                    flex: 3,
                     child: Column(
                       children: [
                         Padding(
@@ -97,13 +97,13 @@ class _PhoneVerifyState extends State<PhoneVerify>
                     ),
                   ),
                   Expanded(
-                    flex: 4,
+                    flex: 3,
                     child: Padding(
                       padding: EdgeInsets.only(
                           right: size.width / 16,
                           left: size.width / 16,
                           bottom: size.width / 46,
-                          top: size.width / 26),
+                          top: size.height / 5),
                       child: Container(
                         height: size.height * 0.78,
                         decoration: BoxDecoration(
@@ -212,6 +212,7 @@ class _PhoneVerifyState extends State<PhoneVerify>
             errorText: _errorPhone,
             icon: Icons.phone,
             isObscureText: false,
+            
             padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
             hintText: "Enter the phone number that was registered",
             keyboardType: TextInputType.phone,

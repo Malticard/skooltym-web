@@ -1,4 +1,5 @@
 // import 'package:flutter/src/animation/animation_controller.dart';
+import '../../../tools/searchHelpers.dart';
 import '/exports/exports.dart';
 
 class ViewPickUps extends StatefulWidget {
@@ -11,6 +12,8 @@ class ViewPickUps extends StatefulWidget {
 class _ViewPickUpsState extends State<ViewPickUps> {
   List<PickUp> pickUpData = [];
   int _currentPage = 1;
+  String? _query;
+
   int rowsPerPage = 20;
   final PaginatorController _controller = PaginatorController();
 // stream controller
@@ -36,8 +39,10 @@ class _ViewPickUpsState extends State<ViewPickUps> {
     try {
       // Add a check to see if the widget is still mounted before updating the state
       if (mounted) {
-        var drops = await fetchPickUps(context.read<SchoolController>().state['school'],
-                page: _currentPage, limit: rowsPerPage);
+        var drops = await fetchPickUps(
+            context.read<SchoolController>().state['school'],
+            page: _currentPage,
+            limit: rowsPerPage);
         _pickUpController.add(drops);
       }
       // Listen to the stream and update the UI
@@ -45,16 +50,23 @@ class _ViewPickUpsState extends State<ViewPickUps> {
         this.timer = timer;
         // Add a check to see if the widget is still mounted before updating the state
         if (mounted) {
-          var drops = await fetchPickUps(context.read<SchoolController>().state['school'],
-                page: _currentPage, limit: rowsPerPage);
-          _pickUpController.add(drops);
+          if (_query != null) {
+            var pickUps = await searchPickups(
+                context.read<SchoolController>().state['school'], _query!);
+            _pickUpController.add(pickUps);
+          } else {
+            var drops = await fetchPickUps(
+                context.read<SchoolController>().state['school'],
+                page: _currentPage,
+                limit: rowsPerPage);
+            _pickUpController.add(drops);
+          }
         }
       });
     } on Exception catch (e) {
       print(e);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +103,9 @@ class _ViewPickUpsState extends State<ViewPickUps> {
                   Expanded(
                     child: SearchField(
                       onChanged: (value) {
-                        // Provider.of<MainController>(context, listen: false)
-                        //     .searchPickUps(value ?? "");
+                        setState(() {
+                          _query = value;
+                        });
                       },
                     ),
                   ),

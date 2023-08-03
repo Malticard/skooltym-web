@@ -24,7 +24,7 @@ class CommonTextField extends StatelessWidget {
     this.isObscureText = false,
     this.padding = const EdgeInsets.only(),
     this.onChanged,
-    this.contentPadding,
+    this.contentPadding = const EdgeInsets.only(left: 24, right: 24,top: 14, bottom: 14),
     this.keyboardType = TextInputType.text,
     this.isAllowTopTitleView = true,
     this.errorText,

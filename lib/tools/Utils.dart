@@ -50,7 +50,7 @@ void loginUser(BuildContext context, String email, String password) async {
           msg: "${value.statusCode} => ${data['message']}",
           type: 'danger');
     }
-  }).whenComplete(() {});
+  });
 }
 
 // global functions
@@ -61,29 +61,23 @@ Future<String> assignRole(String role) async {
   return result.id;
 }
 
-Future<Uint8List?> fetchAndDisplayImage(String imageURL) async {
-  Uint8List? processedImageBytes;
-  try{
-
-  
-  final response =
-      await Client().get(Uri.parse(AppUrls.liveImages + imageURL), headers: {
-    "Access-Control-Allow-Origin": "*",
-    'Content-Type': 'application/json',
-    'Accept': '*/*'
-  });
-  if (response.statusCode == 200) {
-    final imageBytes = response.bodyBytes;
-    final imageBase64 = base64Encode(imageBytes);
-    // Display the image
-    processedImageBytes = base64Decode(imageBase64);
-  }
-} on ClientException catch (e) {
-  debugPrint(e.message);
-} on Exception catch (e) {
-  debugPrint(e.toString());
-}
-  return processedImageBytes;
+Future<String?> fetchAndDisplayImage(String imageURL) async {
+  // Uint8List? processedImageBytes;
+// try{
+  // final response =
+  //     await Client().get(Uri.parse(AppUrls.liveImages + imageURL));
+  // if (response.statusCode == 200) {
+  //   // final imageBytes = response.bodyBytes;
+  //   // final imageBase64 = base64Encode(imageBytes);
+  //   // // Display the image
+  //   // processedImageBytes = base64Decode(imageBase64);
+  // }
+// } on ClientException catch (e) {
+//   debugPrint(e.message);
+// } on Exception catch (e) {
+//   debugPrint(e.toString());
+// }
+  return AppUrls.liveImages + imageURL;
 }
 
 // greetings
@@ -409,23 +403,25 @@ void showProgress(BuildContext context, {String? msg = 'Task'}) {
       backgroundColor: Colors.transparent,
       child: Card(
         child: SizedBox(
-          height: 90,
-          child: Row(
+          width: MediaQuery.of(context).size.width /5,
+          height: MediaQuery.of(context).size.width /5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+               Space(space: 0.02,),
               Padding(
-                padding: const EdgeInsets.only(left: 18.0),
+                padding: const EdgeInsets.all(18.0),
                 child: SpinKitDualRing(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.white
                         : Theme.of(context).primaryColor),
               ),
-              const SizedBox(
-                width: 40,
-              ),
+              Space(space: 0.05,),
               Text(
                 "$msg..",
                 textAlign: TextAlign.center,
-                style: TextStyles(context).getRegularStyle(),
+                style: TextStyles(context).getRegularStyle().copyWith(fontSize: 17),
               ),
             ],
           ),

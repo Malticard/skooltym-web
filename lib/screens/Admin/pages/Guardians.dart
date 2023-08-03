@@ -1,4 +1,5 @@
 // ignore_for_file: deprecated_member_use
+import '../../../tools/searchHelpers.dart';
 import '/models/Guardians.dart';
 
 import '/exports/exports.dart';
@@ -20,11 +21,13 @@ class _ViewGuardiansState extends State<ViewGuardians> {
   List<Guardian> guardianData = [];
   int _currentPage = 1;
   int rowsPerPage = 20;
+  String? _query;
+
   final PaginatorController _controller = PaginatorController();
-    // stream controller
+  // stream controller
   StreamController<Guardians> _guardianController =
       StreamController<Guardians>();
-      Timer? timer;
+  Timer? timer;
   @override
   void initState() {
     super.initState();
@@ -33,7 +36,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   @override
   void dispose() {
-     if (_guardianController.hasListener) {
+    if (_guardianController.hasListener) {
       _guardianController.close();
     }
     timer?.cancel();
@@ -42,21 +45,28 @@ class _ViewGuardiansState extends State<ViewGuardians> {
 
   void _fetchRealTimeData() async {
     try {
-       // Add a check to see if the widget is still mounted before updating the state
+      // Add a check to see if the widget is still mounted before updating the state
       if (mounted) {
-          var guardians = await fetchGuardians(context, page: _currentPage, limit: rowsPerPage);
+        var guardians = await fetchGuardians(context,
+            page: _currentPage, limit: rowsPerPage);
         _guardianController.add(guardians);
       }
       // Listen to the stream and update the UI
-      
-    Timer.periodic(Duration(seconds: 1), (timer) async {
-       this.timer = timer;
-               // Add a check to see if the widget is still mounted before updating the state
-      if (mounted) {
-        // _fetchRealTimeData();
-        var guardians = await fetchGuardians(context, page: _currentPage, limit: rowsPerPage);
-        _guardianController.add(guardians);
-      }
+
+      Timer.periodic(Duration(seconds: 2), (timer) async {
+        this.timer = timer;
+        // Add a check to see if the widget is still mounted before updating the state
+        if (mounted) {
+          if (_query != null) {
+            var guardians = await searchGuardians(
+                context.read<SchoolController>().state['school'], _query ?? "");
+            _guardianController.add(guardians);
+          } else {
+            var guardians = await fetchGuardians(context,
+                page: _currentPage, limit: rowsPerPage);
+            _guardianController.add(guardians);
+          }
+        }
       });
     } on Exception catch (e) {
       print(e);
@@ -67,117 +77,113 @@ class _ViewGuardiansState extends State<ViewGuardians> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return StreamBuilder(
-        stream:_guardianController.stream,
+        stream: _guardianController.stream,
         builder: (context, snapshot) {
           var guardians = snapshot.data;
           guardianData = guardians?.results ?? [];
-          return  Stack(
-                  children: [
-                    SizedBox(
-                      width: size.width,
-                      height: size.width / 2.5,
-                      child: CustomDataTable(
-                        paginatorController: _controller,
-                        onPageChanged: (page) {
-                          setState(() {
-                            _currentPage = (page ~/ rowsPerPage) + 1;
-                          });
-                        },
-                        onRowsPerPageChanged: (rows) {
-                          setState(() {
-                            rowsPerPage = rows ?? 20;
-                          });
-                        },
-                        header: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (guardianData.isNotEmpty)
-                                Expanded(
-                                  child: SearchField(
-                                    onChanged: (value) {
-                                      // Provider.of<MainController>(context, listen: false)
-                                      //     .searchGuardians(value ?? "");
-                                    },
-                                  ),
-                                ),
-                              if (!Responsive.isMobile(context))
-                                Spacer(
-                                    flex:
-                                        Responsive.isDesktop(context) ? 2 : 1),
-                              const SizedBox(),
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AddGuardian();
-                                    },
-                                  );
-                                },
-                                icon: const Icon(Icons.add),
-                                label: const Text("Add Guardian"),
-                              ),
-                            ],
-                          ),
-                        ),
-                        columns: List.generate(
-                          guardianColumns.length,
-                          (index) => DataColumn(
-                            numeric: true,
-                            label: Text(
-                              guardianColumns[index],
+          return Stack(
+            children: [
+              SizedBox(
+                width: size.width,
+                height: size.width / 2.5,
+                child: CustomDataTable(
+                  paginatorController: _controller,
+                  onPageChanged: (page) {
+                    setState(() {
+                      _currentPage = (page ~/ rowsPerPage) + 1;
+                    });
+                  },
+                  onRowsPerPageChanged: (rows) {
+                    setState(() {
+                      rowsPerPage = rows ?? 20;
+                    });
+                  },
+                  header: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (guardianData.isNotEmpty)
+                          Expanded(
+                            child: SearchField(
+                              onChanged: (value) {
+                               setState(() {
+                                 _query = value?.trim();
+                               });
+                              },
                             ),
                           ),
+                        if (!Responsive.isMobile(context))
+                          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                        const SizedBox(),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AddGuardian();
+                              },
+                            );
+                          },
+                          icon: const Icon(Icons.add),
+                          label: const Text("Add Guardian"),
                         ),
-                        empty: Center(
-                          child: snapshot.hasData ?const NoDataWidget(
-                              text: "No guardians registered yet.."):Loader(
-                  text: "Guardians...",
-                ),
-                        ),
-                        source: GuardianDataSource(
-                          paginatorController: _controller,
-                          guardianModel: guardianData,
-                          context: context,
-                          currentPage: _currentPage,
-                          totalDocuments: guardians?.totalDocuments ?? 0,
-                        ),
+                      ],
+                    ),
+                  ),
+                  columns: List.generate(
+                    guardianColumns.length,
+                    (index) => DataColumn(
+                      numeric: true,
+                      label: Text(
+                        guardianColumns[index],
                       ),
                     ),
-                    Positioned(
-                      bottom: 10,
-                      left: 10,
-                      child: Row(
-                        children: [
-                          const Text("Continue to dashboard"),
-                          TextButton(
-                            onPressed: () {
-                              context
-                                  .read<WidgetController>()
-                                  .pushWidget(const Dashboard());
-                              context
-                                  .read<TitleController>()
-                                  .setTitle("Dashboard");
-                              context
-                                  .read<SideBarController>()
-                                  .changeSelected(0);
-                              context
-                                  .read<FirstTimeUserController>()
-                                  .setFirstTimeUser(false);
-                            },
-                            child: Text(
-                              "Click here",
-                              style: TextStyles(context).getRegularStyle(),
-                            ),
-                          )
-                        ],
+                  ),
+                  empty: Center(
+                    child: snapshot.hasData
+                        ? const NoDataWidget(
+                            text: "No guardians registered yet..")
+                        : Loader(
+                            text: "Guardians...",
+                          ),
+                  ),
+                  source: GuardianDataSource(
+                    paginatorController: _controller,
+                    guardianModel: guardianData,
+                    context: context,
+                    currentPage: _currentPage,
+                    totalDocuments: guardians?.totalDocuments ?? 0,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 10,
+                left: 10,
+                child: Row(
+                  children: [
+                    const Text("Continue to dashboard"),
+                    TextButton(
+                      onPressed: () {
+                        context
+                            .read<WidgetController>()
+                            .pushWidget(const Dashboard());
+                        context.read<TitleController>().setTitle("Dashboard");
+                        context.read<SideBarController>().changeSelected(0);
+                        context
+                            .read<FirstTimeUserController>()
+                            .setFirstTimeUser(false);
+                      },
+                      child: Text(
+                        "Click here",
+                        style: TextStyles(context).getRegularStyle(),
                       ),
                     )
                   ],
-                );
-  
+                ),
+              )
+            ],
+          );
         });
   }
 }

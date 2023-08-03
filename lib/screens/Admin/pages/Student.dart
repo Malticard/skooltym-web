@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:admin/tools/searchHelpers.dart';
+
 import '../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
@@ -26,6 +28,7 @@ class _ViewStudentsState extends State<ViewStudents> {
   // stream controller
   StreamController<StudentModel> _studentController =
       StreamController<StudentModel>();
+  String? _query;
   @override
   void initState() {
     super.initState();
@@ -34,31 +37,19 @@ class _ViewStudentsState extends State<ViewStudents> {
 
   @override
   void dispose() {
-     if (_studentController.hasListener) {
+    if (_studentController.hasListener) {
       _studentController.close();
     }
     timer?.cancel();
     super.dispose();
-    
   }
 
   void fetchStudentsRealTimeData() async {
+    String school = context.read<SchoolController>().state['school'];
     try {
       // Fetch the initial data from the server
-    
-       // Add a check to see if the widget is still mounted before updating the state
-      if (mounted) {
-          var students = await fetchStudents(
-          context.read<SchoolController>().state['school'],
-          page: _currentPage,
-          limit: rowsPerPage);
-        _studentController.add(students);
-      }
-      // Listen to the stream and update the UI
-      
-    Timer.periodic(Duration(seconds: 3), (timer) async {
-       this.timer = timer;
-               // Add a check to see if the widget is still mounted before updating the state
+
+      // Add a check to see if the widget is still mounted before updating the state
       if (mounted) {
         var students = await fetchStudents(
             context.read<SchoolController>().state['school'],
@@ -66,6 +57,21 @@ class _ViewStudentsState extends State<ViewStudents> {
             limit: rowsPerPage);
         _studentController.add(students);
       }
+      // Listen to the stream and update the UI
+
+      Timer.periodic(Duration(seconds: 2), (timer) async {
+        this.timer = timer;
+        // Add a check to see if the widget is still mounted before updating the state
+        if (mounted) {
+          if (_query != null) {
+            var students = await searchStudents(school, _query ?? "");
+            _studentController.add(students);
+          } else {
+            var students = await fetchStudents(school,
+                page: _currentPage, limit: rowsPerPage);
+            _studentController.add(students);
+          }
+        }
       });
     } on Exception catch (e) {
       print(e);
@@ -115,7 +121,9 @@ class _ViewStudentsState extends State<ViewStudents> {
                               width: 120,
                               child: SearchField(
                                 onChanged: (value) {
-                                  // controller.searchStudents(value ?? "");
+                                  setState(() {
+                                    _query = value?.trim();
+                                  });
                                 },
                               ),
                             ),
@@ -151,21 +159,16 @@ class _ViewStudentsState extends State<ViewStudents> {
                     ),
                   ),
                   empty: Center(
-                    child: FutureBuilder(
-                        future: Future.delayed(const Duration(seconds: 2)),
-                        builder: (context, d) {
-                          return d.connectionState == ConnectionState.waiting
-                              ? const Loader(
-                                  text: "Students data ",
-                                )
-                              : const NoDataWidget(
-                                  text: "No students registered yet..");
-                        }),
+                    child: !snapshot.hasData
+                        ? const Loader(
+                            text: "Students data ",
+                          )
+                        : const NoDataWidget(
+                            text: "No students registered yet.."),
                   ),
                   columns: List.generate(
                     staffs.length,
-                    (index) => DataColumn2(
-                      numeric: true,
+                    (index) => DataColumn(
                       label: Text(
                         staffs[index],
                       ),

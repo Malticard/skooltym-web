@@ -260,14 +260,27 @@ class ClassDataSource extends DataTableSource {
   final PaginatorController paginatorController;
   final int totalDocuments;
   final int currentPage;
-  ClassDataSource({ required this.paginatorController, required this.totalDocuments,  required this.currentPage, required this.classModel, required this.context});
+  ClassDataSource(
+      {required this.paginatorController,
+      required this.totalDocuments,
+      required this.currentPage,
+      required this.classModel,
+      required this.context});
   @override
   DataRow? getRow(int index) {
-    Classes classData = classModel[index];
+      final int pageIndex = currentPage ~/ paginatorController.rowsPerPage;
+    final int dataIndex = index % paginatorController.rowsPerPage;
+    final int dataLength = classModel.length;
+
+    if (pageIndex * paginatorController.rowsPerPage + dataIndex >=
+        dataLength) {
+      return null;
+    }
+    Classes classData = classModel[pageIndex * paginatorController.rowsPerPage + dataIndex];
     return DataRow.byIndex(
       index: index,
       cells: [
-        DataCell(Text("${index + 1}")),
+        DataCell(Text("${(pageIndex * paginatorController.rowsPerPage + dataIndex) + 1}")),
         DataCell(Text(classData.className)),
         DataCell(
           buildActionButtons(
@@ -306,13 +319,18 @@ class ClassDataSource extends DataTableSource {
 class StreamDataSource extends DataTableSource {
   final List<Streams> streamModel;
   final BuildContext context;
-    final int totalDocuments;
+  final int totalDocuments;
   final int currentPage;
   final PaginatorController? paginatorController;
-  StreamDataSource({required this.totalDocuments, required this.currentPage, this.paginatorController, required this.streamModel, required this.context});
+  StreamDataSource(
+      {required this.totalDocuments,
+      required this.currentPage,
+      this.paginatorController,
+      required this.streamModel,
+      required this.context});
   @override
   DataRow? getRow(int index) {
-      final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
+    final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
     final int dataIndex = index % paginatorController!.rowsPerPage;
     final int dataLength = streamModel.length;
 
@@ -320,7 +338,8 @@ class StreamDataSource extends DataTableSource {
         dataLength) {
       return null;
     }
-    Streams streamData = streamModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
+    Streams streamData =
+        streamModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
     return DataRow.byIndex(
       index: index,
       cells: [
@@ -391,17 +410,13 @@ class StaffDataSource extends DataTableSource {
       index: index,
       cells: [
         DataCell(
-          Row(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: FutureImage(
-                      future: fetchAndDisplayImage(staffData.staffProfilePic))),
-              Text(
-                staffData.staffFname,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+          FutureImage(
+              future: fetchAndDisplayImage(staffData.staffProfilePic)),
+        ),
+        DataCell(
+          Text(
+            staffData.staffFname,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         DataCell(Text((staffData.staffRole.roleType))),
@@ -445,12 +460,17 @@ class StaffDataSource extends DataTableSource {
 
 // Reports Datasource
 class ReportsDataSource extends DataTableSource {
-    final int totalDocuments;
+  final int totalDocuments;
   final int currentPage;
   final PaginatorController? paginatorController;
   final List<Payments> paymentModel;
   final BuildContext context;
-  ReportsDataSource({required this.totalDocuments,required this.currentPage,required this.paginatorController, required this.paymentModel, required this.context});
+  ReportsDataSource(
+      {required this.totalDocuments,
+      required this.currentPage,
+      required this.paginatorController,
+      required this.paymentModel,
+      required this.context});
   @override
   DataRow? getRow(int index) {
     Payments paymentData = paymentModel[index];

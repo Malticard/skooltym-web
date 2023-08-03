@@ -26,7 +26,7 @@ class ClassModel {
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         pageSize: json["pageSize"],
-        classes: List<Classes>.from(json["classes"].map((x) => Classes.fromJson(x))),
+        classes: List<Classes>.from(json["results"].map((x) => Classes.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -34,7 +34,7 @@ class ClassModel {
         "totalPages": totalPages,
         "currentPage": currentPage,
         "pageSize": pageSize,
-        "classes": List<dynamic>.from(classes.map((x) => x.toJson())),
+        "results": List<dynamic>.from(classes.map((x) => x.toJson())),
     };
 }
 

@@ -25,7 +25,7 @@ class DropOffModel {
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         pageSize: json["pageSize"],
-        results: List<DropOff>.from(json["dropoffs"].map((x) => DropOff.fromJson(x))),
+        results: List<DropOff>.from(json["results"].map((x) => DropOff.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -33,7 +33,7 @@ class DropOffModel {
         "totalPages": totalPages,
         "currentPage": currentPage,
         "pageSize": pageSize,
-        "dropoffs": List<dynamic>.from(results.map((x) => x.toJson())),
+        "results": List<dynamic>.from(results.map((x) => x.toJson())),
     };
 }
 

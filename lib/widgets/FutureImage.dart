@@ -1,7 +1,7 @@
 import '../exports/exports.dart';
 
 class FutureImage extends StatelessWidget {
-  final Future<Uint8List?>? future;
+  final Future<String?>? future;
   const FutureImage({super.key, this.future});
 
   @override
@@ -10,9 +10,20 @@ class FutureImage extends StatelessWidget {
         future: future,
         builder: (context, snapshot) {
           return snapshot.hasData
-              ? ClipRRect(
-                  child: Image.memory(snapshot.data!, width: 50, height: 50),
-                  borderRadius: BorderRadius.circular(50),
+              ? Container(
+                 width: 45,
+                    height: 45,
+                margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    image: DecorationImage(
+                      filterQuality: FilterQuality.high,
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        snapshot.data!,
+                      )
+                    )
+                  ),
                 )
               : CircularProgressIndicator.adaptive();
         });

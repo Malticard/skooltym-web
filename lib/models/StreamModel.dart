@@ -28,7 +28,7 @@ class StreamsModel {
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         pageSize: json["pageSize"],
-        streams: List<Streams>.from(json["streams"].map((x) => Streams.fromJson(x))),
+        streams: List<Streams>.from(json["results"].map((x) => Streams.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -36,7 +36,7 @@ class StreamsModel {
         "totalPages": totalPages,
         "currentPage": currentPage,
         "pageSize": pageSize,
-        "streams": List<dynamic>.from(streams.map((x) => x.toJson())),
+        "results": List<dynamic>.from(streams.map((x) => x.toJson())),
     };
 }
 

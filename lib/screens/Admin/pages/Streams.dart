@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import '../../../tools/searchHelpers.dart';
 import '/exports/exports.dart';
 
 class StreamsUI extends StatefulWidget {
@@ -11,6 +12,7 @@ class StreamsUI extends StatefulWidget {
 
 class _StreamsUIState extends State<StreamsUI> {
   List<String> staffs = ["Student Name", "Class", "Gender", "Actions"];
+  String? _query;
   final _pageController = PaginatorController();
   int _currentPage = 1;
   int rowsPerPage = 50;
@@ -48,11 +50,17 @@ class _StreamsUIState extends State<StreamsUI> {
         this.timer = timer;
         // Add a check to see if the widget is still mounted before updating the state
         if (mounted) {
-          var streams = await fetchStreams(
-              context.read<SchoolController>().state['school'],
-              page: _currentPage,
-              limit: rowsPerPage);
-          _streamController.add(streams);
+          if (_query != null) {
+            var streams = await searchStreams(
+                context.read<SchoolController>().state['school'], _query!);
+            _streamController.add(streams);
+          } else {
+            var streams = await fetchStreams(
+                context.read<SchoolController>().state['school'],
+                page: _currentPage,
+                limit: rowsPerPage);
+            _streamController.add(streams);
+          }
         }
       });
     } on Exception catch (e) {
@@ -89,11 +97,13 @@ class _StreamsUIState extends State<StreamsUI> {
                   },
                   header: Row(
                     children: [
-                      const Text(
-                        "Streams",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: SearchField(
+                          onChanged: (value) {
+                            setState(() {
+                              _query = value?.trim();
+                            });
+                          },
                         ),
                       ),
                       const Spacer(),

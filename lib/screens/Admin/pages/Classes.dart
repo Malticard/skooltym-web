@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:admin/tools/searchHelpers.dart';
+
 import '/exports/exports.dart';
 
 class ClassesUI extends StatefulWidget {
@@ -21,6 +23,7 @@ class _ClassesUIState extends State<ClassesUI> {
     fetchStudentsRealTimeData();
   }
 
+  String? _query;
   int _currentPage = 1;
   int rowsPerPage = 50;
   @override
@@ -35,7 +38,12 @@ class _ClassesUIState extends State<ClassesUI> {
   void fetchStudentsRealTimeData() async {
     Response response = await Client().get(
       Uri.parse(
-        AppUrls.getClasses + context.read<SchoolController>().state['school']+"?page="+_currentPage.toString()+"&pageSize="+rowsPerPage.toString(),
+        AppUrls.getClasses +
+            context.read<SchoolController>().state['school'] +
+            "?page=" +
+            _currentPage.toString() +
+            "&pageSize=" +
+            rowsPerPage.toString(),
       ),
     );
     try {
@@ -47,12 +55,18 @@ class _ClassesUIState extends State<ClassesUI> {
       }
       // Listen to the stream and update the UI
 
-      Timer.periodic(Duration(seconds: 3), (timer) async {
+      Timer.periodic(Duration(seconds: 1), (timer) async {
         this.timer = timer;
         // Add a check to see if the widget is still mounted before updating the state
         if (mounted) {
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            _classController.add(classModelFromJson(response.body));
+          if (_query != null) {
+            var classes = await searchClasses(
+                context.read<SchoolController>().state['school'], _query!);
+            _classController.add(classes);
+          } else {
+            if (response.statusCode == 200 || response.statusCode == 201) {
+              _classController.add(classModelFromJson(response.body));
+            }
           }
         }
       });
@@ -81,24 +95,24 @@ class _ClassesUIState extends State<ClassesUI> {
 
               return CustomDataTable(
                 paginatorController: _paginatorController,
-                  onPageChanged: (page) {
-                    setState(() {
-                      _currentPage = (page ~/ rowsPerPage) + 1;
-                    });
-                  },
-                  onRowsPerPageChanged: (rows) {
-                    setState(() {
-                      rowsPerPage = rows ?? 20;
-                    });
-                  },
+                onPageChanged: (page) {
+                  setState(() {
+                    _currentPage = (page ~/ rowsPerPage) + 1;
+                  });
+                },
+                onRowsPerPageChanged: (rows) {
+                  setState(() {
+                    rowsPerPage = rows ?? 20;
+                  });
+                },
                 header: Row(
                   children: [
-                    const Text(
-                      "Classes",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Expanded(
+                      child: SearchField(onChanged: (value) {
+                        setState(() {
+                          _query = value?.trim();
+                        });
+                      }),
                     ),
                     const Spacer(),
                     ElevatedButton.icon(

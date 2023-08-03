@@ -48,7 +48,7 @@ class _VerificationState extends State<Verification> {
             ),
             Center(
               child: Text(
-                "Verification",
+                "Phone OTP Verification",
                 style: TextStyles(context).getTitleStyle(),
               ),
             ),
@@ -56,13 +56,13 @@ class _VerificationState extends State<Verification> {
               space: 0.1,
             ),
             Center(
-              child: Text("Enter the code sent to the number ${widget.code}"),
+              child: Text("Enter the code sent to: ${widget.phone}",),
             ),
             const Space(
               space: 0.03,
             ),
             Center(
-              child: Text(widget.phone,style: TextStyles(context).getDescriptionStyle(),),
+              // child: Text(widget.phone,style: TextStyles(context).getDescriptionStyle(),),
             ),
             const Space(
               space: 0.06,
@@ -204,7 +204,7 @@ class _VerificationState extends State<Verification> {
                           width: MediaQuery.of(context).size.width / 1.3,
                           height: MediaQuery.of(context).size.width * 0.5,
                           child: SvgPicture.asset(
-                            "assets/images/back2Skool.svg",
+                            "assets/vectors/pin.svg",
                           ),
                         ),
                       ),
@@ -218,21 +218,21 @@ class _VerificationState extends State<Verification> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Expanded(
-                        flex: 5,
+                        flex: 3,
                         child: Column(
                           children: [
                             Padding(
                               padding: EdgeInsets.only(
-                                top: size.width * 0.0150,
+                                top: size.height * 0.0150,
                                 left: 60,
                                 right: 60,
                               ),
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.43,
+                                    MediaQuery.of(context).size.width * 0.43,
                                 child: SvgPicture.asset(
-                                  "assets/images/back2Skool.svg",
+                                  "assets/vectors/pin.svg",
                                 ),
                               ),
                             ),
@@ -240,7 +240,7 @@ class _VerificationState extends State<Verification> {
                         ),
                       ),
                       Expanded(
-                        flex: 4,
+                        flex: 3,
                         child: Padding(
                           padding: EdgeInsets.only(
                               right: size.width / 16,
@@ -299,7 +299,7 @@ class _VerificationState extends State<Verification> {
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height * 0.3,
                         child: SvgPicture.asset(
-                          "assets/images/back2Skool.svg",
+                         "assets/vectors/pin.svg",
                         ),
                       ),
                     ],

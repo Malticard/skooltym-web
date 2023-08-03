@@ -162,7 +162,7 @@ class DrawerListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      selectedTileColor: Colors.blueAccent.withOpacity(0.1),
+      selectedTileColor: const Color.fromARGB(255, 119, 119, 121).withOpacity(0.1),
       onTap: press,
       shape: RoundedRectangleBorder(
         side: selected
@@ -170,20 +170,26 @@ class DrawerListTile extends StatelessWidget {
             : BorderSide.none,
       ),
       horizontalTitleGap: 0.6,
-      leading: SvgPicture.asset(
-        svgSrc,
-        // ignore: deprecated_member_use
-        color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white54
-            : Colors.white,
-        height: 18,
+      leading: Padding(
+        padding: const EdgeInsets.only(right:10.0),
+        child: SvgPicture.asset(
+          svgSrc,
+          // ignore: deprecated_member_use
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white54
+              : Colors.white,
+          height: 18,
+        ),
       ),
-      title: Text(
-        title,
-        style: TextStyles(context).getRegularStyle().copyWith(
-            color: Theme.of(context).brightness == Brightness.light
-                ? Colors.white
-                : Colors.white54),
+      title: Padding(
+        padding: const EdgeInsets.only(left:5.0),
+        child: Text(
+          title,
+          style: TextStyles(context).getRegularStyle().copyWith(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : Colors.white54),
+        ),
       ),
     );
   }

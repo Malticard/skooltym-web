@@ -71,5 +71,13 @@ static String setPassword = "${devURL}password/set-password/";
 static String results = "${devURL}results/scanned-results/";
 // dashboard
 static String dashboard = "${devURL}dashboard/data/";
+// searches
+static String searchStudents = "${devURL}search/search-students/";
+static String searchStaff = "${devURL}search/search-staff/";
+static String searchGuardians = "${devURL}search/search-guardians/";
+static String searchClass = "${devURL}search/search-classes/";
+static String searchStreams = "${devURL}search/search-streams/";
+static String searchPickUps = "${devURL}search/search-pickups/";
+static String searchDropOffs = "${devURL}search/search-dropoffs/";
 }
 

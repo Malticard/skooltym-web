@@ -63,8 +63,9 @@ class _CommonFormFieldsState extends State<CommonFormFields>
   var _imageBytes;
   _handleImageUpload(int a) async {
     if (kIsWeb) {
-    PickedFile? picker =  await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    XFile? picker =  await ImagePicker.platform.getImageFromSource(source: ImageSource.gallery);// pickImage(source: ImageSource.gallery);
     if (picker != null) {
+      print("Picker: => ${picker.path}");
       var element = await picker.readAsBytes();
           setState(() {
             _imageBytes = element;

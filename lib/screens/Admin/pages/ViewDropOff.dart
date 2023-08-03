@@ -1,4 +1,5 @@
 import '../../../models/DropOffModels.dart';
+import '../../../tools/searchHelpers.dart';
 import '/exports/exports.dart';
 
 class ViewDropOffs extends StatefulWidget {
@@ -11,6 +12,7 @@ class ViewDropOffs extends StatefulWidget {
 class _ViewDropOffsState extends State<ViewDropOffs> {
   List<String> staffs = ["Guardian Name", "Address", "Gender", "Actions"];
   List<DropOff> drop_offs = [];
+  String? _query;
   final _controller = PaginatorController();
   int _currentPage = 1;
   int rowsPerPage = 20;
@@ -52,12 +54,20 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
         this.timer = timer;
         // Add a check to see if the widget is still mounted before updating the state
         if (mounted) {
-          var drops = await fetchDropOffs(
-            context.read<SchoolController>().state['school'],
-            page: _currentPage,
-            limit: rowsPerPage,
-          );
-          _dropOffController.add(drops);
+          if (_query != null) {
+            var drops = await searchDropOffs(
+              context.read<SchoolController>().state['school'],
+              _query!,
+            );
+            _dropOffController.add(drops);
+          } else {
+            var drops = await fetchDropOffs(
+              context.read<SchoolController>().state['school'],
+              page: _currentPage,
+              limit: rowsPerPage,
+            );
+            _dropOffController.add(drops);
+          }
         }
       });
     } on Exception catch (e) {
@@ -101,7 +111,9 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
                   Expanded(
                     child: SearchField(
                       onChanged: (value) {
-                        setState(() {});
+                        setState(() {
+                          _query = value;
+                        });
                       },
                     ),
                   ),
@@ -131,7 +143,9 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
                 future: Future.delayed(Duration(seconds: 3)),
                 builder: (context, snapshot) {
                   return snapshot.connectionState == ConnectionState.waiting
-                      ? Loader(text: "DropOffs ..",)
+                      ? Loader(
+                          text: "DropOffs ..",
+                        )
                       : Center(
                           child: const NoDataWidget(
                               text: "No drop offs captured yet"),
