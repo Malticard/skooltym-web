@@ -132,12 +132,11 @@ class _PaymentReportsState extends State<PaymentReports>
                           ),
                         ),
               
-            source: ReportsDataSource(
+            source: PaymentDataSource(
                 context: context,
-                paymentModel: _payments,
                 currentPage: _currentPage,
                 paginatorController: _paginatorController,
-                totalDocuments: paymentModel?.totalDocuments ?? 0),
+                totalDocuments: paymentModel?.totalDocuments ?? 0, payments: _payments),
           );
         },
       ),

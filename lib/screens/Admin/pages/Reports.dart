@@ -1,4 +1,5 @@
 // import 'package:flutter/src/animation/animation_controller.dart';
+import '../../../models/OvertimeModel.dart';
 import '/exports/exports.dart';
 
 class ClearedOvertime extends StatefulWidget {
@@ -15,8 +16,8 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
   int rowsPerPage = 20;
   final PaginatorController _controller = PaginatorController();
   // stream controller
-  StreamController<PaymentModel> _paymentController =
-      StreamController<PaymentModel>();
+  StreamController<OvertimeModel> _overtimeController =
+      StreamController<OvertimeModel>();
   @override
   void initState() {
     super.initState();
@@ -25,20 +26,20 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
 
   void realTimeClearedPayments() async {
     // initial data
-    var payments = await fetchPayments(
+    var overtimes = await fetchOvertimeData(
         context.read<SchoolController>().state['school'],
         page: _currentPage,
         limit: rowsPerPage);
-    _paymentController.add(payments);
+    _overtimeController.add(overtimes);
     // listen to the stream
     Timer.periodic(Duration(seconds: 1), (timer) async {
       this.timer = timer;
       if (mounted) {
-        var payments = await fetchPayments(
+        var overtimes = await fetchOvertimeData(
             context.read<SchoolController>().state['school'],
             page: _currentPage,
             limit: rowsPerPage);
-        _paymentController.add(payments);
+        _overtimeController.add(overtimes);
       }
     });
   }
@@ -46,8 +47,8 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
   @override
   void dispose() {
     super.dispose();
-    if (_paymentController.hasListener) {
-      _paymentController.close();
+    if (_overtimeController.hasListener) {
+      _overtimeController.close();
     }
     timer?.cancel();
   }
@@ -60,10 +61,10 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
       width: size.width,
       height: size.width / 2.5,
       child: StreamBuilder(
-        stream: _paymentController.stream,
+        stream: _overtimeController.stream,
         builder: (context, payload) {
-          var paymentModel = payload.data;
-          var _payments = paymentModel?.results ?? [];
+          var overtimeModel = payload.data;
+          var _overtimes = overtimeModel?.results ?? [];
           return CustomDataTable(
             paginatorController: _controller,
             onPageChanged: (page) {
@@ -79,18 +80,27 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
             header: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Payments",
-                  style: TextStyles(context).getTitleStyle(),
-                ),
+                // Text(
+                //   "Payments",
+                //   style: TextStyles(context).getTitleStyle(),
+                // ),
               ],
             ),
             columns: const [
               DataColumn(
                 label: Text(
-                  "Student",
+                  "Student's profile",
                   style: TextStyle(fontSize: 12),
                 ),
+              ),
+              DataColumn(
+                label: Text(
+                  "Student Name",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+               DataColumn(
+                label: Text("Guardian Name", style: TextStyle(fontSize: 12)),
               ),
               DataColumn(
                 label: Text("Cleared By", style: TextStyle(fontSize: 12)),
@@ -101,15 +111,13 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
                     child: Text("Date", style: TextStyle(fontSize: 12))),
               ),
               DataColumn(
-                label: Text("Cleared With", style: TextStyle(fontSize: 12)),
-              ),
-              DataColumn(
-                label: Text("Balance", style: TextStyle(fontSize: 12)),
-              ),
-              DataColumn(
-                label: Text("Comment", style: TextStyle(fontSize: 12)),
+                label: Text(
+                  "Overtime Charge",
+                  style: TextStyle(fontSize: 12),
+                ),
               ),
             ],
+         
             empty: !payload.hasData
                 ? Loader(
                     text: "cleared overtimes...",
@@ -121,12 +129,13 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
                             ""),
                   ),
             source: ReportsDataSource(
-              paymentModel:
-                  _payments.where((element) => element.balance == 0).toList(),
+              overtimeModel: _overtimes
+                  .where((element) => element.status != 'Pending')
+                  .toList(),
               context: context,
               currentPage: _currentPage,
-              totalDocuments: _payments
-                  .where((element) => element.balance == 0)
+              totalDocuments: _overtimes
+                  .where((element) => element.status != 'Pending')
                   .toList()
                   .length,
               paginatorController: _controller,
@@ -151,10 +160,10 @@ class _PendingOvertimeState extends State<PendingOvertime>
   int _currentPage = 1;
   Timer? timer;
   int rowsPerPage = 20;
-  final PaginatorController _controller = PaginatorController();
+  final PaginatorController _pendingPaginatorController = PaginatorController();
   // stream controller
-  StreamController<PaymentModel> _paymentController =
-      StreamController<PaymentModel>();
+  StreamController<OvertimeModel> _overtimeController =
+      StreamController<OvertimeModel>();
   @override
   void initState() {
     super.initState();
@@ -163,20 +172,20 @@ class _PendingOvertimeState extends State<PendingOvertime>
 
   void realTimeClearedPayments() async {
     // initial data
-    var payments = await fetchPayments(
+    var pendingOvertimes = await fetchOvertimeData(
         context.read<SchoolController>().state['school'],
         page: _currentPage,
         limit: rowsPerPage);
-    _paymentController.add(payments);
+    _overtimeController.add(pendingOvertimes);
     // listen to the stream
     Timer.periodic(Duration(seconds: 1), (timer) async {
       this.timer = timer;
       if (mounted) {
-        var payments = await fetchPayments(
+        var overtimes = await fetchOvertimeData(
             context.read<SchoolController>().state['school'],
             page: _currentPage,
             limit: rowsPerPage);
-        _paymentController.add(payments);
+        _overtimeController.add(overtimes);
       }
     });
   }
@@ -184,8 +193,8 @@ class _PendingOvertimeState extends State<PendingOvertime>
   @override
   void dispose() {
     super.dispose();
-    if (_paymentController.hasListener) {
-      _paymentController.close();
+    if (_overtimeController.hasListener) {
+      _overtimeController.close();
     }
     timer?.cancel();
   }
@@ -197,26 +206,36 @@ class _PendingOvertimeState extends State<PendingOvertime>
       width: size.width,
       height: size.width / 2.5,
       child: StreamBuilder(
-        stream: _paymentController.stream,
+        stream: _overtimeController.stream,
         builder: (context, payload) {
-          var paymentModel = payload.data;
-          var _payments = paymentModel?.results ?? [];
+          var overtimeModel = payload.data;
+          var _overtimes = overtimeModel?.results ?? [];
           return CustomDataTable(
+            paginatorController: _pendingPaginatorController,
             header: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Pending",
-                  style: TextStyles(context).getTitleStyle(),
-                ),
+                // Text(
+                //   "Pending",
+                //   style: TextStyles(context).getTitleStyle(),
+                // ),
               ],
             ),
             columns: const [
               DataColumn(
                 label: Text(
-                  "Student",
+                  "Student's profile",
                   style: TextStyle(fontSize: 12),
                 ),
+              ),
+              DataColumn(
+                label: Text(
+                  "Student Name",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+               DataColumn(
+                label: Text("Guardian Name", style: TextStyle(fontSize: 12)),
               ),
               DataColumn(
                 label: Text("Cleared By", style: TextStyle(fontSize: 12)),
@@ -227,15 +246,13 @@ class _PendingOvertimeState extends State<PendingOvertime>
                     child: Text("Date", style: TextStyle(fontSize: 12))),
               ),
               DataColumn(
-                label: Text("Cleared With", style: TextStyle(fontSize: 12)),
-              ),
-              DataColumn(
-                label: Text("Balance", style: TextStyle(fontSize: 12)),
-              ),
-              DataColumn(
-                label: Text("Comment", style: TextStyle(fontSize: 12)),
+                label: Text(
+                  "Overtime Charge",
+                  style: TextStyle(fontSize: 12),
+                ),
               ),
             ],
+         
             empty: SizedBox(
               height: MediaQuery.of(context).size.width / 9,
               child: !payload.hasData
@@ -247,15 +264,16 @@ class _PendingOvertimeState extends State<PendingOvertime>
                           ""),
             ),
             source: ReportsDataSource(
-                paymentModel:
-                    _payments.where((element) => element.balance > 0).toList(),
+                overtimeModel: _overtimes
+                    .where((element) => element.status == 'Pending')
+                    .toList(),
                 context: context,
                 currentPage: _currentPage,
-                totalDocuments: _payments
-                    .where((element) => element.balance > 0)
+                totalDocuments: _overtimes
+                    .where((element) => element.status == "Pending")
                     .toList()
                     .length,
-                paginatorController: _controller),
+                paginatorController: _pendingPaginatorController),
           );
         },
       ),

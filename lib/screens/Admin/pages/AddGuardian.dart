@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_return_type_for_catch_error
-import 'dart:io';
 
 import '../../../models/StudentModel.dart';
 import '/exports/exports.dart';
@@ -81,37 +79,59 @@ class _AddGuardianState extends State<AddGuardian> {
 
 // form key
   final formKey = GlobalKey<FormState>();
+  Timer? _timer;
+  StreamController<StudentModel> _guardianStudentsController = StreamController<StudentModel>();
   @override
   void initState() {
     super.initState();
+    realTimeStudentsData();
     BlocProvider.of<GuardianController>(context).getGuardians(context);
+    BlocProvider.of<SchoolController>(context).getSchoolData();
+  }
+  void realTimeStudentsData() async {
+    var school = context.read<SchoolController>().state['school'];
+    var students = await fetchStudents(school);
+    _guardianStudentsController.add(students);
+    Timer.periodic(Duration(seconds: 1), (timer) async { 
+      this._timer = timer;
+      if(mounted){
+    var students = await fetchStudents(school);
+        _guardianStudentsController.add(students);
+      }
+    });
   }
   // error fields
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
-
+@override
+void dispose() {
+  _timer?.cancel();
+  if (_guardianStudentsController.hasListener) {
+    _guardianStudentsController.close();
+  }
+  super.dispose();
+}
   @override
   Widget build(BuildContext context) {
-    // context.watch<MainController>().getAllStudents(context.read<SchoolController>().state['school'],context.read<SchoolController>().state['role']);
     context.read<MultiStudentsController>().getMultiStudents();
     BlocProvider.of<GuardianController>(context).getGuardians(context);
 
-    Size size = MediaQuery.of(context).size;
     return Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,
         height: MediaQuery.of(context).size.width / 1.5,
         child: Padding(
           padding: padding,
-          child: BlocBuilder<FetchStudentsController, List<Student>>(
+          child: StreamBuilder(
+            stream: _guardianStudentsController.stream,
             builder: (context, students) {
               return CommonFormFields(
                 padding: padding,
                 formFields: _formFields,
-                lists:students
+                lists:students.data?.results
                     .map((e) => e.id)
                     .toList(),
                 dropdownLists:
-                    students.map((item) {
+                    students.data?.results.map((item) {
                   return "${item.studentFname} ${item.studentLname}";
                 }).toList(),
                 onDropDownValue: (v) {

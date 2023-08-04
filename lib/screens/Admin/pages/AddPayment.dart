@@ -154,7 +154,7 @@ class _AddPaymentState extends State<AddPayment> {
       "payment_method": _paymentMethodController.text,
       "staff": context.read<SchoolController>().state['id'],
       "comment": _commentController.text,
-      "paid_amount": _amountPaidController.text,
+      "paid_amount": (_amountPaidController.text),
       "date_of_payment": DateTime.now().toString().split(" ")[0],
       "payment_key[0]": "0"
     }).then((value) {

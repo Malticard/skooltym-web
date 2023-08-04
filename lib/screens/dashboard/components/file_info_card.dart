@@ -83,22 +83,23 @@ class FileInfoCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  const SizedBox(
-                    width: 150,
-                    height: 40,
-                  ),
+                  
                   Container(
                     // padding:const EdgeInsets.all(defaultPadding),
-                    height: 60,
-                    width: 60,
+                    height: 140,
+                    width: 140,
                     decoration: const BoxDecoration(
                       // color: info['color'].withOpacity(0.1),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: SvgPicture.asset(
-                      "assets/vectors/groups.svg",
+                      "assets/vectors/students_class.svg",
                       // color: Colors.red,
                     ),
+                  ),
+                  const SizedBox(
+                    width: 50,
+                    height: 40,
                   ),
                 ],
               ),

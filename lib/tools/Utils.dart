@@ -352,8 +352,8 @@ bool validateTextControllers(List<TextEditingController> controllers) {
 }
 
 // method to fetch available classes
-Future<ClassModel> fetchClasses(String id) async {
-  var response = await Client().get(Uri.parse(AppUrls.getClasses + id));
+Future<ClassModel> fetchClasses(String id,{int page =1 , int limit = 50}) async {
+  var response = await Client().get(Uri.parse(AppUrls.getClasses + id+"?page=$page&pageSize=$limit"));
   return classModelFromJson(response.body);
 }
 
@@ -517,11 +517,11 @@ Future<DropOffModel> fetchDropOffs(String id,
 /// Dashboard cards
 
 // fetch overtimes
-Future<List<OvertimeModel>> fetchOvertimeData(String status, String id) async {
-  var response = await Client().get(Uri.parse(AppUrls.overtime + id));
-  return overtimeModelFromJson(response.body)
-      .where((element) => element.status == status)
-      .toList();
+Future<OvertimeModel> fetchOvertimeData(String id,{int page = 1,int limit = 50}) async {
+  var response = await Client().get(Uri.parse(AppUrls.overtime + id+"?page=$page&limit=$limit"));
+  return overtimeModelFromJson(response.body);
+      // .where((element) => element.status == status)
+      // .toList();
   // return response;
 }
 
@@ -550,14 +550,14 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
   // context.read<PaymentController>().getPayments(context);
   var drops =
       await fetchDropOffs(schoolId);
-  // var picks =
-  //     await fetchPickUps(schoolId);
-      var payments = await fetchPayments(schoolId,limit: 100);
-  var clearedOvertimes = payments.results
-      .where((element) => element.balance == 0)
+  var picks =
+      await fetchPickUps(schoolId);
+      var overtimes = await fetchOvertimeData(schoolId,limit: 100);
+  var clearedOvertimes = overtimes.results
+      .where((element) => element.status != "Pending")
       .toList();
-  var pendingOvertimes = payments.results
-      .where((element) => element.balance == 0)
+  var pendingOvertimes = overtimes.results
+      .where((element) => element.status == "Pending")
       .toList();
 
   List<Map<String, dynamic>> dashboardData = [
@@ -570,7 +570,7 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
     },
     {
       "label": "PICK UPS",
-      "value": 0,//picks.totalDocuments,
+      "value": picks.totalDocuments,
       "icon": "assets/icons/009-student.svg",
       'color': const Color.fromARGB(255, 181, 150, 253),
       // "last_updated": "14:45"

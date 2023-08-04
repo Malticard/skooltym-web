@@ -77,7 +77,7 @@ void dispose() {
                       "stream_name": _updateStreamController.text,
                     };
                     debugPrint("Saved data $data");
-                    showProgress(context, msg: 'Adding stream in progress');
+                    showProgress(context, msg: 'Updating stream in progress');
                     // saving class data to db
                     Client()
                         .patch(Uri.parse(AppUrls.updateStream + widget.id), body: data)
@@ -86,8 +86,8 @@ void dispose() {
                         Routes.popPage(context);
                         showMessage(
                             context: context,
-                            msg: "Stream added successfully",
-                            type: 'success',
+                            msg: "Stream updated successfully",
+                            type: 'info',
                             duration: 6);
                       } else {
                         Routes.popPage(context);

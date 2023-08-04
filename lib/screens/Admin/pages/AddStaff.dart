@@ -66,7 +66,6 @@ class _AddStaffState extends State<AddStaff> {
   @override
   Widget build(BuildContext context) {
     // 0756598425
-    Size size = MediaQuery.of(context).size;
     return Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,

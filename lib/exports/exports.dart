@@ -175,7 +175,7 @@ export '/screens/Admin/pages/AccountProfile.dart';
 export '/screens/Admin/pages/AddGuardian.dart';
 export '/screens/Admin/pages/AddStudent.dart';
 export '/screens/Admin/pages/Reports.dart';
-export '/screens/Admin/pages/Payment.dart';
+export '../screens/Admin/pages/Payments.dart';
 export '/screens/Admin/pages/Staffs.dart';
 export '/screens/Admin/pages/Test.dart';
 export '/screens/Admin/pages/Student.dart';

@@ -42,7 +42,7 @@ class PickUpModel {
 class PickUp {
   final String id;
   final String school;
-  final String settings;
+  final Settings settings;
   final StudentName studentName;
   final PickedBy pickedBy;
   final AuthorizedBy authorizedBy;
@@ -68,8 +68,8 @@ class PickUp {
 
   factory PickUp.fromJson(Map<String, dynamic> json) => PickUp(
         id: json["_id"],
-        school: json["school"],
-        settings: json["settings"],
+        school: json["school"] ?? "",
+        settings: Settings.fromJson(json["settings"]),
         studentName: StudentName.fromJson(json["student_name"] ?? {}),
         pickedBy: PickedBy.fromJson(json["picked_by"] ?? {}),
         authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
@@ -84,7 +84,7 @@ class PickUp {
   Map<String, dynamic> toJson() => {
         "_id": id,
         "school": school,
-        "settings": settings,
+        "settings": settings.toJson(),
         "student_name": studentName.toJson(),
         "picked_by": pickedBy.toJson(),
         "authorized_by": authorizedBy.toJson(),
@@ -179,3 +179,28 @@ class StudentName {
         "student_profile_pic": studentProfilePic,
       };
 }
+
+class Settings {
+    final String id;
+    final String pickUpEndTime;
+    final String pickUpAllowance;
+
+    Settings({
+        required this.id,
+        required this.pickUpEndTime,
+        required this.pickUpAllowance,
+    });
+
+    factory Settings.fromJson(Map<String, dynamic> json) => Settings(
+        id: json["_id"],
+        pickUpEndTime: json["pick_up_end_time"],
+        pickUpAllowance: json["pick_up_allowance"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "_id": id,
+        "pick_up_end_time": pickUpEndTime,
+        "pick_up_allowance": pickUpAllowance,
+    };
+}
+

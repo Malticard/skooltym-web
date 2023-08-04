@@ -36,22 +36,12 @@ class _ClassesUIState extends State<ClassesUI> {
   }
 
   void fetchStudentsRealTimeData() async {
-    Response response = await Client().get(
-      Uri.parse(
-        AppUrls.getClasses +
-            context.read<SchoolController>().state['school'] +
-            "?page=" +
-            _currentPage.toString() +
-            "&pageSize=" +
-            rowsPerPage.toString(),
-      ),
-    );
     try {
       // Add a check to see if the widget is still mounted before updating the state
       if (mounted) {
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          _classController.add(classModelFromJson(response.body));
-        }
+        var classes = await fetchClasses(
+            context.read<SchoolController>().state['school']);
+        _classController.add(classes);
       }
       // Listen to the stream and update the UI
 
@@ -64,9 +54,9 @@ class _ClassesUIState extends State<ClassesUI> {
                 context.read<SchoolController>().state['school'], _query!);
             _classController.add(classes);
           } else {
-            if (response.statusCode == 200 || response.statusCode == 201) {
-              _classController.add(classModelFromJson(response.body));
-            }
+            var classes = await fetchClasses(
+                context.read<SchoolController>().state['school']);
+            _classController.add(classes);
           }
         }
       });
@@ -138,16 +128,11 @@ class _ClassesUIState extends State<ClassesUI> {
                     label: Text("Action"),
                   ),
                 ],
-                empty: FutureBuilder(
-                    future: fetchClasses(
-                        context.read<SchoolController>().state['school']),
-                    builder: (context, snapshot) {
-                      return snapshot.connectionState == ConnectionState.waiting
-                          ? const Loader(text: "Classes data")
-                          : const Center(
-                              child: Text("No Classes added.."),
-                            );
-                    }),
+                empty: !snapshot.hasData
+                    ? const Loader(text: "Classes data")
+                    : const Center(
+                        child: Text("No Classes added.."),
+                      ),
                 source: ClassDataSource(
                   classModel: controller,
                   context: context,

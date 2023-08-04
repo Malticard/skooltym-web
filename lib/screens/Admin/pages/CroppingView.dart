@@ -15,7 +15,6 @@ class CropSample extends StatefulWidget {
 }
 
 class _CropSampleState extends State<CropSample> {
-  var _loadingImage = false;
 
   var _isSumbnail = false;
   var _isCropping = false;

@@ -26,7 +26,7 @@ class _DashboardState extends State<Dashboard> {
       _dashDataController.add(dashData);
     }
     // fetch data periodically
-    timer = Timer.periodic(Duration(seconds: 3), (timer) async {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       if (mounted) {
         var dashData = await fetchDashBoardData(
             context.read<SchoolController>().state['school']);

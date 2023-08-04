@@ -1,4 +1,6 @@
 // ignore_for_file: file_names, non_constant_identifier_names, invalid_return_type_for_catch_error, argument_type_not_assignable_to_error_handler
+import 'dart:developer';
+
 import '/exports/exports.dart';
 
 class SystemSettings extends StatefulWidget {
@@ -206,8 +208,9 @@ class _SystemSettingsState extends State<SystemSettings> {
       "settings_key[key]": "0",
     };
     BlocProvider.of<SettingsController>(context).saveSettings(results);
-    debugPrint("results => $results");
-    showProgress(context);
+    // log(message)
+    log("results => $results");
+    showProgress(context,msg: "Saving setting in progress");
     Client()
         .post(Uri.parse(AppUrls.addSettings), body: results)
         .then((response) {

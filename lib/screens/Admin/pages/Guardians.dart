@@ -13,8 +13,9 @@ class ViewGuardians extends StatefulWidget {
 
 class _ViewGuardiansState extends State<ViewGuardians> {
   List<String> guardianColumns = [
+    "Guardian's Profile",
     "Guardian Name",
-    "Address",
+    "Email",
     "Gender",
     "Actions"
   ];
@@ -134,7 +135,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                   columns: List.generate(
                     guardianColumns.length,
                     (index) => DataColumn(
-                      numeric: true,
+                   
                       label: Text(
                         guardianColumns[index],
                       ),
@@ -158,7 +159,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                 ),
               ),
               Positioned(
-                bottom: 10,
+                bottom: size.width /9,
                 left: 10,
                 child: Row(
                   children: [

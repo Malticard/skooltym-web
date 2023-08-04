@@ -1,7 +1,8 @@
+import '../../../models/Guardians.dart';
+import '../../../models/OvertimeModel.dart';
 import '/screens/dashboard/popups/UpdateStudentDash.dart';
 
 import '../../../models/DropOffModels.dart';
-import '../../../models/Guardians.dart';
 import '../../../models/StudentModel.dart';
 import '../../../widgets/FutureImage.dart';
 import '/exports/exports.dart';
@@ -197,25 +198,21 @@ class GuardianDataSource extends DataTableSource {
     return DataRow2.byIndex(
       index: index,
       cells: [
-        DataCell(Row(
-          children: [
-            Padding(
+        DataCell(  Padding(
               padding: const EdgeInsets.all(5.0),
               child: FutureImage(
                 future: fetchAndDisplayImage(guardianData.guardianProfilePic),
               ),
+            ),),
+        DataCell(Padding(
+          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              "${guardianData.guardianFname} ${guardianData.guardianLname}",
+              style: const TextStyle(fontSize: 13.5),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Text(
-                  "${guardianData.guardianFname} ${guardianData.guardianLname}",
-                  style: const TextStyle(fontSize: 13.5),
-                ),
-              ),
-            ),
-          ],
+          ),
         )),
         DataCell(Text(guardianData.guardianEmail)),
         DataCell(Text(guardianData.guardianGender)),
@@ -268,19 +265,20 @@ class ClassDataSource extends DataTableSource {
       required this.context});
   @override
   DataRow? getRow(int index) {
-      final int pageIndex = currentPage ~/ paginatorController.rowsPerPage;
+    final int pageIndex = currentPage ~/ paginatorController.rowsPerPage;
     final int dataIndex = index % paginatorController.rowsPerPage;
     final int dataLength = classModel.length;
 
-    if (pageIndex * paginatorController.rowsPerPage + dataIndex >=
-        dataLength) {
+    if (pageIndex * paginatorController.rowsPerPage + dataIndex >= dataLength) {
       return null;
     }
-    Classes classData = classModel[pageIndex * paginatorController.rowsPerPage + dataIndex];
+    Classes classData =
+        classModel[pageIndex * paginatorController.rowsPerPage + dataIndex];
     return DataRow.byIndex(
       index: index,
       cells: [
-        DataCell(Text("${(pageIndex * paginatorController.rowsPerPage + dataIndex) + 1}")),
+        DataCell(Text(
+            "${(pageIndex * paginatorController.rowsPerPage + dataIndex) + 1}")),
         DataCell(Text(classData.className)),
         DataCell(
           buildActionButtons(
@@ -410,8 +408,7 @@ class StaffDataSource extends DataTableSource {
       index: index,
       cells: [
         DataCell(
-          FutureImage(
-              future: fetchAndDisplayImage(staffData.staffProfilePic)),
+          FutureImage(future: fetchAndDisplayImage(staffData.staffProfilePic)),
         ),
         DataCell(
           Text(
@@ -463,58 +460,76 @@ class ReportsDataSource extends DataTableSource {
   final int totalDocuments;
   final int currentPage;
   final PaginatorController? paginatorController;
-  final List<Payments> paymentModel;
+  final List<Overtimes> overtimeModel;
   final BuildContext context;
   ReportsDataSource(
       {required this.totalDocuments,
       required this.currentPage,
       required this.paginatorController,
-      required this.paymentModel,
+      required this.overtimeModel,
       required this.context});
   @override
   DataRow? getRow(int index) {
-    Payments paymentData = paymentModel[index];
+    final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
+    final int dataIndex = index % paginatorController!.rowsPerPage;
+    final int dataLength = overtimeModel.length;
+
+    if (pageIndex * paginatorController!.rowsPerPage + dataIndex >=
+        dataLength) {
+      return null;
+    }
+    Overtimes overtimeData =
+        overtimeModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
     return DataRow2.byIndex(
       index: index,
       cells: [
         DataCell(
-          Row(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: FutureImage(
-                    future: fetchAndDisplayImage(
-                        paymentData.student.studentProfilePic),
-                  )),
-              Padding(
-                padding: const EdgeInsets.all(0),
-                child: Text(paymentData.student.username,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 11)),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: FutureImage(
+              future:
+                  fetchAndDisplayImage(overtimeData.student.studentProfilePic),
+            ),
           ),
         ),
-        DataCell(Text(
-            "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
-            style: const TextStyle(fontSize: 11))),
-        DataCell(Text(paymentData.dateOfPayment.split(".").first,
-            style: const TextStyle(fontSize: 11))),
-        DataCell(Text(paymentData.paymentMethod,
-            style: const TextStyle(fontSize: 11))),
-        // DataCell(Text(
-        //     "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
-        //     style: const TextStyle(fontSize: 11))),
-        DataCell(Text(paymentData.balance.toString(),
-            style: const TextStyle(fontSize: 11))),
-        DataCell(Text(paymentData.comment.toString(),
-            style: const TextStyle(fontSize: 11))),
+        DataCell(
+          Padding(
+            padding: const EdgeInsets.all(0),
+            child: Text(overtimeData.student.username,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 11)),
+          ),
+        ),
+        DataCell(
+          Text(
+            "${overtimeData.staff.staffFname} ${overtimeData.staff.staffLname}",
+            style: const TextStyle(fontSize: 11),
+          ),
+        ),
+        DataCell(
+          Text(
+            "${overtimeData.guardian.guardianFname} ${overtimeData.guardian.guardianFname}",
+            style: const TextStyle(fontSize: 11),
+          ),
+        ),
+        DataCell(
+          Text(
+            formatDate(overtimeData.createdAt),
+            style: const TextStyle(fontSize: 11),
+          ),
+        ),
+        DataCell(
+          Text(
+            overtimeData.overtimeCharge.toString(),
+            style: const TextStyle(fontSize: 11),
+          ),
+        )
       ],
     );
   }
 
   @override
-  int get rowCount => paymentModel.length;
+  int get rowCount => totalDocuments;
   @override
   int get selectedRowCount => 0;
 
@@ -655,6 +670,79 @@ class PickUpDataSource extends DataTableSource {
         // DataCell(
         //   Text(pickUp.pickUpTime),
         // ),
+      ],
+    );
+  }
+
+  @override
+  int get rowCount => totalDocuments;
+  @override
+  int get selectedRowCount => 0;
+
+  @override
+  bool get isRowCountApproximate => false;
+}
+
+// PickUp Datasource
+class PaymentDataSource extends DataTableSource {
+  final List<Payments> payments;
+  final BuildContext context;
+  final int totalDocuments;
+  final int currentPage;
+  final PaginatorController? paginatorController;
+  PaymentDataSource(
+      {required this.totalDocuments,
+      required this.currentPage,
+      this.paginatorController,
+      required this.payments,
+      required this.context});
+  @override
+  DataRow? getRow(int index) {
+    final int pageIndex = currentPage ~/ paginatorController!.rowsPerPage;
+    final int dataIndex = index % paginatorController!.rowsPerPage;
+    final int dataLength = payments.length;
+
+    if (pageIndex * paginatorController!.rowsPerPage + dataIndex >=
+        dataLength) {
+      return null;
+    }
+    Payments paymentData =
+        payments[pageIndex * paginatorController!.rowsPerPage + dataIndex];
+    return DataRow2.byIndex(
+      index: index,
+      cells: [
+        DataCell(
+          Row(
+            children: [
+              Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: FutureImage(
+                    future: fetchAndDisplayImage(
+                        paymentData.student.studentProfilePic),
+                  )),
+              Padding(
+                padding: const EdgeInsets.all(0),
+                child: Text(paymentData.student.username,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 11)),
+              ),
+            ],
+          ),
+        ),
+        DataCell(Text(
+            "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(paymentData.dateOfPayment.split(".").first,
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(paymentData.paymentMethod,
+            style: const TextStyle(fontSize: 11))),
+        // DataCell(Text(
+        //     "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
+        //     style: const TextStyle(fontSize: 11))),
+        DataCell(Text(paymentData.balance.toString(),
+            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(paymentData.comment.toString(),
+            style: const TextStyle(fontSize: 11))),
       ],
     );
   }

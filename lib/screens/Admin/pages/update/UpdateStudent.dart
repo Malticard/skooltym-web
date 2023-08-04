@@ -1,7 +1,5 @@
 // ignore_for_file: invalid_return_type_for_catch_error, unnecessary_null_comparison
 
-import 'dart:io';
-
 import '../../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
@@ -30,7 +28,8 @@ class _UpdateStudentState extends State<UpdateStudent> {
       TextEditingController(text: widget.studentModel.resultClass.className),
     ];
   }
-Map<String, dynamic> imageData = {};
+
+  Map<String, dynamic> imageData = {};
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
@@ -95,7 +94,7 @@ Map<String, dynamic> imageData = {};
         'icon': Icons.home_work_outlined
       }
     ];
-    return BlocConsumer<ImageUploadController, Map<String,dynamic>>(
+    return BlocConsumer<ImageUploadController, Map<String, dynamic>>(
       listener: (context, state) {
         setState(() {
           imageData = state;
@@ -136,8 +135,6 @@ Map<String, dynamic> imageData = {};
                           for (var v in _formControllers) {
                             v.clear();
                           }
-                          // showSuccessDialog(
-                          //     _formControllers[0].text.trim(), context);
                         } else {
                           showMessage(
                             msg:
@@ -182,11 +179,14 @@ Map<String, dynamic> imageData = {};
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
     if (kIsWeb) {
-      request.files.add(MultipartFile(
+      request.files.add(
+        MultipartFile(
           "image",
           imageData['image'],
           imageData['size'],
-          filename: imageData['name']));
+          filename: imageData['name'],
+        ),
+      );
     } else {
       if (uri.isNotEmpty) {
         request.files.add(MultipartFile(
@@ -194,10 +194,6 @@ Map<String, dynamic> imageData = {};
             filename: uri.split("/").last));
       }
     }
-
-    // request.files.add(MultipartFile('image',
-    //     File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-    //     filename: uri.split("/").last));
     //  ============================== student key ============================
     request.fields['student_key[key]'] = "";
     //  ============================== student key ============================
