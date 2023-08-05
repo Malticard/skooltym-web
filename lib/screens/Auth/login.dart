@@ -287,7 +287,10 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(8)),
-            onTap: () => Routes.namedRoute(context,Routes.phoneVerify),
+            onTap: (){
+              BlocProvider.of<TitleController>(context).setTitle("Verify Phone");
+              Routes.namedRoute(context,Routes.phoneVerify);
+            },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(

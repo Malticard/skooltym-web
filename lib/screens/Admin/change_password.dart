@@ -164,7 +164,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       .setTitle("Dashboard");
                                   BlocProvider.of<SideBarController>(context)
                                       .changeSelected(0);
-                                      context.read<FinanceFirstTimeController>().setFirstTime(false);
+                                      context.read<FirstTimeUserController>().setFirstTimeUser(false,context.read<SchoolController>().state['role']);
                                 } else {
                                   // for admins after changing the password are redirected to system settings
                                   context

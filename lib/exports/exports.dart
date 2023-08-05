@@ -133,12 +133,9 @@ export '/controllers/PickUpAllowanceTimeController.dart';
 export '/controllers/DropOffController.dart';
 export '/controllers/SchoolController.dart';
 export '/controllers/AllowOvertimeController.dart';
-export '/controllers/LightDarkController.dart';
-export '/controllers/StudentController.dart';
 export '/controllers/TitleController.dart';
 export '/controllers/OnlineCheckerController.dart';
 export '/controllers/DashboardController.dart';
-export '/controllers/OvertimeController.dart';
 export '/controllers/StepperController.dart';
 export '/controllers/ClassNameController.dart';
 export '/controllers/SideBarController.dart';
@@ -153,16 +150,12 @@ export '/controllers/PickUpTimeController.dart';
 export '/controllers/DropOffTimeController.dart';
 export '/controllers/FirstTimeUserController.dart';
 export '/controllers/FinanceFirstTimeController.dart';
-export '/controllers/PaymentController.dart';
+
 // util controllers
 export '/controllers/utils/ClassesController.dart';
-export '/controllers/utils/DropOffController.dart';
 export '/controllers/utils/GuardianController.dart';
-export '/controllers/utils/StaffController.dart';
 export '/controllers/utils/StreamController.dart';
-export '/controllers/utils/PickUpsController.dart';
-export '/controllers/utils/DashboardData.dart';
-export '/controllers/utils/DashboardCardController.dart';
+
 
 
 // themes

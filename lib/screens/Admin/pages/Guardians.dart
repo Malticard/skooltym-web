@@ -173,7 +173,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                         context.read<SideBarController>().changeSelected(0);
                         context
                             .read<FirstTimeUserController>()
-                            .setFirstTimeUser(false);
+                            .setFirstTimeUser(false,context.read<SchoolController>().state['role']);
                       },
                       child: Text(
                         "Click here",

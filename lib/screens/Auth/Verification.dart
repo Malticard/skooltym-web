@@ -39,6 +39,25 @@ class _VerificationState extends State<Verification> {
         border: Border.all(color: borderColor),
       ),
     );
+   void gotoChangePassword(){
+       if(formKey.currentState!.validate()){
+                  
+                
+                focusNode.unfocus();
+                print("Id => ${widget.code}");
+                // showProgress(context);
+                 Client().post(Uri.parse(AppUrls.verifyOtp+widget.code),body: json.encode({"new_otp":pinController.text})).then((value) {
+                  print(value.body);
+                  if (value.statusCode == 200 || value.statusCode == 201) {
+                    showMessage(context: context,msg: "Verification successful",type:'success');
+                    Routes.push(const UpdatePassword(), context);
+                  } else {
+                    // var data = jsonDecode(value.body);
+                    showMessage(context: context,msg: value.body,type:'error');
+                  }
+                 });
+                }
+    }
  buildPinPut(){
     return ListView(
           // mainAxisAlignment: MainAxisAlignment.center,
@@ -88,7 +107,7 @@ class _VerificationState extends State<Verification> {
                 hapticFeedbackType: HapticFeedbackType.lightImpact,
                 onCompleted: (pin) {
                   debugPrint('onCompleted: $pin');
-                
+                 gotoChangePassword();
                 },
                 onChanged: (value) {
                   debugPrint('onChanged: $value');
@@ -127,26 +146,7 @@ class _VerificationState extends State<Verification> {
             ),
             CommonButton(
               padding: const EdgeInsets.only(left: 44, right: 44),
-              onTap: () {
-                if(formKey.currentState!.validate()){
-                  
-                
-                focusNode.unfocus();
-                print("Id => ${widget.code}");
-                // showProgress(context);
-                 Client().post(Uri.parse(AppUrls.verifyOtp+widget.code),body: json.encode({"new_otp":pinController.text})).then((value) {
-                  print(value.body);
-                  if (value.statusCode == 200 || value.statusCode == 201) {
-                    showMessage(context: context,msg: "Verification successful",type:'success');
-                    Routes.push(const UpdatePassword(), context);
-                  } else {
-                    // var data = jsonDecode(value.body);
-                    showMessage(context: context,msg: value.body,type:'error');
-                  }
-                 });
-                }
-                    // Routes.push(UpdatePassword(), context);
-              },
+              onTap: () =>  gotoChangePassword(),
               buttonText: 'Verify',
             ),
             const Space(

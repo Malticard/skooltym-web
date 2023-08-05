@@ -10,6 +10,7 @@ import '/exports/exports.dart';
 
 // login logic for the user
 void loginUser(BuildContext context, String email, String password) async {
+    // BlocProvider.of<FinanceFirstTimeController>(context).getFirstTime();
   showProgress(context, msg: "Login in progress");
   Client()
       .post(Uri.parse(AppUrls.login),
@@ -25,9 +26,21 @@ void loginUser(BuildContext context, String email, String password) async {
       .then((value) {
     if (value.statusCode == 200 || value.statusCode == 201) {
       var data = jsonDecode(value.body);
+   BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser(data['role']);
+
+      if(BlocProvider.of<FirstTimeUserController>(context).state == true){
+         BlocProvider.of<TitleController>(context).setTitle("Change Password");
+      } else {
+         BlocProvider.of<TitleController>(context).setTitle("Dashboard");
+      }
+      // for finance 
+       if(BlocProvider.of<FinanceFirstTimeController>(context).state == true){
+         BlocProvider.of<TitleController>(context).setTitle("Change Password");
+      } else {
+         BlocProvider.of<TitleController>(context).setTitle("Dashboard");
+      }
 
       Routes.popPage(context);
-
       BlocProvider.of<SchoolController>(context).setSchoolData(data);
       //
       Routes.namedRemovedUntilRoute(

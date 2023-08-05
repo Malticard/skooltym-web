@@ -50,8 +50,8 @@ class _SideMenuState extends State<SideMenu> {
                         const Space(space: 0.04),
                         Image.network(
                             "${AppUrls.liveImages}${school['school_badge']}",
-                            height: 40,
-                            width: 40),
+                            height:60,
+                            width: 60),
                         const Space(), //
                         Text(
                           "${school['schoolName']}",
@@ -79,20 +79,16 @@ class _SideMenuState extends State<SideMenu> {
                       svgSrc: store[index]['icon'],
                       press: () {
                         context.read<SideBarController>().changeSelected(index);
-                        if (context.read<SchoolController>().state['role'] ==
-                            'Admin') {
-                          context
+                         context
                               .read<TitleController>()
                               .setTitle(store[index]['title']);
+                        if (context.read<SchoolController>().state['role'] ==
+                            'Admin') {
                           // update rendered page
                           context
                               .read<WidgetController>()
                               .pushWidget(store[index]['page']);
                         } else {
-                          context
-                              .read<FinanceTitleController>()
-                              .setTitle(store[index]['title']);
-                          // update rendered page
                           context
                               .read<FinanceViewController>()
                               .pushWidget(store[index]['page']);
@@ -162,13 +158,16 @@ class DrawerListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      selectedTileColor: const Color.fromARGB(255, 119, 119, 121).withOpacity(0.1),
+      iconColor: selected ? Colors.blue : Colors.white54,
+      textColor: selected ? Colors.blue : Colors.white54,
+      // tileColor: selected ?Colors.grey[200]: const Color.fromRGBO(6, 109, 161, 1.0),
+      selectedTileColor: Color.fromARGB(255, 46, 47, 47),
       onTap: press,
-      shape: RoundedRectangleBorder(
-        side: selected
-            ? const BorderSide(color: Colors.white60)
-            : BorderSide.none,
-      ),
+      // shape: RoundedRectangleBorder(
+      //   side: selected
+      //       ? const BorderSide(color: Colors.white60)
+      //       : BorderSide.none,
+      // ),
       horizontalTitleGap: 0.6,
       leading: Padding(
         padding: const EdgeInsets.only(right:10.0),
