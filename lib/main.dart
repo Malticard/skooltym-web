@@ -4,22 +4,16 @@ import '/exports/exports.dart';
 
 Future<void> main() async {
   // Obtain shared preferences.
-    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer = const Observer();
   var prefs = await SharedPreferences.getInstance();
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => DashboardCardsController()),
         BlocProvider(create: (context) => FetchStudentsController()),
-        BlocProvider(create: (context) => DashboardDataController()),
-        BlocProvider(create: (context) => PickUpsController()),
-        ChangeNotifierProvider(create: (context) => StaffController()),
         BlocProvider(create: (context) => GuardianController()),
-        BlocProvider(create: (context) => DropOffController()),
         ChangeNotifierProvider(create: (context) => ClassController()),
-        BlocProvider(create: (context) => PaymentController()),
         BlocProvider(create: (context) => WidgetController()),
         BlocProvider(create: (context) => ImageUploadController()),
         BlocProvider(create: (context) => SideBarController()),
@@ -34,9 +28,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => DropOffAllowanceController()),
         BlocProvider(create: (context) => SchoolController()),
         BlocProvider(create: (context) => AllowOvertimeController()),
-        BlocProvider(create: (context) => LightDarkController()),
         BlocProvider(create: (context) => OnlineCheckerController()),
-        BlocProvider(create: (context) => StudentController()),
         BlocProvider(create: (context) => TitleController()),
         BlocProvider(create: (context) => DashboardController()),
         BlocProvider(create: (context) => StepperController()),
@@ -50,40 +42,42 @@ Future<void> main() async {
         BlocProvider(create: (context) => PickUpTimeController()),
       ],
       child: BlocConsumer<ThemeController, ThemeData>(
-        listener: (context, theme) {
-          print("Theme state changed to $theme");
-        },
+        listener: (context, theme) {},
         builder: (context, theme) {
           BlocProvider.of<SchoolController>(context).getSchoolData();
-          return MaterialApp(
-            // debugShowCheckedModeBanner: false,xs
-            themeMode: theme.brightness == Brightness.light
-                ? ThemeMode.light
-                : ThemeMode.dark,
-            theme: theme.copyWith(
-              textTheme:
-                  GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
-                      .apply(
-                bodyColor: theme.brightness == Brightness.light
-                    ? Colors.black
-                    : Colors.white,
-                displayColor: theme.brightness == Brightness.light
-                    ? Colors.black
-                    : Colors.white,
-              ),
-              useMaterial3: true,
-            ),
-            initialRoute: prefs.containsKey('schoolData') == true &&
-                    context.read<SchoolController>().state['role'] != null
-                ? Routes.home
-                : Routes.login,
-            routes: routes(context),
+          return BlocBuilder<TitleController, String>(
+            builder: (context, title) {
+              return MaterialApp(
+                title: "Skooltym  | $title",
+                // debugShowCheckedModeBanner: false,xs
+                themeMode: theme.brightness == Brightness.light
+                    ? ThemeMode.light
+                    : ThemeMode.dark,
+                theme: theme.copyWith(
+                  textTheme:
+                      GoogleFonts.chilankaTextTheme(Theme.of(context).textTheme)
+                          .apply(
+                    bodyColor: theme.brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
+                    displayColor: theme.brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
+                  ),
+                  useMaterial3: true,
+                ),
+                initialRoute: prefs.containsKey('schoolData') == true &&
+                        context.read<SchoolController>().state['role'] != null
+                    ? Routes.home
+                    : Routes.login,
+                routes: routes(context),
+              );
+            },
           );
         },
       ),
     ),
   );
   // whenever your initialization is completed, remove the splash screen:
-    FlutterNativeSplash.remove();
-
+  FlutterNativeSplash.remove();
 }

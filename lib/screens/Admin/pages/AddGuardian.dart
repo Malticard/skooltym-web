@@ -85,7 +85,7 @@ class _AddGuardianState extends State<AddGuardian> {
   void initState() {
     super.initState();
     realTimeStudentsData();
-    BlocProvider.of<GuardianController>(context).getGuardians(context);
+  
     BlocProvider.of<SchoolController>(context).getSchoolData();
   }
   void realTimeStudentsData() async {
@@ -113,8 +113,6 @@ void dispose() {
   @override
   Widget build(BuildContext context) {
     context.read<MultiStudentsController>().getMultiStudents();
-    BlocProvider.of<GuardianController>(context).getGuardians(context);
-
     return Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,
