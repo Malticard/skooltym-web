@@ -34,6 +34,7 @@ class FileInfoCard extends StatelessWidget {
                           builder: (context) => Dialog(
                             child: StudentsPopUps(
                               id: index,
+                              streamId: info.classStreams[index].id,
                               classId: classId, className: info.className, streamName: info.classStreams[index].streamName,
                             ),
                           ),

@@ -1,4 +1,6 @@
+// To parse this JSON data, do
 import 'dart:convert';
+
 PaymentModel paymentModelFromJson(String str) => PaymentModel.fromJson(json.decode(str));
 
 String paymentModelToJson(PaymentModel data) => json.encode(data.toJson());
@@ -23,7 +25,7 @@ class PaymentModel {
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         pageSize: json["pageSize"],
-        results: List<Payments>.from(json["results"].map((x) => x)),
+        results: List<Payments>.from(json["results"].map((x) => Payments.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -31,26 +33,21 @@ class PaymentModel {
         "totalPages": totalPages,
         "currentPage": currentPage,
         "pageSize": pageSize,
-        "results": List<Payments>.from(results.map((x) => x)),
+        "results": List<dynamic>.from(results.map((x) => x.toJson())),
     };
 }
-
-// List<PaymentModel> paymentModelFromJson(String str) => List<PaymentModel>.from(json.decode(str).map((x) => PaymentModel.fromJson(x)));
-
-// String paymentModelToJson(List<PaymentModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Payments {
     final String id;
     final String school;
-    final Studen_t student;
-    final Staff_ staff;
-    final String dateOfPayment;
+    final GuardianP guardian;
+    final StudentP student;
+    final StaffP staff;
+    final DateTime dateOfPayment;
     final String paymentMethod;
     final int paidAmount;
-    final int balance;
     final String comment;
     final bool isComplete;
-    final List<dynamic> paymentKey;
     final DateTime createdAt;
     final DateTime updatedAt;
     final int v;
@@ -58,15 +55,14 @@ class Payments {
     Payments({
         required this.id,
         required this.school,
+        required this.guardian,
         required this.student,
         required this.staff,
         required this.dateOfPayment,
         required this.paymentMethod,
         required this.paidAmount,
-        required this.balance,
         required this.comment,
         required this.isComplete,
-        required this.paymentKey,
         required this.createdAt,
         required this.updatedAt,
         required this.v,
@@ -75,15 +71,14 @@ class Payments {
     factory Payments.fromJson(Map<String, dynamic> json) => Payments(
         id: json["_id"],
         school: json["school"],
-        student: Studen_t.fromJson(json["student"] ?? {}),
-        staff: Staff_.fromJson(json["staff"] ?? {}),
-        dateOfPayment: json["date_of_payment"],
+        guardian: GuardianP.fromJson(json["guardian"]),
+        student: StudentP.fromJson(json["student"]),
+        staff: StaffP.fromJson(json["staff"]),
+        dateOfPayment: DateTime.parse(json["date_of_payment"]),
         paymentMethod: json["payment_method"],
-        paidAmount: json["paid_amount"] ?? 0,
-        balance: json["balance"] ?? 0,
-        comment: json["comment"] ?? "",
+        paidAmount: json["paid_amount"],
+        comment: json["comment"],
         isComplete: json["isComplete"],
-        paymentKey: List<dynamic>.from(json["payment_key"].map((x) => x)),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
@@ -92,34 +87,57 @@ class Payments {
     Map<String, dynamic> toJson() => {
         "_id": id,
         "school": school,
+        "guardian": guardian.toJson(),
         "student": student.toJson(),
         "staff": staff.toJson(),
-        "date_of_payment": dateOfPayment,
+        "date_of_payment": "${dateOfPayment.year.toString().padLeft(4, '0')}-${dateOfPayment.month.toString().padLeft(2, '0')}-${dateOfPayment.day.toString().padLeft(2, '0')}",
         "payment_method": paymentMethod,
         "paid_amount": paidAmount,
-        "balance": balance,
         "comment": comment,
         "isComplete": isComplete,
-        "payment_key": List<dynamic>.from(paymentKey.map((x) => x)),
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
     };
 }
 
-class Staff_ {
+class GuardianP {
+    final String id;
+    final String guardianFname;
+    final String guardianLname;
+
+    GuardianP({
+        required this.id,
+        required this.guardianFname,
+        required this.guardianLname,
+    });
+
+    factory GuardianP.fromJson(Map<String, dynamic> json) => GuardianP(
+        id: json["_id"],
+        guardianFname: json["guardian_fname"] ?? "",
+        guardianLname: json["guardian_lname"] ?? "",
+    );
+
+    Map<String, dynamic> toJson() => {
+        "_id": id,
+        "guardian_fname": guardianFname,
+        "guardian_lname": guardianLname,
+    };
+}
+
+class StaffP {
     final String id;
     final String staffFname;
     final String staffLname;
 
-    Staff_({
+    StaffP({
         required this.id,
         required this.staffFname,
         required this.staffLname,
     });
 
-    factory Staff_.fromJson(Map<String, dynamic> json) => Staff_(
-        id: json["_id"] ?? "",
+    factory StaffP.fromJson(Map<String, dynamic> json) => StaffP(
+        id: json["_id"],
         staffFname: json["staff_fname"] ?? "",
         staffLname: json["staff_lname"] ?? "",
     );
@@ -131,19 +149,19 @@ class Staff_ {
     };
 }
 
-class Studen_t {
+class StudentP {
     final String id;
     final String username;
     final String studentProfilePic;
 
-    Studen_t({
+    StudentP({
         required this.id,
         required this.username,
         required this.studentProfilePic,
     });
 
-    factory Studen_t.fromJson(Map<String, dynamic> json) => Studen_t(
-        id: json["_id"] ??"",
+    factory StudentP.fromJson(Map<String, dynamic> json) => StudentP(
+        id: json["_id"] ?? "",
         username: json["username"] ?? "",
         studentProfilePic: json["student_profile_pic"] ?? "",
     );

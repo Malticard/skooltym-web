@@ -7,9 +7,10 @@ class StudentsPopUps extends StatefulWidget {
 
 final int classId;
 final int id;
+final String streamId;
 final String className;
 final String streamName;
-  const StudentsPopUps({super.key, required this.id, required this.className, required this.streamName, required this.classId,});
+  const StudentsPopUps({super.key, required this.id, required this.className, required this.streamName, required this.classId, required this.streamId,});
 
 
   @override
@@ -18,6 +19,8 @@ final String streamName;
 
 class _StudentsPopUpsState extends State<StudentsPopUps> {
   List<Student> studentData = [];
+String? _query;
+
   int _currentPage = 1;
   int rowsPerPage = 20;
   Timer? timer;
@@ -65,7 +68,6 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
       _dashDataController.close();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -79,7 +81,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
             builder: (context, snapshot) {
               var dashboard = snapshot.data;
               var studentData = dashboard?[widget.classId].classStudents ?? [];
-              return snapshot.hasData ? CustomDataTable(
+              return  CustomDataTable(
                 paginatorController: _controller,
                 onPageChanged: (page) {
                   setState(() {
@@ -101,9 +103,9 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
                           width: 120,
                           child: SearchField(
                             onChanged: (value) {
-                              // Provider.of<MainController>(context,
-                              //         listen: false)
-                              //     .searchStudents(value ?? "");
+                             setState(() {
+                               _query = value?.trim();
+                             });
                             },
                           ),
                         ),
@@ -116,7 +118,7 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
                     ],
                   ),
                 ),
-                empty: NoDataWidget(
+                empty:!snapshot.hasData ?Loader(text: "Students in ${widget.streamName}",): NoDataWidget(
                   text: "No "
                       "Students in ${dashboard?[widget.classId].classStreams[widget.id].streamName} "
                       "yet...",
@@ -132,12 +134,12 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
                 source: StudentsDashboardDataSource(
                   studentClass:widget.className,
                   studentStream:widget.streamName,
-                    studentModel: studentData,
+                    studentModel: studentData.where((element) => element.stream == widget.streamId).toList(),
                     context: context,
                     currentPage: _currentPage,
                     paginatorController: _controller,
-                    totalDocuments: studentData.length),
-              ): Loader(text: "Students in ${widget.streamName}",);
+                    totalDocuments: studentData.where((element) => element.stream == widget.streamId).toList().length),
+              );
             },
           ),
           Positioned(

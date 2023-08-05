@@ -117,7 +117,7 @@ class _PaymentReportsState extends State<PaymentReports>
                 label: Text("Cleared With", style: TextStyle(fontSize: 12)),
               ),
               DataColumn(
-                label: Text("Balance", style: TextStyle(fontSize: 12)),
+                label: Text("Amount Paid", style: TextStyle(fontSize: 12)),
               ),
               DataColumn(
                 label: Text("Comment", style: TextStyle(fontSize: 12)),

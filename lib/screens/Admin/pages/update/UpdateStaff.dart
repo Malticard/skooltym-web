@@ -78,7 +78,6 @@ class _UpdateStaffState extends State<UpdateStaff> {
   List<String> errorFields = List.generate(formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return BlocConsumer<ImageUploadController, Map<String, dynamic>>(
       listener: (context, state) {
        setState(() {

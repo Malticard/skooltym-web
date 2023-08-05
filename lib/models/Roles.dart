@@ -17,7 +17,6 @@ class Roles {
     required this.roleKey,
     required this.createdAt,
     required this.updatedAt,
-    required this.roleNo,
     required this.v,
   });
 
@@ -26,7 +25,6 @@ class Roles {
   List<RoleKey> roleKey;
   DateTime createdAt;
   DateTime updatedAt;
-  int roleNo;
   int v;
 
   factory Roles.fromJson(Map<String, dynamic> json) => Roles(
@@ -36,7 +34,7 @@ class Roles {
             json["role_key"].map((x) => RoleKey.fromJson(x))),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        roleNo: json["role_no"],
+        
         v: json["__v"],
       );
 
@@ -46,7 +44,7 @@ class Roles {
         "role_key": List<dynamic>.from(roleKey.map((x) => x.toJson())),
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
-        "role_no": roleNo,
+       
         "__v": v,
       };
 }

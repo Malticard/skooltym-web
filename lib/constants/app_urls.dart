@@ -79,5 +79,8 @@ static String searchClass = "${devURL}search/search-classes/";
 static String searchStreams = "${devURL}search/search-streams/";
 static String searchPickUps = "${devURL}search/search-pickups/";
 static String searchDropOffs = "${devURL}search/search-dropoffs/";
+// overtimes
+static String pendingOvertime = "${devURL}overtime/pending/";
+static String clearedOvertime = "${devURL}overtime/cleared/";
 }
 

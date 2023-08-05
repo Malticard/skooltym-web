@@ -113,27 +113,30 @@ class _ViewPickUpsState extends State<ViewPickUps> {
             ),
             columns: [
               DataColumn2(
-                numeric: true,
+                numeric: false,
+                label: Text("Student's Profile"),
+              ),DataColumn2(
+                numeric: false,
                 label: Text("Student Name"),
               ),
               DataColumn2(
-                numeric: true,
+                numeric: false,
                 label: Text("PickedUp By"),
               ),
               DataColumn2(
-                numeric: true,
+                numeric: false,
                 label: Text("Cleared by"),
               ),
               DataColumn2(
-                numeric: true,
+                numeric: false,
                 label: Text("Overtime Charge"),
               ),
               DataColumn2(
-                numeric: true,
+                numeric: false,
                 label: Text("Date"),
               ),
               DataColumn2(
-                numeric: true,
+                numeric: false,
                 label: Text("Time Of PickUp"),
               ),
             ],

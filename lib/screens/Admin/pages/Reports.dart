@@ -26,7 +26,7 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
 
   void realTimeClearedPayments() async {
     // initial data
-    var overtimes = await fetchOvertimeData(
+    var overtimes = await fetchClearedOvertimeData(
         context.read<SchoolController>().state['school'],
         page: _currentPage,
         limit: rowsPerPage);
@@ -35,7 +35,7 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
     Timer.periodic(Duration(seconds: 1), (timer) async {
       this.timer = timer;
       if (mounted) {
-        var overtimes = await fetchOvertimeData(
+        var overtimes = await fetchClearedOvertimeData(
             context.read<SchoolController>().state['school'],
             page: _currentPage,
             limit: rowsPerPage);
@@ -172,7 +172,7 @@ class _PendingOvertimeState extends State<PendingOvertime>
 
   void realTimeClearedPayments() async {
     // initial data
-    var pendingOvertimes = await fetchOvertimeData(
+    var pendingOvertimes = await fetchPendingOvertimeData(
         context.read<SchoolController>().state['school'],
         page: _currentPage,
         limit: rowsPerPage);
@@ -181,7 +181,7 @@ class _PendingOvertimeState extends State<PendingOvertime>
     Timer.periodic(Duration(seconds: 1), (timer) async {
       this.timer = timer;
       if (mounted) {
-        var overtimes = await fetchOvertimeData(
+        var overtimes = await fetchPendingOvertimeData(
             context.read<SchoolController>().state['school'],
             page: _currentPage,
             limit: rowsPerPage);

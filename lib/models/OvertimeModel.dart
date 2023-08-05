@@ -246,7 +246,7 @@ class Overtimes {
         staff: Staff_.fromJson(json["staff"] ?? {}),
         overtimeCharge: json["overtime_charge"],
         status: json["status"],
-        comments: json["comments"],
+        comments: json["comments"] ?? "",
         isComplete: json["isComplete"],
         overtimeKey: List<dynamic>.from(json["overtime_key"].map((x) => x)),
         createdAt: DateTime.parse(json["createdAt"]),
@@ -321,24 +321,27 @@ class Staff_ {
 
 class StudentO {
     final String id;
-    final String username;
+    final String studentFname;
+    final String studentLname;
     final String studentProfilePic;
 
-    StudentO({
+    StudentO({ required this.studentFname,required this.studentLname,
         required this.id,
-        required this.username,
+        
         required this.studentProfilePic,
     });
 
     factory StudentO.fromJson(Map<String, dynamic> json) => StudentO(
         id: json["_id"] ?? "",
-        username: json["username"] ?? "",
+        studentFname: json["student_fname"] ?? "",
+        studentLname: json["student_lname"] ?? "",
         studentProfilePic: json["student_profile_pic"] ?? "",
     );
 
     Map<String, dynamic> toJson() => {
         "_id": id,
-        "username": username,
+        "student_fname": studentFname,
+        "student_lname": studentLname,
         "student_profile_pic": studentProfilePic,
     };
 }

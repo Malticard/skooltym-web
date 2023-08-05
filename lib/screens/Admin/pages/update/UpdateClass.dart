@@ -33,9 +33,7 @@ class _UpdateClassState extends State<UpdateClass> {
 
   @override
   Widget build(BuildContext context) {
-       Provider.of<ClassController>(context,listen: true).getClasses(context.read<SchoolController>().state['school']);
-
-
+       Provider.of<StreamsController>(context,listen: true).getStreams(context.read<SchoolController>().state['school']);
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.white

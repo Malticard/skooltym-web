@@ -517,8 +517,15 @@ Future<DropOffModel> fetchDropOffs(String id,
 /// Dashboard cards
 
 // fetch overtimes
-Future<OvertimeModel> fetchOvertimeData(String id,{int page = 1,int limit = 50}) async {
-  var response = await Client().get(Uri.parse(AppUrls.overtime + id+"?page=$page&limit=$limit"));
+Future<OvertimeModel> fetchPendingOvertimeData(String id,{int page = 1,int limit = 50}) async {
+  var response = await Client().get(Uri.parse(AppUrls.pendingOvertime + id+"?page=$page&limit=$limit"));
+  return overtimeModelFromJson(response.body);
+      // .where((element) => element.status == status)
+      // .toList();
+  // return response;
+}
+Future<OvertimeModel> fetchClearedOvertimeData(String id,{int page = 1,int limit = 50}) async {
+  var response = await Client().get(Uri.parse(AppUrls.clearedOvertime + id+"?page=$page&limit=$limit"));
   return overtimeModelFromJson(response.body);
       // .where((element) => element.status == status)
       // .toList();
@@ -552,13 +559,14 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       await fetchDropOffs(schoolId);
   var picks =
       await fetchPickUps(schoolId);
-      var overtimes = await fetchOvertimeData(schoolId,limit: 100);
-  var clearedOvertimes = overtimes.results
-      .where((element) => element.status != "Pending")
-      .toList();
-  var pendingOvertimes = overtimes.results
-      .where((element) => element.status == "Pending")
-      .toList();
+      var pendingOvertimes = await fetchPendingOvertimeData(schoolId,limit: 100);
+      var clearedOvertimes = await fetchClearedOvertimeData(schoolId,limit: 100);
+  // var clearedOvertimes = overtimes.results
+  //     .where((element) => element.status != "Pending")
+  //     .toList();
+  // var pendingOvertimes = overtimes.results
+  //     .where((element) => element.status == "Pending")
+  //     .toList();
 
   List<Map<String, dynamic>> dashboardData = [
     {
@@ -577,14 +585,14 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
     },
     {
       "label": "CLEARED OVERTIME",
-      "value": clearedOvertimes.length,
+      "value": clearedOvertimes.totalDocuments,
       "icon": "assets/icons/002-all.svg",
       'color': const Color.fromARGB(255, 77, 154, 255),
       // "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": pendingOvertimes.length,
+      "value": pendingOvertimes.totalDocuments,
       "icon": "assets/icons/005-overtime.svg",
       'color': const Color.fromARGB(255, 50, 66, 95),
       // "last_updated": "14:45"
@@ -593,14 +601,14 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
   List<Map<String, dynamic>> financeData = [
     {
       "label": "CLEARED OVERTIME",
-      "value": clearedOvertimes.length,
+      "value": clearedOvertimes.totalDocuments,
       "icon": "assets/icons/005-overtime.svg",
       'color': Color.fromARGB(255, 27, 86, 24),
       "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
-      "value": pendingOvertimes.length,
+      "value": pendingOvertimes.totalDocuments,
       "icon": "assets/icons/005-overtime.svg",
       'color': const Color.fromARGB(255, 50, 66, 95),
       "last_updated": "14:45"

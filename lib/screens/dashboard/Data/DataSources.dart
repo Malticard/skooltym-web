@@ -198,12 +198,14 @@ class GuardianDataSource extends DataTableSource {
     return DataRow2.byIndex(
       index: index,
       cells: [
-        DataCell(  Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: FutureImage(
-                future: fetchAndDisplayImage(guardianData.guardianProfilePic),
-              ),
-            ),),
+        DataCell(
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: FutureImage(
+              future: fetchAndDisplayImage(guardianData.guardianProfilePic),
+            ),
+          ),
+        ),
         DataCell(Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
           child: SingleChildScrollView(
@@ -495,7 +497,8 @@ class ReportsDataSource extends DataTableSource {
         DataCell(
           Padding(
             padding: const EdgeInsets.all(0),
-            child: Text(overtimeData.student.username,
+            child: Text(
+                "${overtimeData.student.studentFname} ${overtimeData.student.studentLname}",
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 11)),
           ),
@@ -630,34 +633,24 @@ class PickUpDataSource extends DataTableSource {
     }
     PickUp pickUp =
         pickUpModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
-
-    // PickUp pickUp = pickUpModel[index];
     return DataRow2.byIndex(
       index: index,
       cells: [
         DataCell(
           Row(
             children: [
-              // Image.network(
-              //   AppUrls.liveImages + (pickUp.studentN.studentProfilePic),
-              //   height: 25,
-              //   width: 25,
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: CircleAvatar(
-              //     radius: 24,
-              //     backgroundImage: MemoryImage(
-              //       processImage(pickUp.studentN.studentProfilePic),
-              //     ),
-              //   ),
-              // ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text(
-                    "${pickUp.studentName.studentFname} ${pickUp.studentName.studentLname}"),
+              FutureImage(
+                future:
+                    fetchAndDisplayImage(pickUp.studentName.studentProfilePic),
               ),
             ],
+          ),
+        ),
+        DataCell(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+            child: Text(
+                "${pickUp.studentName.studentFname} ${pickUp.studentName.studentLname}"),
           ),
         ),
         DataCell(Text(
@@ -667,9 +660,6 @@ class PickUpDataSource extends DataTableSource {
         DataCell(Text(pickUp.overtimeCharge.toString().split(" ").first)),
         DataCell(Text(formatDate(pickUp.createdAt))),
         DataCell(Text(formatDateTime(pickUp.createdAt))),
-        // DataCell(
-        //   Text(pickUp.pickUpTime),
-        // ),
       ],
     );
   }
@@ -732,14 +722,14 @@ class PaymentDataSource extends DataTableSource {
         DataCell(Text(
             "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
             style: const TextStyle(fontSize: 11))),
-        DataCell(Text(paymentData.dateOfPayment.split(".").first,
+        DataCell(Text(formatDate(paymentData.dateOfPayment),
             style: const TextStyle(fontSize: 11))),
         DataCell(Text(paymentData.paymentMethod,
             style: const TextStyle(fontSize: 11))),
         // DataCell(Text(
         //     "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
         //     style: const TextStyle(fontSize: 11))),
-        DataCell(Text(paymentData.balance.toString(),
+        DataCell(Text(paymentData.paidAmount.toString(),
             style: const TextStyle(fontSize: 11))),
         DataCell(Text(paymentData.comment.toString(),
             style: const TextStyle(fontSize: 11))),
