@@ -49,13 +49,13 @@ final List<Map<String, dynamic>> _formFields = [
     "hint": "eg Relationship type e.g Primary",
     "data": ["Select relationship type", "Primary", "Secondary"]
   },
-  {
-    "title": "Date Of Entry*",
-    "hint": "e.g xx-xx-xx",
-    "date": 9,
-    "password": false,
-    'icon': Icons.calendar_month_outlined
-  },
+  // {
+  //   "title": "Date Of Entry*",
+  //   "hint": "e.g xx-xx-xx",
+  //   "date": 9,
+  //   "password": false,
+  //   'icon': Icons.calendar_month_outlined
+  // },
   {
     "title": "Students *",
     "hint": "Select students",
@@ -91,8 +91,8 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
       TextEditingController(text: ""),
       TextEditingController(text: widget.guardianModel.guardianGender),
       TextEditingController(text: widget.guardianModel.type),
-      TextEditingController(
-          text: widget.guardianModel.guardianDateOfEntry.toString()),
+      // TextEditingController(
+      //     text: widget.guardianModel.guardianDateOfEntry.toString()),
       TextEditingController(),
       TextEditingController(text: widget.guardianModel.relationship),
     ];
@@ -139,6 +139,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
               child: BlocBuilder<FetchStudentsController, List<Student>>(
                 builder: (context, students) {
                   return CommonFormFields(
+                    formTitle: "Update Guardian",
                     initialPic: widget.guardianModel.guardianProfilePic,
                     padding: padding,
                     formFields: _formFields,
@@ -219,7 +220,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
       }
     }
 
-    request.fields['guardian_dateOfEntry'] = _formControllers[6].text.trim();
+    request.fields['guardian_dateOfEntry'] =""; //_formControllers[6].text.trim();
     request.fields['passcode'] = "";
     request.fields['fcmToken'] = "";
     request.fields['guardian_key[key]'] = "";

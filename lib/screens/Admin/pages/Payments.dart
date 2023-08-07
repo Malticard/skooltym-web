@@ -83,25 +83,27 @@ class _PaymentReportsState extends State<PaymentReports>
                   "Payments",
                   style: TextStyles(context).getTitleStyle(),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const AddPayment();
-                        });
-                  },
-                  child: Text(
-                    "Add payment",
-                    style: TextStyles(context).getRegularStyle(),
-                  ),
-                )
+                // ElevatedButton(
+                //   onPressed: () {
+                    
+                //   },
+                //   child: Text(
+                //     "Add payment",
+                //     style: TextStyles(context).getRegularStyle(),
+                //   ),
+                // )
               ],
             ),
             columns: const [
               DataColumn(
                 label: Text(
-                  "Student",
+                  "Student Profile",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  "Student Name",
                   style: TextStyle(fontSize: 12),
                 ),
               ),

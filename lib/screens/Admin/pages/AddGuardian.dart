@@ -44,13 +44,13 @@ final List<Map<String, dynamic>> _formFields = [
     "hint": "eg Relationship type e.g Primary",
     "data": ["Select relationship type", "Primary", "Secondary"]
   },
-  {
-    "title": "Date Of Entry*",
-    "hint": "e.g xx-xx-xx",
-    "date": 9,
-    "password": false,
-    'icon': Icons.calendar_month_outlined
-  },
+  // {
+  //   "title": "Date Of Entry*",
+  //   "hint": "e.g xx-xx-xx",
+  //   "date": 9,
+  //   "password": false,
+  //   'icon': Icons.calendar_month_outlined
+  // },
   {
     "title": "Students *",
     "hint": "Select students",
@@ -116,13 +116,14 @@ void dispose() {
     return Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 1.5,
+        height: MediaQuery.of(context).size.width / 1.79,
         child: Padding(
           padding: padding,
           child: StreamBuilder(
             stream: _guardianStudentsController.stream,
             builder: (context, students) {
               return CommonFormFields(
+                formTitle: "Add Guardian",
                 padding: padding,
                 formFields: _formFields,
                 lists:students.data?.results
@@ -207,7 +208,7 @@ void dispose() {
           'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
           filename: uri.split("/").last));
     }
-    request.fields['guardian_dateOfEntry'] = _formControllers[6].text.trim();
+    request.fields['guardian_dateOfEntry'] = "";//_formControllers[6].text.trim();
     request.fields['passcode'] = "";
     request.fields['fcmToken'] = "";
     request.fields['guardian_key[key]'] = "";

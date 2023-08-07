@@ -12,13 +12,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     context.read<SchoolController>().getSchoolData();
-
     BlocProvider.of<FirstTimeUserController>(context)
         .getFirstTimeUser(context.read<SchoolController>().state['role']);
     // app theme state
     context.read<ThemeController>().getTheme();
     // retrieve session state
-
     super.initState();
   }
 

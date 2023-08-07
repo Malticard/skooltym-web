@@ -38,9 +38,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // ====== end of header section ======
           Padding(
             padding: EdgeInsets.only(
-                top: size.width * 0,
-                left: size.width * 0.061,
-                right: size.width * 0.061),
+                top: size.width * 0.011,
+                left: size.width * 0.031,
+                right: size.width * 0.031),
             // ======= body section =======
             child: BlocConsumer<SchoolController, Map<String, dynamic>>(
               listener: (context, state) {
@@ -70,7 +70,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       BlocBuilder<WidgetController, Widget>(
                         builder: (context, child) {
                           return Expanded(
-                        
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height / 1.2,

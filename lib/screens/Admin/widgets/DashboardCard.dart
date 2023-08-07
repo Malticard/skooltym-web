@@ -26,13 +26,23 @@ class DashboardCard extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            bottom: 23,
+            bottom: 20,
             left: 20,
-            child: Text(
-              "$value",
-              style: TextStyles(context)
-                  .getBoldStyle()
-                  .copyWith(fontSize: 30, color: Colors.white),
+            child: RichText(
+              text: TextSpan(
+                text:value.toString(),
+                style: TextStyles(context)
+                        .getRegularStyle()
+                        .copyWith(fontSize: 35, color: Colors.white),
+                children: [
+                  TextSpan(
+                    text:value == 1?" Record" : " Records",
+                    style: TextStyles(context)
+                        .getRegularStyle()
+                        .copyWith(fontSize: 20, color: Colors.white),
+                  ),
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -48,29 +58,29 @@ class DashboardCard extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            bottom: 10,
-            left: 10,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(
-                "Last updated $last_updated",
-                style: TextStyles(context)
-                    .getDescriptionStyle()
-                    .copyWith(fontSize: 14, color: Colors.white),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 10,
+          //   left: 10,
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 8.0),
+          //     child: Text(
+          //       "Last updated $last_updated",
+          //       style: TextStyles(context)
+          //           .getDescriptionStyle()
+          //           .copyWith(fontSize: 14, color: Colors.white),
+          //     ),
+          //   ),
+          // ),
           Positioned(
             top: 10,
             left: 10,
             child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
+              padding: const EdgeInsets.only(left: 18.0, top: 12.0,bottom: 10),
               child: Text(
                 label,
                 style: TextStyles(context)
-                    .getRegularStyle()
-                    .copyWith(fontWeight: FontWeight.w200, color: Colors.white),
+                    .getBoldStyle()
+                    .copyWith(fontWeight: FontWeight.w900, fontSize: 18, color: Colors.white),
               ),
             ),
           )

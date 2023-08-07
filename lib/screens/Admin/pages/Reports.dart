@@ -66,6 +66,7 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
           var overtimeModel = payload.data;
           var _overtimes = overtimeModel?.results ?? [];
           return CustomDataTable(
+            
             paginatorController: _controller,
             onPageChanged: (page) {
               setState(() {
@@ -78,6 +79,7 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
               });
             },
             header: Row(
+
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Text(
@@ -112,7 +114,7 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
               ),
               DataColumn(
                 label: Text(
-                  "Overtime Charge",
+                  "Overtime Balance",
                   style: TextStyle(fontSize: 12),
                 ),
               ),
@@ -138,7 +140,7 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
                   .where((element) => element.status != 'Pending')
                   .toList()
                   .length,
-              paginatorController: _controller,
+              paginatorController: _controller, isPending: false,
             ),
           );
         },
@@ -238,7 +240,7 @@ class _PendingOvertimeState extends State<PendingOvertime>
                 label: Text("Guardian Name", style: TextStyle(fontSize: 12)),
               ),
               DataColumn(
-                label: Text("Cleared By", style: TextStyle(fontSize: 12)),
+                label: Text("Recorded By", style: TextStyle(fontSize: 12)),
               ),
               DataColumn(
                 label: SizedBox(
@@ -248,6 +250,11 @@ class _PendingOvertimeState extends State<PendingOvertime>
               DataColumn(
                 label: Text(
                   "Overtime Charge",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ), DataColumn(
+                label: Text(
+                  "Action",
                   style: TextStyle(fontSize: 12),
                 ),
               ),
@@ -273,7 +280,7 @@ class _PendingOvertimeState extends State<PendingOvertime>
                     .where((element) => element.status == "Pending")
                     .toList()
                     .length,
-                paginatorController: _pendingPaginatorController),
+                paginatorController: _pendingPaginatorController, isPending: true),
           );
         },
       ),

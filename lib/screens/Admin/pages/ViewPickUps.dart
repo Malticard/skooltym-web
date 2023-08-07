@@ -115,7 +115,8 @@ class _ViewPickUpsState extends State<ViewPickUps> {
               DataColumn2(
                 numeric: false,
                 label: Text("Student's Profile"),
-              ),DataColumn2(
+              ),
+              DataColumn2(
                 numeric: false,
                 label: Text("Student Name"),
               ),
@@ -141,17 +142,13 @@ class _ViewPickUpsState extends State<ViewPickUps> {
               ),
             ],
             empty: Center(
-              child: FutureBuilder(
-                  future: Future.delayed(const Duration(seconds: 7)),
-                  builder: (context, y) {
-                    return y.connectionState == ConnectionState.waiting
-                        ? const Loader(
-                            text: "PickUp data",
-                          )
-                        : const NoDataWidget(
-                            text: "No PickUps recorded..",
-                          );
-                  }),
+              child: !snapshot.hasData
+                  ? const Loader(
+                      text: "PickUp data",
+                    )
+                  : const NoDataWidget(
+                      text: "No PickUps recorded..",
+                    ),
             ),
             source: PickUpDataSource(
                 pickUpModel: pickUpData,

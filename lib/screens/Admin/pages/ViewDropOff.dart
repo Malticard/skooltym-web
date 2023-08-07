@@ -17,7 +17,7 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
   int _currentPage = 1;
   int rowsPerPage = 20;
 
-  // REALTIME DATA PPLLING
+  // REALTIME DATA POLLING
 
   // stream controller
   StreamController<DropOffModel> _dropOffController =
@@ -139,18 +139,14 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
                 label: Text("Time Of DropOff"),
               ),
             ],
-            empty: FutureBuilder(
-                future: Future.delayed(Duration(seconds: 3)),
-                builder: (context, snapshot) {
-                  return snapshot.connectionState == ConnectionState.waiting
-                      ? Loader(
-                          text: "DropOffs ..",
-                        )
-                      : Center(
-                          child: const NoDataWidget(
-                              text: "No drop offs captured yet"),
-                        );
-                }),
+            empty: !snapshot.hasData
+                ? Loader(
+                    text: "DropOffs ..",
+                  )
+                : Center(
+                    child:
+                        const NoDataWidget(text: "No drop offs captured yet"),
+                  ),
             source: DropOffDataSource(
                 dropOffModel: drop_offs,
                 context: context,

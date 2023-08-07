@@ -461,12 +461,14 @@ class StaffDataSource extends DataTableSource {
 class ReportsDataSource extends DataTableSource {
   final int totalDocuments;
   final int currentPage;
+  final bool isPending;
   final PaginatorController? paginatorController;
   final List<Overtimes> overtimeModel;
   final BuildContext context;
   ReportsDataSource(
       {required this.totalDocuments,
       required this.currentPage,
+      required this.isPending,
       required this.paginatorController,
       required this.overtimeModel,
       required this.context});
@@ -526,7 +528,20 @@ class ReportsDataSource extends DataTableSource {
             overtimeData.overtimeCharge.toString(),
             style: const TextStyle(fontSize: 11),
           ),
-        )
+        ),
+        if (isPending)
+          DataCell(
+            OutlinedButton(
+              child: Text("Clear"),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const AddPayment();
+                    });
+              },
+            ),
+          )
       ],
     );
   }
@@ -590,10 +605,10 @@ class DropOffDataSource extends DataTableSource {
         DataCell(Text(
             "${dropOffData.authorizedBy.staffFname} ${dropOffData.authorizedBy.staffLname}")),
         DataCell(
-          Text(formatDate(dropOffData.dropOffTime)),
+          Text(formatDate(dropOffData.dropOffTime.toLocal())),
         ),
         DataCell(
-          Text(formatDateTime(dropOffData.dropOffTime)),
+          Text(formatDateTime(dropOffData.dropOffTime.toLocal())),
         ),
       ],
     );
@@ -658,8 +673,8 @@ class PickUpDataSource extends DataTableSource {
         DataCell(Text(
             "${pickUp.authorizedBy.staffFname} ${pickUp.authorizedBy.staffLname}")),
         DataCell(Text(pickUp.overtimeCharge.toString().split(" ").first)),
-        DataCell(Text(formatDate(pickUp.createdAt))),
-        DataCell(Text(formatDateTime(pickUp.createdAt))),
+        DataCell(Text(formatDate(pickUp.createdAt.toLocal()))),
+        DataCell(Text(formatDateTime(pickUp.createdAt.toLocal()))),
       ],
     );
   }
@@ -702,21 +717,20 @@ class PaymentDataSource extends DataTableSource {
       index: index,
       cells: [
         DataCell(
-          Row(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: FutureImage(
-                    future: fetchAndDisplayImage(
-                        paymentData.student.studentProfilePic),
-                  )),
-              Padding(
-                padding: const EdgeInsets.all(0),
-                child: Text(paymentData.student.username,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 11)),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: FutureImage(
+              future:
+                  fetchAndDisplayImage(paymentData.student.studentProfilePic),
+            ),
+          ),
+        ),
+        DataCell(
+          Padding(
+            padding: const EdgeInsets.all(0),
+            child: Text(paymentData.student.username,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 11)),
           ),
         ),
         DataCell(Text(

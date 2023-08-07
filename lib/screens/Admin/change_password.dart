@@ -158,7 +158,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                         .state['role'] ==
                                     'Finance') {
                                       // for finance after changing the password are redirected to dashboard
-                                  BlocProvider.of<WidgetController>(context)
+                                  BlocProvider.of<FinanceViewController>(context)
                                       .pushWidget(const Dashboard());
                                   BlocProvider.of<TitleController>(context)
                                       .setTitle("Dashboard");

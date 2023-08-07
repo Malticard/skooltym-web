@@ -13,6 +13,7 @@ class CommonFormFields extends StatefulWidget {
   final List<String> errorMsgs;
   final List<TextEditingController> formControllers;
   final List<dynamic>? lists;
+  final EdgeInsets titlePadding;
   final void Function(dynamic)? onDropDownValue;
   final List<dynamic>? dropdownLists;
   final int? numberOfDropDowns;
@@ -40,7 +41,7 @@ class CommonFormFields extends StatefulWidget {
       this.onDropDownValue,
       this.onSelectedValue,
       this.initialPic,
-      this.selectedData});
+      this.selectedData, this.titlePadding = const EdgeInsets.all(20)});
 
   @override
   State<CommonFormFields> createState() => _CommonFormFieldsState();
@@ -155,7 +156,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
       (index) => index != (widget.formFields.length + 1)
           ? index == 0
               ? Padding(
-                  padding: widget.padding,
+                  padding: widget.titlePadding,
                   child: Text(
                     widget.formTitle ?? "",
                     style: TextStyles(context).getBoldStyle().copyWith(

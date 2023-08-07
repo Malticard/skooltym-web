@@ -62,7 +62,7 @@ dev_dependencies:
     sdk: flutter
 # splash screen
 flutter_native_splash:
-  color: "#4c6c7c"
+  color: "#5D8FA8"
 
   image: assets/images/new_splash.png
   web: true

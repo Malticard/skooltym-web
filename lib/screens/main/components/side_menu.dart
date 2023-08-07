@@ -36,40 +36,39 @@ class _SideMenuState extends State<SideMenu> {
           : Theme.of(context).canvasColor,
       child: Column(
         children: [
-          DrawerHeader(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
-              child: BlocConsumer<SchoolController,Map<String,dynamic>>(
-                listener: (context, state) {
-                  // TODO: implement listener
-                },
-                builder: (context, school) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const Space(space: 0.04),
-                        Image.network(
-                            "${AppUrls.liveImages}${school['school_badge']}",
-                            height:60,
-                            width: 60),
-                        const Space(), //
-                        Text(
-                          "${school['schoolName']}",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyles(context)
-                              .getBoldStyle()
-                              .copyWith(color: Colors.white, fontSize: 19),
-                        )
-                      ],
+          Expanded(
+            flex: 1,
+            child: BlocConsumer<SchoolController,Map<String,dynamic>>(
+              listener: (context, state) {
+              },
+              builder: (context, school) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Image.network(
+                          "${AppUrls.liveImages}${school['school_badge']}",
+                          height:80,
+                          width: 80),
                     ),
-                  );
-                },
-              ),
+                    // const Space(), //
+                    Text(
+                      "${school['schoolName']}",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles(context)
+                          .getBoldStyle()
+                          .copyWith(color: Colors.white, fontSize: 19),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
+                    Divider(color: Colors.white24,),
           BlocBuilder<SideBarController, int>(
             builder: (context, selected) {
               return Expanded(
+                flex: 5,
                 child: ListView(
                   children: List.generate(
                     store.length,
@@ -100,41 +99,6 @@ class _SideMenuState extends State<SideMenu> {
               );
             },
           ),
-          // DrawerListTile(
-          //   title: "Transaction",
-          //   svgSrc: "assets/icons/menu_tran.svg",
-          //   press: () {},
-          // ),
-          // DrawerListTile(
-          //   title: "Task",
-          //   svgSrc: "assets/icons/menu_task.svg",
-          //   press: () {},
-          // ),
-          // DrawerListTile(
-          //   title: "Documents",
-          //   svgSrc: "assets/icons/menu_doc.svg",
-          //   press: () {},
-          // ),
-          // DrawerListTile(
-          //   title: "Store",
-          //   svgSrc: "assets/icons/menu_store.svg",
-          //   press: () {},
-          // ),
-          // DrawerListTile(
-          //   title: "Notification",
-          //   svgSrc: "assets/icons/menu_notification.svg",
-          //   press: () {},
-          // ),
-          // DrawerListTile(
-          //   title: "Profile",
-          //   svgSrc: "assets/icons/menu_profile.svg",
-          //   press: () {},
-          // ),
-          // DrawerListTile(
-          //   title: "Settings",
-          //   svgSrc: "assets/icons/menu_setting.svg",
-          //   press: () {},
-          // ),
         ],
       ),
     );
@@ -161,14 +125,8 @@ class DrawerListTile extends StatelessWidget {
       iconColor: selected ? Colors.blue : Colors.white54,
       textColor: selected ? Colors.blue : Colors.white54,
       // tileColor: selected ?Colors.grey[200]: const Color.fromRGBO(6, 109, 161, 1.0),
-      selectedTileColor: Color.fromARGB(255, 46, 47, 47),
+      selectedTileColor:Theme.of(context).brightness == Brightness.light ? Color.fromARGB(71, 46, 47, 47):Color.fromARGB(70, 166, 172, 172),
       onTap: press,
-      // shape: RoundedRectangleBorder(
-      //   side: selected
-      //       ? const BorderSide(color: Colors.white60)
-      //       : BorderSide.none,
-      // ),
-      horizontalTitleGap: 0.6,
       leading: Padding(
         padding: const EdgeInsets.only(right:10.0),
         child: SvgPicture.asset(

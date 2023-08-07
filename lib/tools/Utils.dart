@@ -32,13 +32,16 @@ void loginUser(BuildContext context, String email, String password) async {
          BlocProvider.of<TitleController>(context).setTitle("Change Password");
       } else {
          BlocProvider.of<TitleController>(context).setTitle("Dashboard");
+        BlocProvider.of<FinanceViewController>(context).pushWidget(Dashboard());
+        BlocProvider.of<WidgetController>(context).pushWidget(Dashboard());
       }
       // for finance 
-       if(BlocProvider.of<FinanceFirstTimeController>(context).state == true){
-         BlocProvider.of<TitleController>(context).setTitle("Change Password");
-      } else {
-         BlocProvider.of<TitleController>(context).setTitle("Dashboard");
-      }
+      //  if(BlocProvider.of<FinanceFirstTimeController>(context).state == true){
+      //    BlocProvider.of<TitleController>(context).setTitle("Change Password");
+      // } else {
+      //    BlocProvider.of<TitleController>(context).setTitle("Dashboard");
+
+      // }
 
       Routes.popPage(context);
       BlocProvider.of<SchoolController>(context).setSchoolData(data);

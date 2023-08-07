@@ -55,7 +55,7 @@ Future<void> main() async {
                     : ThemeMode.dark,
                 theme: theme.copyWith(
                   textTheme:
-                      GoogleFonts.chilankaTextTheme(Theme.of(context).textTheme)
+                      GoogleFonts.aBeeZeeTextTheme(Theme.of(context).textTheme)
                           .apply(
                     bodyColor: theme.brightness == Brightness.light
                         ? Colors.black

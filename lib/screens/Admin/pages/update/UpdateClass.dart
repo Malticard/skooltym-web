@@ -49,6 +49,7 @@ class _UpdateClassState extends State<UpdateClass> {
                   style: TextStyles(context).getTitleStyle()),
             ),
             CommonTextField(
+              
               icon: Icons.home_work_outlined,
               controller: _classController,
               hintText: "e.g Grade 2",

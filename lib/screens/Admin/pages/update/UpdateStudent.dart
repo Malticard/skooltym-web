@@ -114,6 +114,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                 ),
               ),
               CommonFormFields(
+                formTitle: "Update Student Details",
                 initialPic: widget.studentModel.studentProfilePic,
                 padding: _padding,
                 formFields: formFields,

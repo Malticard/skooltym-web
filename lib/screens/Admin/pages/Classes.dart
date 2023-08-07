@@ -149,13 +149,13 @@ class _ClassesUIState extends State<ClassesUI> {
           left: 10,
           child: Row(
             children: [
-              const Text("Continue to add staffs members"),
+              const Text("Continue to add staff members"),
               TextButton(
                 onPressed: () {
                   context
                       .read<WidgetController>()
                       .pushWidget(const StaffView());
-                  context.read<TitleController>().setTitle("Staffs");
+                  context.read<TitleController>().setTitle("Staff");
                   context.read<SideBarController>().changeSelected(2);
                 },
                 child: Text(

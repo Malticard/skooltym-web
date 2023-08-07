@@ -65,7 +65,7 @@ class FileInfoCard extends StatelessWidget {
         padding: const EdgeInsets.all(defaultPadding),
         decoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
         ),
         child: SizedBox(
           height: MediaQuery.of(context).size.width / 3.5,
@@ -84,23 +84,23 @@ class FileInfoCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  
                   Container(
-                    // padding:const EdgeInsets.all(defaultPadding),
-                    height: 140,
-                    width: 140,
-                    decoration: const BoxDecoration(
-                      // color: info['color'].withOpacity(0.1),
+                    padding:const EdgeInsets.all(defaultPadding),
+                    height: 167,
+                    width: 167,
+                    decoration:  BoxDecoration(
+                      // color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: SvgPicture.asset(
                       "assets/vectors/students_class.svg",
+                      fit: BoxFit.cover,
                       // color: Colors.red,
                     ),
                   ),
                   const SizedBox(
-                    width: 50,
-                    height: 40,
+                    width: 40,
+                    height:40,
                   ),
                 ],
               ),
@@ -113,7 +113,7 @@ class FileInfoCard extends StatelessWidget {
                       style: TextStyles(context).getBoldStyle(),
                       children: [
                         TextSpan(
-                          text: ' Streams',
+                          text: info.classStreams.length == 1 ? ' Stream' : ' Streams',
                           style: TextStyles(context).getRegularStyle(),
                         ),
                       ],
@@ -125,7 +125,7 @@ class FileInfoCard extends StatelessWidget {
                       style: TextStyles(context).getBoldStyle(),
                       children: [
                         TextSpan(
-                          text: ' Students',
+                          text: info.classStudents.length == 1 ? ' Student' : ' Students',
                           style: TextStyles(context).getRegularStyle(),
                         ),
                       ],

@@ -159,8 +159,8 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                 ),
               ),
               Positioned(
-                bottom: size.width /9,
-                left: 10,
+              bottom: 10,
+          left: 10,
                 child: Row(
                   children: [
                     const Text("Continue to dashboard"),

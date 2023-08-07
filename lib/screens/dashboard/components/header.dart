@@ -32,15 +32,15 @@ class _HeaderState extends State<Header> {
                   } //context.read<MainController>().controlMenu(scaffoldKey),
                   ),
             if (!Responsive.isMobile(context))
-              if (schoolData['role'] == 'Finance')
-                BlocBuilder<FinanceTitleController, String>(
-                    builder: (context, title) {
-                  return Text(
-                    title,
-                    style: TextStyles(context).getTitleStyle(),
-                  );
-                }),
-            if (schoolData['role'] != 'Finance')
+              // if (schoolData['role'] == 'Finance')
+                // BlocBuilder<FinanceTitleController, String>(
+                //     builder: (context, title) {
+                //   return Text(
+                //     title,
+                //     style: TextStyles(context).getTitleStyle(),
+                //   );
+                // }),
+            // if (schoolData['role'] != 'Finance')
               BlocBuilder<TitleController, String>(builder: (context, title) {
                 return Text(
                   title,
