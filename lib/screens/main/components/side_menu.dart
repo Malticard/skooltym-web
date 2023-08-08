@@ -3,10 +3,8 @@
 import '/exports/exports.dart';
 
 class SideMenu extends StatefulWidget {
-  final GlobalKey<ScaffoldState> scaffoldKey;
   const SideMenu({
     Key? key,
-    required this.scaffoldKey,
   }) : super(key: key);
 
   @override
@@ -30,7 +28,6 @@ class _SideMenuState extends State<SideMenu> {
             ? financeViews
             : [];
     return Drawer(
-      key: widget.scaffoldKey,
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? const Color.fromRGBO(6, 109, 161, 1.0)
           : Theme.of(context).canvasColor,
@@ -38,9 +35,8 @@ class _SideMenuState extends State<SideMenu> {
         children: [
           Expanded(
             flex: 1,
-            child: BlocConsumer<SchoolController,Map<String,dynamic>>(
-              listener: (context, state) {
-              },
+            child: BlocConsumer<SchoolController, Map<String, dynamic>>(
+              listener: (context, state) {},
               builder: (context, school) {
                 return Column(
                   children: [
@@ -48,8 +44,8 @@ class _SideMenuState extends State<SideMenu> {
                       padding: const EdgeInsets.all(18.0),
                       child: Image.network(
                           "${AppUrls.liveImages}${school['school_badge']}",
-                          height:80,
-                          width: 80),
+                          height: Responsive.isMobile(context) ?  60 : 80,
+                          width: Responsive.isMobile(context) ?  60 : 80),
                     ),
                     // const Space(), //
                     Text(
@@ -57,14 +53,16 @@ class _SideMenuState extends State<SideMenu> {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyles(context)
                           .getBoldStyle()
-                          .copyWith(color: Colors.white, fontSize: 19),
+                          .copyWith(color: Colors.white, fontSize:Responsive.isMobile(context) ? 17 : 19),
                     ),
                   ],
                 );
               },
             ),
           ),
-                    Divider(color: Colors.white24,),
+          Divider(
+            color: Colors.white24,
+          ),
           BlocBuilder<SideBarController, int>(
             builder: (context, selected) {
               return Expanded(
@@ -78,9 +76,12 @@ class _SideMenuState extends State<SideMenu> {
                       svgSrc: store[index]['icon'],
                       press: () {
                         context.read<SideBarController>().changeSelected(index);
-                         context
-                              .read<TitleController>()
-                              .setTitle(store[index]['title']);
+                        if(Responsive.isMobile(context)){
+                          Routes.popPage(context);
+                        }
+                        context
+                            .read<TitleController>()
+                            .setTitle(store[index]['title']);
                         if (context.read<SchoolController>().state['role'] ==
                             'Admin') {
                           // update rendered page
@@ -125,10 +126,13 @@ class DrawerListTile extends StatelessWidget {
       iconColor: selected ? Colors.blue : Colors.white54,
       textColor: selected ? Colors.blue : Colors.white54,
       // tileColor: selected ?Colors.grey[200]: const Color.fromRGBO(6, 109, 161, 1.0),
-      selectedTileColor:Theme.of(context).brightness == Brightness.light ? Color.fromARGB(71, 46, 47, 47):Color.fromARGB(70, 166, 172, 172),
+      selectedTileColor: Theme.of(context).brightness == Brightness.light
+          ? Color.fromARGB(71, 46, 47, 47)
+          : Color.fromARGB(70, 166, 172, 172),
+
       onTap: press,
       leading: Padding(
-        padding: const EdgeInsets.only(right:10.0),
+        padding: const EdgeInsets.only(right: 10.0),
         child: SvgPicture.asset(
           svgSrc,
           // ignore: deprecated_member_use
@@ -139,7 +143,7 @@ class DrawerListTile extends StatelessWidget {
         ),
       ),
       title: Padding(
-        padding: const EdgeInsets.only(left:5.0),
+        padding: const EdgeInsets.only(left: 5.0),
         child: Text(
           title,
           style: TextStyles(context).getRegularStyle().copyWith(

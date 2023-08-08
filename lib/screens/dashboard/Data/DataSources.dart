@@ -485,7 +485,7 @@ class ReportsDataSource extends DataTableSource {
     Overtimes overtimeData =
         overtimeModel[pageIndex * paginatorController!.rowsPerPage + dataIndex];
     return DataRow2.byIndex(
-      index: index,
+      index: pageIndex * paginatorController!.rowsPerPage + dataIndex,
       cells: [
         DataCell(
           Padding(
@@ -525,21 +525,31 @@ class ReportsDataSource extends DataTableSource {
         ),
         DataCell(
           Text(
-            overtimeData.overtimeCharge.toString(),
+            formatNumber(overtimeData.overtimeCharge),
             style: const TextStyle(fontSize: 11),
           ),
         ),
-        if (isPending)
+        if (isPending == true &&
+            context.read<SchoolController>().state['role'] == 'Finance')
+           
           DataCell(
             OutlinedButton(
               child: Text("Clear"),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const AddPayment();
-                    });
-              },
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AddPayment(
+                      guardianId: overtimeData.guardian.id,
+                      studentId: overtimeData.student.id,
+                      amount: formatNumber(overtimeData.overtimeCharge),
+                      guardian: overtimeData.guardian.guardianFname +
+                          " " +
+                          overtimeData.guardian.guardianLname,
+                      student: overtimeData.student.studentFname +
+                          " " +
+                          overtimeData.student.studentLname,
+                    );
+                  }),
             ),
           )
       ],
@@ -672,7 +682,7 @@ class PickUpDataSource extends DataTableSource {
             "${pickUp.pickedBy.guardianFname} ${pickUp.pickedBy.guardianLname}")),
         DataCell(Text(
             "${pickUp.authorizedBy.staffFname} ${pickUp.authorizedBy.staffLname}")),
-        DataCell(Text(pickUp.overtimeCharge.toString().split(" ").first)),
+        DataCell(Text(formatNumber(pickUp.overtimeCharge))),
         DataCell(Text(formatDate(pickUp.createdAt.toLocal()))),
         DataCell(Text(formatDateTime(pickUp.createdAt.toLocal()))),
       ],
@@ -743,7 +753,7 @@ class PaymentDataSource extends DataTableSource {
         // DataCell(Text(
         //     "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
         //     style: const TextStyle(fontSize: 11))),
-        DataCell(Text(paymentData.paidAmount.toString(),
+        DataCell(Text(formatNumber(paymentData.paidAmount),
             style: const TextStyle(fontSize: 11))),
         DataCell(Text(paymentData.comment.toString(),
             style: const TextStyle(fontSize: 11))),

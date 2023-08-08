@@ -73,7 +73,7 @@ class PickUp {
         studentName: StudentName.fromJson(json["student_name"] ?? {}),
         pickedBy: PickedBy.fromJson(json["picked_by"] ?? {}),
         authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
-        overtimeCharge: json["overtime_charge"],
+        overtimeCharge: json["overtime_charge"] ?? 0,
         pickupKey: List<PickupKey>.from(
             json["pickup_key"].map((x) => PickupKey.fromJson(x))),
         createdAt: DateTime.parse(json["createdAt"]),

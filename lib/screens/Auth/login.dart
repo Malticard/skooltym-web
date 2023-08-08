@@ -57,21 +57,27 @@ class _LoginScreenState extends State<LoginScreen> {
             Expanded(
               child: Responsive(
                 mobile: Padding(
-                  padding: EdgeInsets.only(top: size.width * 0.180),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            height: MediaQuery.of(context).size.width * 0.9,
+                  padding: EdgeInsets.only(top: size.width * 0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: SizedBox(
+                            // width: MediaQuery.of(context).size.width * 0.6,
+                            // height: MediaQuery.of(context).size.width * 0.9,
                             child: SvgPicture.asset(
                               "assets/vectors/mother_child.svg",
+                              width: MediaQuery.of(context).size.width * 1.6,
+                            height: MediaQuery.of(context).size.width * 0.9,
                             ),
                           ),
-                        Container(
-                          height: MediaQuery.of(context).size.height,
-                          margin: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height * 0.13),
+                      ),
+                      Expanded(
+                        flex:4,
+                        child: Container(
+                          height: MediaQuery.of(context).size.width,
+                          // margin: EdgeInsets.only(
+                          //     top: MediaQuery.of(context).size.height * 0.13),
                           decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(50),
@@ -83,8 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   : Colors.white),
                           child: _buildForm(),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 desktop: Padding(

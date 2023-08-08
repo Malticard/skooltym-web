@@ -1,3 +1,4 @@
+import '../../../controllers/MenuAppController.dart';
 import '/exports/exports.dart';
 
 class Header extends StatefulWidget {
@@ -28,10 +29,10 @@ class _HeaderState extends State<Header> {
               IconButton(
                   icon: const Icon(Icons.menu),
                   onPressed: () {
-                    // debugPrint("Scaffold state => ${scaffoldKey.currentWidget}");
-                  } //context.read<MainController>().controlMenu(scaffoldKey),
+                    context.read<MenuAppController>().controlMenu();
+                  }// context.read<MainController>().controlMenu(scaffoldKey),
                   ),
-            if (!Responsive.isMobile(context))
+            // if (!Responsive.isMobile(context))
               // if (schoolData['role'] == 'Finance')
                 // BlocBuilder<FinanceTitleController, String>(
                 //     builder: (context, title) {
@@ -44,11 +45,12 @@ class _HeaderState extends State<Header> {
               BlocBuilder<TitleController, String>(builder: (context, title) {
                 return Text(
                   title,
-                  style: TextStyles(context).getTitleStyle(),
+                  style:Responsive.isMobile(context) ? TextStyles(context).getRegularStyle().copyWith(fontSize:18) : TextStyles(context).getTitleStyle(),
                 );
               }),
             if (!Responsive.isMobile(context))
               Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+              Expanded(child: Container()),
             CommonButton(
               width: 50,
               buttonTextWidget: Icon(
@@ -91,8 +93,8 @@ class _ProfileCardState extends State<ProfileCard> {
       builder: (context, state) {
         return Container(
             margin: const EdgeInsets.only(left: defaultPadding),
-            padding: const EdgeInsets.symmetric(
-              horizontal: defaultPadding,
+            padding:  EdgeInsets.symmetric(
+              horizontal:Responsive.isMobile(context) ? defaultPadding /2 : defaultPadding,
               vertical: defaultPadding / 2,
             ),
             decoration: BoxDecoration(
@@ -109,7 +111,7 @@ class _ProfileCardState extends State<ProfileCard> {
                     future: fetchAndDisplayImage(
                         schoolData['profile_pic'] ?? "profile.png"),
                     builder: (context, payload) => payload.hasData
-                        ? Image.network(payload.data!)
+                        ? Image.network(payload.data!,fit:BoxFit.cover)
                         : CircularProgressIndicator.adaptive(),
                   ),
                 ),

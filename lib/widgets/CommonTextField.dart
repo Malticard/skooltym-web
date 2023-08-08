@@ -17,14 +17,17 @@ class CommonTextField extends StatelessWidget {
   final bool enableBorder;
   final EdgeInsets? contentPadding;
   final VoidCallback? onTapSuffix;
+  final bool readOnly;
   final String? Function(String?)? validate;
   const CommonTextField({
     Key? key,
     this.hintText = '',
+    this.readOnly = false,
     this.isObscureText = false,
     this.padding = const EdgeInsets.only(),
     this.onChanged,
-    this.contentPadding = const EdgeInsets.only(left: 24, right: 24,top: 14, bottom: 14),
+    this.contentPadding =
+        const EdgeInsets.only(left: 24, right: 24, top: 14, bottom: 14),
     this.keyboardType = TextInputType.text,
     this.isAllowTopTitleView = true,
     this.errorText,
@@ -36,7 +39,8 @@ class CommonTextField extends StatelessWidget {
     this.suffixIcon,
     this.onTapSuffix,
     this.enableSuffix = false,
-    this.icon, this.textInputAction,
+    this.icon,
+    this.textInputAction,
   }) : super(key: key);
 
   @override
@@ -80,22 +84,28 @@ class CommonTextField extends StatelessWidget {
                 height: 45,
                 child: Center(
                   child: TextFormField(
+                    readOnly: readOnly,
                     textInputAction: textInputAction,
                     controller: controller,
                     maxLines: 1,
                     onChanged: onChanged,
-                    style: TextStyles(context).getRegularStyle(),
+                    style: readOnly == true
+                        ? TextStyles(context)
+                            .getRegularStyle()
+                            .copyWith(color: Theme.of(context).disabledColor)
+                        : TextStyles(context).getRegularStyle(),
                     obscureText: isObscureText,
                     cursorColor: Theme.of(context).primaryColor,
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     validator: validate,
                     decoration: InputDecoration(
-                      contentPadding:contentPadding ??  const EdgeInsets.only(
-                           left: 20,
-                        right: 16,
-                        top: 26,
-                        bottom: 10,
-                      ),
+                      contentPadding: contentPadding ??
+                          const EdgeInsets.only(
+                            left: 20,
+                            right: 16,
+                            top: 26,
+                            bottom: 10,
+                          ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       suffixIcon: enableSuffix
                           ? IconButton(
@@ -121,7 +131,6 @@ class CommonTextField extends StatelessWidget {
                       ),
                     ),
                     keyboardType: keyboardType,
-                    
                   ),
                 ),
               ),

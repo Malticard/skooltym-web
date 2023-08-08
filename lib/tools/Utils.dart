@@ -95,7 +95,9 @@ Future<String?> fetchAndDisplayImage(String imageURL) async {
 // }
   return AppUrls.liveImages + imageURL;
 }
-
+String formatNumber(var number){
+ return NumberFormat('#,###').format(number);
+}
 // greetings
 String greetUser() {
   String greet = '';
@@ -418,28 +420,52 @@ void showProgress(BuildContext context, {String? msg = 'Task'}) {
     builder: (context) => Dialog(
       backgroundColor: Colors.transparent,
       child: Card(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width /5,
-          height: MediaQuery.of(context).size.width /5,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+        child: Responsive(
+          mobile:SizedBox(
+          height: 90,
+          child: Row(
             children: [
-               Space(space: 0.02,),
               Padding(
-                padding: const EdgeInsets.all(18.0),
+                padding: const EdgeInsets.only(left: 18.0),
                 child: SpinKitDualRing(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.white
                         : Theme.of(context).primaryColor),
               ),
-              Space(space: 0.05,),
+              const SizedBox(
+                width: 40,
+              ),
               Text(
                 "$msg..",
                 textAlign: TextAlign.center,
-                style: TextStyles(context).getRegularStyle().copyWith(fontSize: 17),
+                style: TextStyles(context).getRegularStyle(),
               ),
             ],
+          ),
+        ),
+          desktop: SizedBox(
+            width: MediaQuery.of(context).size.width /5,
+            height: MediaQuery.of(context).size.width /5,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                 Space(space: 0.02,),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: SpinKitDualRing(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Theme.of(context).primaryColor),
+                ),
+                Space(space: 0.05,),
+                Text(
+                  "$msg..",
+                  textAlign: TextAlign.center,
+                  style: TextStyles(context).getRegularStyle().copyWith(fontSize: 17),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,9 +1,12 @@
-import '../../../models/Guardians.dart';
-import '../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 class AddPayment extends StatefulWidget {
-  const AddPayment({super.key});
+  final String amount;
+  final String guardian;
+  final String student;
+  final String studentId;
+  final String guardianId;
+  const AddPayment({super.key, required this.studentId, required this.guardianId, required this.amount,required this.guardian, required this.student});
 
   @override
   State<AddPayment> createState() => _AddPaymentState();
@@ -22,34 +25,39 @@ class _AddPaymentState extends State<AddPayment> {
   final _amountPaidController = TextEditingController();
   final _commentController = TextEditingController();
   final _paymentMethodController = TextEditingController(text:"Cash");
-  final _studentController = TextEditingController();
-  final _guardianController = TextEditingController();
   String? selected;
   // overall form padding
   EdgeInsets padding =
       const EdgeInsets.only(left: 14, top: 0, right: 14, bottom: 5);
   @override
   Widget build(BuildContext context) {
+    // displaying names for guardian and student being cleared
+    final _studentController = TextEditingController(text: widget.student);
+    final _guardianController = TextEditingController(text:widget.guardian);
+    // 
     BlocProvider.of<FetchStudentsController>(context)
         .getStudents(context.read<SchoolController>().state['school']);
         BlocProvider.of<GuardianController>(context)
         .getGuardians(context);
     return Dialog(
       child: SizedBox(
-        width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 2.3,
+        width: Responsive.isDesktop(context) ? MediaQuery.of(context).size.width / 3 :MediaQuery.of(context).size.width,
+        height:Responsive.isMobile(context) ? MediaQuery.of(context).size.height / 1.3 : MediaQuery.of(context).size.width / 2.5,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Add Payment",
-                  style: TextStyles(context)
-                      .getRegularStyle()
-                      .copyWith(fontSize: 19)),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Add Payment",
+                    style: TextStyles(context)
+                        .getRegularStyle()
+                        .copyWith(fontSize: 19),),
+              ),
             ),
             const SizedBox(height: defaultPadding),
             CommonTextField(
-              titleText: "Amount Paid",
+              titleText: "Amount Paid :  UGX ${widget.amount}",
               hintText: "e.g 5000",
               padding: padding,
               icon: Icons.attach_money,
@@ -71,54 +79,28 @@ class _AddPaymentState extends State<AddPayment> {
               },
             ),
             CommonTextField(
+              icon: Icons.comment,
               titleText: "Comment",
               padding: padding,
               contentPadding:const EdgeInsets.only(top: 12),
               hintText: "e.g school activities",
               controller: _commentController,
-            ),
-            // const SizedBox(height: defaultPadding),
-            BlocBuilder<FetchStudentsController, List<Student>>(
-              builder: (context, state) {
-                return CommonMenuWidget(
-                    fieldText: "Attach a student",
-                    onChange: (x) {
-                      if (x != null) {
-                        setState(() {
-                          _studentController.text = json.decode(x).join(",");
-                        });
-                      }
-                    },
-                    hint: "Select one student",
-                    padding: padding,
-                    data: state
-                        .map((e) => e.id)
-                        .toList(),
-                    dropdownList:state
-                        .map((e) => "${e.studentFname} ${e.studentLname}")
-                        .toList());
-              },
-            ),
-            BlocBuilder<GuardianController, List<Guardian>>(
-              builder: (context, guardians) {
-                return CommonMenuWidget(
-                    fieldText: "Attach one guardian",
-                    onChange: (x) {
-                      if (x != null) {
-                        setState(() {
-                          _guardianController.text = json.decode(x).join(",");
-                        });
-                      }
-                    },
-                    hint: "Select a student",
-                    padding: padding,
-                    data: guardians
-                        .map((e) => e.id)
-                        .toList(),
-                    dropdownList:guardians
-                        .map((e) => "${e.guardianFname} ${e.guardianLname}")
-                        .toList());
-              },
+            ), CommonTextField(
+              icon: Icons.person,
+              titleText: "Student",
+              readOnly: true,
+              padding: padding,
+              contentPadding:const EdgeInsets.only(top: 12),
+              hintText: "e.g John Doe",
+              controller: _studentController,
+            ), CommonTextField(
+              icon: Icons.person,
+              titleText: "Guardian",
+              readOnly: true,
+              padding: padding,
+              contentPadding:const EdgeInsets.only(top: 12),
+              hintText: "e.g Guardian name",
+              controller: _guardianController,
             ),
             CommonButton(
               buttonText: "Add Payment",
@@ -135,22 +117,11 @@ class _AddPaymentState extends State<AddPayment> {
 
   // function to handle the add payment
   handlePayment() {
-    // print({
-    //   "school": context.read<SchoolController>().state['school'],
-    //   "guardian": "",
-    //   "student": _studentController.text,
-    //   "payment_method": _paymentMethodController.text,
-    //   "staff": context.read<SchoolController>().state['id'],
-    //   "comment": _commentController.text,
-    //   "paid_amount": _amountPaidController.text,
-    //   "date_of_payment": DateTime.now().toString(),
-    //   "payment_key[0]": "0"
-    // });
     showProgress(context, msg: "Recording new payment...");
     Client().post(Uri.parse(AppUrls.addPayment), body: {
       "school": context.read<SchoolController>().state['school'],
-      "guardian": _guardianController.text,
-      "student": _studentController.text,
+      "guardian": widget.guardianId,
+      "student": widget.studentId,
       "payment_method": _paymentMethodController.text,
       "staff": context.read<SchoolController>().state['id'],
       "comment": _commentController.text,

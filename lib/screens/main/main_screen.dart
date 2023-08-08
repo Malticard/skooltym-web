@@ -1,3 +1,4 @@
+import '../../controllers/MenuAppController.dart';
 import '/exports/exports.dart';
 import 'components/side_menu.dart';
 
@@ -43,12 +44,11 @@ class _MainScreenState extends State<MainScreen> {
         .getFirstTimeUser(context.read<SchoolController>().state['role']);
 
     return Scaffold(
+      key: context.read<MenuAppController>().scaffoldKey,
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.grey[200]
           : Theme.of(context).scaffoldBackgroundColor,
-      drawer: SideMenu(
-        scaffoldKey: _scaffoldKey,
-      ),
+      drawer: SideMenu(),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -93,9 +93,7 @@ class _MainScreenState extends State<MainScreen> {
                     ? Expanded(
                         // default flex = 1
                         // and it takes 1/6 part of the screen
-                        child: SideMenu(
-                          scaffoldKey: _scaffoldKey,
-                        ),
+                        child: SideMenu(),
                       )
                     : const Center();
               },

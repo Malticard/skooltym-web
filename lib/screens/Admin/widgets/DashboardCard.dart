@@ -33,28 +33,35 @@ class DashboardCard extends StatelessWidget {
                 text:value.toString(),
                 style: TextStyles(context)
                         .getRegularStyle()
-                        .copyWith(fontSize: 35, color: Colors.white),
+                        .copyWith(fontSize: Responsive.isMobile(context) ? 20 : 35, color: Colors.white),
                 children: [
                   TextSpan(
                     text:value == 1?" Record" : " Records",
                     style: TextStyles(context)
                         .getRegularStyle()
-                        .copyWith(fontSize: 20, color: Colors.white),
+                        .copyWith(fontSize:Responsive.isMobile(context) ? 18: 20, color: Colors.white),
                   ),
                 ],
               ),
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.08,
+            bottom:Responsive.isMobile(context) ? MediaQuery.of(context).size.height * 0.06 : MediaQuery.of(context).size.height * 0.08,
             left: 25,
             child: Padding(
               padding: const EdgeInsets.only(top: 15.0),
-              child: SvgPicture.asset(
-                icon,
-                color: Colors.white60,
-                width: MediaQuery.of(context).size.width * 0.044,
-                height: MediaQuery.of(context).size.width * 0.044,
+              child: Responsive(
+                desktop: SvgPicture.asset(
+                  icon,
+                  color: Colors.white60,
+                  width: MediaQuery.of(context).size.width * 0.044,
+                  height: MediaQuery.of(context).size.width * 0.044,
+                ), mobile: SvgPicture.asset(
+                  icon,
+                  color: Colors.white60,
+                  width: MediaQuery.of(context).size.width * 0.1,
+                  height: MediaQuery.of(context).size.width * 0.1,
+                ),
               ),
             ),
           ),
@@ -75,12 +82,12 @@ class DashboardCard extends StatelessWidget {
             top: 10,
             left: 10,
             child: Padding(
-              padding: const EdgeInsets.only(left: 18.0, top: 12.0,bottom: 10),
+              padding:  EdgeInsets.only(left: Responsive.isMobile(context) ? 3.0 : 18.0, top: 12.0,bottom: 10),
               child: Text(
                 label,
                 style: TextStyles(context)
                     .getBoldStyle()
-                    .copyWith(fontWeight: FontWeight.w900, fontSize: 18, color: Colors.white),
+                    .copyWith(fontWeight: FontWeight.w900, fontSize:Responsive.isMobile(context) ? 14 : 18, color: Colors.white),
               ),
             ),
           )

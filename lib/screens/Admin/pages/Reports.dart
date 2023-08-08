@@ -223,7 +223,7 @@ class _PendingOvertimeState extends State<PendingOvertime>
                 // ),
               ],
             ),
-            columns: const [
+            columns:  [
               DataColumn(
                 label: Text(
                   "Student's profile",
@@ -252,7 +252,9 @@ class _PendingOvertimeState extends State<PendingOvertime>
                   "Overtime Charge",
                   style: TextStyle(fontSize: 12),
                 ),
-              ), DataColumn(
+              ), 
+          if(context.read<SchoolController>().state['role'] == 'Finance')
+              DataColumn(
                 label: Text(
                   "Action",
                   style: TextStyle(fontSize: 12),
