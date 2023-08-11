@@ -81,7 +81,10 @@ Future<String> assignRole(String role) async {
 }
 
 Future<String?> fetchAndDisplayImage(String imageURL) async {
-  await Client().get(Uri.parse(AppUrls.liveImages + imageURL));
+  await Future.delayed(
+    Duration(seconds: 2),
+  );
+  // await Client().get(Uri.parse(AppUrls.liveImages + imageURL));
   return AppUrls.liveImages + imageURL;
 }
 

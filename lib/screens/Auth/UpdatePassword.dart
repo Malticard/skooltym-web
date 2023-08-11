@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '/exports/exports.dart';
 
 ///  Created by bruno on 15/02/2023.
@@ -189,7 +191,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
           padding: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
           hintText: "************",
           keyboardType: TextInputType.visiblePassword,
-          isObscureText: _pass,
+          isObscureText: !_pass,
           onTapSuffix: () {
             setState(() {
               _pass = !_pass;
@@ -208,7 +210,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
           padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
           hintText: "*************",
           keyboardType: TextInputType.visiblePassword,
-          isObscureText: _confirm,
+          isObscureText: !_confirm,
           onTapSuffix: () {
             setState(() {
               _confirm = !_confirm;
@@ -228,7 +230,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
           ),
           onTap: () {
             if (_allValidation()) {
-              showProgress(context, msg: "Updating password in progress");
+              showProgress(context, msg: "Updating password");
               Client().post(
                   Uri.parse(AppUrls.setPassword +
                       context.read<ForgotPasswordController>().state['id']),
@@ -236,12 +238,12 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                     "new_password": _newController.text.trim(),
                     "confirm_password": _confirmController.text.trim(),
                   }).then((value) {
-                  final Map<String, dynamic> data = jsonDecode(value.body);
+                final Map<String, dynamic> data = jsonDecode(value.body);
 
-                debugPrint("Change response => ${value.body}");
+                log("Change response => ${value.body}");
                 if (value.statusCode == 200 || value.statusCode == 201) {
                   Navigator.pop(context);
-                  debugPrint(data.toString());
+                  // log(data.toString());
                   // if (data['status'] == 200) {
                   _newController.clear();
                   _confirmController.clear();

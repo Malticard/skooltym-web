@@ -75,7 +75,7 @@ class _StreamsUIState extends State<StreamsUI> {
     return Column(
       children: [
         Expanded(
-          flex:5,
+          flex: 5,
           child: SizedBox(
             width: size.width,
             height: size.height,
@@ -132,17 +132,11 @@ class _StreamsUIState extends State<StreamsUI> {
                         label: Text("Action"),
                       ),
                     ],
-                    empty: FutureBuilder(
-                        future: fetchStreams(
-                            context.read<SchoolController>().state['school']),
-                        builder: (context, snapshot) {
-                          return snapshot.connectionState ==
-                                  ConnectionState.waiting
-                              ? const Loader(text: "Streams data")
-                              : const Center(
-                                  child: Text("No Streams added.."),
-                                );
-                        }),
+                    empty: !snapshot.hasData
+                        ? const Loader(text: "Streams data")
+                        : const Center(
+                            child: Text("No Streams added.."),
+                          ),
                     source: StreamDataSource(
                         context: context,
                         streamModel: streams,
@@ -154,8 +148,7 @@ class _StreamsUIState extends State<StreamsUI> {
           ),
         ),
         Expanded(
-         flex:1,
-       
+          flex: 1,
           child: Row(
             children: [
               const Text("Continue to add classes"),

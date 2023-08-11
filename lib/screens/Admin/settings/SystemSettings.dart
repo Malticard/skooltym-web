@@ -36,10 +36,10 @@ class _SystemSettingsState extends State<SystemSettings> {
       SettingsModel settingsModel =
           await fetchSettings(context.read<SchoolController>().state['school']);
       _settingsController.add(settingsModel);
-      Timer.periodic(Duration(seconds: 2), (timer) {
-        _timer = timer;
-        settingsUpdate();
-      });
+      // Timer.periodic(Duration(seconds: 2), (timer) {
+      //   _timer = timer;
+      //   settingsUpdate();
+      // });
     }
   }
 
@@ -65,6 +65,7 @@ class _SystemSettingsState extends State<SystemSettings> {
     BlocProvider.of<DropOffTimeController>(context).getDropOffTime();
     BlocProvider.of<AllowOvertimeController>(context).getAllowOvertime();
     BlocProvider.of<PickUpTimeController>(context).getPickUpTime();
+    BlocProvider.of<OvertimeRateController>(context).getOvertimeRate();
     return StreamBuilder(
         stream: _settingsController.stream,
         builder: (context, snapshot) {
@@ -91,7 +92,7 @@ class _SystemSettingsState extends State<SystemSettings> {
                               titleText: "Drop offs",
                               subText:
                                   "Set the start and end time for students drop offs",
-                              trailText: settings?.dropOffStartTime ?? state,
+                              trailText: state,
                             );
                           },
                         ),
@@ -106,9 +107,9 @@ class _SystemSettingsState extends State<SystemSettings> {
                               titleText: "Drop off time allowance",
                               subText:
                                   "Set the start and end time for students drop offs",
-                              trailText:
-                                  "${settings?.dropOffAllowance}(mins)" ??
-                                      "${state.floor()}(mins)",
+                              trailText: state.floor() == 1
+                                  ? "${state.floor()}(min)"
+                                  : "${state.floor()}(mins)",
                             );
                           },
                         ),
@@ -123,9 +124,7 @@ class _SystemSettingsState extends State<SystemSettings> {
                               titleText: "Pick Ups",
                               subText:
                                   "Set the start and end time for students pickups",
-                              trailText:
-                                  "${settings?.pickUpStartTime}-${settings?.pickUpEndTime}" ??
-                                      state,
+                              trailText: state,
                             );
                           },
                         ),
@@ -140,8 +139,9 @@ class _SystemSettingsState extends State<SystemSettings> {
                               titleText: "Pick Up time allowance",
                               subText:
                                   "Set the start and end time for students pickups",
-                              trailText: settings?.pickUpAllowance ??
-                                  "${state.floor()} (mins) ",
+                              trailText: state.floor() == 1
+                                  ? "${state.floor()} (min)"
+                                  : "${state.floor()} (mins)",
                             );
                           },
                         ),
@@ -192,8 +192,9 @@ class _SystemSettingsState extends State<SystemSettings> {
                                   titleText: "Overtime interval",
                                   subText:
                                       "Set the amount of time after which overtime will be charged eg. every after 20mins",
-                                  trailText: settings?.overtimeInterval ??
-                                      "${state.floor()} (mins)",
+                                  trailText: state.floor() == 1
+                                      ? "${state.floor()} (min)"
+                                      : "${state.floor()} (mins)",
                                 );
                               },
                             ),
@@ -210,9 +211,7 @@ class _SystemSettingsState extends State<SystemSettings> {
                                   titleText: "Overtime rate",
                                   subText:
                                       "Set the amount of money to charge every after the set overtime interval eg. 20000 every after 20mins ",
-                                  trailText:
-                                      settings?.overtimeRate.toString() ??
-                                          "${state.floor()}",
+                                  trailText: "UGX ${state.floor()}",
                                 );
                               },
                             ),
@@ -262,31 +261,46 @@ class _SystemSettingsState extends State<SystemSettings> {
     BlocProvider.of<SettingsController>(context).saveSettings(results);
     // log(message)
     log("results => $results");
-    showProgress(context, msg: "Saving setting in progress");
-    Client()
-        .post(Uri.parse(AppUrls.addSettings), body: results)
-        .then((response) {
-      if (response.statusCode == 200) {
-        Routes.popPage(context);
-        showSuccessDialog(
-          "Settings saved successfully",
-          context,
-          onPressed: () {
-            Routes.popPage(context);
-            if (context.read<FirstTimeUserController>().state) {
-              context.read<WidgetController>().pushWidget(const StreamsUI());
-              context.read<TitleController>().setTitle("Streams");
-              context.read<SideBarController>().changeSelected(5);
-            }
-          },
-        );
-        showMessage(msg: "Settings saved", type: 'success', context: context);
-      } else {
-        Routes.popPage(context);
-        showMessage(
-            msg: "${response.reasonPhrase}", type: 'danger', context: context);
-      }
-    });
+    // check if all fields are captured
+    if (results["drop_off_start_time"] != "" &&
+        results["drop_off_end_time"] != "" &&
+        results["pick_up_start_time"] != "" &&
+        results["pick_up_end_time"] != "" &&
+        results["drop_off_allowance"] != "" &&
+        results["pick_up_allowance"] != "") {
+      showProgress(context, msg: "Saving setting in progress");
+      Client()
+          .post(Uri.parse(AppUrls.addSettings), body: results)
+          .then((response) {
+        if (response.statusCode == 200) {
+          Routes.popPage(context);
+          showSuccessDialog(
+            "Settings saved successfully",
+            context,
+            onPressed: () {
+              Routes.popPage(context);
+              if (context.read<FirstTimeUserController>().state) {
+                context.read<WidgetController>().pushWidget(const StreamsUI());
+                context.read<TitleController>().setTitle("Streams");
+                context.read<SideBarController>().changeSelected(5);
+              }
+            },
+          );
+          showMessage(msg: "Settings saved", type: 'success', context: context);
+        } else {
+          Routes.popPage(context);
+          showMessage(
+              msg: "${response.reasonPhrase}",
+              type: 'danger',
+              context: context);
+        }
+      });
+    } else {
+      showMessage(
+          context: context,
+          msg: "Drop Offs and Pick Ups are not set",
+          type: "warning");
+    }
   }
 
   // drop offs
