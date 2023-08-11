@@ -71,7 +71,9 @@ class _ClassesUIState extends State<ClassesUI> {
   Widget build(BuildContext context) {
     // responsive dimensions
     Size size = MediaQuery.of(context).size;
-
+    context
+        .read<FirstTimeUserController>()
+        .getFirstTimeUser(context.read<SchoolController>().state['role']);
     return Column(
       children: [
         Expanded(
@@ -84,7 +86,7 @@ class _ClassesUIState extends State<ClassesUI> {
               builder: (context, snapshot) {
                 var classModel = snapshot.data;
                 var controller = classModel?.classes ?? [];
-        
+
                 return CustomDataTable(
                   paginatorController: _paginatorController,
                   onPageChanged: (page) {
@@ -147,27 +149,28 @@ class _ClassesUIState extends State<ClassesUI> {
             ),
           ),
         ),
-        Expanded(
-          flex:1,
-          child: Row(
-            children: [
-              const Text("Continue to add staff members"),
-              TextButton(
-                onPressed: () {
-                  context
-                      .read<WidgetController>()
-                      .pushWidget(const StaffView());
-                  context.read<TitleController>().setTitle("Staff");
-                  context.read<SideBarController>().changeSelected(2);
-                },
-                child: Text(
-                  "Click here",
-                  style: TextStyles(context).getRegularStyle(),
-                ),
-              )
-            ],
-          ),
-        )
+        if (context.read<FirstTimeUserController>().state)
+          Expanded(
+            flex: 1,
+            child: Row(
+              children: [
+                const Text("Continue to add staff members"),
+                TextButton(
+                  onPressed: () {
+                    context.read<WidgetController>().pushWidget(2);
+                    context.read<TitleController>().setTitle("Staff",
+                        context.read<SchoolController>().state['role']);
+                    context.read<SideBarController>().changeSelected(
+                        2, context.read<SchoolController>().state['role']);
+                  },
+                  child: Text(
+                    "Click here",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                )
+              ],
+            ),
+          )
       ],
     );
   }

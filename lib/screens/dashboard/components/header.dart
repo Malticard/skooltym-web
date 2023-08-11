@@ -15,7 +15,8 @@ class _HeaderState extends State<Header> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<SchoolController>(context, listen: true).getSchoolData();
-
+    BlocProvider.of<TitleController>(context, listen: true)
+        .showTitle(context.read<SchoolController>().state['role']);
     return BlocConsumer<SchoolController, Map<String, dynamic>>(
       listener: (context, state) {
         setState(() {
@@ -30,27 +31,20 @@ class _HeaderState extends State<Header> {
                   icon: const Icon(Icons.menu),
                   onPressed: () {
                     context.read<MenuAppController>().controlMenu();
-                  }// context.read<MainController>().controlMenu(scaffoldKey),
-                  ),
-            // if (!Responsive.isMobile(context))
-              // if (schoolData['role'] == 'Finance')
-                // BlocBuilder<FinanceTitleController, String>(
-                //     builder: (context, title) {
-                //   return Text(
-                //     title,
-                //     style: TextStyles(context).getTitleStyle(),
-                //   );
-                // }),
-            // if (schoolData['role'] != 'Finance')
-              BlocBuilder<TitleController, String>(builder: (context, title) {
-                return Text(
-                  title,
-                  style:Responsive.isMobile(context) ? TextStyles(context).getRegularStyle().copyWith(fontSize:18) : TextStyles(context).getTitleStyle(),
-                );
-              }),
+                  }),
+            BlocBuilder<TitleController, String>(builder: (context, title) {
+              return Text(
+                title,
+                style: Responsive.isMobile(context)
+                    ? TextStyles(context)
+                        .getRegularStyle()
+                        .copyWith(fontSize: 18)
+                    : TextStyles(context).getTitleStyle(),
+              );
+            }),
             if (!Responsive.isMobile(context))
               Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-              Expanded(child: Container()),
+            Expanded(child: Container()),
             CommonButton(
               width: 50,
               buttonTextWidget: Icon(
@@ -93,8 +87,10 @@ class _ProfileCardState extends State<ProfileCard> {
       builder: (context, state) {
         return Container(
             margin: const EdgeInsets.only(left: defaultPadding),
-            padding:  EdgeInsets.symmetric(
-              horizontal:Responsive.isMobile(context) ? defaultPadding /2 : defaultPadding,
+            padding: EdgeInsets.symmetric(
+              horizontal: Responsive.isMobile(context)
+                  ? defaultPadding / 2
+                  : defaultPadding,
               vertical: defaultPadding / 2,
             ),
             decoration: BoxDecoration(
@@ -104,14 +100,13 @@ class _ProfileCardState extends State<ProfileCard> {
             ),
             child: Row(
               children: [
-                
                 CircleAvatar(
                   backgroundColor: Colors.transparent,
                   child: FutureBuilder(
                     future: fetchAndDisplayImage(
                         schoolData['profile_pic'] ?? "profile.png"),
                     builder: (context, payload) => payload.hasData
-                        ? Image.network(payload.data!,fit:BoxFit.cover)
+                        ? Image.network(payload.data!, fit: BoxFit.cover)
                         : CircularProgressIndicator.adaptive(),
                   ),
                 ),
@@ -132,11 +127,11 @@ class _ProfileCardState extends State<ProfileCard> {
                         leading: Icon(StaffPopUpOptions.options[index].icon),
                         title: Text(StaffPopUpOptions.options[index].title!),
                         onTap: () {
-                          StaffPopUpOptions.options[index].title == 'Logout'
-                              ? Routes.logout(context)
-                              : context
-                                  .read<WidgetController>()
-                                  .pushWidget(const AdminProfile());
+                          // StaffPopUpOptions.options[index].title == 'Logout'
+                          Routes.logout(context);
+                          // : context
+                          //     .read<WidgetController>()
+                          //     .pushWidget(const AdminProfile());
                           Navigator.pop(context);
                         },
                       )),

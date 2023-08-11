@@ -168,8 +168,9 @@ class _SystemSettingsState extends State<SystemSettings> {
                       //rendering overtime settings if enabled.
                       ...[
                         //  overtime currency
-                        if (context.watch<AllowOvertimeController>().state ==
-                            true)
+                        if (settings?.allowOvertime ??
+                            (context.watch<AllowOvertimeController>().state ==
+                                true))
                           TapEffect(
                             onClick: () => setOvertimeCurrency(),
                             child: SettingCard(
@@ -180,8 +181,9 @@ class _SystemSettingsState extends State<SystemSettings> {
                               trailText: currencyCode,
                             ),
                           ),
-                        if (context.watch<AllowOvertimeController>().state ==
-                            true)
+                        if (settings?.allowOvertime ??
+                            (context.watch<AllowOvertimeController>().state ==
+                                true))
                           // set overtime interval
                           TapEffect(
                             onClick: () => setOvertimeInterval(),
@@ -199,8 +201,9 @@ class _SystemSettingsState extends State<SystemSettings> {
                               },
                             ),
                           ),
-                        if (context.watch<AllowOvertimeController>().state ==
-                            true)
+                        if (settings?.allowOvertime ??
+                            (context.watch<AllowOvertimeController>().state ==
+                                true))
                           // set overtime rate
                           TapEffect(
                             onClick: () => setOvertimeRate(),
@@ -211,7 +214,8 @@ class _SystemSettingsState extends State<SystemSettings> {
                                   titleText: "Overtime rate",
                                   subText:
                                       "Set the amount of money to charge every after the set overtime interval eg. 20000 every after 20mins ",
-                                  trailText: "UGX ${state.floor()}",
+                                  trailText:
+                                      "${currencyCode.split(" ").last} ${state.floor()}",
                                 );
                               },
                             ),
@@ -280,9 +284,11 @@ class _SystemSettingsState extends State<SystemSettings> {
             onPressed: () {
               Routes.popPage(context);
               if (context.read<FirstTimeUserController>().state) {
-                context.read<WidgetController>().pushWidget(const StreamsUI());
-                context.read<TitleController>().setTitle("Streams");
-                context.read<SideBarController>().changeSelected(5);
+                context.read<WidgetController>().pushWidget(5);
+                context.read<TitleController>().setTitle(
+                    "Streams", context.read<SchoolController>().state['role']);
+                context.read<SideBarController>().changeSelected(
+                    5, context.read<SchoolController>().state['role']);
               }
             },
           );

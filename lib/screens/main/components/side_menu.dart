@@ -16,12 +16,16 @@ class _SideMenuState extends State<SideMenu> {
   @override
   void initState() {
     context.read<SchoolController>().getSchoolData();
+    BlocProvider.of<SideBarController>(context)
+        .showCurrentSelection(context.read<SchoolController>().state['role']);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     context.read<SchoolController>().getSchoolData();
+    BlocProvider.of<SideBarController>(context)
+        .showCurrentSelection(context.read<SchoolController>().state['role']);
     store = context.read<SchoolController>().state['role'] == 'Admin'
         ? options
         : context.read<SchoolController>().state['role'] == 'Finance'
@@ -44,16 +48,16 @@ class _SideMenuState extends State<SideMenu> {
                       padding: const EdgeInsets.all(18.0),
                       child: Image.network(
                           "${AppUrls.liveImages}${school['school_badge']}",
-                          height: Responsive.isMobile(context) ?  60 : 80,
-                          width: Responsive.isMobile(context) ?  60 : 80),
+                          height: Responsive.isMobile(context) ? 60 : 80,
+                          width: Responsive.isMobile(context) ? 60 : 80),
                     ),
                     // const Space(), //
                     Text(
                       "${school['schoolName']}",
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyles(context)
-                          .getBoldStyle()
-                          .copyWith(color: Colors.white, fontSize:Responsive.isMobile(context) ? 17 : 19),
+                      style: TextStyles(context).getBoldStyle().copyWith(
+                          color: Colors.white,
+                          fontSize: Responsive.isMobile(context) ? 17 : 19),
                     ),
                   ],
                 );
@@ -71,27 +75,27 @@ class _SideMenuState extends State<SideMenu> {
                   children: List.generate(
                     store.length,
                     (index) => DrawerListTile(
-                      selected: selected == index,
+                      selected: index == selected,
                       title: store[index]['title'],
                       svgSrc: store[index]['icon'],
                       press: () {
-                        context.read<SideBarController>().changeSelected(index);
-                        if(Responsive.isMobile(context) || Responsive.isTablet(context)){
+                        context.read<SideBarController>().changeSelected(index,
+                            context.read<SchoolController>().state['role']);
+                        if (Responsive.isMobile(context) ||
+                            Responsive.isTablet(context)) {
                           Routes.popPage(context);
                         }
-                        context
-                            .read<TitleController>()
-                            .setTitle(store[index]['title']);
+                        context.read<TitleController>().setTitle(
+                            store[index]['title'],
+                            context.read<SchoolController>().state['role']);
                         if (context.read<SchoolController>().state['role'] ==
                             'Admin') {
                           // update rendered page
-                          context
-                              .read<WidgetController>()
-                              .pushWidget(store[index]['page']);
+                          context.read<WidgetController>().pushWidget(index);
                         } else {
                           context
                               .read<FinanceViewController>()
-                              .pushWidget(store[index]['page']);
+                              .pushWidget(index);
                         }
                       },
                     ),

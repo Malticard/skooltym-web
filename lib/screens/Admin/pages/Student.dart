@@ -80,12 +80,14 @@ class _ViewStudentsState extends State<ViewStudents> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    context
+        .read<FirstTimeUserController>()
+        .getFirstTimeUser(context.read<SchoolController>().state['role']);
 
     return Column(
       children: [
         Expanded(
-          flex:5,
+          flex: 5,
           // height:Responsive.isMobile(context) ? size.width : size.width / 2.39,
           child: StreamBuilder(
               stream: _studentController.stream,
@@ -178,17 +180,18 @@ class _ViewStudentsState extends State<ViewStudents> {
                 );
               }),
         ),
-        Expanded(
-          child: Row(
+        if (context.read<FirstTimeUserController>().state)
+          Expanded(
+            child: Row(
               children: [
                 const Text("Continue to add guardians"),
                 TextButton(
                   onPressed: () {
-                    context
-                        .read<WidgetController>()
-                        .pushWidget(const ClassesUI());
-                    context.read<TitleController>().setTitle("Guardians");
-                    context.read<SideBarController>().changeSelected(3);
+                    context.read<WidgetController>().pushWidget(3);
+                    context.read<TitleController>().setTitle("Guardians",
+                        context.read<SchoolController>().state['role']);
+                    context.read<SideBarController>().changeSelected(
+                        3, context.read<SchoolController>().state['role']);
                   },
                   child: Text(
                     "Click here",
@@ -197,7 +200,7 @@ class _ViewStudentsState extends State<ViewStudents> {
                 )
               ],
             ),
-        ),
+          ),
       ],
     );
   }

@@ -54,40 +54,19 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           // We want this side menu only for large screen
           if (Responsive.isDesktop(context))
-            // BlocBuilder<FinanceFirstTimeController, bool>(
-            //       builder: (context, finance) {
-            //         // redirect to dashboard if not first time user
-            //         if (finance == false && context.read<SchoolController>().state['role'] == 'Finance') {
-            //             // Finance redirection
-            //             BlocProvider.of<FinanceViewController>(context)
-            //                 .pushWidget(const Dashboard());
-            //             BlocProvider.of<FinanceTitleController>(context)
-            //                 .setTitle("Dashboard");
-            //             BlocProvider.of<SideBarController>(context)
-            //                 .changeSelected(0);
-            //         }
-            //         return finance == false && context.read<SchoolController>().state['role'] == 'Finance'
-            //             ? Expanded(
-            //                 // default flex = 1
-            //                 // and it takes 1/6 part of the screen
-            //                 child: SideMenu(
-            //                   scaffoldKey: _scaffoldKey,
-            //                 ),
-            //               )
-            //             : const Center();
-            //       },
-            //     ),
-
             BlocBuilder<FirstTimeUserController, bool>(
               builder: (context, state) {
                 // redirect to dashboard if not first time user
                 if (state == false) {
                   // Admin redirection
-                  BlocProvider.of<WidgetController>(context)
-                      .pushWidget(const Dashboard());
-                  BlocProvider.of<TitleController>(context)
-                      .setTitle("Dashboard");
-                  BlocProvider.of<SideBarController>(context).changeSelected(0);
+                  BlocProvider.of<WidgetController>(context).showRecentWidget();
+                  BlocProvider.of<FinanceViewController>(context)
+                      .showRecentWidget();
+                  BlocProvider.of<TitleController>(context).showTitle(
+                      context.read<SchoolController>().state['role']);
+                  BlocProvider.of<SideBarController>(context)
+                      .showCurrentSelection(
+                          context.read<SchoolController>().state['role']);
                 }
                 return state == false
                     ? Expanded(

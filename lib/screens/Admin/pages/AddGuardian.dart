@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import '../../../models/StudentModel.dart';
 import '/exports/exports.dart';
@@ -44,13 +45,6 @@ final List<Map<String, dynamic>> _formFields = [
     "hint": "eg Relationship type e.g Primary",
     "data": ["Select relationship type", "Primary", "Secondary"]
   },
-  // {
-  //   "title": "Date Of Entry*",
-  //   "hint": "e.g xx-xx-xx",
-  //   "date": 9,
-  //   "password": false,
-  //   'icon': Icons.calendar_month_outlined
-  // },
   {
     "title": "Students *",
     "hint": "Select students",
@@ -80,36 +74,44 @@ class _AddGuardianState extends State<AddGuardian> {
 // form key
   final formKey = GlobalKey<FormState>();
   Timer? _timer;
-  StreamController<StudentModel> _guardianStudentsController = StreamController<StudentModel>();
+  StreamController<StudentModel> _guardianStudentsController =
+      StreamController<StudentModel>();
   @override
   void initState() {
     super.initState();
     realTimeStudentsData();
-  
+
     BlocProvider.of<SchoolController>(context).getSchoolData();
   }
+
   void realTimeStudentsData() async {
     var school = context.read<SchoolController>().state['school'];
-    var students = await fetchStudents(school);
-    _guardianStudentsController.add(students);
-    Timer.periodic(Duration(seconds: 1), (timer) async { 
+
+    if (mounted) {
+      var students = await fetchStudents(school);
+      _guardianStudentsController.add(students);
+    }
+
+    Timer.periodic(Duration(seconds: 1), (timer) async {
       this._timer = timer;
-      if(mounted){
-    var students = await fetchStudents(school);
+      if (mounted) {
+        var students = await fetchStudents(school);
         _guardianStudentsController.add(students);
       }
     });
   }
+
   // error fields
   List<String> errorFields = List.generate(_formFields.length, (i) => '');
-@override
-void dispose() {
-  _timer?.cancel();
-  if (_guardianStudentsController.hasListener) {
-    _guardianStudentsController.close();
+  @override
+  void dispose() {
+    _timer?.cancel();
+    if (_guardianStudentsController.hasListener) {
+      _guardianStudentsController.close();
+    }
+    super.dispose();
   }
-  super.dispose();
-}
+
   @override
   Widget build(BuildContext context) {
     context.read<MultiStudentsController>().getMultiStudents();
@@ -126,11 +128,8 @@ void dispose() {
                 formTitle: "Add Guardian",
                 padding: padding,
                 formFields: _formFields,
-                lists:students.data?.results
-                    .map((e) => e.id)
-                    .toList(),
-                dropdownLists:
-                    students.data?.results.map((item) {
+                lists: students.data?.results.map((e) => e.id).toList(),
+                dropdownLists: students.data?.results.map((item) {
                   return "${item.studentFname} ${item.studentLname}";
                 }).toList(),
                 onDropDownValue: (v) {
@@ -166,7 +165,6 @@ void dispose() {
         );
       }).whenComplete(() {
         Routes.popPage(context);
-        // debugPrint("done saving");
       });
     }
   }
@@ -184,7 +182,7 @@ void dispose() {
       'Accept': 'application/json',
       // 'Authorization': 'Bearer ${context.read<TokenController>().state}'
     });
-
+    log("Done setting headers");
     request.fields['students'] =
         (context.read<MultiStudentsController>().state);
     request.fields['school'] = context.read<SchoolController>().state['school'];
@@ -204,16 +202,15 @@ void dispose() {
           context.read<ImageUploadController>().state['size'],
           filename: context.read<ImageUploadController>().state['name']));
     } else {
+      log("$_formControllers: Upload");
       request.files.add(MultipartFile(
           'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
           filename: uri.split("/").last));
     }
-    request.fields['guardian_dateOfEntry'] = "";//_formControllers[6].text.trim();
     request.fields['passcode'] = "";
-    request.fields['fcmToken'] = "";
+    request.fields['deviceId'] = "";
     request.fields['guardian_key[key]'] = "";
     var response = request.send();
-    debugPrint("Status code $response");
     return response;
   }
 }

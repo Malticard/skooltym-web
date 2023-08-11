@@ -14,7 +14,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<SchoolController>().getSchoolData();
-    // BlocProvider.of<FinanceViewController>(context).
+    BlocProvider.of<FinanceViewController>(context).showRecentWidget();
+    BlocProvider.of<WidgetController>(context).showRecentWidget();
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.all(0),

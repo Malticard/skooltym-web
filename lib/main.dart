@@ -9,6 +9,7 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer = const Observer();
   var prefs = await SharedPreferences.getInstance();
+  // prefs.clear().then((value) {});
   runApp(
     MultiBlocProvider(
       providers: [
@@ -45,6 +46,10 @@ Future<void> main() async {
         listener: (context, theme) {},
         builder: (context, theme) {
           BlocProvider.of<SchoolController>(context).getSchoolData();
+          BlocProvider.of<TitleController>(context).showTitle(
+              BlocProvider.of<SchoolController>(context, listen: true)
+                      .state['role'] ??
+                  "guest");
           return BlocBuilder<TitleController, String>(
             builder: (context, title) {
               return MaterialApp(

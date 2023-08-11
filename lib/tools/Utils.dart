@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:admin/models/SettingModel.dart';
 import 'package:intl/intl.dart';
 import '../models/DropOffModels.dart';
@@ -30,12 +32,14 @@ void loginUser(BuildContext context, String email, String password) async {
           .getFirstTimeUser(data['role']);
 
       if (BlocProvider.of<FirstTimeUserController>(context).state == true) {
-        BlocProvider.of<TitleController>(context).setTitle("Change Password");
+        BlocProvider.of<TitleController>(context).setTitle(
+            "Change Password", context.read<SchoolController>().state['role']);
       } else {
-        debugPrint("${data['role']}");
-        BlocProvider.of<TitleController>(context).setTitle("Dashboard");
-        BlocProvider.of<FinanceViewController>(context).pushWidget(Dashboard());
-        BlocProvider.of<WidgetController>(context).pushWidget(Dashboard());
+        log("${data['role']}");
+        BlocProvider.of<TitleController>(context).setTitle(
+            "Dashboard", context.read<SchoolController>().state['role']);
+        BlocProvider.of<FinanceViewController>(context).showRecentWidget();
+        BlocProvider.of<WidgetController>(context).showRecentWidget();
       }
       // for finance
       //  if(BlocProvider.of<FinanceFirstTimeController>(context).state == true){
@@ -81,10 +85,10 @@ Future<String> assignRole(String role) async {
 }
 
 Future<String?> fetchAndDisplayImage(String imageURL) async {
-  await Future.delayed(
-    Duration(seconds: 2),
-  );
-  // await Client().get(Uri.parse(AppUrls.liveImages + imageURL));
+  // await Future.delayed(
+  //   Duration(seconds: 2),
+  // );
+  // // await Client().get(Uri.parse(AppUrls.liveImages + imageURL));
   return AppUrls.liveImages + imageURL;
 }
 
@@ -330,6 +334,7 @@ List<Map<String, dynamic>> options = [
     'icon': "assets/icons/menu_setting.svg"
   }
 ];
+
 // finance routes
 List<Map<String, dynamic>> financeViews = [
   {
@@ -417,7 +422,7 @@ void showMessage(
 /// show progress widget
 void showProgress(BuildContext context, {String? msg = 'Task'}) {
   showDialog(
-    barrierDismissible: false,
+    barrierDismissible: true,
     context: context,
     builder: (context) => Dialog(
       backgroundColor: Colors.transparent,

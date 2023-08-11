@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import '/exports/exports.dart';
-// export 'package:flutter/cupertino.dart';
 
 class UpdateStaff extends StatefulWidget {
   final Staff staff;
@@ -68,7 +67,7 @@ class _UpdateStaffState extends State<UpdateStaff> {
       ]
     },
   ];
- Map<String,dynamic> imageData = {};
+  Map<String, dynamic> imageData = {};
   // overall form padding
   EdgeInsets padding =
       const EdgeInsets.only(left: 14, top: 0, right: 14, bottom: 5);
@@ -80,9 +79,9 @@ class _UpdateStaffState extends State<UpdateStaff> {
   Widget build(BuildContext context) {
     return BlocConsumer<ImageUploadController, Map<String, dynamic>>(
       listener: (context, state) {
-       setState(() {
-         imageData = state;
-       });
+        setState(() {
+          imageData = state;
+        });
       },
       builder: (context, state) {
         return Padding(
@@ -155,9 +154,7 @@ class _UpdateStaffState extends State<UpdateStaff> {
     //
     if (kIsWeb) {
       request.files.add(MultipartFile(
-          "image",
-          imageData['image'],
-          imageData['size'],
+          "image", imageData['image'], imageData['size'],
           filename: imageData['name']));
     } else {
       if (uri.isNotEmpty) {

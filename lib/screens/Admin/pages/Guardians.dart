@@ -77,6 +77,9 @@ class _ViewGuardiansState extends State<ViewGuardians> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    context
+        .read<FirstTimeUserController>()
+        .getFirstTimeUser(context.read<SchoolController>().state['role']);
     return StreamBuilder(
         stream: _guardianController.stream,
         builder: (context, snapshot) {
@@ -85,7 +88,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           return Column(
             children: [
               Expanded(
-                flex:5,
+                flex: 5,
                 child: SizedBox(
                   width: size.width,
                   height: size.height,
@@ -110,9 +113,9 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                             Expanded(
                               child: SearchField(
                                 onChanged: (value) {
-                                 setState(() {
-                                   _query = value?.trim();
-                                 });
+                                  setState(() {
+                                    _query = value?.trim();
+                                  });
                                 },
                               ),
                             ),
@@ -137,7 +140,6 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                     columns: List.generate(
                       guardianColumns.length,
                       (index) => DataColumn(
-                     
                         label: Text(
                           guardianColumns[index],
                         ),
@@ -161,30 +163,35 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                   ),
                 ),
               ),
-              Expanded(
-              flex: 1,
-                child: Row(
-                  children: [
-                    const Text("Continue to dashboard"),
-                    TextButton(
-                      onPressed: () {
-                        context
-                            .read<WidgetController>()
-                            .pushWidget(const Dashboard());
-                        context.read<TitleController>().setTitle("Dashboard");
-                        context.read<SideBarController>().changeSelected(0);
-                        context
-                            .read<FirstTimeUserController>()
-                            .setFirstTimeUser(false,context.read<SchoolController>().state['role']);
-                      },
-                      child: Text(
-                        "Click here",
-                        style: TextStyles(context).getRegularStyle(),
-                      ),
-                    )
-                  ],
-                ),
-              )
+              if (context.read<FirstTimeUserController>().state)
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: [
+                      const Text("Continue to dashboard"),
+                      TextButton(
+                        onPressed: () {
+                          context.read<WidgetController>().pushWidget(0);
+                          context.read<TitleController>().setTitle("Dashboard",
+                              context.read<SchoolController>().state['role']);
+                          context.read<SideBarController>().changeSelected(0,
+                              context.read<SchoolController>().state['role']);
+                          context
+                              .read<FirstTimeUserController>()
+                              .setFirstTimeUser(
+                                  false,
+                                  context
+                                      .read<SchoolController>()
+                                      .state['role']);
+                        },
+                        child: Text(
+                          "Click here",
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
+                      )
+                    ],
+                  ),
+                )
             ],
           );
         });

@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_return_type_for_catch_error, unnecessary_null_comparison
 
+import 'dart:developer';
 import 'dart:io';
 
 import '/exports/exports.dart';
@@ -18,26 +19,48 @@ class _AddStudentState extends State<AddStudent> {
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
+  List<DashboardModel> _dashDataController = [];
+  Timer? _timer;
 // form key
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    initStreams();
+    pollData();
     super.initState();
   }
 
-  void initStreams() {
-    Provider.of<ClassController>(context, listen: false)
-        .getClasses(context.read<SchoolController>().state['school']);
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cancel the timer when the widget is disposed
+    super.dispose();
+  }
 
-    var stream = Provider.of<StreamsController>(context, listen: false);
-    stream.getStreams(context.read<SchoolController>().state['school']);
+  void pollData() {
+    fetchDashBoardData(context.read<SchoolController>().state['school'])
+        .then((dashData) {
+      setState(() {
+        _dashDataController = dashData;
+      });
+    });
+  }
+
+  List<String> getStreams() {
+    return formControllers[5].text.isNotEmpty && mounted
+        ? _dashDataController
+            .where((element) => element.className == formControllers[5].text)
+            .toList()
+            .first
+            .classStreams
+            .map((e) => e.streamName)
+            .toList()
+        : [];
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ClassController>(context, listen: true)
-        .getClasses(context.read<SchoolController>().state['school']);
+    pollData();
+    // Provider.of<ClassController>(context, listen: true)
+    //     .getClasses(context.read<SchoolController>().state['school']);
 // form data
 // error fields
     List<String> errorFields = List.generate(7, (i) => '');
@@ -75,23 +98,14 @@ class _AddStudentState extends State<AddStudent> {
         "hint": "e.g grade 2",
         "data": [
           "Select class",
-          ...Provider.of<ClassController>(context,listen: false)
-              .classes
-              .map((e) => e.className)
-              .toList(),
+          ..._dashDataController.map((e) => e.className).toList(),
         ],
         'icon': Icons.home_work_outlined
       },
       {
         "title": "Stream *",
         "hint": "e.g North",
-        "data": [
-          "Select stream",
-          ...Provider.of<StreamsController>(context, listen: false)
-              .streams
-              .map((e) => e.streamName)
-              .toList(),
-        ],
+        "data": ["Select stream", ...getStreams()],
         'icon': Icons.home_work_outlined
       }
     ];
@@ -104,42 +118,41 @@ class _AddStudentState extends State<AddStudent> {
         ),
         SingleChildScrollView(
           child: CommonFormFields(
-                padding: _padding,
-                formFields: formFields ?? [],
-                formControllers: formControllers,
-                buttonText: "Save Student Details",
-                onSubmit: () {
-                  if (true) {
-                    showProgress(context, msg: "Adding new student...");
-                    _handleStudentRegistration().then(
-                      (value) {
-                        print("Response => ${value}");
-                        if (value.statusCode == 200) {
-                          Routes.popPage(context);
-                          showMessage(
-                            context: context,
-                            type: 'success',
-                            msg: "Added new student successfully",
-                          );
-                          for (var v in formControllers) {
-                            v.clear();
-                          }
-                        } else {
-                          showMessage(
-                            msg: "Failed to add student ${value.reasonPhrase}",
-                            context: context,
-                            type: "danger",
-                          );
-                        }
-                      },
-                    ).whenComplete(() {
+            padding: _padding,
+            formFields: formFields ?? [],
+            formControllers: formControllers,
+            buttonText: "Save Student Details",
+            onSubmit: () {
+              if (true) {
+                showProgress(context, msg: "Adding new student...");
+                _handleStudentRegistration().then(
+                  (value) {
+                    print("Response => ${value}");
+                    if (value.statusCode == 200) {
                       Routes.popPage(context);
-                    });
-                  }
-                },
-                errorMsgs: errorFields,
-                lists: [],
-             
+                      showMessage(
+                        context: context,
+                        type: 'success',
+                        msg: "Added new student successfully",
+                      );
+                      for (var v in formControllers) {
+                        v.clear();
+                      }
+                    } else {
+                      showMessage(
+                        msg: "Failed to add student ${value.reasonPhrase}",
+                        context: context,
+                        type: "danger",
+                      );
+                    }
+                  },
+                ).whenComplete(() {
+                  Routes.popPage(context);
+                });
+              }
+            },
+            errorMsgs: errorFields,
+            lists: [],
           ),
         ),
       ],
@@ -150,7 +163,7 @@ class _AddStudentState extends State<AddStudent> {
     String uri = formControllers[3].text;
 
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStudent));
-    debugPrint("${request.headers}");
+    log("${request.headers}");
     //  ============================== student details ============================
     request.fields['guardians'] =
         ""; //json.encode(context.watch()<MainController>().multiselect);

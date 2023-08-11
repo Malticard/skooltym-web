@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_return_type_for_catch_error
 
-import 'dart:io';
+import 'dart:developer';
 
 import '../../../../models/Guardians.dart';
 import '../../../../models/StudentModel.dart';
@@ -49,13 +49,6 @@ final List<Map<String, dynamic>> _formFields = [
     "hint": "eg Relationship type e.g Primary",
     "data": ["Select relationship type", "Primary", "Secondary"]
   },
-  // {
-  //   "title": "Date Of Entry*",
-  //   "hint": "e.g xx-xx-xx",
-  //   "date": 9,
-  //   "password": false,
-  //   'icon': Icons.calendar_month_outlined
-  // },
   {
     "title": "Students *",
     "hint": "Select students",
@@ -101,7 +94,8 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
 
     super.initState();
   }
-  Map<String,dynamic> imageData = {};
+
+  Map<String, dynamic> imageData = {};
   @override
   void dispose() {
     super.dispose();
@@ -169,10 +163,13 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
 
 // adding guardian
   void _addGuardian() {
+    for (var i = 0; i < _formControllers.length; i++) {
+      log(_formControllers[i].text);
+    }
     if (validateEmail(_formControllers[1].text, context) != false) {
       showProgress(context, msg: "Updating guardian in progress");
       _handleGuardian().then((value) {
-        debugPrint("Status code ${value.statusCode}");
+        // log("Status code ${value.statusCode}");
         Routes.popPage(context);
       }).whenComplete(() {
         Routes.popPage(context);
@@ -191,7 +188,6 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     request.headers.addAll({
       'Content-Type': 'multipart/form-data',
       'Accept': 'application/json',
-      // 'Authorization': 'Bearer ${context.read<TokenController>().state}'
     });
 
     request.fields['students'] =
@@ -206,12 +202,15 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     request.fields['guardian_contact'] = _formControllers[2].text.trim();
     request.fields['guardian_email'] = _formControllers[1].text.trim();
     request.fields['guardian_gender'] = _formControllers[4].text.trim();
+    request.fields['passcode'] = "";
+    request.fields['deviceId'] = "";
+    request.fields['guardian_key[key]'] = "";
+
     if (kIsWeb) {
-      request.files.add(MultipartFile(
-          "image",
-          imageData['image'],
-          imageData['size'],
-          filename: imageData['name']));
+      request.files.add(
+        MultipartFile("image", imageData['image'], imageData['size'],
+            filename: imageData['name']),
+      );
     } else {
       if (uri.isNotEmpty) {
         request.files.add(MultipartFile(
@@ -219,13 +218,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
             filename: uri.split("/").last));
       }
     }
-
-    request.fields['guardian_dateOfEntry'] =""; //_formControllers[6].text.trim();
-    request.fields['passcode'] = "";
-    request.fields['fcmToken'] = "";
-    request.fields['guardian_key[key]'] = "";
     var response = request.send();
-    debugPrint("Status code $response");
     return response;
   }
 }

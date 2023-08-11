@@ -147,27 +147,28 @@ class _StreamsUIState extends State<StreamsUI> {
                 }),
           ),
         ),
-        Expanded(
-          flex: 1,
-          child: Row(
-            children: [
-              const Text("Continue to add classes"),
-              TextButton(
-                onPressed: () {
-                  context
-                      .read<WidgetController>()
-                      .pushWidget(const ClassesUI());
-                  context.read<TitleController>().setTitle("Classes");
-                  context.read<SideBarController>().changeSelected(4);
-                },
-                child: Text(
-                  "Click here",
-                  style: TextStyles(context).getRegularStyle(),
-                ),
-              )
-            ],
-          ),
-        )
+        if (context.read<FirstTimeUserController>().state)
+          Expanded(
+            flex: 1,
+            child: Row(
+              children: [
+                const Text("Continue to add classes"),
+                TextButton(
+                  onPressed: () {
+                    context.read<WidgetController>().pushWidget(4);
+                    context.read<TitleController>().setTitle("Classes",
+                        context.read<SchoolController>().state['role']);
+                    context.read<SideBarController>().changeSelected(
+                        4, context.read<SchoolController>().state['role']);
+                  },
+                  child: Text(
+                    "Click here",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                )
+              ],
+            ),
+          )
       ],
     );
   }

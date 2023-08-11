@@ -30,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -63,17 +62,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       Expanded(
                         flex: 3,
                         child: SizedBox(
-                            // width: MediaQuery.of(context).size.width * 0.6,
-                            // height: MediaQuery.of(context).size.width * 0.9,
-                            child: SvgPicture.asset(
-                              "assets/vectors/mother_child.svg",
-                              width: MediaQuery.of(context).size.width * 1.6,
+                          // width: MediaQuery.of(context).size.width * 0.6,
+                          // height: MediaQuery.of(context).size.width * 0.9,
+                          child: SvgPicture.asset(
+                            "assets/vectors/mother_child.svg",
+                            width: MediaQuery.of(context).size.width * 1.6,
                             height: MediaQuery.of(context).size.width * 0.9,
-                            ),
                           ),
+                        ),
                       ),
                       Expanded(
-                        flex:4,
+                        flex: 4,
                         child: Container(
                           height: MediaQuery.of(context).size.width,
                           // margin: EdgeInsets.only(
@@ -104,14 +103,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: const  EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 left: 60,
                                 right: 60,
                               ),
                               child: SizedBox(
-                                width: MediaQuery.of(context).size.width ,
-                                height:
-                                   MediaQuery.of(context).size.height /2,
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height / 2,
                                 child: SvgPicture.asset(
                                   "assets/vectors/mother_child.svg",
                                 ),
@@ -152,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisCount: 2,
                     children: [
                       Container(
-                       margin: EdgeInsets.only(
+                        margin: EdgeInsets.only(
                           top: size.height * 0.03,
                           bottom: size.height * 0.093,
                           right: size.width / 17,
@@ -166,10 +164,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               bottomLeft: Radius.circular(50),
                               bottomRight: Radius.circular(50),
                             ),
-                            color: Theme.of(context).brightness ==
-                                    Brightness.dark
-                                ? Colors.black26
-                                : Colors.white.withOpacity(1)),
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.black26
+                                    : Colors.white.withOpacity(1)),
                         child: _buildForm(),
                       ),
                       SizedBox(
@@ -202,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyles(context).getBoldStyle().copyWith(
                             color: Colors.white,
                             fontSize: 20,
-                          ), 
+                          ),
                     ),
                   ],
                 ),
@@ -265,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
               buttonText: "Sign in", //AppLocalizations(context).of("login"),
               onTap: () {
                 // if (context.watch<OnlineCheckerController>().state == true) {
-                if ( formKey.currentState!.validate()) {
+                if (formKey.currentState!.validate()) {
                   loginUser(
                       context, _emailController.text, _passwordController.text);
                 }
@@ -293,9 +291,10 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(8)),
-            onTap: (){
-              BlocProvider.of<TitleController>(context).setTitle("Verify Phone");
-              Routes.namedRoute(context,Routes.phoneVerify);
+            onTap: () {
+              BlocProvider.of<TitleController>(context)
+                  .setTitle("Verify Phone", "guest");
+              Routes.namedRoute(context, Routes.phoneVerify);
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),

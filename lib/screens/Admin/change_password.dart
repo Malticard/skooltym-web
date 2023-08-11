@@ -23,11 +23,13 @@ class _ChangePasswordState extends State<ChangePassword> {
     context.read<SchoolController>().getSchoolData();
     super.initState();
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     context.read<SchoolController>().getSchoolData();
   }
+
   @override
   Widget build(BuildContext context) {
     context.read<SchoolController>().getSchoolData();
@@ -140,11 +142,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                 ),
               ),
             ),
-          
           ],
         ),
-        
-         mobile: Column(
+        mobile: Column(
           children: [
             Expanded(
               flex: 2,
@@ -164,13 +164,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                 child: Form(
                   key: formKey,
                   child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Padding(
-                        padding:  EdgeInsets.only(
-                            top: 16.0, bottom: size.width * 0.0050, left: 34, right: 34),
+                        padding: EdgeInsets.only(
+                            top: 16.0,
+                            bottom: size.width * 0.0050,
+                            left: 34,
+                            right: 34),
                         child: Row(
                           children: <Widget>[
                             Expanded(
@@ -238,7 +240,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         buttonText:
                             "Apply Changes", //AppLocalizations(context).of("Apply_text"),
                         onTap: () {
-actionTap();
+                          actionTap();
                         },
                       )
                     ],
@@ -246,78 +248,67 @@ actionTap();
                 ),
               ),
             ),
-          
           ],
         ),
       ),
     );
   }
-  void actionTap(){
-                              if (_allValidation()) {
-                            showProgress(context,
-                                msg: "Changing password in progress");
-                            Client().post(
-                                Uri.parse(AppUrls.setPass +
-                                    context.read<SchoolController>().state['id']),
-                                body: {
-                                  "new_password": _newController.text.trim(),
-                                  "confirm_password":
-                                      _confirmController.text.trim(),
-                                }).then((value) {
-                              var data = jsonDecode(value.body);
-                              debugPrint("Change response => ${value.body}");
-                              if (value.statusCode == 200 ||
-                                  value.statusCode == 201) {
-                                Routes.popPage(context);
-                                _newController.clear();
-                                _confirmController.clear();
-                                showSuccessDialog(
-                                    "Password changed successfully", context,
-                                    onPressed: () {
-                                  Routes.popPage(context);
-      
-                                  if (context
-                                          .read<SchoolController>()
-                                          .state['role'] ==
-                                      'Finance') {
-                                        // for finance after changing the password are redirected to dashboard
-                                    BlocProvider.of<FinanceViewController>(context)
-                                        .pushWidget(const Dashboard());
-                                    BlocProvider.of<TitleController>(context)
-                                        .setTitle("Dashboard");
-                                    BlocProvider.of<SideBarController>(context)
-                                        .changeSelected(0);
-                                        context.read<FirstTimeUserController>().setFirstTimeUser(false,context.read<SchoolController>().state['role']);
-                                  } else {
-                                    // for admins after changing the password are redirected to system settings
-                                    context
-                                        .read<WidgetController>()
-                                        .pushWidget(const SystemSettings());
-                                    context
-                                        .read<TitleController>()
-                                        .setTitle("System Settings");
-                                    context
-                                        .read<SideBarController>()
-                                        .changeSelected(11);
-                                  }
-                                });
-                                showMessage(
-                                    context: context,
-                                    msg: "Password Updated successfully",
-                                    type: 'success');
-                              } else {
-                                Routes.popPage(context);
-                                showMessage(
-                                    context: context,
-                                    // float: true,
-                                    duration: 6,
-                                    msg: data['error'],
-                                    type: 'warning');
-                              }
-                            });
-                          }
-                       
+
+  void actionTap() {
+    if (_allValidation()) {
+      showProgress(context, msg: "Changing password in progress");
+      Client().post(
+          Uri.parse(
+              AppUrls.setPass + context.read<SchoolController>().state['id']),
+          body: {
+            "new_password": _newController.text.trim(),
+            "confirm_password": _confirmController.text.trim(),
+          }).then((value) {
+        var data = jsonDecode(value.body);
+        debugPrint("Change response => ${value.body}");
+        if (value.statusCode == 200 || value.statusCode == 201) {
+          Routes.popPage(context);
+          _newController.clear();
+          _confirmController.clear();
+          showSuccessDialog("Password changed successfully", context,
+              onPressed: () {
+            Routes.popPage(context);
+
+            if (context.read<SchoolController>().state['role'] == 'Finance') {
+              // for finance after changing the password are redirected to dashboard
+              BlocProvider.of<FinanceViewController>(context).pushWidget(0);
+              BlocProvider.of<TitleController>(context).setTitle(
+                  "Dashboard", context.read<SchoolController>().state['role']);
+              BlocProvider.of<SideBarController>(context).changeSelected(
+                  0, context.read<SchoolController>().state['role']);
+              context.read<FirstTimeUserController>().setFirstTimeUser(
+                  false, context.read<SchoolController>().state['role']);
+            } else {
+              // for admins after changing the password are redirected to system settings
+              context.read<WidgetController>().pushWidget(11);
+              context.read<TitleController>().setTitle("System Settings",
+                  context.read<SchoolController>().state['role']);
+              context.read<SideBarController>().changeSelected(
+                  11, context.read<SchoolController>().state['role']);
+            }
+          });
+          showMessage(
+              context: context,
+              msg: "Password Updated successfully",
+              type: 'success');
+        } else {
+          Routes.popPage(context);
+          showMessage(
+              context: context,
+              // float: true,
+              duration: 6,
+              msg: data['error'],
+              type: 'warning');
+        }
+      });
+    }
   }
+
   bool _allValidation() {
     bool isValid = true;
     if (_newController.text.trim().isEmpty) {

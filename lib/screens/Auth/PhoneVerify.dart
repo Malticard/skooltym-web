@@ -212,7 +212,7 @@ class _PhoneVerifyState extends State<PhoneVerify>
             errorText: _errorPhone,
             icon: Icons.phone,
             isObscureText: false,
-            
+
             padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
             hintText: "Enter the phone number that was registered",
             keyboardType: TextInputType.phone,
@@ -238,7 +238,8 @@ class _PhoneVerifyState extends State<PhoneVerify>
                     // if (data['otp'] != null) {
                     Routes.popPage(context);
                     context.read<ForgotPasswordController>().updateForgot(data);
-                     BlocProvider.of<TitleController>(context).setTitle("verify OTP");
+                    BlocProvider.of<TitleController>(context)
+                        .setTitle("verify OTP", "guest");
                     showMessage(
                         context: context,
                         msg: "${_phoneVerificationController.text} verified",

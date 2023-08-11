@@ -46,7 +46,6 @@ class _StaffViewState extends State<StaffView> {
     try {
       // Add a check to see if the widget is still mounted before updating the state
       if (mounted) {
-        
         var staff =
             await fetchStaffs(context, page: _currentPage, limit: rowsPerPage);
         _staffController.add(staff);
@@ -58,10 +57,11 @@ class _StaffViewState extends State<StaffView> {
         this.timer = timer;
         // Add a check to see if the widget is still mounted before updating the state
         if (mounted) {
-          if(_query != null){
-          var staffs = await searchStaff(context.read<SchoolController>().state['school'], _query!);
-          _staffController.add(staffs);
-          } else{
+          if (_query != null) {
+            var staffs = await searchStaff(
+                context.read<SchoolController>().state['school'], _query!);
+            _staffController.add(staffs);
+          } else {
             var staffs = await fetchStaffs(context,
                 page: _currentPage, limit: rowsPerPage);
             _staffController.add(staffs);
@@ -76,10 +76,13 @@ class _StaffViewState extends State<StaffView> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    context
+        .read<FirstTimeUserController>()
+        .getFirstTimeUser(context.read<SchoolController>().state['role']);
     return Column(
       children: [
         Expanded(
-          flex:5,
+          flex: 5,
           child: SizedBox(
             height: size.height,
             child: StreamBuilder(
@@ -108,9 +111,9 @@ class _StaffViewState extends State<StaffView> {
                           Expanded(
                             child: SearchField(
                               onChanged: (value) {
-                               setState(() {
-                                 _query = value;
-                               });
+                                setState(() {
+                                  _query = value;
+                                });
                               },
                             ),
                           ),
@@ -143,7 +146,8 @@ class _StaffViewState extends State<StaffView> {
                     ),
                   ),
                   empty: snapshot.hasData
-                      ? NoDataWidget(text: "You currently have no staff records")
+                      ? NoDataWidget(
+                          text: "You currently have no staff records")
                       : Loader(text: "Staff data..."),
                   source: StaffDataSource(
                     staffModel: staffData,
@@ -157,18 +161,19 @@ class _StaffViewState extends State<StaffView> {
             ),
           ),
         ),
-        Expanded(
-          flex: 1,
-          child: Row(
+        if (context.read<FirstTimeUserController>().state)
+          Expanded(
+            flex: 1,
+            child: Row(
               children: [
                 const Text("Continue to add students"),
                 TextButton(
                   onPressed: () {
-                    context
-                        .read<WidgetController>()
-                        .pushWidget(const ViewStudents());
-                    context.read<TitleController>().setTitle("Students");
-                    context.read<SideBarController>().changeSelected(1);
+                    context.read<WidgetController>().pushWidget(1);
+                    context.read<TitleController>().setTitle("Students",
+                        context.read<SchoolController>().state['role']);
+                    context.read<SideBarController>().changeSelected(
+                        1, context.read<SchoolController>().state['role']);
                   },
                   child: Text(
                     "Click here",
@@ -177,7 +182,7 @@ class _StaffViewState extends State<StaffView> {
                 )
               ],
             ),
-        ),
+          ),
       ],
     );
   }
