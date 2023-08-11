@@ -76,7 +76,7 @@ class _SideMenuState extends State<SideMenu> {
                       svgSrc: store[index]['icon'],
                       press: () {
                         context.read<SideBarController>().changeSelected(index);
-                        if(Responsive.isMobile(context)){
+                        if(Responsive.isMobile(context) || Responsive.isTablet(context)){
                           Routes.popPage(context);
                         }
                         context

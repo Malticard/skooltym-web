@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:ui';
+import 'package:admin/models/SettingModel.dart';
 import 'package:intl/intl.dart';
 import '../models/DropOffModels.dart';
 import '../models/Guardians.dart';
@@ -10,7 +10,7 @@ import '/exports/exports.dart';
 
 // login logic for the user
 void loginUser(BuildContext context, String email, String password) async {
-    // BlocProvider.of<FinanceFirstTimeController>(context).getFirstTime();
+  // BlocProvider.of<FinanceFirstTimeController>(context).getFirstTime();
   showProgress(context, msg: "Login in progress");
   Client()
       .post(Uri.parse(AppUrls.login),
@@ -26,16 +26,18 @@ void loginUser(BuildContext context, String email, String password) async {
       .then((value) {
     if (value.statusCode == 200 || value.statusCode == 201) {
       var data = jsonDecode(value.body);
-   BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser(data['role']);
+      BlocProvider.of<FirstTimeUserController>(context)
+          .getFirstTimeUser(data['role']);
 
-      if(BlocProvider.of<FirstTimeUserController>(context).state == true){
-         BlocProvider.of<TitleController>(context).setTitle("Change Password");
+      if (BlocProvider.of<FirstTimeUserController>(context).state == true) {
+        BlocProvider.of<TitleController>(context).setTitle("Change Password");
       } else {
-         BlocProvider.of<TitleController>(context).setTitle("Dashboard");
+        debugPrint("${data['role']}");
+        BlocProvider.of<TitleController>(context).setTitle("Dashboard");
         BlocProvider.of<FinanceViewController>(context).pushWidget(Dashboard());
         BlocProvider.of<WidgetController>(context).pushWidget(Dashboard());
       }
-      // for finance 
+      // for finance
       //  if(BlocProvider.of<FinanceFirstTimeController>(context).state == true){
       //    BlocProvider.of<TitleController>(context).setTitle("Change Password");
       // } else {
@@ -44,27 +46,28 @@ void loginUser(BuildContext context, String email, String password) async {
       // }
 
       Routes.popPage(context);
-      BlocProvider.of<SchoolController>(context).setSchoolData(data);
-      //
-      Routes.namedRemovedUntilRoute(
-        context,
-        data['role'] == 'Admin' ||
-                data['role'] == 'Finance'
-            ? Routes.home
-            : Routes.login,
-      );
-      showMessage(
-        context: context,
-        msg: "Logged in  successfully..",
-        type: 'success',
-      );
+      if (data['role'] == 'Admin' || data['role'] == 'Finance') {
+        BlocProvider.of<SchoolController>(context).setSchoolData(data);
+        //
+        Routes.namedRemovedUntilRoute(
+          context,
+          data['role'] == 'Admin' || data['role'] == 'Finance'
+              ? Routes.home
+              : Routes.login,
+        );
+        showMessage(
+          context: context,
+          msg: "Logged in  successfully..",
+          type: 'success',
+        );
+      } else {
+        showMessage(
+            context: context, msg: "Account not authorized", type: 'warning');
+      }
     } else {
       var data = jsonDecode(value.body);
       Routes.popPage(context);
-      showMessage(
-          context: context,
-          msg: "${value.statusCode} => ${data['message']}",
-          type: 'danger');
+      showMessage(context: context, msg: "${data['message']}", type: 'danger');
     }
   });
 }
@@ -78,26 +81,20 @@ Future<String> assignRole(String role) async {
 }
 
 Future<String?> fetchAndDisplayImage(String imageURL) async {
-  // Uint8List? processedImageBytes;
-// try{
-  // final response =
-  //     await Client().get(Uri.parse(AppUrls.liveImages + imageURL));
-  // if (response.statusCode == 200) {
-  //   // final imageBytes = response.bodyBytes;
-  //   // final imageBase64 = base64Encode(imageBytes);
-  //   // // Display the image
-  //   // processedImageBytes = base64Decode(imageBase64);
-  // }
-// } on ClientException catch (e) {
-//   debugPrint(e.message);
-// } on Exception catch (e) {
-//   debugPrint(e.toString());
-// }
+  await Client().get(Uri.parse(AppUrls.liveImages + imageURL));
   return AppUrls.liveImages + imageURL;
 }
-String formatNumber(var number){
- return NumberFormat('#,###').format(number);
+
+String formatNumber(var number) {
+  return NumberFormat('#,###').format(number);
 }
+
+Future<SettingsModel> fetchSettings(String schoolId) async {
+  Response response =
+      await Client().get(Uri.parse(AppUrls.settings + schoolId));
+  return settingsModelFromJson(response.body).first;
+}
+
 // greetings
 String greetUser() {
   String greet = '';
@@ -370,8 +367,10 @@ bool validateTextControllers(List<TextEditingController> controllers) {
 }
 
 // method to fetch available classes
-Future<ClassModel> fetchClasses(String id,{int page =1 , int limit = 50}) async {
-  var response = await Client().get(Uri.parse(AppUrls.getClasses + id+"?page=$page&pageSize=$limit"));
+Future<ClassModel> fetchClasses(String id,
+    {int page = 1, int limit = 50}) async {
+  var response = await Client()
+      .get(Uri.parse(AppUrls.getClasses + id + "?page=$page&pageSize=$limit"));
   return classModelFromJson(response.body);
 }
 
@@ -421,36 +420,38 @@ void showProgress(BuildContext context, {String? msg = 'Task'}) {
       backgroundColor: Colors.transparent,
       child: Card(
         child: Responsive(
-          mobile:SizedBox(
-          height: 90,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 18.0),
-                child: SpinKitDualRing(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Theme.of(context).primaryColor),
-              ),
-              const SizedBox(
-                width: 40,
-              ),
-              Text(
-                "$msg..",
-                textAlign: TextAlign.center,
-                style: TextStyles(context).getRegularStyle(),
-              ),
-            ],
+          mobile: SizedBox(
+            height: 90,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: SpinKitDualRing(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Theme.of(context).primaryColor),
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                Text(
+                  "$msg..",
+                  textAlign: TextAlign.center,
+                  style: TextStyles(context).getRegularStyle(),
+                ),
+              ],
+            ),
           ),
-        ),
           desktop: SizedBox(
-            width: MediaQuery.of(context).size.width /5,
-            height: MediaQuery.of(context).size.width /5,
+            width: MediaQuery.of(context).size.width / 5,
+            height: MediaQuery.of(context).size.width / 5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                 Space(space: 0.02,),
+                Space(
+                  space: 0.02,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: SpinKitDualRing(
@@ -458,11 +459,15 @@ void showProgress(BuildContext context, {String? msg = 'Task'}) {
                           ? Colors.white
                           : Theme.of(context).primaryColor),
                 ),
-                Space(space: 0.05,),
+                Space(
+                  space: 0.05,
+                ),
                 Text(
                   "$msg..",
                   textAlign: TextAlign.center,
-                  style: TextStyles(context).getRegularStyle().copyWith(fontSize: 17),
+                  style: TextStyles(context)
+                      .getRegularStyle()
+                      .copyWith(fontSize: 17),
                 ),
               ],
             ),
@@ -471,7 +476,6 @@ void showProgress(BuildContext context, {String? msg = 'Task'}) {
       ),
     ),
   );
-
 }
 
 // mark dates
@@ -560,18 +564,23 @@ Future<DropOffModel> fetchDropOffs(String id,
 /// Dashboard cards
 
 // fetch overtimes
-Future<OvertimeModel> fetchPendingOvertimeData(String id,{int page = 1,int limit = 50}) async {
-  var response = await Client().get(Uri.parse(AppUrls.pendingOvertime + id+"?page=$page&limit=$limit"));
+Future<OvertimeModel> fetchPendingOvertimeData(String id,
+    {int page = 1, int limit = 50}) async {
+  var response = await Client().get(
+      Uri.parse(AppUrls.pendingOvertime + id + "?page=$page&limit=$limit"));
   return overtimeModelFromJson(response.body);
-      // .where((element) => element.status == status)
-      // .toList();
+  // .where((element) => element.status == status)
+  // .toList();
   // return response;
 }
-Future<OvertimeModel> fetchClearedOvertimeData(String id,{int page = 1,int limit = 50}) async {
-  var response = await Client().get(Uri.parse(AppUrls.clearedOvertime + id+"?page=$page&limit=$limit"));
+
+Future<OvertimeModel> fetchClearedOvertimeData(String id,
+    {int page = 1, int limit = 50}) async {
+  var response = await Client().get(
+      Uri.parse(AppUrls.clearedOvertime + id + "?page=$page&limit=$limit"));
   return overtimeModelFromJson(response.body);
-      // .where((element) => element.status == status)
-      // .toList();
+  // .where((element) => element.status == status)
+  // .toList();
   // return response;
 }
 
@@ -586,24 +595,23 @@ String handSanIntervals() {
           : "Nothing taking place currently";
 }
 
-Future<PaymentModel> fetchPayments(String schoolId, {int page = 1, int limit = 50}) async {
+Future<PaymentModel> fetchPayments(String schoolId,
+    {int page = 1, int limit = 50}) async {
   // if (ctx.read<SchoolController>().state['role'] == 'Finance') {
   Response response = await Client().get(
       Uri.parse(AppUrls.getPayment + schoolId + "?page=$page&pageSize=$limit"));
   // if (response.statusCode == 200 || response.statusCode == 201) {
-   return paymentModelFromJson(response.body);
-  }
+  return paymentModelFromJson(response.body);
+}
 
 // fetch dashboard meta data
 Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
-    String schoolId,String role) async {
+    String schoolId, String role) async {
   // context.read<PaymentController>().getPayments(context);
-  var drops =
-      await fetchDropOffs(schoolId);
-  var picks =
-      await fetchPickUps(schoolId);
-      var pendingOvertimes = await fetchPendingOvertimeData(schoolId,limit: 100);
-      var clearedOvertimes = await fetchClearedOvertimeData(schoolId,limit: 100);
+  var drops = await fetchDropOffs(schoolId);
+  var picks = await fetchPickUps(schoolId);
+  var pendingOvertimes = await fetchPendingOvertimeData(schoolId, limit: 100);
+  var clearedOvertimes = await fetchClearedOvertimeData(schoolId, limit: 100);
   // var clearedOvertimes = overtimes.results
   //     .where((element) => element.status != "Pending")
   //     .toList();
@@ -657,9 +665,7 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "last_updated": "14:45"
     },
   ];
-  return role == 'Admin'
-      ? dashboardData
-      : financeData;
+  return role == 'Admin' ? dashboardData : financeData;
 }
 
 // function to process images

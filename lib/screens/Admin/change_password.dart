@@ -31,6 +31,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     context.read<SchoolController>().getSchoolData();
+    Size size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.only(
           // top: MediaQuery.of(context).size.width * 0.1,
@@ -168,8 +169,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(
-                            top: 16.0, bottom: 16.0, left: 34, right: 34),
+                        padding:  EdgeInsets.only(
+                            top: 16.0, bottom: size.width * 0.0050, left: 34, right: 34),
                         child: Row(
                           children: <Widget>[
                             Expanded(

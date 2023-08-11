@@ -76,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
                               ? Loader(text: "Classes data..")
                               : snapshot.data!.isEmpty? NoDataWidget(text: "No classes available",): SingleChildScrollView(
                                   child: SizedBox(
-                                    height: MediaQuery.of(context).size.height,
+                                    height:Responsive.isMobile(context) ?  MediaQuery.of(context).size.width / 2 :MediaQuery.of(context).size.height,
                                     child: GridView.builder(
                                       shrinkWrap: true,
                                       itemCount: dashClasses.length,

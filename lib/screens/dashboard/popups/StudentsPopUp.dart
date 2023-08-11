@@ -73,7 +73,7 @@ String? _query;
     Size size = MediaQuery.of(context).size;
 
     return SizedBox(
-      height: size.width / 2.5,
+      height:Responsive.isMobile(context) ? size.width : size.width / 2.5,
       child: Stack(
         children: [
           StreamBuilder(

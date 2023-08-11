@@ -72,81 +72,83 @@ class _ClassesUIState extends State<ClassesUI> {
     // responsive dimensions
     Size size = MediaQuery.of(context).size;
 
-    return Stack(
+    return Column(
       children: [
-        SizedBox(
-          // width: size.width,
-          height: size.width / 2.39,
-          child: StreamBuilder(
-            stream: _classController.stream,
-            builder: (context, snapshot) {
-              var classModel = snapshot.data;
-              var controller = classModel?.classes ?? [];
-
-              return CustomDataTable(
-                paginatorController: _paginatorController,
-                onPageChanged: (page) {
-                  setState(() {
-                    _currentPage = (page ~/ rowsPerPage) + 1;
-                  });
-                },
-                onRowsPerPageChanged: (rows) {
-                  setState(() {
-                    rowsPerPage = rows ?? 20;
-                  });
-                },
-                header: Row(
-                  children: [
-                    Expanded(
-                      child: SearchField(onChanged: (value) {
-                        setState(() {
-                          _query = value?.trim();
-                        });
-                      }),
+        Expanded(
+          flex: 5,
+          child: SizedBox(
+            // width: size.width,
+            height: size.height,
+            child: StreamBuilder(
+              stream: _classController.stream,
+              builder: (context, snapshot) {
+                var classModel = snapshot.data;
+                var controller = classModel?.classes ?? [];
+        
+                return CustomDataTable(
+                  paginatorController: _paginatorController,
+                  onPageChanged: (page) {
+                    setState(() {
+                      _currentPage = (page ~/ rowsPerPage) + 1;
+                    });
+                  },
+                  onRowsPerPageChanged: (rows) {
+                    setState(() {
+                      rowsPerPage = rows ?? 20;
+                    });
+                  },
+                  header: Row(
+                    children: [
+                      Expanded(
+                        child: SearchField(onChanged: (value) {
+                          setState(() {
+                            _query = value?.trim();
+                          });
+                        }),
+                      ),
+                      const Spacer(),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => const AddClass(),
+                          );
+                        },
+                        label: const Text("Add Class"),
+                        icon: const Icon(Icons.add),
+                      ),
+                    ],
+                  ),
+                  columns: const [
+                    DataColumn(
+                      label: Text("No."),
                     ),
-                    const Spacer(),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => const AddClass(),
-                        );
-                      },
-                      label: const Text("Add Class"),
-                      icon: const Icon(Icons.add),
+                    DataColumn(
+                      label: Text("Class"),
+                    ),
+                    DataColumn(
+                      label: Text("Action"),
                     ),
                   ],
-                ),
-                columns: const [
-                  DataColumn(
-                    label: Text("No."),
+                  empty: !snapshot.hasData
+                      ? const Loader(text: "Classes data")
+                      : const Center(
+                          child: Text("No Classes added.."),
+                        ),
+                  source: ClassDataSource(
+                    classModel: controller,
+                    context: context,
+                    currentPage: _currentPage,
+                    paginatorController: _paginatorController,
+                    totalDocuments: classModel?.totalDocuments ?? 0,
                   ),
-                  DataColumn(
-                    label: Text("Class"),
-                  ),
-                  DataColumn(
-                    label: Text("Action"),
-                  ),
-                ],
-                empty: !snapshot.hasData
-                    ? const Loader(text: "Classes data")
-                    : const Center(
-                        child: Text("No Classes added.."),
-                      ),
-                source: ClassDataSource(
-                  classModel: controller,
-                  context: context,
-                  currentPage: _currentPage,
-                  paginatorController: _paginatorController,
-                  totalDocuments: classModel?.totalDocuments ?? 0,
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
-        Positioned(
-          bottom: 10,
-          left: 10,
+        Expanded(
+          flex:1,
           child: Row(
             children: [
               const Text("Continue to add staff members"),

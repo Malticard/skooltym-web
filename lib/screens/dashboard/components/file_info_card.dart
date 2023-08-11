@@ -21,6 +21,7 @@ class FileInfoCard extends StatelessWidget {
             child: Column(
               children: [
                 CommonAppbarView(
+                  titleTextSize: Responsive.isMobile(context) ? 18 : 24,
                   titleText: "Available Streams in ${info.className}",
                   topPadding: 3,
                 ),
@@ -35,7 +36,9 @@ class FileInfoCard extends StatelessWidget {
                             child: StudentsPopUps(
                               id: index,
                               streamId: info.classStreams[index].id,
-                              classId: classId, className: info.className, streamName: info.classStreams[index].streamName,
+                              classId: classId,
+                              className: info.className,
+                              streamName: info.classStreams[index].streamName,
                             ),
                           ),
                         );
@@ -68,7 +71,7 @@ class FileInfoCard extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(15)),
         ),
         child: SizedBox(
-          height: MediaQuery.of(context).size.width / 3.5,
+          height:Responsive.isMobile(context) ? MediaQuery.of(context).size.width / 4 : MediaQuery.of(context).size.width / 3.5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,23 +87,42 @@ class FileInfoCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Container(
-                    padding:const EdgeInsets.all(defaultPadding),
-                    height: 167,
-                    width: 167,
-                    decoration:  BoxDecoration(
-                      // color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                  Responsive(
+                    desktop: Container(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      height: 167,
+                      width: 167,
+                      decoration: BoxDecoration(
+                        // color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/vectors/students_class.svg",
+                        fit: BoxFit.cover,
+                        // color: Colors.red,
+                      ),
                     ),
-                    child: SvgPicture.asset(
-                      "assets/vectors/students_class.svg",
-                      fit: BoxFit.cover,
-                      // color: Colors.red,
+                    mobile: Container(
+                      padding: EdgeInsets.zero,
+                      height: 85,
+                      width: 85,
+                      decoration: BoxDecoration(
+                        // color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/vectors/students_class.svg",
+                        fit: BoxFit.cover,
+                        // color: Colors.red,
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 40,
-                    height:40,
+                  Responsive(
+                    desktop: const SizedBox(
+                      width: 40,
+                      height: 40,
+                    ),
+                    mobile:SizedBox(width:2,height:2)
                   ),
                 ],
               ),
@@ -110,11 +132,19 @@ class FileInfoCard extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: '${info.classStreams.length}',
-                      style: TextStyles(context).getBoldStyle(),
+                     style:Responsive.isMobile(context)
+                              ? TextStyles(context).getBoldStyle().copyWith(fontSize:13) : TextStyles(context).getBoldStyle(),
+                      
                       children: [
                         TextSpan(
-                          text: info.classStreams.length == 1 ? ' Stream' : ' Streams',
-                          style: TextStyles(context).getRegularStyle(),
+                          text: info.classStreams.length == 1
+                              ? ' Stream'
+                              : ' Streams',
+                          style: Responsive.isMobile(context)
+                              ? TextStyles(context)
+                                  .getRegularStyle()
+                                  .copyWith(fontSize: 14)
+                              : TextStyles(context).getRegularStyle(),
                         ),
                       ],
                     ),
@@ -122,11 +152,19 @@ class FileInfoCard extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: "${info.classStudents.length}",
-                      style: TextStyles(context).getBoldStyle(),
+                      style:Responsive.isMobile(context)
+                              ? TextStyles(context).getBoldStyle().copyWith(fontSize:13) : TextStyles(context).getBoldStyle(),
+                      
                       children: [
                         TextSpan(
-                          text: info.classStudents.length == 1 ? ' Student' : ' Students',
-                          style: TextStyles(context).getRegularStyle(),
+                          text: info.classStudents.length == 1
+                              ? ' Student'
+                              : ' Students',
+                           style: Responsive.isMobile(context)
+                              ? TextStyles(context)
+                                  .getRegularStyle()
+                                  .copyWith(fontSize: 14)
+                              : TextStyles(context).getRegularStyle(),
                         ),
                       ],
                     ),

@@ -76,106 +76,108 @@ class _StaffViewState extends State<StaffView> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Stack(
+    return Column(
       children: [
-        SizedBox(
-          height: size.width / 2.39,
-          child: StreamBuilder(
-            stream: _staffController.stream,
-            builder: (context, snapshot) {
-              var staffs = snapshot.data;
-              var staffData = staffs?.results ?? [];
-              return CustomDataTable(
-                paginatorController: _controller,
-                onPageChanged: (page) {
-                  setState(() {
-                    _currentPage = (page ~/ rowsPerPage) + 1;
-                  });
-                },
-                onRowsPerPageChanged: (rows) {
-                  setState(() {
-                    rowsPerPage = rows ?? 20;
-                  });
-                },
-                header: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (staffData.isNotEmpty)
-                        Expanded(
-                          child: SearchField(
-                            onChanged: (value) {
-                             setState(() {
-                               _query = value;
-                             });
-                            },
+        Expanded(
+          flex:5,
+          child: SizedBox(
+            height: size.height,
+            child: StreamBuilder(
+              stream: _staffController.stream,
+              builder: (context, snapshot) {
+                var staffs = snapshot.data;
+                var staffData = staffs?.results ?? [];
+                return CustomDataTable(
+                  paginatorController: _controller,
+                  onPageChanged: (page) {
+                    setState(() {
+                      _currentPage = (page ~/ rowsPerPage) + 1;
+                    });
+                  },
+                  onRowsPerPageChanged: (rows) {
+                    setState(() {
+                      rowsPerPage = rows ?? 20;
+                    });
+                  },
+                  header: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (staffData.isNotEmpty)
+                          Expanded(
+                            child: SearchField(
+                              onChanged: (value) {
+                               setState(() {
+                                 _query = value;
+                               });
+                              },
+                            ),
                           ),
+                        if (!Responsive.isMobile(context))
+                          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                        Text(
+                          "",
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
-                      if (!Responsive.isMobile(context))
-                        Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                      Text(
-                        "",
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return const AddStaff();
-                              });
-                        },
-                        icon: const Icon(Icons.add),
-                        label: const Text("Add Staff"),
-                      ),
-                    ],
-                  ),
-                ),
-                columns: List.generate(
-                  _staffColumns.length,
-                  (index) => DataColumn(
-                    label: Text(
-                      _staffColumns[index],
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AddStaff();
+                                });
+                          },
+                          icon: const Icon(Icons.add),
+                          label: const Text("Add Staff"),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                empty: snapshot.hasData
-                    ? NoDataWidget(text: "You currently have no staff records")
-                    : Loader(text: "Staff data..."),
-                source: StaffDataSource(
-                  staffModel: staffData,
-                  context: context,
-                  currentPage: _currentPage,
-                  paginatorController: _controller,
-                  totalDocuments: staffs?.totalDocuments ?? 0,
-                ),
-              );
-            },
+                  columns: List.generate(
+                    _staffColumns.length,
+                    (index) => DataColumn(
+                      label: Text(
+                        _staffColumns[index],
+                      ),
+                    ),
+                  ),
+                  empty: snapshot.hasData
+                      ? NoDataWidget(text: "You currently have no staff records")
+                      : Loader(text: "Staff data..."),
+                  source: StaffDataSource(
+                    staffModel: staffData,
+                    context: context,
+                    currentPage: _currentPage,
+                    paginatorController: _controller,
+                    totalDocuments: staffs?.totalDocuments ?? 0,
+                  ),
+                );
+              },
+            ),
           ),
         ),
-        Positioned(
-          bottom: 10,
-          left: 10,
+        Expanded(
+          flex: 1,
           child: Row(
-            children: [
-              const Text("Continue to add students"),
-              TextButton(
-                onPressed: () {
-                  context
-                      .read<WidgetController>()
-                      .pushWidget(const ViewStudents());
-                  context.read<TitleController>().setTitle("Students");
-                  context.read<SideBarController>().changeSelected(1);
-                },
-                child: Text(
-                  "Click here",
-                  style: TextStyles(context).getRegularStyle(),
-                ),
-              )
-            ],
-          ),
-        )
+              children: [
+                const Text("Continue to add students"),
+                TextButton(
+                  onPressed: () {
+                    context
+                        .read<WidgetController>()
+                        .pushWidget(const ViewStudents());
+                    context.read<TitleController>().setTitle("Students");
+                    context.read<SideBarController>().changeSelected(1);
+                  },
+                  child: Text(
+                    "Click here",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                )
+              ],
+            ),
+        ),
       ],
     );
   }

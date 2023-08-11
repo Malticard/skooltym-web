@@ -98,7 +98,7 @@ export 'package:internet_connection_checker/internet_connection_checker.dart';
 export 'package:pinput/pinput.dart';
 export 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 // models
-export '/models/PopUpOptions.dart'; 
+export '/models/PopUpOptions.dart';
 export '/models/StaffPopUpOptions.dart';
 export '/models/Roles.dart';
 export '/models/PaymentModel.dart';
@@ -135,8 +135,6 @@ export '/controllers/SchoolController.dart';
 export '/controllers/AllowOvertimeController.dart';
 export '/controllers/TitleController.dart';
 export '/controllers/OnlineCheckerController.dart';
-export '/controllers/DashboardController.dart';
-export '/controllers/StepperController.dart';
 export '/controllers/ClassNameController.dart';
 export '/controllers/SideBarController.dart';
 export '/controllers/ImageUploadController.dart';
@@ -156,13 +154,10 @@ export '/controllers/utils/ClassesController.dart';
 export '/controllers/utils/GuardianController.dart';
 export '/controllers/utils/StreamController.dart';
 
-
-
 // themes
 export '/Themes/Themes.dart';
 
 // ----> Admin routes
-export '/screens/Admin/Settings.dart';
 export '/screens/Admin/change_password.dart';
 export '/screens/Admin/pages/AccountProfile.dart';
 export '/screens/Admin/pages/AddGuardian.dart';

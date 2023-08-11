@@ -47,7 +47,7 @@ class SettingCard extends StatelessWidget {
             const EdgeInsets.only(left: 20, top: 1.2, right:20, bottom: 1.2),
         child: ListTile(
           leading: SizedBox(
-            width: 30,height: 30,
+            width:Responsive.isMobile(context) ? 40: 30,height:Responsive.isMobile(context) ? 40: 30,
             child: Center(
               child: leading ??
                   Image.asset(

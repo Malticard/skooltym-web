@@ -72,87 +72,90 @@ class _StreamsUIState extends State<StreamsUI> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Stack(
+    return Column(
       children: [
-        SizedBox(
-          width: size.width,
-          height: size.width / 2.39,
-          child: StreamBuilder(
-              stream: _streamController.stream,
-              builder: (context, snapshot) {
-                var stream_obj = snapshot.data;
-                var streams = stream_obj?.streams ?? [];
-                return CustomDataTable(
-                  loaderText: "Streams data",
-                  paginatorController: _pageController,
-                  onPageChanged: (page) {
-                    setState(() {
-                      _currentPage = (page ~/ rowsPerPage) + 1;
-                    });
-                  },
-                  onRowsPerPageChanged: (rows) {
-                    setState(() {
-                      rowsPerPage = rows ?? 20;
-                    });
-                  },
-                  header: Row(
-                    children: [
-                      Expanded(
-                        child: SearchField(
-                          onChanged: (value) {
-                            setState(() {
-                              _query = value?.trim();
-                            });
-                          },
+        Expanded(
+          flex:5,
+          child: SizedBox(
+            width: size.width,
+            height: size.height,
+            child: StreamBuilder(
+                stream: _streamController.stream,
+                builder: (context, snapshot) {
+                  var stream_obj = snapshot.data;
+                  var streams = stream_obj?.streams ?? [];
+                  return CustomDataTable(
+                    loaderText: "Streams data",
+                    paginatorController: _pageController,
+                    onPageChanged: (page) {
+                      setState(() {
+                        _currentPage = (page ~/ rowsPerPage) + 1;
+                      });
+                    },
+                    onRowsPerPageChanged: (rows) {
+                      setState(() {
+                        rowsPerPage = rows ?? 20;
+                      });
+                    },
+                    header: Row(
+                      children: [
+                        Expanded(
+                          child: SearchField(
+                            onChanged: (value) {
+                              setState(() {
+                                _query = value?.trim();
+                              });
+                            },
+                          ),
                         ),
+                        const Spacer(),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => const AddStream(),
+                            );
+                          },
+                          label: const Text("Add Stream"),
+                          icon: const Icon(Icons.add),
+                        ),
+                      ],
+                    ),
+                    columns: const [
+                      DataColumn(
+                        label: Text("#"),
                       ),
-                      const Spacer(),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => const AddStream(),
-                          );
-                        },
-                        label: const Text("Add Stream"),
-                        icon: const Icon(Icons.add),
+                      DataColumn(
+                        label: Text("Stream"),
+                      ),
+                      DataColumn(
+                        label: Text("Action"),
                       ),
                     ],
-                  ),
-                  columns: const [
-                    DataColumn(
-                      label: Text("#"),
-                    ),
-                    DataColumn(
-                      label: Text("Stream"),
-                    ),
-                    DataColumn(
-                      label: Text("Action"),
-                    ),
-                  ],
-                  empty: FutureBuilder(
-                      future: fetchStreams(
-                          context.read<SchoolController>().state['school']),
-                      builder: (context, snapshot) {
-                        return snapshot.connectionState ==
-                                ConnectionState.waiting
-                            ? const Loader(text: "Streams data")
-                            : const Center(
-                                child: Text("No Streams added.."),
-                              );
-                      }),
-                  source: StreamDataSource(
-                      context: context,
-                      streamModel: streams,
-                      currentPage: _currentPage,
-                      totalDocuments: stream_obj?.totalDocuments ?? 0,
-                      paginatorController: _pageController),
-                );
-              }),
+                    empty: FutureBuilder(
+                        future: fetchStreams(
+                            context.read<SchoolController>().state['school']),
+                        builder: (context, snapshot) {
+                          return snapshot.connectionState ==
+                                  ConnectionState.waiting
+                              ? const Loader(text: "Streams data")
+                              : const Center(
+                                  child: Text("No Streams added.."),
+                                );
+                        }),
+                    source: StreamDataSource(
+                        context: context,
+                        streamModel: streams,
+                        currentPage: _currentPage,
+                        totalDocuments: stream_obj?.totalDocuments ?? 0,
+                        paginatorController: _pageController),
+                  );
+                }),
+          ),
         ),
-        Positioned(
-          bottom: 10,
-          left: 10,
+        Expanded(
+         flex:1,
+       
           child: Row(
             children: [
               const Text("Continue to add classes"),

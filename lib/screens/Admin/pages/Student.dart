@@ -82,10 +82,11 @@ class _ViewStudentsState extends State<ViewStudents> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Stack(
+    return Column(
       children: [
-        SizedBox(
-          height: size.width / 2.39,
+        Expanded(
+          flex:5,
+          // height:Responsive.isMobile(context) ? size.width : size.width / 2.39,
           child: StreamBuilder(
               stream: _studentController.stream,
               builder: (context, snapshot) {
@@ -177,28 +178,26 @@ class _ViewStudentsState extends State<ViewStudents> {
                 );
               }),
         ),
-        Positioned(
-          bottom: 10,
-          left: 10,
+        Expanded(
           child: Row(
-            children: [
-              const Text("Continue to adding guardians"),
-              TextButton(
-                onPressed: () {
-                  context
-                      .read<WidgetController>()
-                      .pushWidget(const ViewGuardians());
-                  context.read<TitleController>().setTitle("Guardians");
-                  context.read<SideBarController>().changeSelected(3);
-                },
-                child: Text(
-                  "Click here",
-                  style: TextStyles(context).getRegularStyle(),
-                ),
-              )
-            ],
-          ),
-        )
+              children: [
+                const Text("Continue to add guardians"),
+                TextButton(
+                  onPressed: () {
+                    context
+                        .read<WidgetController>()
+                        .pushWidget(const ClassesUI());
+                    context.read<TitleController>().setTitle("Guardians");
+                    context.read<SideBarController>().changeSelected(3);
+                  },
+                  child: Text(
+                    "Click here",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                )
+              ],
+            ),
+        ),
       ],
     );
   }

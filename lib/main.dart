@@ -32,8 +32,6 @@ Future<void> main() async {
         BlocProvider(create: (context) => AllowOvertimeController()),
         BlocProvider(create: (context) => OnlineCheckerController()),
         BlocProvider(create: (context) => TitleController()),
-        BlocProvider(create: (context) => DashboardController()),
-        BlocProvider(create: (context) => StepperController()),
         BlocProvider(create: (context) => ClassNameController()),
         BlocProvider(create: (context) => ForgotPasswordController()),
         BlocProvider(create: (context) => SettingsController()),

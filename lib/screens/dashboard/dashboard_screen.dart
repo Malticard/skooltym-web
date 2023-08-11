@@ -9,7 +9,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  Map<String,dynamic> school = {};
+  Map<String, dynamic> school = {};
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +69,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     if (school['role'] == 'Admin')
                       BlocBuilder<WidgetController, Widget>(
                         builder: (context, child) {
-                          return Expanded(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height / 1.2,
-                              child: child,
+                          return Responsive(
+                            desktop: Expanded(
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height / 1.2,
+                                child: child,
+                              ),
                             ),
+                            mobile: Expanded(
+                                child: SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height /
+                                        1.2,
+                                    child: child)),
                           );
                         },
                       ),

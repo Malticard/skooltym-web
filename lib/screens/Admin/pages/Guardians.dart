@@ -82,85 +82,87 @@ class _ViewGuardiansState extends State<ViewGuardians> {
         builder: (context, snapshot) {
           var guardians = snapshot.data;
           guardianData = guardians?.results ?? [];
-          return Stack(
+          return Column(
             children: [
-              SizedBox(
-                width: size.width,
-                height: size.width / 2.5,
-                child: CustomDataTable(
-                  paginatorController: _controller,
-                  onPageChanged: (page) {
-                    setState(() {
-                      _currentPage = (page ~/ rowsPerPage) + 1;
-                    });
-                  },
-                  onRowsPerPageChanged: (rows) {
-                    setState(() {
-                      rowsPerPage = rows ?? 20;
-                    });
-                  },
-                  header: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        if (guardianData.isNotEmpty)
-                          Expanded(
-                            child: SearchField(
-                              onChanged: (value) {
-                               setState(() {
-                                 _query = value?.trim();
-                               });
-                              },
+              Expanded(
+                flex:5,
+                child: SizedBox(
+                  width: size.width,
+                  height: size.height,
+                  child: CustomDataTable(
+                    paginatorController: _controller,
+                    onPageChanged: (page) {
+                      setState(() {
+                        _currentPage = (page ~/ rowsPerPage) + 1;
+                      });
+                    },
+                    onRowsPerPageChanged: (rows) {
+                      setState(() {
+                        rowsPerPage = rows ?? 20;
+                      });
+                    },
+                    header: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (guardianData.isNotEmpty)
+                            Expanded(
+                              child: SearchField(
+                                onChanged: (value) {
+                                 setState(() {
+                                   _query = value?.trim();
+                                 });
+                                },
+                              ),
                             ),
+                          if (!Responsive.isMobile(context))
+                            Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                          const SizedBox(),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AddGuardian();
+                                },
+                              );
+                            },
+                            icon: const Icon(Icons.add),
+                            label: const Text("Add Guardian"),
                           ),
-                        if (!Responsive.isMobile(context))
-                          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                        const SizedBox(),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AddGuardian();
-                              },
-                            );
-                          },
-                          icon: const Icon(Icons.add),
-                          label: const Text("Add Guardian"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  columns: List.generate(
-                    guardianColumns.length,
-                    (index) => DataColumn(
-                   
-                      label: Text(
-                        guardianColumns[index],
+                        ],
                       ),
                     ),
-                  ),
-                  empty: Center(
-                    child: snapshot.hasData
-                        ? const NoDataWidget(
-                            text: "No guardians registered yet..")
-                        : Loader(
-                            text: "Guardians...",
-                          ),
-                  ),
-                  source: GuardianDataSource(
-                    paginatorController: _controller,
-                    guardianModel: guardianData,
-                    context: context,
-                    currentPage: _currentPage,
-                    totalDocuments: guardians?.totalDocuments ?? 0,
+                    columns: List.generate(
+                      guardianColumns.length,
+                      (index) => DataColumn(
+                     
+                        label: Text(
+                          guardianColumns[index],
+                        ),
+                      ),
+                    ),
+                    empty: Center(
+                      child: snapshot.hasData
+                          ? const NoDataWidget(
+                              text: "No guardians registered yet..")
+                          : Loader(
+                              text: "Guardians...",
+                            ),
+                    ),
+                    source: GuardianDataSource(
+                      paginatorController: _controller,
+                      guardianModel: guardianData,
+                      context: context,
+                      currentPage: _currentPage,
+                      totalDocuments: guardians?.totalDocuments ?? 0,
+                    ),
                   ),
                 ),
               ),
-              Positioned(
-              bottom: 10,
-          left: 10,
+              Expanded(
+              flex: 1,
                 child: Row(
                   children: [
                     const Text("Continue to dashboard"),
