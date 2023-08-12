@@ -154,8 +154,7 @@ class _AddGuardianState extends State<AddGuardian> {
   void addGuardian() {
     if (validateEmail(_formControllers[1].text, context) != false) {
       showProgress(context, msg: "Adding guardian...");
-      handleGuardian().then((value) {
-        // debugPrint("Status code ${value.statusCode}");
+      handleGuardian().then((event) {
         Routes.popPage(context);
 
         showMessage(
@@ -163,16 +162,16 @@ class _AddGuardianState extends State<AddGuardian> {
           type: 'success',
           msg: "Added new guardian successfully",
         );
-      }).whenComplete(() {
-        Routes.popPage(context);
-      });
+      }).whenComplete(() => Routes.popPage(context));
     }
   }
 
-  Future<StreamedResponse> handleGuardian() {
+  Future<StreamedResponse> handleGuardian() async {
+    for (var i = 0; i < _formControllers.length; i++) {
+      log(_formControllers[i].text);
+    }
+    log("Students: ${context.read<MultiStudentsController>().state}");
     String uri = _formControllers[3].text.trim();
-    context.read<MultiStudentsController>().getMultiStudents();
-    //
     var request = MultipartRequest(
       'POST',
       Uri.parse(AppUrls.addGuardian),
@@ -180,14 +179,15 @@ class _AddGuardianState extends State<AddGuardian> {
     request.headers.addAll({
       'Content-Type': 'multipart/form-data',
       'Accept': 'application/json',
-      // 'Authorization': 'Bearer ${context.read<TokenController>().state}'
     });
     log("Done setting headers");
     request.fields['students'] =
         (context.read<MultiStudentsController>().state);
+
     request.fields['school'] = context.read<SchoolController>().state['school'];
+
     request.fields['type'] = _formControllers[5].text.trim();
-    request.fields['relationship'] = _formControllers[8].text.trim();
+    request.fields['relationship'] = _formControllers[7].text.trim();
     request.fields['guardian_fname'] =
         _formControllers[0].text.trim().split(" ").first;
     request.fields['guardian_lname'] =
@@ -202,7 +202,6 @@ class _AddGuardianState extends State<AddGuardian> {
           context.read<ImageUploadController>().state['size'],
           filename: context.read<ImageUploadController>().state['name']));
     } else {
-      log("$_formControllers: Upload");
       request.files.add(MultipartFile(
           'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
           filename: uri.split("/").last));

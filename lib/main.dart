@@ -1,5 +1,4 @@
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-
 import '/exports/exports.dart';
 import 'controllers/MenuAppController.dart';
 
@@ -54,23 +53,9 @@ Future<void> main() async {
             builder: (context, title) {
               return MaterialApp(
                 title: "Skooltym  | $title",
-                // debugShowCheckedModeBanner: false,xs
-                themeMode: theme.brightness == Brightness.light
-                    ? ThemeMode.light
-                    : ThemeMode.dark,
-                theme: theme.copyWith(
-                  textTheme:
-                      GoogleFonts.aBeeZeeTextTheme(Theme.of(context).textTheme)
-                          .apply(
-                    bodyColor: theme.brightness == Brightness.light
-                        ? Colors.black
-                        : Colors.white,
-                    displayColor: theme.brightness == Brightness.light
-                        ? Colors.black
-                        : Colors.white,
-                  ),
-                  useMaterial3: true,
-                ),
+                // themeMode: ThemeMode.,
+                // debugShowCheckedModeBanner: false,
+                theme: theme,
                 initialRoute: prefs.containsKey('schoolData') == true &&
                         context.read<SchoolController>().state['role'] != null
                     ? Routes.home

@@ -114,8 +114,10 @@ class _ProfileCardState extends State<ProfileCard> {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: defaultPadding / 2),
-                    child:
-                        Text("${schoolData['fname']} ${schoolData['lname']}"),
+                    child: Text(
+                      "${schoolData['fname']} ${schoolData['lname']}",
+                      style: TextStyles(context).getRegularStyle(),
+                    ),
                   ),
                 PopupMenuButton(
                   icon: const Icon(Icons.keyboard_arrow_down),

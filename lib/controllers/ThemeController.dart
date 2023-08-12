@@ -2,7 +2,7 @@ import '/exports/exports.dart';
 
 /// {@template brightness_cubit}
 /// A simple [Cubit] that manages the [ThemeData] as its state.
-/// {@endtemplate}
+/// {@end template}
 class ThemeController extends Cubit<ThemeData> {
   /// {@macro brightness_cubit}
   ThemeController() : super(_light);
@@ -38,6 +38,4 @@ class ThemeController extends Cubit<ThemeData> {
 // save the current theme
     saveTheme();
   }
-
-  // method to keep track of the current theme
 }

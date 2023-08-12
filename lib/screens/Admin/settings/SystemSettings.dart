@@ -314,6 +314,9 @@ class _SystemSettingsState extends State<SystemSettings> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Theme.of(context).dialogBackgroundColor
+            : Theme.of(context).canvasColor,
         child: SizedBox(
           width: MediaQuery.of(context).size.width * .37,
           height: MediaQuery.of(context).size.width * .2,
@@ -351,10 +354,13 @@ class _SystemSettingsState extends State<SystemSettings> {
                         );
                       },
                       child: Card(
-                        color: Theme.of(context).canvasColor.withOpacity(0.5),
-                        child: const Padding(
+                        color: Theme.of(context).canvasColor,
+                        child: Padding(
                           padding: EdgeInsets.all(33.0),
-                          child: Text("Tap to set start time"),
+                          child: Text(
+                            "Tap to set start time",
+                            style: TextStyles(context).getRegularStyle(),
+                          ),
                         ),
                       ),
                     ),
@@ -377,10 +383,13 @@ class _SystemSettingsState extends State<SystemSettings> {
                           });
                         },
                         child: Card(
-                          color: Theme.of(context).canvasColor.withOpacity(0.5),
-                          child: const Padding(
+                          color: Theme.of(context).canvasColor,
+                          child: Padding(
                             padding: EdgeInsets.all(33.0),
-                            child: Text("Tap to set end time"),
+                            child: Text(
+                              "Tap to set end time",
+                              style: TextStyles(context).getRegularStyle(),
+                            ),
                           ),
                         )),
                   ),
@@ -447,9 +456,12 @@ class _SystemSettingsState extends State<SystemSettings> {
                         color: Theme.of(context).brightness == Brightness.light
                             ? Theme.of(context).cardColor
                             : Theme.of(context).canvasColor,
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(33.0),
-                          child: Text("Tap to set start time"),
+                          child: Text(
+                            "Tap to set start time",
+                            style: TextStyles(context).getRegularStyle(),
+                          ),
                         ),
                       ),
                     ),
@@ -475,9 +487,12 @@ class _SystemSettingsState extends State<SystemSettings> {
                               Theme.of(context).brightness == Brightness.light
                                   ? Theme.of(context).cardColor
                                   : Theme.of(context).canvasColor,
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(33.0),
-                            child: Text("Tap to set end time"),
+                            child: Text(
+                              "Tap to set end time",
+                              style: TextStyles(context).getRegularStyle(),
+                            ),
                           ),
                         )),
                   ),

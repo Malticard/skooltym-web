@@ -40,14 +40,15 @@ class SettingCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius),
         color: Theme.of(context).brightness == Brightness.light
             ? color ?? const Color.fromRGBO(246, 246, 246, 1)
-            : Theme.of(context).cardColor,
+            : Theme.of(context).canvasColor,
       ),
       child: ListTileTheme(
         contentPadding:
-            const EdgeInsets.only(left: 20, top: 1.2, right:20, bottom: 1.2),
+            const EdgeInsets.only(left: 20, top: 1.2, right: 20, bottom: 1.2),
         child: ListTile(
           leading: SizedBox(
-            width:Responsive.isMobile(context) ? 40: 30,height:Responsive.isMobile(context) ? 40: 30,
+            width: Responsive.isMobile(context) ? 40 : 30,
+            height: Responsive.isMobile(context) ? 40 : 30,
             child: Center(
               child: leading ??
                   Image.asset(

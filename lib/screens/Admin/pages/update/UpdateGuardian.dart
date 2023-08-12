@@ -1,7 +1,3 @@
-// ignore_for_file: invalid_return_type_for_catch_error
-
-import 'dart:developer';
-
 import '../../../../models/Guardians.dart';
 import '../../../../models/StudentModel.dart';
 import '/exports/exports.dart';
@@ -84,8 +80,6 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
       TextEditingController(text: ""),
       TextEditingController(text: widget.guardianModel.guardianGender),
       TextEditingController(text: widget.guardianModel.type),
-      // TextEditingController(
-      //     text: widget.guardianModel.guardianDateOfEntry.toString()),
       TextEditingController(),
       TextEditingController(text: widget.guardianModel.relationship),
     ];
@@ -144,7 +138,9 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
                     onDropDownValue: (v) {
                       if (v != null) {
                         BlocProvider.of<MultiStudentsController>(context)
-                            .setMultiStudents((json.decode(v).join(",")));
+                            .setMultiStudents(
+                          json.decode(v).join(","),
+                        );
                       }
                     },
                     formControllers: _formControllers,
@@ -163,9 +159,6 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
 
 // adding guardian
   void _addGuardian() {
-    for (var i = 0; i < _formControllers.length; i++) {
-      log(_formControllers[i].text);
-    }
     if (validateEmail(_formControllers[1].text, context) != false) {
       showProgress(context, msg: "Updating guardian in progress");
       _handleGuardian().then((value) {
@@ -194,7 +187,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
         (context.read<MultiStudentsController>().state);
     request.fields['school'] = context.read<SchoolController>().state['school'];
     request.fields['type'] = _formControllers[5].text.trim();
-    request.fields['relationship'] = _formControllers[8].text.trim();
+    request.fields['relationship'] = _formControllers[7].text.trim();
     request.fields['guardian_fname'] =
         _formControllers[0].text.trim().split(" ").first;
     request.fields['guardian_lname'] =
