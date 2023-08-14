@@ -142,6 +142,7 @@ class _StaffViewState extends State<StaffView> {
                     (index) => DataColumn(
                       label: Text(
                         _staffColumns[index],
+                        style: TextStyles(context).getRegularStyle(),
                       ),
                     ),
                   ),

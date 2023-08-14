@@ -85,7 +85,7 @@ class _PaymentReportsState extends State<PaymentReports>
                 ),
                 // ElevatedButton(
                 //   onPressed: () {
-                    
+
                 //   },
                 //   child: Text(
                 //     "Add payment",
@@ -94,51 +94,70 @@ class _PaymentReportsState extends State<PaymentReports>
                 // )
               ],
             ),
-            columns: const [
+            columns: [
               DataColumn(
                 label: Text(
                   "Student Profile",
-                  style: TextStyle(fontSize: 12),
+                  // style: TextStyle(fontSize: 12),
+                  style: TextStyles(context).getRegularStyle(),
                 ),
               ),
               DataColumn(
                 label: Text(
                   "Student Name",
-                  style: TextStyle(fontSize: 12),
+                  // style: TextStyle(fontSize: 12),
+                  style: TextStyles(context).getRegularStyle(),
                 ),
               ),
               DataColumn(
-                label: Text("Cleared By", style: TextStyle(fontSize: 12)),
+                label: Text(
+                  "Cleared By",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
                 label: SizedBox(
                     width: 800,
-                    child: Text("Date", style: TextStyle(fontSize: 12))),
+                    child: Text(
+                      "Date",
+                      style: TextStyles(context).getRegularStyle(),
+                    )),
               ),
               DataColumn(
-                label: Text("Cleared With", style: TextStyle(fontSize: 12)),
+                label: Text(
+                  "Cleared With",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
-                label: Text("Amount Paid", style: TextStyle(fontSize: 12)),
+                label: Text(
+                  "Amount Paid",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
-                label: Text("Comment", style: TextStyle(fontSize: 12)),
+                label: Text(
+                  "Comment",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
             ],
-            empty:  SizedBox(
-                          height: MediaQuery.of(context).size.width / 9,
-                          child: payload.hasData ? const NoDataWidget(
-                              text: "No  payments recorded"
-                                  "") : Loader(
-                            text: "Payment records",
-                          ),
-                        ),
-              
+            empty: SizedBox(
+              height: MediaQuery.of(context).size.width / 9,
+              child: payload.hasData
+                  ? const NoDataWidget(
+                      text: "No  payments recorded"
+                          "")
+                  : Loader(
+                      text: "Payment records",
+                    ),
+            ),
             source: PaymentDataSource(
                 context: context,
                 currentPage: _currentPage,
                 paginatorController: _paginatorController,
-                totalDocuments: paymentModel?.totalDocuments ?? 0, payments: _payments),
+                totalDocuments: paymentModel?.totalDocuments ?? 0,
+                payments: _payments),
           );
         },
       ),

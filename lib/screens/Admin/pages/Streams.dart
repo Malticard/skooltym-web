@@ -121,21 +121,33 @@ class _StreamsUIState extends State<StreamsUI> {
                         ),
                       ],
                     ),
-                    columns: const [
+                    columns: [
                       DataColumn(
-                        label: Text("#"),
+                        label: Text(
+                          "#",
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
                       ),
                       DataColumn(
-                        label: Text("Stream"),
+                        label: Text(
+                          "Stream",
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
                       ),
                       DataColumn(
-                        label: Text("Action"),
+                        label: Text(
+                          "Action",
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
                       ),
                     ],
                     empty: !snapshot.hasData
                         ? const Loader(text: "Streams data")
-                        : const Center(
-                            child: Text("No Streams added.."),
+                        : Center(
+                            child: Text(
+                              "No Streams added..",
+                              style: TextStyles(context).getRegularStyle(),
+                            ),
                           ),
                     source: StreamDataSource(
                         context: context,

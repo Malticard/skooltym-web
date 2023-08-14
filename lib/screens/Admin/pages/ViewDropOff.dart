@@ -119,24 +119,42 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
                   ),
               ],
             ),
-            columns: const [
+            columns: [
               DataColumn(
-                label: Text("Student Profile"),
+                label: Text(
+                  "Student Profile",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
-                label: Text("Student Name"),
+                label: Text(
+                  "Student Name",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
-                label: Text("Dropped by"),
+                label: Text(
+                  "Dropped by",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
-                label: Text("Cleared by"),
+                label: Text(
+                  "Cleared by",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
-                label: Text("Date"),
+                label: Text(
+                  "Date",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
-                label: Text("Time Of DropOff"),
+                label: Text(
+                  "Time Of DropOff",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
             ],
             empty: !snapshot.hasData

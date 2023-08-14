@@ -174,6 +174,7 @@ class _ViewStudentsState extends State<ViewStudents> {
                     (index) => DataColumn(
                       label: Text(
                         staffs[index],
+                        style: TextStyles(context).getRegularStyle(),
                       ),
                     ),
                   ),

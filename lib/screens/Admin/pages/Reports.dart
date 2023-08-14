@@ -66,7 +66,6 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
           var overtimeModel = payload.data;
           var _overtimes = overtimeModel?.results ?? [];
           return CustomDataTable(
-            
             paginatorController: _controller,
             onPageChanged: (page) {
               setState(() {
@@ -79,7 +78,6 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
               });
             },
             header: Row(
-
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Text(
@@ -88,38 +86,49 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
                 // ),
               ],
             ),
-            columns: const [
+            columns: [
               DataColumn(
                 label: Text(
                   "Student's profile",
-                  style: TextStyle(fontSize: 12),
+                  // style: TextStyle(fontSize: 12),
+                  style: TextStyles(context).getRegularStyle(),
                 ),
               ),
               DataColumn(
                 label: Text(
                   "Student Name",
-                  style: TextStyle(fontSize: 12),
+                  // style: TextStyle(fontSize: 12),
+                  style: TextStyles(context).getRegularStyle(),
                 ),
               ),
-               DataColumn(
-                label: Text("Guardian Name", style: TextStyle(fontSize: 12)),
+              DataColumn(
+                label: Text(
+                  "Guardian Name",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
-                label: Text("Cleared By", style: TextStyle(fontSize: 12)),
+                label: Text(
+                  "Cleared By",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
                 label: SizedBox(
                     width: 800,
-                    child: Text("Date", style: TextStyle(fontSize: 12))),
+                    child: Text(
+                      "Date",
+                      style: TextStyles(context).getRegularStyle(),
+                    )),
               ),
               DataColumn(
                 label: Text(
                   "Overtime Balance",
-                  style: TextStyle(fontSize: 12),
+                  // style: TextStyle(fontSize: 12),
+                  style: TextStyles(context).getRegularStyle(),
                 ),
               ),
             ],
-         
             empty: !payload.hasData
                 ? Loader(
                     text: "cleared overtimes...",
@@ -140,7 +149,8 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
                   .where((element) => element.status != 'Pending')
                   .toList()
                   .length,
-              paginatorController: _controller, isPending: false,
+              paginatorController: _controller,
+              isPending: false,
             ),
           );
         },
@@ -223,45 +233,57 @@ class _PendingOvertimeState extends State<PendingOvertime>
                 // ),
               ],
             ),
-            columns:  [
+            columns: [
               DataColumn(
                 label: Text(
                   "Student's profile",
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyles(context).getRegularStyle(),
+                  // style: TextStyle(fontSize: 12),
                 ),
               ),
               DataColumn(
                 label: Text(
                   "Student Name",
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyles(context).getRegularStyle(),
+                  // style: TextStyle(fontSize: 12),
                 ),
               ),
-               DataColumn(
-                label: Text("Guardian Name", style: TextStyle(fontSize: 12)),
+              DataColumn(
+                label: Text(
+                  "Guardian Name",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
-                label: Text("Recorded By", style: TextStyle(fontSize: 12)),
+                label: Text(
+                  "Recorded By",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn(
                 label: SizedBox(
                     width: 800,
-                    child: Text("Date", style: TextStyle(fontSize: 12))),
+                    child: Text(
+                      "Date",
+                      style: TextStyles(context).getRegularStyle(),
+                    )),
               ),
               DataColumn(
                 label: Text(
                   "Overtime Charge",
-                  style: TextStyle(fontSize: 12),
-                ),
-              ), 
-          if(context.read<SchoolController>().state['role'] == 'Finance')
-              DataColumn(
-                label: Text(
-                  "Action",
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyles(context).getRegularStyle(),
+                  // style: TextStyle(fontSize: 12),
                 ),
               ),
+              if (context.read<SchoolController>().state['role'] == 'Finance')
+                DataColumn(
+                  label: Text(
+                    "Action",
+                    style: TextStyles(context).getRegularStyle(),
+                    // style: TextStyle(fontSize: 12),
+                  ),
+                ),
             ],
-         
             empty: SizedBox(
               height: MediaQuery.of(context).size.width / 9,
               child: !payload.hasData
@@ -282,7 +304,8 @@ class _PendingOvertimeState extends State<PendingOvertime>
                     .where((element) => element.status == "Pending")
                     .toList()
                     .length,
-                paginatorController: _pendingPaginatorController, isPending: true),
+                paginatorController: _pendingPaginatorController,
+                isPending: true),
           );
         },
       ),

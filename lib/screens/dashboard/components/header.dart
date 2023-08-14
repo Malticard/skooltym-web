@@ -13,6 +13,14 @@ class Header extends StatefulWidget {
 class _HeaderState extends State<Header> {
   Map<String, dynamic> schoolData = {};
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<SchoolController>(context).getSchoolData();
+    BlocProvider.of<TitleController>(context)
+        .showTitle(context.read<SchoolController>().state['role']);
+  }
+
+  @override
   Widget build(BuildContext context) {
     BlocProvider.of<SchoolController>(context, listen: true).getSchoolData();
     BlocProvider.of<TitleController>(context, listen: true)

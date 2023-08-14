@@ -142,6 +142,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                       (index) => DataColumn(
                         label: Text(
                           guardianColumns[index],
+                          style: TextStyles(context).getRegularStyle(),
                         ),
                       ),
                     ),

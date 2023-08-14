@@ -114,31 +114,52 @@ class _ViewPickUpsState extends State<ViewPickUps> {
             columns: [
               DataColumn2(
                 numeric: false,
-                label: Text("Student's Profile"),
+                label: Text(
+                  "Student's Profile",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn2(
                 numeric: false,
-                label: Text("Student Name"),
+                label: Text(
+                  "Student Name",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn2(
                 numeric: false,
-                label: Text("PickedUp By"),
+                label: Text(
+                  "PickedUp By",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn2(
                 numeric: false,
-                label: Text("Cleared by"),
+                label: Text(
+                  "Cleared by",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn2(
                 numeric: false,
-                label: Text("Overtime Charge"),
+                label: Text(
+                  "Overtime Charge",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn2(
                 numeric: false,
-                label: Text("Date"),
+                label: Text(
+                  "Date",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
               DataColumn2(
                 numeric: false,
-                label: Text("Time Of PickUp"),
+                label: Text(
+                  "Time Of PickUp",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
             ],
             empty: Center(

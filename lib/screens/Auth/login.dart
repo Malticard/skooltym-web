@@ -128,16 +128,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               top: size.width / 26),
                           height: size.height * 1.8,
                           decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(50),
-                                topRight: Radius.circular(50),
-                                bottomLeft: Radius.circular(50),
-                                bottomRight: Radius.circular(50),
-                              ),
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.black26
-                                  : Colors.white.withOpacity(1)),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              topRight: Radius.circular(50),
+                              bottomLeft: Radius.circular(50),
+                              bottomRight: Radius.circular(50),
+                            ),
+                            color: Theme.of(context).canvasColor,
+                          ),
                           child: _buildForm(),
                         ),
                       ),
@@ -300,11 +298,13 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 "Forgot Password",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Theme.of(context).primaryColor,
-                ),
+                style: TextStyles(context).getRegularStyle().copyWith(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Theme.of(context).primaryColor
+                          : Colors.white54,
+                    ),
               ),
             ),
           ),

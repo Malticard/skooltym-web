@@ -22,10 +22,15 @@ class AppThemes {
   static final ThemeData darkTheme = ThemeData(
     textTheme: GoogleFonts.aBeeZeeTextTheme(),
     primaryColor: Color.fromARGB(204, 9, 87, 139),
-    // colorScheme: ColorScheme.fromSeed(
-    //   seedColor: Color.fromARGB(204, 9, 87, 139),
-    //   primary: Color.fromARGB(204, 9, 87, 139),
-    //   brightness: Brightness.dark,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Color.fromARGB(204, 255, 255, 255),
+      brightness: Brightness.dark,
+    ),
+    // primaryTextTheme: TextTheme(
+    //   headline6: TextStyle(color: Colors.white),
+    //   displayMedium: TextStyle(color: Colors.white),
+    //   displaySmall: TextStyle(color: Colors.white),
+    //   displayLarge: TextStyle(color: Colors.white),
     // ),
     useMaterial3: true,
     scaffoldBackgroundColor: bgColor,

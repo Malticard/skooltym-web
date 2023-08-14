@@ -51,10 +51,19 @@ class StudentsDataSource extends DataTableSource {
           ),
         ),
         DataCell(
-          Text("${studentData.studentFname} ${studentData.studentLname}"),
+          Text(
+            "${studentData.studentFname} ${studentData.studentLname}",
+            style: TextStyles(context).getRegularStyle(),
+          ),
         ),
-        DataCell(Text(studentData.resultClass.className)),
-        DataCell(Text(studentData.studentGender)),
+        DataCell(Text(
+          studentData.resultClass.className,
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          studentData.studentGender,
+          style: TextStyles(context).getRegularStyle(),
+        )),
         DataCell(
           buildActionButtons(context, () {
             showDialog(
@@ -133,10 +142,19 @@ class StudentsDashboardDataSource extends DataTableSource {
           ),
         ),
         DataCell(
-          Text("${studentData.studentFname} ${studentData.studentLname}"),
+          Text(
+            "${studentData.studentFname} ${studentData.studentLname}",
+            style: TextStyles(context).getRegularStyle(),
+          ),
         ),
-        DataCell(Text(studentClass)),
-        DataCell(Text(studentData.studentGender)),
+        DataCell(Text(
+          studentClass,
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          studentData.studentGender,
+          style: TextStyles(context).getRegularStyle(),
+        )),
         DataCell(
           buildActionButtons(context, () {
             showDialog(
@@ -212,12 +230,18 @@ class GuardianDataSource extends DataTableSource {
             scrollDirection: Axis.horizontal,
             child: Text(
               "${guardianData.guardianFname} ${guardianData.guardianLname}",
-              style: const TextStyle(fontSize: 13.5),
+              style: TextStyles(context).getRegularStyle(),
             ),
           ),
         )),
-        DataCell(Text(guardianData.guardianEmail)),
-        DataCell(Text(guardianData.guardianGender)),
+        DataCell(Text(
+          guardianData.guardianEmail,
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          guardianData.guardianGender,
+          style: TextStyles(context).getRegularStyle(),
+        )),
         DataCell(buildActionButtons(
           context,
           () {
@@ -280,8 +304,13 @@ class ClassDataSource extends DataTableSource {
       index: index,
       cells: [
         DataCell(Text(
-            "${(pageIndex * paginatorController.rowsPerPage + dataIndex) + 1}")),
-        DataCell(Text(classData.className)),
+          "${(pageIndex * paginatorController.rowsPerPage + dataIndex) + 1}",
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          classData.className,
+          style: TextStyles(context).getRegularStyle(),
+        )),
         DataCell(
           buildActionButtons(
             context,
@@ -343,9 +372,15 @@ class StreamDataSource extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       cells: [
-        DataCell(Text("${index + 1}")),
+        DataCell(Text(
+          "${(pageIndex * paginatorController!.rowsPerPage + dataIndex)}",
+          style: TextStyles(context).getRegularStyle(),
+        )),
         DataCell(
-          Text(streamData.streamName),
+          Text(
+            streamData.streamName,
+            style: TextStyles(context).getRegularStyle(),
+          ),
         ),
         DataCell(buildActionButtons(
           context,
@@ -416,11 +451,21 @@ class StaffDataSource extends DataTableSource {
           Text(
             staffData.staffFname,
             overflow: TextOverflow.ellipsis,
+            style: TextStyles(context).getRegularStyle(),
           ),
         ),
-        DataCell(Text((staffData.staffRole.roleType))),
-        DataCell(Text(staffData.staffEmail)),
-        DataCell(Text(staffData.staffGender)),
+        DataCell(Text(
+          staffData.staffRole.roleType,
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          staffData.staffEmail,
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          staffData.staffGender,
+          style: TextStyles(context).getRegularStyle(),
+        )),
         DataCell(buildActionButtons(context, () {
           showDialog(
               context: context,
@@ -500,38 +545,38 @@ class ReportsDataSource extends DataTableSource {
           Padding(
             padding: const EdgeInsets.all(0),
             child: Text(
-                "${overtimeData.student.studentFname} ${overtimeData.student.studentLname}",
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 11)),
+              "${overtimeData.student.studentFname} ${overtimeData.student.studentLname}",
+              overflow: TextOverflow.ellipsis,
+              style: TextStyles(context).getRegularStyle(),
+            ),
           ),
         ),
         DataCell(
           Text(
             "${overtimeData.staff.staffFname} ${overtimeData.staff.staffLname}",
-            style: const TextStyle(fontSize: 11),
+            style: TextStyles(context).getRegularStyle(),
           ),
         ),
         DataCell(
           Text(
             "${overtimeData.guardian.guardianFname} ${overtimeData.guardian.guardianFname}",
-            style: const TextStyle(fontSize: 11),
+            style: TextStyles(context).getRegularStyle(),
           ),
         ),
         DataCell(
           Text(
             formatDate(overtimeData.createdAt),
-            style: const TextStyle(fontSize: 11),
+            style: TextStyles(context).getRegularStyle(),
           ),
         ),
         DataCell(
           Text(
             formatNumber(overtimeData.overtimeCharge),
-            style: const TextStyle(fontSize: 11),
+            style: TextStyles(context).getRegularStyle(),
           ),
         ),
         if (isPending == true &&
             context.read<SchoolController>().state['role'] == 'Finance')
-           
           DataCell(
             OutlinedButton(
               child: Text("Clear"),
@@ -607,18 +652,30 @@ class DropOffDataSource extends DataTableSource {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Text(
-                "${dropOffData.studentName.studentFname} ${dropOffData.studentName.studentLname}"),
+              "${dropOffData.studentName.studentFname} ${dropOffData.studentName.studentLname}",
+              style: TextStyles(context).getRegularStyle(),
+            ),
           ),
         ),
         DataCell(Text(
-            "${dropOffData.droppedBy.guardianFname} ${dropOffData.droppedBy.guardianLname}")),
+          "${dropOffData.droppedBy.guardianFname} ${dropOffData.droppedBy.guardianLname}",
+          style: TextStyles(context).getRegularStyle(),
+        )),
         DataCell(Text(
-            "${dropOffData.authorizedBy.staffFname} ${dropOffData.authorizedBy.staffLname}")),
+          "${dropOffData.authorizedBy.staffFname} ${dropOffData.authorizedBy.staffLname}",
+          style: TextStyles(context).getRegularStyle(),
+        )),
         DataCell(
-          Text(formatDate(dropOffData.dropOffTime.toLocal())),
+          Text(
+            formatDate(dropOffData.dropOffTime.toLocal()),
+            style: TextStyles(context).getRegularStyle(),
+          ),
         ),
         DataCell(
-          Text(formatDateTime(dropOffData.dropOffTime.toLocal())),
+          Text(
+            formatDateTime(dropOffData.dropOffTime.toLocal()),
+            style: TextStyles(context).getRegularStyle(),
+          ),
         ),
       ],
     );
@@ -675,16 +732,31 @@ class PickUpDataSource extends DataTableSource {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Text(
-                "${pickUp.studentName.studentFname} ${pickUp.studentName.studentLname}"),
+              "${pickUp.studentName.studentFname} ${pickUp.studentName.studentLname}",
+              style: TextStyles(context).getRegularStyle(),
+            ),
           ),
         ),
         DataCell(Text(
-            "${pickUp.pickedBy.guardianFname} ${pickUp.pickedBy.guardianLname}")),
+          "${pickUp.pickedBy.guardianFname} ${pickUp.pickedBy.guardianLname}",
+          style: TextStyles(context).getRegularStyle(),
+        )),
         DataCell(Text(
-            "${pickUp.authorizedBy.staffFname} ${pickUp.authorizedBy.staffLname}")),
-        DataCell(Text(formatNumber(pickUp.overtimeCharge))),
-        DataCell(Text(formatDate(pickUp.createdAt.toLocal()))),
-        DataCell(Text(formatDateTime(pickUp.createdAt.toLocal()))),
+          "${pickUp.authorizedBy.staffFname} ${pickUp.authorizedBy.staffLname}",
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          formatNumber(pickUp.overtimeCharge),
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          formatDate(pickUp.createdAt.toLocal()),
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          formatDateTime(pickUp.createdAt.toLocal()),
+          style: TextStyles(context).getRegularStyle(),
+        )),
       ],
     );
   }
@@ -738,25 +810,36 @@ class PaymentDataSource extends DataTableSource {
         DataCell(
           Padding(
             padding: const EdgeInsets.all(0),
-            child: Text(paymentData.student.username,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 11)),
+            child: Text(
+              paymentData.student.username,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyles(context).getRegularStyle(),
+            ),
           ),
         ),
         DataCell(Text(
-            "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
-            style: const TextStyle(fontSize: 11))),
-        DataCell(Text(formatDate(paymentData.dateOfPayment),
-            style: const TextStyle(fontSize: 11))),
-        DataCell(Text(paymentData.paymentMethod,
-            style: const TextStyle(fontSize: 11))),
+          "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          formatDate(paymentData.dateOfPayment),
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          paymentData.paymentMethod,
+          style: TextStyles(context).getRegularStyle(),
+        )),
         // DataCell(Text(
         //     "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
         //     style: const TextStyle(fontSize: 11))),
-        DataCell(Text(formatNumber(paymentData.paidAmount),
-            style: const TextStyle(fontSize: 11))),
-        DataCell(Text(paymentData.comment.toString(),
-            style: const TextStyle(fontSize: 11))),
+        DataCell(Text(
+          formatNumber(paymentData.paidAmount),
+          style: TextStyles(context).getRegularStyle(),
+        )),
+        DataCell(Text(
+          paymentData.comment.toString(),
+          style: TextStyles(context).getRegularStyle(),
+        )),
       ],
     );
   }

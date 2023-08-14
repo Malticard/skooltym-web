@@ -1,8 +1,10 @@
 import '/exports/exports.dart';
+
 class CommonDelete extends StatefulWidget {
   final String title;
-   final String url;
-  const CommonDelete({Key? key, required this.title, required this.url}) : super(key: key);
+  final String url;
+  const CommonDelete({Key? key, required this.title, required this.url})
+      : super(key: key);
 
   @override
   State<CommonDelete> createState() => _CommonDeleteState();
@@ -11,16 +13,18 @@ class CommonDelete extends StatefulWidget {
 class _CommonDeleteState extends State<CommonDelete> {
   @override
   Widget build(BuildContext context) {
-    return  Dialog(
+    return Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 4,
-        height: MediaQuery.of(context).size.width / 14,
+        height: MediaQuery.of(context).size.width / 10,
         child: Column(
           children: [
             const Space(space: 0.02),
             Center(
               child: Text(
-                  "Are you sure you want to delete ${widget.title}"),
+                "Are you sure you want to delete ${widget.title}",
+                style: TextStyles(context).getRegularStyle(),
+              ),
             ),
             const Space(space: 0.032),
             Row(
@@ -31,17 +35,24 @@ class _CommonDeleteState extends State<CommonDelete> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        showProgress(context,msg: "Deleting ${widget.title}....");
+                        showProgress(context,
+                            msg: "Deleting ${widget.title}....");
                         Client().delete(Uri.parse(widget.url)).then((value) {
-                         
-                          if(value.statusCode == 200 || value.statusCode == 201){
+                          if (value.statusCode == 200 ||
+                              value.statusCode == 201) {
                             Routes.popPage(context);
-                            showMessage(context: context,type: 'success',msg: '${widget.title} removed successfully..');
-                          } else{
-                            showMessage(context: context,msg: 'Error ${value.reasonPhrase}',type: 'danger');
+                            showMessage(
+                                context: context,
+                                type: 'success',
+                                msg: '${widget.title} removed successfully..');
+                          } else {
+                            showMessage(
+                                context: context,
+                                msg: 'Error ${value.reasonPhrase}',
+                                type: 'danger');
                           }
-                        }).whenComplete((){
-                            Routes.popPage(context);
+                        }).whenComplete(() {
+                          Routes.popPage(context);
                         });
                       },
                       child: Text(
@@ -51,7 +62,9 @@ class _CommonDeleteState extends State<CommonDelete> {
                             .copyWith(color: Colors.red),
                       ),
                     ),
-                    TextButton(onPressed: () => Routes.popPage(context), child: const Text("No")),
+                    TextButton(
+                        onPressed: () => Routes.popPage(context),
+                        child: const Text("No")),
                   ],
                 ),
               ],

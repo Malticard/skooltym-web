@@ -32,22 +32,16 @@ void loginUser(BuildContext context, String email, String password) async {
           .getFirstTimeUser(data['role']);
 
       if (BlocProvider.of<FirstTimeUserController>(context).state == true) {
-        BlocProvider.of<TitleController>(context).setTitle(
-            "Change Password", context.read<SchoolController>().state['role']);
+        BlocProvider.of<TitleController>(context)
+            .setTitle("Change Password", data['role']);
       } else {
         log("${data['role']}");
-        BlocProvider.of<TitleController>(context).setTitle(
-            "Dashboard", context.read<SchoolController>().state['role']);
+        BlocProvider.of<TitleController>(context)
+            .setTitle("Dashboard", data['role']);
         BlocProvider.of<FinanceViewController>(context).showRecentWidget();
         BlocProvider.of<WidgetController>(context).showRecentWidget();
       }
       // for finance
-      //  if(BlocProvider.of<FinanceFirstTimeController>(context).state == true){
-      //    BlocProvider.of<TitleController>(context).setTitle("Change Password");
-      // } else {
-      //    BlocProvider.of<TitleController>(context).setTitle("Dashboard");
-
-      // }
 
       Routes.popPage(context);
       if (data['role'] == 'Admin' || data['role'] == 'Finance') {

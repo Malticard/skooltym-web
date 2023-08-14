@@ -156,12 +156,18 @@ class _AddGuardianState extends State<AddGuardian> {
       showProgress(context, msg: "Adding guardian...");
       handleGuardian().then((event) {
         Routes.popPage(context);
-
-        showMessage(
-          context: context,
-          type: 'success',
-          msg: "Added new guardian successfully",
-        );
+        log(event.reasonPhrase ?? "");
+        log(event.statusCode.toString());
+        if (event.statusCode == 200 || event.statusCode == 201) {
+          showMessage(
+            context: context,
+            type: 'success',
+            msg: "Added new guardian successfully",
+          );
+        } else {
+          showMessage(
+              context: context, type: 'danger', msg: event.reasonPhrase ?? "");
+        }
       }).whenComplete(() => Routes.popPage(context));
     }
   }
@@ -202,12 +208,15 @@ class _AddGuardianState extends State<AddGuardian> {
           context.read<ImageUploadController>().state['size'],
           filename: context.read<ImageUploadController>().state['name']));
     } else {
-      request.files.add(MultipartFile(
-          'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-          filename: uri.split("/").last));
+      request.files.add(
+        MultipartFile(
+          'image',
+          File(uri).readAsBytes().asStream(),
+          File(uri).lengthSync(),
+          filename: uri.split("/").last,
+        ),
+      );
     }
-    request.fields['passcode'] = "";
-    request.fields['deviceId'] = "";
     request.fields['guardian_key[key]'] = "";
     var response = request.send();
     return response;

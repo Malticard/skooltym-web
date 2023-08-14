@@ -121,15 +121,24 @@ class _ClassesUIState extends State<ClassesUI> {
                       ),
                     ],
                   ),
-                  columns: const [
+                  columns: [
                     DataColumn(
-                      label: Text("No."),
+                      label: Text(
+                        "No.",
+                        style: TextStyles(context).getRegularStyle(),
+                      ),
                     ),
                     DataColumn(
-                      label: Text("Class"),
+                      label: Text(
+                        "Class",
+                        style: TextStyles(context).getRegularStyle(),
+                      ),
                     ),
                     DataColumn(
-                      label: Text("Action"),
+                      label: Text(
+                        "Action",
+                        style: TextStyles(context).getRegularStyle(),
+                      ),
                     ),
                   ],
                   empty: !snapshot.hasData
@@ -154,7 +163,10 @@ class _ClassesUIState extends State<ClassesUI> {
             flex: 1,
             child: Row(
               children: [
-                const Text("Continue to add staff members"),
+                Text(
+                  "Continue to add staff members",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
                 TextButton(
                   onPressed: () {
                     context.read<WidgetController>().pushWidget(2);
