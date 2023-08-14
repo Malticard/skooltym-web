@@ -93,6 +93,7 @@ String formatNumber(var number) {
 Future<SettingsModel> fetchSettings(String schoolId) async {
   Response response =
       await Client().get(Uri.parse(AppUrls.settings + schoolId));
+  // if (settingsModelFromJson(response.body).isNotEmpty)
   return settingsModelFromJson(response.body).first;
 }
 
@@ -429,6 +430,7 @@ void showProgress(BuildContext context, {String? msg = 'Task'}) {
                 Padding(
                   padding: const EdgeInsets.only(left: 18.0),
                   child: SpinKitDualRing(
+                      size: Responsive.isMobile(context) ? 35 : 45,
                       color: Theme.of(context).brightness == Brightness.dark
                           ? Colors.white
                           : Theme.of(context).primaryColor),

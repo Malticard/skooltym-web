@@ -13,8 +13,9 @@ class UpdateStudent extends StatefulWidget {
 
 class _UpdateStudentState extends State<UpdateStudent> {
   List<TextEditingController> _formControllers = <TextEditingController>[];
-  //  = <Map<String, dynamic>>[];
-
+  List<Map<String, dynamic>>? formFields;
+  List<String>? _streams;
+  List<DashboardModel> _dashDataController = [];
   @override
   void initState() {
     super.initState();
@@ -23,10 +24,37 @@ class _UpdateStudentState extends State<UpdateStudent> {
       TextEditingController(text: widget.studentModel.studentLname),
       TextEditingController(text: widget.studentModel.otherName),
       TextEditingController(text: ""),
-      TextEditingController(text: ""),
       TextEditingController(text: widget.studentModel.studentGender),
       TextEditingController(text: widget.studentModel.resultClass.className),
+      TextEditingController(text: widget.studentModel.stream.streamName),
     ];
+    pollData();
+  }
+
+  void pollData() {
+    fetchDashBoardData(context.read<SchoolController>().state['school'])
+        .then((dashData) {
+      if (mounted) {
+        setState(() {
+          _dashDataController = dashData;
+        });
+      }
+    });
+  }
+
+  void getStreams() {
+    if (_formControllers[5].text.isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          _streams = _dashDataController
+              .where((element) => element.className == _formControllers[5].text)
+              .first
+              .classStreams
+              .map((e) => e.streamName)
+              .toList();
+        });
+      }
+    }
   }
 
   Map<String, dynamic> imageData = {};
@@ -36,14 +64,14 @@ class _UpdateStudentState extends State<UpdateStudent> {
 // form key
   final formKey = GlobalKey<FormState>();
   // error fields
+
   @override
   Widget build(BuildContext context) {
+    pollData();
+    getStreams();
     List<String> errorFields = List.generate(7, (i) => '');
-    Provider.of<ClassController>(context, listen: true)
-        .getClasses(context.read<SchoolController>().state['school']);
-    var streams = Provider.of<StreamsController>(context, listen: true);
 // form data
-    List<Map<String, dynamic>> formFields = [
+    formFields = [
       {
         "title": "Student's Firstname *",
         "hint": "e.g John",
@@ -77,10 +105,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
         "hint": "e.g grade 2",
         "data": [
           "Select class",
-          ...Provider.of<ClassController>(context)
-              .classes
-              .map((e) => e.className)
-              .toList(),
+          ..._dashDataController.map((e) => e.className).toList(),
         ],
         'icon': Icons.home_work_outlined
       },
@@ -89,7 +114,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
         "hint": "e.g North",
         "data": [
           "Select stream",
-          ...streams.streams.map((e) => e.streamName).toList(),
+          ..._streams ?? [],
         ],
         'icon': Icons.home_work_outlined
       }
@@ -102,57 +127,42 @@ class _UpdateStudentState extends State<UpdateStudent> {
       },
       builder: (context, state) {
         return SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Update Student Details",
-                  style: TextStyles(context)
-                      .getRegularStyle()
-                      .copyWith(fontSize: 19),
-                ),
-              ),
-              CommonFormFields(
-                formTitle: "Update Student Details",
-                initialPic: widget.studentModel.studentProfilePic,
-                padding: _padding,
-                formFields: formFields,
-                formControllers: _formControllers,
-                buttonText: "Update Student Details",
-                onSubmit: () {
-                  if (true) {
-                    showProgress(context, msg: "Updating student details");
-                    _handleStudentRegistration().then(
-                      (value) {
-                        if (value.statusCode == 200 ||
-                            value.statusCode == 201) {
-                          Routes.popPage(context);
-                          showMessage(
-                            context: context,
-                            type: 'success',
-                            msg: "Student details updated successfully",
-                          );
-                          for (var v in _formControllers) {
-                            v.clear();
-                          }
-                        } else {
-                          showMessage(
-                            msg:
-                                "Failed to update student ${value.reasonPhrase}",
-                            context: context,
-                            type: "danger",
-                          );
-                        }
-                      },
-                    ).whenComplete(() {
+          child: CommonFormFields(
+            formTitle: "Update Student Details",
+            initialPic: widget.studentModel.studentProfilePic,
+            padding: _padding,
+            formFields: formFields ?? [],
+            formControllers: _formControllers,
+            buttonText: "Update Student Details",
+            onSubmit: () {
+              if (true) {
+                showProgress(context, msg: "Updating student details");
+                _handleStudentRegistration().then(
+                  (value) {
+                    if (value.statusCode == 200 || value.statusCode == 201) {
                       Routes.popPage(context);
-                    });
-                  }
-                },
-                errorMsgs: errorFields,
-              ),
-            ],
+                      showMessage(
+                        context: context,
+                        type: 'success',
+                        msg: "Student details updated successfully",
+                      );
+                      for (var v in _formControllers) {
+                        v.clear();
+                      }
+                    } else {
+                      showMessage(
+                        msg: "Failed to update student ${value.reasonPhrase}",
+                        context: context,
+                        type: "danger",
+                      );
+                    }
+                  },
+                ).whenComplete(() {
+                  Routes.popPage(context);
+                });
+              }
+            },
+            errorMsgs: errorFields,
           ),
         );
       },

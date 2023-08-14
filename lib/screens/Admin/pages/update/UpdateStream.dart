@@ -27,14 +27,17 @@ class _UpdateStreamState extends State<UpdateStream> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.white
           : Theme.of(context).canvasColor,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 5,
+        width: Responsive.isMobile(context) ? size.width : size.width / 3,
+        height:
+            Responsive.isMobile(context) ? size.width / 1.7 : size.width / 3.5,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
               padding: const EdgeInsets.all(18.0),

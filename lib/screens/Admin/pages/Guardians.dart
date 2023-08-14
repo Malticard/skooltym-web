@@ -15,8 +15,8 @@ class _ViewGuardiansState extends State<ViewGuardians> {
   List<String> guardianColumns = [
     "Guardian's Profile",
     "Guardian Name",
-    "Email",
-    "Gender",
+    "Contact",
+    "Relationship",
     "Actions"
   ];
   List<Guardian> guardianData = [];

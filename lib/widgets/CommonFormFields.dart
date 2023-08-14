@@ -41,7 +41,8 @@ class CommonFormFields extends StatefulWidget {
       this.onDropDownValue,
       this.onSelectedValue,
       this.initialPic,
-      this.selectedData, this.titlePadding = const EdgeInsets.all(20)});
+      this.selectedData,
+      this.titlePadding = const EdgeInsets.all(20)});
 
   @override
   State<CommonFormFields> createState() => _CommonFormFieldsState();
@@ -64,20 +65,21 @@ class _CommonFormFieldsState extends State<CommonFormFields>
   var _imageBytes;
   _handleImageUpload(int a) async {
     if (kIsWeb) {
-    XFile? picker =  await ImagePicker.platform.getImageFromSource(source: ImageSource.gallery);// pickImage(source: ImageSource.gallery);
-    if (picker != null) {
-      print("Picker: => ${picker.path}");
-      var element = await picker.readAsBytes();
-          setState(() {
-            _imageBytes = element;
-          });
+      XFile? picker = await ImagePicker.platform.getImageFromSource(
+          source:
+              ImageSource.gallery); // pickImage(source: ImageSource.gallery);
+      if (picker != null) {
+        print("Picker: => ${picker.path}");
+        var element = await picker.readAsBytes();
+        setState(() {
+          _imageBytes = element;
+        });
         BlocProvider.of<ImageUploadController>(context).uploadImage({
           "image": picker.readAsBytes().asStream(),
           "name": widget.formControllers[0].text,
           "size": picker.readAsBytes().asStream().length,
         });
-    }
-
+      }
     } else {
       FilePicker.platform.pickFiles(
         dialogTitle: "${widget.formFields[a]['title']}",
@@ -92,8 +94,6 @@ class _CommonFormFieldsState extends State<CommonFormFields>
       });
     }
   }
-
-
 
   Object drawImage(var url) {
     if (url.isEmpty) {
@@ -112,35 +112,35 @@ class _CommonFormFieldsState extends State<CommonFormFields>
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 18.0),
+            padding: const EdgeInsets.only(right: 10.0),
             child: Text(widget.formFields[ind]['title'],
                 style: TextStyles(context).getDescriptionStyle()),
           ),
           SizedBox(
             child: CircleAvatar(
-              radius: 35,
+              radius: Responsive.isMobile(context) ? 30 : 35,
               backgroundImage:
                   drawImage(_imageBytes ?? '') as ImageProvider<Object>,
             ),
           ),
           // code for uploading profile picture  using file picker
-          OutlinedButtonTheme(
-            data: OutlinedButtonThemeData(
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28)),
-                fixedSize: const Size(150, 50),
-                foregroundColor: Colors.black45,
-                // backgroundColor: Colors.blue,
-              ),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              primary: Theme.of(context).brightness == Brightness.light
+                  ? Colors.blueAccent[900]
+                  : Colors.white,
+              backgroundColor: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : const Color.fromARGB(66, 75, 74, 74),
+              side: const BorderSide(color: Colors.blueAccent),
             ),
-            child: OutlinedButton(
-              onPressed: () => _handleImageUpload(ind),
-              child: Text(
-                "Upload",
-                style: TextStyles(context).getRegularStyle(),
-              ),
-            ),
+            onPressed: () => _handleImageUpload(ind),
+            child: Responsive.isMobile(context)
+                ? Icon(Icons.upload_file_rounded)
+                : Text(
+                    "Upload",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
           ),
         ],
       ),
@@ -160,7 +160,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                   child: Text(
                     widget.formTitle ?? "",
                     style: TextStyles(context).getBoldStyle().copyWith(
-                          fontSize: 20,
+                          fontSize: Responsive.isMobile(context) ? 17 : 20,
                         ),
                   ),
                 )
@@ -327,13 +327,14 @@ class _CommonFormFieldsState extends State<CommonFormFields>
             key: formKey,
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: buildForm(),
               ),
             ),
           )
         : SingleChildScrollView(
             child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: buildForm(),
             ),
           );

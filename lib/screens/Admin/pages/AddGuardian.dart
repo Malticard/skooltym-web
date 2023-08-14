@@ -115,10 +115,13 @@ class _AddGuardianState extends State<AddGuardian> {
   @override
   Widget build(BuildContext context) {
     context.read<MultiStudentsController>().getMultiStudents();
+    Size size = MediaQuery.of(context).size;
     return Dialog(
       child: SizedBox(
-        width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 1.79,
+        width: Responsive.isDesktop(context) ? size.width / 3 : size.width,
+        height: Responsive.isMobile(context)
+            ? size.height * 1.25
+            : size.width / 1.5,
         child: Padding(
           padding: padding,
           child: StreamBuilder(

@@ -14,7 +14,7 @@ class ViewStudents extends StatefulWidget {
 
 class _ViewStudentsState extends State<ViewStudents> {
   List<String> staffs = [
-    "Student's Image",
+    "Student's Photo",
     "Student Name",
     "Class",
     "Gender",
@@ -83,7 +83,7 @@ class _ViewStudentsState extends State<ViewStudents> {
     context
         .read<FirstTimeUserController>()
         .getFirstTimeUser(context.read<SchoolController>().state['role']);
-
+    Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Expanded(
@@ -144,13 +144,13 @@ class _ViewStudentsState extends State<ViewStudents> {
                                 builder: (context) {
                                   return Dialog(
                                     child: SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          3.5,
-                                      height:
-                                          MediaQuery.of(context).size.width /
-                                              2.2,
-                                      child: const SingleChildScrollView(
-                                          child: AddStudent()),
+                                      width: Responsive.isDesktop(context)
+                                          ? size.width / 3
+                                          : size.width,
+                                      height: Responsive.isMobile(context)
+                                          ? size.height * 1.25
+                                          : size.width / 1.5,
+                                      child: AddStudent(),
                                     ),
                                   );
                                 });

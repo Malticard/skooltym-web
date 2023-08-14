@@ -33,15 +33,20 @@ class _UpdateClassState extends State<UpdateClass> {
 
   @override
   Widget build(BuildContext context) {
-       Provider.of<StreamsController>(context,listen: true).getStreams(context.read<SchoolController>().state['school']);
+    Size size = MediaQuery.of(context).size;
+    Provider.of<StreamsController>(context, listen: true)
+        .getStreams(context.read<SchoolController>().state['school']);
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.white
           : Theme.of(context).canvasColor,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 3.4,
+        width: Responsive.isMobile(context) ? size.width : size.width / 3,
+        height: Responsive.isMobile(context)
+            ? size.width / 1.125
+            : size.width / 3.5,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
               padding: const EdgeInsets.all(18.0),
@@ -49,7 +54,6 @@ class _UpdateClassState extends State<UpdateClass> {
                   style: TextStyles(context).getTitleStyle()),
             ),
             CommonTextField(
-              
               icon: Icons.home_work_outlined,
               controller: _classController,
               hintText: "e.g Grade 2",
@@ -68,8 +72,8 @@ class _UpdateClassState extends State<UpdateClass> {
               // controller: _controllers[index],
               titleText: "Class Name",
             ),
-             Consumer<StreamsController>(
-              builder: (context, s,x) {
+            Consumer<StreamsController>(
+              builder: (context, s, x) {
                 return CommonMenuWidget(
                   // fieldColor: Colors.transparent,
                   onChange: (v) {
@@ -82,13 +86,8 @@ class _UpdateClassState extends State<UpdateClass> {
                   hint: "Attach streams",
                   padding: const EdgeInsets.only(
                       top: 10, bottom: 10, right: 10, left: 10),
-                  data: 
-                      s.streams
-                      .map((e) => e.id)
-                      .toList(),
-                  dropdownList:s.streams
-                      .map((e) => e.streamName)
-                      .toList(),
+                  data: s.streams.map((e) => e.id).toList(),
+                  dropdownList: s.streams.map((e) => e.streamName).toList(),
                 );
               },
             ),

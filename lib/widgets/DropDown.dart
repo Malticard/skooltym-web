@@ -36,7 +36,7 @@ class _DropDownWidgetState extends State<DropDownWidget> {
         children: [
           Padding(
             padding:
-                const EdgeInsets.only(left: 18, right: 18, top: 4, bottom: 4),
+                const EdgeInsets.only(left: 18, right: 18, top: 2, bottom: 2),
             child: RichText(
               text: TextSpan(
                 text: "${widget.titleText}   ",
@@ -55,15 +55,17 @@ class _DropDownWidgetState extends State<DropDownWidget> {
           ),
           SizedBox(
             width: size.width,
-            height: size.height / 16,
+            height: Responsive.isMobile(context)
+                ? size.width / 10
+                : size.width / 26,
             // height: 48,
             child: Card(
-               shadowColor:Colors.black26.withOpacity(
-              Theme.of(context).brightness == Brightness.dark ? 0.6 : 0.5,
-            ),
+              shadowColor: Colors.black26.withOpacity(
+                Theme.of(context).brightness == Brightness.dark ? 0.6 : 0.5,
+              ),
               color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.white12
-                          : Colors.black12,
+                  ? Colors.grey[200]
+                  : Colors.black12,
               borderOnForeground: false,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),

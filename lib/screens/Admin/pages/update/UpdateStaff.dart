@@ -89,6 +89,7 @@ class _UpdateStaffState extends State<UpdateStaff> {
           child: CommonFormFields(
             initialPic: widget.staff.staffProfilePic,
             padding: padding,
+            formTitle: "Update Staff Details",
             formFields: formFields,
             numberOfDropDowns: 2,
             formControllers: _formControllers,

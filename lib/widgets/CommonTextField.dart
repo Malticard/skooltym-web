@@ -81,7 +81,7 @@ class CommonTextField extends StatelessWidget {
                 right: 16,
               ),
               child: SizedBox(
-                height: 45,
+                height: Responsive.isMobile(context) ? 37 : 45,
                 child: Center(
                   child: TextFormField(
                     readOnly: readOnly,

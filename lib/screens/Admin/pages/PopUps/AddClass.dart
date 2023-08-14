@@ -31,8 +31,9 @@ class _AddClassState extends State<AddClass> {
     timer?.cancel();
     super.dispose();
   }
-int _page = 1;
-int limit = 120;
+
+  int _page = 1;
+  int limit = 120;
   void fetchRealTimeData() async {
     try {
       // Add a check to see if the widget is still mounted before updating the state
@@ -47,7 +48,9 @@ int limit = 120;
         // Add a check to see if the widget is still mounted before updating the state
         if (mounted) {
           var streams = await fetchStreams(
-              context.read<SchoolController>().state['school'],page: _page,limit: limit);
+              context.read<SchoolController>().state['school'],
+              page: _page,
+              limit: limit);
           _streamController.add(streams);
         }
       });
@@ -58,15 +61,19 @@ int limit = 120;
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Dialog(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.white
           : Theme.of(context).canvasColor,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 3,
+        width: Responsive.isMobile(context) ? size.width : size.width / 3,
+        height: Responsive.isMobile(context)
+            ? size.width / 1.125
+            : size.width / 3.5,
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -117,7 +124,7 @@ int limit = 120;
               ),
               const SizedBox(height: defaultPadding),
               CommonButton(
-                  buttonText: "Save class",
+                  buttonText: "Save a class",
                   padding: const EdgeInsets.only(
                       top: 5, bottom: 5, right: 15, left: 15),
                   onTap: () {

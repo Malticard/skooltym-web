@@ -7,7 +7,7 @@ class TextStyles {
 
   TextStyle getTitleStyle() {
     return GoogleFonts.aBeeZee(
-      fontSize: 24,
+      fontSize: Responsive.isMobile(context) ? 18 : 24,
       fontWeight: FontWeight.w600,
       color: Theme.of(context).brightness == Brightness.dark
           ? Colors.white
@@ -17,7 +17,7 @@ class TextStyles {
 
   TextStyle getDescriptionStyle() {
     return GoogleFonts.aBeeZee(
-      fontSize: 15,
+      fontSize: Responsive.isMobile(context) ? 14 : 16,
       fontWeight: FontWeight.w400,
       color: Theme.of(context).brightness == Brightness.dark
           ? Colors.white54
@@ -27,7 +27,7 @@ class TextStyles {
 
   TextStyle getRegularStyle() {
     return GoogleFonts.aBeeZee(
-      fontSize: 15,
+      fontSize: Responsive.isMobile(context) ? 14 : 16,
       fontWeight: FontWeight.w400,
       color: Theme.of(context).brightness == Brightness.dark
           ? Colors.white
@@ -37,7 +37,7 @@ class TextStyles {
 
   TextStyle getBoldStyle() {
     return GoogleFonts.aBeeZee(
-      fontSize: 16,
+      fontSize: Responsive.isMobile(context) ? 14 : 16,
       fontWeight: FontWeight.bold,
       color: Theme.of(context).brightness == Brightness.dark
           ? Colors.white

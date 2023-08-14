@@ -65,14 +65,16 @@ class _AddStaffState extends State<AddStaff> {
   List<String> errorFields = List.generate(formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
-    // 0756598425
+    Size size = MediaQuery.of(context).size;
     return Dialog(
       child: SizedBox(
-        width: MediaQuery.of(context).size.width / 3,
-        height: MediaQuery.of(context).size.width / 2.2,
+        width: Responsive.isDesktop(context) ? size.width / 3 : size.width,
+        height:
+            Responsive.isMobile(context) ? size.height / 1.3 : size.width / 2.3,
         child: Padding(
           padding: padding,
           child: CommonFormFields(
+            formTitle: "Add a new Staff member",
             padding: padding,
             formFields: formFields,
             numberOfDropDowns: 2,
@@ -85,7 +87,7 @@ class _AddStaffState extends State<AddStaff> {
                 _handleFormUpload().then((value) {
                   // debugPrint("Staff data -> ${value.reasonPhrase}");
                   if (value.statusCode == 200 || value.statusCode == 201) {
-                      Routes.popPage(context);
+                    Routes.popPage(context);
                     //  bottom msg
                     showMessage(
                       context: context,
@@ -137,13 +139,20 @@ class _AddStaffState extends State<AddStaff> {
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
     if (kIsWeb) {
-     request.files.add(MultipartFile(
-        "image", context.read<ImageUploadController>().state['image'], context.read<ImageUploadController>().state['size'],
-        filename: context.read<ImageUploadController>().state['name']));
+      request.files.add(MultipartFile(
+          "image",
+          context.read<ImageUploadController>().state['image'],
+          context.read<ImageUploadController>().state['size'],
+          filename: context.read<ImageUploadController>().state['name']));
     } else {
-    request.files.add(MultipartFile(
-        'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-        filename: uri.split("/").last));
+      request.files.add(
+        MultipartFile(
+          'image',
+          File(uri).readAsBytes().asStream(),
+          File(uri).lengthSync(),
+          filename: uri.split("/").last,
+        ),
+      );
     }
     //
     request.fields['staff_password'] = "qwerty";

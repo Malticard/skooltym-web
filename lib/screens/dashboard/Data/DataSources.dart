@@ -66,13 +66,18 @@ class StudentsDataSource extends DataTableSource {
         )),
         DataCell(
           buildActionButtons(context, () {
+            Size size = MediaQuery.of(context).size;
             showDialog(
                 context: context,
                 builder: (context) {
                   return Dialog(
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 3.5,
-                      height: MediaQuery.of(context).size.width / 1.3,
+                      width: Responsive.isDesktop(context)
+                          ? size.width
+                          : size.width,
+                      height: Responsive.isMobile(context)
+                          ? size.height * 1.25
+                          : size.width / 1.5,
                       child: UpdateStudent(studentModel: studentData),
                     ),
                   );
@@ -235,11 +240,11 @@ class GuardianDataSource extends DataTableSource {
           ),
         )),
         DataCell(Text(
-          guardianData.guardianEmail,
+          guardianData.guardianContact.toString(),
           style: TextStyles(context).getRegularStyle(),
         )),
         DataCell(Text(
-          guardianData.guardianGender,
+          guardianData.relationship,
           style: TextStyles(context).getRegularStyle(),
         )),
         DataCell(buildActionButtons(
@@ -467,13 +472,18 @@ class StaffDataSource extends DataTableSource {
           style: TextStyles(context).getRegularStyle(),
         )),
         DataCell(buildActionButtons(context, () {
+          Size size = MediaQuery.of(context).size;
           showDialog(
               context: context,
               builder: (context) {
                 return Dialog(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: MediaQuery.of(context).size.width / 2.3,
+                    width: Responsive.isDesktop(context)
+                        ? size.width / 3
+                        : size.width,
+                    height: Responsive.isMobile(context)
+                        ? size.height / 1.3
+                        : size.width / 2.35,
                     child: UpdateStaff(staff: staffData),
                   ),
                 );

@@ -16,14 +16,19 @@ class _CommonDeleteState extends State<CommonDelete> {
     return Dialog(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 4,
-        height: MediaQuery.of(context).size.width / 10,
+        height: Responsive.isMobile(context)
+            ? MediaQuery.of(context).size.width / 2.7
+            : MediaQuery.of(context).size.width / 10,
         child: Column(
           children: [
             const Space(space: 0.02),
-            Center(
-              child: Text(
-                "Are you sure you want to delete ${widget.title}",
-                style: TextStyles(context).getRegularStyle(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  "Are you sure you want to delete ${widget.title}",
+                  style: TextStyles(context).getRegularStyle(),
+                ),
               ),
             ),
             const Space(space: 0.032),

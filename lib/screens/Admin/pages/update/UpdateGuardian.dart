@@ -110,7 +110,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
         .getStudents(context.read<SchoolController>().state['school']);
     context.read<MultiStudentsController>().getMultiStudents();
 
-    // Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Dialog(
       child: Padding(
         padding: padding,
@@ -122,8 +122,10 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
           },
           builder: (context, state) {
             return SizedBox(
-              width: MediaQuery.of(context).size.width / 3,
-              height: MediaQuery.of(context).size.width / 1.5,
+              width: Responsive.isDesktop(context) ? size.width : size.width,
+              height: Responsive.isMobile(context)
+                  ? size.height * 1.25
+                  : size.width / 1.5,
               child: BlocBuilder<FetchStudentsController, List<Student>>(
                 builder: (context, students) {
                   return CommonFormFields(

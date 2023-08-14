@@ -1,7 +1,6 @@
 // ignore_for_file: invalid_return_type_for_catch_error, unnecessary_null_comparison
 
 import 'dart:developer';
-import 'dart:io';
 
 import '/exports/exports.dart';
 
@@ -38,9 +37,11 @@ class _AddStudentState extends State<AddStudent> {
   void pollData() {
     fetchDashBoardData(context.read<SchoolController>().state['school'])
         .then((dashData) {
-      setState(() {
-        _dashDataController = dashData;
-      });
+      if (mounted) {
+        setState(() {
+          _dashDataController = dashData;
+        });
+      }
     });
   }
 
@@ -59,8 +60,7 @@ class _AddStudentState extends State<AddStudent> {
   @override
   Widget build(BuildContext context) {
     pollData();
-    // Provider.of<ClassController>(context, listen: true)
-    //     .getClasses(context.read<SchoolController>().state['school']);
+
 // form data
 // error fields
     List<String> errorFields = List.generate(7, (i) => '');
@@ -110,52 +110,45 @@ class _AddStudentState extends State<AddStudent> {
       }
     ];
 
-    return Column(
-      children: [
-        Text(
-          "Add Student",
-          style: TextStyles(context).getTitleStyle(),
-        ),
-        SingleChildScrollView(
-          child: CommonFormFields(
-            padding: _padding,
-            formFields: formFields ?? [],
-            formControllers: formControllers,
-            buttonText: "Save Student Details",
-            onSubmit: () {
-              if (true) {
-                showProgress(context, msg: "Adding new student...");
-                _handleStudentRegistration().then(
-                  (value) {
-                    print("Response => ${value}");
-                    if (value.statusCode == 200) {
-                      Routes.popPage(context);
-                      showMessage(
-                        context: context,
-                        type: 'success',
-                        msg: "Added new student successfully",
-                      );
-                      for (var v in formControllers) {
-                        v.clear();
-                      }
-                    } else {
-                      showMessage(
-                        msg: "Failed to add student ${value.reasonPhrase}",
-                        context: context,
-                        type: "danger",
-                      );
-                    }
-                  },
-                ).whenComplete(() {
+    return SingleChildScrollView(
+      child: CommonFormFields(
+        formTitle: "Add Student",
+        padding: _padding,
+        formFields: formFields ?? [],
+        formControllers: formControllers,
+        buttonText: "Save Student Details",
+        onSubmit: () {
+          if (true) {
+            showProgress(context, msg: "Adding new student...");
+            _handleStudentRegistration().then(
+              (value) {
+                log("Response => ${value}");
+                if (value.statusCode == 200) {
                   Routes.popPage(context);
-                });
-              }
-            },
-            errorMsgs: errorFields,
-            lists: [],
-          ),
-        ),
-      ],
+                  showMessage(
+                    context: context,
+                    type: 'success',
+                    msg: "Added new student successfully",
+                  );
+                  for (var v in formControllers) {
+                    v.clear();
+                  }
+                } else {
+                  showMessage(
+                    msg: "Failed to add student ${value.reasonPhrase}",
+                    context: context,
+                    type: "danger",
+                  );
+                }
+              },
+            ).whenComplete(() {
+              Routes.popPage(context);
+            });
+          }
+        },
+        errorMsgs: errorFields,
+        lists: [],
+      ),
     );
   }
 
