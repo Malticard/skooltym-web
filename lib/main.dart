@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/exports/exports.dart';
 import 'controllers/MenuAppController.dart';
@@ -8,7 +10,9 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer = const Observer();
   var prefs = await SharedPreferences.getInstance();
-  // prefs.clear().then((value) {});
+  // prefs.clear().then((value) {
+  //   log("Done cleaning");
+  // });
   runApp(
     MultiBlocProvider(
       providers: [
@@ -53,8 +57,6 @@ Future<void> main() async {
             builder: (context, title) {
               return MaterialApp(
                 title: "Skooltym  | $title",
-                // themeMode: ThemeMode.,
-                // debugShowCheckedModeBanner: false,
                 theme: theme,
                 initialRoute: prefs.containsKey('schoolData') == true &&
                         context.read<SchoolController>().state['role'] != null

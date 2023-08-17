@@ -1,4 +1,6 @@
 // ignore_for_file: deprecated_member_use
+import 'dart:developer';
+
 import '../../../tools/searchHelpers.dart';
 import '/models/Guardians.dart';
 
@@ -172,13 +174,13 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                       const Text("Continue to dashboard"),
                       TextButton(
                         onPressed: () {
+                          log("User role : ${context.read<SchoolController>().state['role']}");
                           context.read<WidgetController>().pushWidget(0);
                           context.read<TitleController>().setTitle("Dashboard",
                               context.read<SchoolController>().state['role']);
                           context.read<SideBarController>().changeSelected(0,
                               context.read<SchoolController>().state['role']);
-                          context
-                              .read<FirstTimeUserController>()
+                          BlocProvider.of<FirstTimeUserController>(context)
                               .setFirstTimeUser(
                                   false,
                                   context

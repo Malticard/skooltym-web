@@ -12,12 +12,10 @@ class RateSlider extends StatefulWidget {
 }
 
 class _RateSliderState extends State<RateSlider> {
-    bool switcher = true;
+  bool switcher = true;
+  final textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-  final textController = TextEditingController(text: context
-                          .read<OvertimeRateController>().state.toString());
-
     return Scaffold(
       body: BlocBuilder<OvertimeRateController, int>(
         builder: (context, state) {
@@ -27,7 +25,9 @@ class _RateSliderState extends State<RateSlider> {
             children: [
               Text(
                 "Set Overtime rate",
-                style: TextStyles(context).getRegularStyle().copyWith(fontSize:17),
+                style: TextStyles(context)
+                    .getRegularStyle()
+                    .copyWith(fontSize: 17),
               ),
               const Space(space: 0.03),
               Padding(
@@ -48,7 +48,7 @@ class _RateSliderState extends State<RateSlider> {
                           .setOvertimeRate(v.toInt());
                     }),
               ),
-                   const Space(space: 0.03),
+              const Space(space: 0.03),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,7 +71,8 @@ class _RateSliderState extends State<RateSlider> {
                         onChanged: (p0) {
                           context
                               .read<OvertimeRateController>()
-                              .setOvertimeRate(int.parse(p0 == ""?"0":valueLimit(p0, "100000")));
+                              .setOvertimeRate(int.parse(
+                                  p0 == "" ? "0" : valueLimit(p0, "100000")));
                         },
                       ),
                     ),

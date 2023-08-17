@@ -52,7 +52,9 @@ class _DashboardState extends State<Dashboard> {
         const MyFiles(),
         const SizedBox(height: defaultPadding),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.5,
+          height: Responsive.isMobile(context)
+              ? MediaQuery.of(context).size.height * 0.45
+              : MediaQuery.of(context).size.height * 0.6,
           child: BlocBuilder<SchoolController, Map<String, dynamic>>(
             builder: (context, school) {
               return Column(
@@ -68,17 +70,19 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   if (school['role'] == 'Admin')
                     Expanded(
+                      flex: 5,
                       child: StreamBuilder(
                         stream: _dashDataController.stream,
                         builder: (context, snapshot) {
                           var dashClasses = snapshot.data ?? [];
                           return !snapshot.hasData
                               ? Loader(text: "Classes data..")
-                              : snapshot.data!.isEmpty? NoDataWidget(text: "No classes available",): SingleChildScrollView(
-                                  child: SizedBox(
-                                    height:Responsive.isMobile(context) ?  MediaQuery.of(context).size.width / 2 :MediaQuery.of(context).size.height,
-                                    child: GridView.builder(
-                                      shrinkWrap: true,
+                              : snapshot.data!.isEmpty
+                                  ? NoDataWidget(
+                                      text: "No classes available",
+                                    )
+                                  : GridView.builder(
+                                      // shrinkWrap: true,
                                       itemCount: dashClasses.length,
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
@@ -95,9 +99,7 @@ class _DashboardState extends State<Dashboard> {
                                         info: dashClasses[index],
                                         classId: index,
                                       ),
-                                    ),
-                                  ),
-                                );
+                                    );
                         },
                       ),
                     ),

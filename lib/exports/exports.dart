@@ -96,7 +96,6 @@ export 'package:shared_preferences/shared_preferences.dart';
 export 'package:file_picker/file_picker.dart';
 export 'package:internet_connection_checker/internet_connection_checker.dart';
 export 'package:pinput/pinput.dart';
-export 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 // models
 export '/models/PopUpOptions.dart';
 export '/models/StaffPopUpOptions.dart';
@@ -173,10 +172,7 @@ export '/screens/Admin/pages/AddPayment.dart';
 export '/screens/Admin/pages/ViewDropOff.dart';
 export '/screens/Admin/pages/ViewPickUps.dart';
 export '/screens/Admin/pages/Classes.dart';
-export '/screens/Admin/settings/AppSettings.dart';
 export '/screens/Admin/settings/SystemSettings.dart';
-export '/screens/Admin/settings/privacy_policy.dart';
-export '/screens/Admin/settings/about.dart';
 export '/screens/dashboard/dashboard.dart';
 export '/screens/Admin/pages/Streams.dart';
 // popups
@@ -192,7 +188,6 @@ export '/screens/Admin/pages/update/UpdateGuardian.dart';
 export '/screens/Admin/pages/update/UpdateStream.dart';
 export '/screens/Admin/pages/update/UpdateClass.dart';
 // --> admin widgets
-export '/screens/Admin/widgets/PopOptions.dart';
 export '/screens/Admin/widgets/IntervalSlider.dart';
 export '/screens/Admin/widgets/RateSlider.dart';
 export '/screens/Admin/widgets/PickUpAllowanceSlider.dart';

@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import '/exports/exports.dart';
+import 'CustomSearchDropDown.dart';
 
 class CommonMenuWidget extends StatefulWidget {
   final Color? fieldColor;
   final String fieldText;
+  final String fieldHeaderTitle;
   final bool enableBorder;
   final List<dynamic> data;
   final List<dynamic> dropdownList;
@@ -18,7 +20,10 @@ class CommonMenuWidget extends StatefulWidget {
       this.enableBorder = false,
       required this.onChange,
       required this.hint,
-      required this.padding, required this.data, required this.dropdownList})
+      required this.padding,
+      required this.data,
+      required this.dropdownList,
+      required this.fieldHeaderTitle})
       : super(key: key);
 
   @override
@@ -62,23 +67,36 @@ class _CommonMenuWidgetState extends State<CommonMenuWidget> {
               padding: const EdgeInsets.only(
                 left: 16,
                 right: 16,
-                top: 5,bottom: 5,
+                top: 5,
+                bottom: 5,
               ),
               child: CustomSearchableDropDown(
                 items: widget.data,
                 label: widget.hint,
+                menuPadding: Responsive.isMobile(context)
+                    ? EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.width / 3,
+                        top: MediaQuery.of(context).size.width / 3,
+                        left: 20,
+                        right: 20)
+                    : EdgeInsets.all(150).copyWith(right: 180, left: 180),
                 multiSelectTag: 'Names',
                 multiSelectValuesAsWidget: true,
                 multiSelect: true,
-                menuMode:false,
+
                 prefixIcon: Padding(
-                  padding:  const EdgeInsets.all(0.0),
-                  child: Icon(Icons.search,color: Colors.grey.shade300,),
+                  padding: const EdgeInsets.all(0.0),
+                  child: Icon(
+                    Icons.search,
+                    color: Colors.grey.shade300,
+                  ),
                 ),
                 dropDownMenuItems: widget.dropdownList,
+                dropdownItemStyle: TextStyles(context).getRegularStyle(),
                 onChanged: widget.onChange, //(value){
                 decoration:
-                    BoxDecoration(border: Border.all(color: Colors.white54)),
+                    BoxDecoration(border: Border.all(color: Colors.black)),
+                title: widget.fieldHeaderTitle,
               ),
             ),
           ),

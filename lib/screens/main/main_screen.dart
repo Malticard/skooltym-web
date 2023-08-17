@@ -36,9 +36,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // app theme statecr
+    // app theme state
     context.read<ThemeController>().getTheme();
-    // retrive session state
+    // retrieve session state
     BlocProvider.of<SchoolController>(context, listen: false).getSchoolData();
     BlocProvider.of<FirstTimeUserController>(context)
         .getFirstTimeUser(context.read<SchoolController>().state['role']);

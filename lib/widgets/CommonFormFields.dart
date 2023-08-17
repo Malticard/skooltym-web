@@ -2,6 +2,8 @@
 
 // import 'package:image_picker_for_web/image_picker_for_web.dart';
 
+import 'dart:developer';
+
 import 'package:image_picker/image_picker.dart';
 
 import '/exports/exports.dart';
@@ -13,6 +15,7 @@ class CommonFormFields extends StatefulWidget {
   final List<String> errorMsgs;
   final List<TextEditingController> formControllers;
   final List<dynamic>? lists;
+  final String menuTitle;
   final EdgeInsets titlePadding;
   final void Function(dynamic)? onDropDownValue;
   final List<dynamic>? dropdownLists;
@@ -42,7 +45,7 @@ class CommonFormFields extends StatefulWidget {
       this.onSelectedValue,
       this.initialPic,
       this.selectedData,
-      this.titlePadding = const EdgeInsets.all(20)});
+      this.titlePadding = const EdgeInsets.all(20),  this.menuTitle = ""});
 
   @override
   State<CommonFormFields> createState() => _CommonFormFieldsState();
@@ -242,7 +245,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                     padding: widget.padding,
                                     onChange: widget.onDropDownValue ??
                                         (v) {
-                                          print("Selected => $v");
+                                          log("Selected => $v");
                                           if (v != null) {
                                             Provider.of<MainController>(context,
                                                     listen: false)
@@ -256,7 +259,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                           }
                                         },
                                     data: widget.lists ?? [],
-                                    dropdownList: widget.dropdownLists ?? [],
+                                    dropdownList: widget.dropdownLists ?? [], fieldHeaderTitle: widget.menuTitle,
                                   ),
                                 )
                               :
@@ -305,13 +308,6 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                 onTap: () {
                   if (formKey.currentState!.validate() == true) {
                     widget.onSubmit!();
-
-                    List<String> e = widget.errorMsgs
-                        .where((element) => element.isEmpty)
-                        .toList();
-                    //  this checks if the provided fields are empty hence no errors raised for empty fields
-                    // if (e.isEmpty) {
-                    // }
                   }
                 },
                 padding: widget.padding,

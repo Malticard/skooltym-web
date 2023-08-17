@@ -15,8 +15,8 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
   bool switcher = true;
   @override
   Widget build(BuildContext context) {
-    var textController = TextEditingController(text:context
-                          .read<DropOffAllowanceController>().state.toString());
+    var textController = TextEditingController(
+        text: context.read<DropOffAllowanceController>().state.toString());
     return Scaffold(
       body: BlocBuilder<DropOffAllowanceController, int>(
         builder: (context, state) {
@@ -26,7 +26,9 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
             children: [
               Text(
                 "Set drop off time allowance",
-                style: TextStyles(context).getRegularStyle().copyWith(fontSize: 16),
+                style: TextStyles(context)
+                    .getRegularStyle()
+                    .copyWith(fontSize: 16),
               ),
               const Space(space: 0.03),
               Padding(
@@ -36,7 +38,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                     min: 0.0,
                     max: 60,
                     value: state > 60 ? 60 : state,
-                    stepSize: 5,
+                    stepSize: 1,
                     // showTicks: true,
                     showLabels: true,
                     enableTooltip: true,
@@ -50,7 +52,7 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                       });
                     }),
               ),
-                const Space(space: 0.03),
+              const Space(space: 0.03),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,7 +75,8 @@ class _DropOffAllowanceSliderState extends State<DropOffAllowanceSlider> {
                         onChanged: (p0) {
                           context
                               .read<DropOffAllowanceController>()
-                              .setDropOffAllowanceTime(int.parse(p0 == ""?"0":valueLimit(p0, "60")));
+                              .setDropOffAllowanceTime(int.parse(
+                                  p0 == "" ? "0" : valueLimit(p0, "60")));
                         },
                       ),
                     ),

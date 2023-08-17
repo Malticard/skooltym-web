@@ -150,7 +150,7 @@ class _AddStaffState extends State<AddStaff> {
           'image',
           File(uri).readAsBytes().asStream(),
           File(uri).lengthSync(),
-          filename: uri.split("/").last,
+          filename: uri.split("/").last.trim(),
         ),
       );
     }

@@ -46,8 +46,8 @@ class CommonDropDown extends StatelessWidget {
                 borderRadius: BorderRadius.circular(radius),
                 side: BorderSide(
                   color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.black12.withOpacity(0.6)
-                      : Colors.black12.withOpacity(0.12),
+                      ? Colors.black45.withOpacity(0.6)
+                      : Colors.black.withOpacity(0.12),
                 ),
               ),
               color: Theme.of(context).brightness == Brightness.dark
@@ -63,7 +63,7 @@ class CommonDropDown extends StatelessWidget {
                     padding: MaterialStateProperty.all(
                         EdgeInsets.only(left: 24, right: 24)),
                     fixedSize: MaterialStateProperty.all(
-                      Size.fromWidth(MediaQuery.of(context).size.width /3),
+                      Size.fromWidth(MediaQuery.of(context).size.width / 3),
                     ),
                   ),
                 ),

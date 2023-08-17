@@ -23,7 +23,7 @@ class _LoaderState extends State<Loader> with TickerProviderStateMixin {
 
     controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 40),
+      duration: const Duration(milliseconds: 900),
     )
       ..addListener(() {
         setState(() {});

@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import '/exports/exports.dart';
 
 class UpdateStaff extends StatefulWidget {
@@ -87,48 +89,55 @@ class _UpdateStaffState extends State<UpdateStaff> {
         return Padding(
           padding: padding,
           child: CommonFormFields(
-            initialPic: widget.staff.staffProfilePic,
-            padding: padding,
-            formTitle: "Update Staff Details",
-            formFields: formFields,
-            numberOfDropDowns: 2,
-            formControllers: _formControllers,
-            buttonText: "Submit Staff Details",
-            errorMsgs: errorFields,
-            onSubmit: () {
-              if (validateEmail(_formControllers[1].text, context) != false) {
-                if (_formControllers[0].text.trim().split(" ")[1] == '') {
-                  showMessage(
-                      context: context, msg: "Staff last name is required");
-                } else {
-                  showProgress(context, msg: "Updating staff in progress");
-                  _handleFormUpload(widget.staff.id).then((value) {
-                    // debugPrint("response code -> ${value.statusCode}");
-                    // debugPrint("Staff data -> ${value.reasonPhrase}");
-                    if (value.statusCode == 200 || value.statusCode == 201) {
+              initialPic: widget.staff.staffProfilePic,
+              padding: padding,
+              formTitle: "Update Staff Details",
+              formFields: formFields,
+              numberOfDropDowns: 2,
+              formControllers: _formControllers,
+              buttonText: "Submit Staff Details",
+              errorMsgs: errorFields,
+              onSubmit: () {
+                if (validateEmail(_formControllers[1].text, context) != false) {
+                  log("Email verified");
+                  if (_formControllers[0].text.split(" ").last.isEmpty) {
+                    log("Staff last name is required");
+                    setState(() {
+                      errorFields[0] = "Staff last name is required";
+                    });
+
+                    // Routes.popPage(context);
+                    showMessage(
+                        context: context,
+                        msg: "Staff last name is required",
+                        type: 'warning');
+                  } else {
+                    showProgress(context, msg: "Updating staff in progress");
+                    _handleFormUpload(widget.staff.id).then((value) {
+                      if (value.statusCode == 200 || value.statusCode == 201) {
+                        Routes.popPage(context);
+                        //  bottom msg
+                        showMessage(
+                          context: context,
+                          type: 'success',
+                          msg: "Updated staff successfully",
+                        );
+                        //  end of bottom msg
+                      } else {
+                        showProgress(context,
+                            msg: "Updating staff in progress");
+                        showMessage(
+                          context: context,
+                          type: 'danger',
+                          msg: "Error ${value.reasonPhrase}",
+                        );
+                      }
+                    }).whenComplete(() {
                       Routes.popPage(context);
-                      //  bottom msg
-                      showMessage(
-                        context: context,
-                        type: 'success',
-                        msg: "Updated staff successfully",
-                      );
-                      //  end of bottom msg
-                    } else {
-                      showProgress(context, msg: "Updating staff in progress");
-                      showMessage(
-                        context: context,
-                        type: 'danger',
-                        msg: "Error ${value.reasonPhrase}",
-                      );
-                    }
-                  }).whenComplete(() {
-                    Routes.popPage(context);
-                  });
+                    });
+                  }
                 }
-              }
-            },
-          ),
+              }),
         );
       },
     );
@@ -143,10 +152,10 @@ class _UpdateStaffState extends State<UpdateStaff> {
     request.fields['staff_school'] =
         "${context.read<SchoolController>().state['school']}";
     request.fields['staff_fname'] =
-        _formControllers[0].text.trim().split(" ")[0];
+        _formControllers[0].text.trim().split(" ")[0].trim();
     request.fields['staff_lname'] =
-        _formControllers[0].text.trim().split(" ")[1];
-    request.fields['staff_contact'] = _formControllers[2].text;
+        _formControllers[0].text.trim().split(" ")[1].trim();
+    request.fields['staff_contact'] = _formControllers[2].text.trim();
     request.fields['staff_email'] = _formControllers[1].text.trim();
     // --------------------------- form files ---------------------------
     request.fields['staff_role'] =
@@ -156,7 +165,7 @@ class _UpdateStaffState extends State<UpdateStaff> {
     if (kIsWeb) {
       request.files.add(MultipartFile(
           "image", imageData['image'], imageData['size'],
-          filename: imageData['name']));
+          filename: imageData['name'].toString().trim()));
     } else {
       if (uri.isNotEmpty) {
         request.files.add(MultipartFile(

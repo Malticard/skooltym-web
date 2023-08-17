@@ -1,3 +1,5 @@
+import 'package:admin/extensions/FormatString.dart';
+
 import '/exports/exports.dart';
 
 class MyFiles extends StatelessWidget {
@@ -53,10 +55,10 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
   StreamController<List<Map<String, dynamic>>> _dashboardController =
       StreamController<List<Map<String, dynamic>>>();
   void fetchRealTimeData() async {
-   String schoolId = context.read<SchoolController>().state['school'];
-   String role = context.read<SchoolController>().state['role'];
+    String schoolId = context.read<SchoolController>().state['school'];
+    String role = context.read<SchoolController>().state['role'];
     if (mounted) {
-      var dashboardData = await fetchDashboardMetaData(schoolId,role);
+      var dashboardData = await fetchDashboardMetaData(schoolId, role);
       _dashboardController.add(dashboardData);
     }
 
@@ -64,7 +66,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
     Timer.periodic(Duration(seconds: 2), (timer) async {
       this.timer = timer;
       if (mounted) {
-        var dashboardData = await fetchDashboardMetaData(schoolId,role);
+        var dashboardData = await fetchDashboardMetaData(schoolId, role);
         _dashboardController.add(dashboardData);
       }
     });
@@ -72,12 +74,11 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
 
   @override
   void dispose() {
-     timer?.cancel();
+    timer?.cancel();
     if (_dashboardController.hasListener) {
       _dashboardController.close();
     }
     super.dispose();
-   
   }
 
   @override
@@ -104,12 +105,34 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
                   mainAxisSpacing: defaultPadding,
                   childAspectRatio: widget.childAspectRatio,
                 ),
-                itemBuilder: (context, index) => DashboardCard(
+                itemBuilder: (context, index) => TapEffect(
+                  onClick: () {
+                    String role =
+                        context.read<SchoolController>().state['role'];
+                    context.read<TitleController>().setTitle(
+                        cards[index]['label'].toString().capitalize, role);
+                    // update side bar
+                    context
+                        .read<SideBarController>()
+                        .changeSelected(cards[index]['page'], role);
+                    if (role == "Admin") {
+                      context
+                          .read<WidgetController>()
+                          .pushWidget(cards[index]['page']);
+                    } else {
+                      context
+                          .read<FinanceViewController>()
+                          .pushWidget(cards[index]['page']);
+                    }
+                  },
+                  child: DashboardCard(
                     label: cards[index]['label'],
                     value: cards[index]['value'],
                     icon: cards[index]['icon'],
                     color: cards[index]['color'],
-                    last_updated: ""), //FileInfoCard(info: cards[index]),
+                    last_updated: "",
+                  ),
+                ),
               );
       },
     );

@@ -73,7 +73,7 @@ class StudentsDataSource extends DataTableSource {
                   return Dialog(
                     child: SizedBox(
                       width: Responsive.isDesktop(context)
-                          ? size.width
+                          ? size.width / 3
                           : size.width,
                       height: Responsive.isMobile(context)
                           ? size.height * 1.25
@@ -483,7 +483,7 @@ class StaffDataSource extends DataTableSource {
                         : size.width,
                     height: Responsive.isMobile(context)
                         ? size.height / 1.3
-                        : size.width / 2.35,
+                        : size.width / 2.15,
                     child: UpdateStaff(staff: staffData),
                   ),
                 );

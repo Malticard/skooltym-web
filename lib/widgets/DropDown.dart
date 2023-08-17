@@ -42,13 +42,13 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                 text: "${widget.titleText}   ",
                 style: TextStyles(context).getDescriptionStyle(),
                 children: [
-                  WidgetSpan(
-                    child: Icon(
-                      widget.mustIcon,
-                      size: 12,
-                      color: Colors.red,
-                    ),
-                  )
+                  // WidgetSpan(
+                  //   child: Icon(
+                  //     widget.mustIcon,
+                  //     size: 12,
+                  //     color: Colors.red,
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -64,9 +64,9 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                 Theme.of(context).brightness == Brightness.dark ? 0.6 : 0.5,
               ),
               color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.grey[200]
+                  ? Colors.white
                   : Colors.black12,
-              borderOnForeground: false,
+              borderOnForeground: true,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
               ),

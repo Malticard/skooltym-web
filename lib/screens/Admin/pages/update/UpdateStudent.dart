@@ -1,5 +1,7 @@
 // ignore_for_file: invalid_return_type_for_catch_error, unnecessary_null_comparison
 
+import 'dart:developer';
+
 import '../../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
@@ -14,8 +16,9 @@ class UpdateStudent extends StatefulWidget {
 class _UpdateStudentState extends State<UpdateStudent> {
   List<TextEditingController> _formControllers = <TextEditingController>[];
   List<Map<String, dynamic>>? formFields;
-  List<String>? _streams;
+  List<String> _streams = [];
   List<DashboardModel> _dashDataController = [];
+  Timer? _timer;
   @override
   void initState() {
     super.initState();
@@ -25,10 +28,11 @@ class _UpdateStudentState extends State<UpdateStudent> {
       TextEditingController(text: widget.studentModel.otherName),
       TextEditingController(text: ""),
       TextEditingController(text: widget.studentModel.studentGender),
-      TextEditingController(text: widget.studentModel.resultClass.className),
-      TextEditingController(text: widget.studentModel.stream.streamName),
+      TextEditingController(text: ""),
+      TextEditingController(text: ""),
     ];
     pollData();
+    getStreams();
   }
 
   void pollData() {
@@ -43,18 +47,22 @@ class _UpdateStudentState extends State<UpdateStudent> {
   }
 
   void getStreams() {
-    if (_formControllers[5].text.isNotEmpty) {
-      if (mounted) {
-        setState(() {
-          _streams = _dashDataController
-              .where((element) => element.className == _formControllers[5].text)
-              .first
-              .classStreams
-              .map((e) => e.streamName)
-              .toList();
-        });
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = timer;
+      if (_formControllers[5].text.isNotEmpty) {
+        if (mounted) {
+          setState(() {
+            _streams = _dashDataController
+                .where(
+                    (element) => element.className == _formControllers[5].text)
+                .first
+                .classStreams
+                .map((e) => e.streamName)
+                .toList();
+          });
+        }
       }
-    }
+    });
   }
 
   Map<String, dynamic> imageData = {};
@@ -64,11 +72,14 @@ class _UpdateStudentState extends State<UpdateStudent> {
 // form key
   final formKey = GlobalKey<FormState>();
   // error fields
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
-    pollData();
-    getStreams();
     List<String> errorFields = List.generate(7, (i) => '');
 // form data
     formFields = [
@@ -114,7 +125,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
         "hint": "e.g North",
         "data": [
           "Select stream",
-          ..._streams ?? [],
+          ..._streams!,
         ],
         'icon': Icons.home_work_outlined
       }
@@ -170,22 +181,21 @@ class _UpdateStudentState extends State<UpdateStudent> {
   }
 
   Future<StreamedResponse> _handleStudentRegistration() async {
-    String uri = _formControllers[3].text;
-
+    String uri = _formControllers[3].text.trim();
     var request = MultipartRequest(
         'POST', Uri.parse(AppUrls.updateStudent + widget.studentModel.id));
     debugPrint("${request.headers}");
     //  ============================== student details ============================
     request.fields['school'] =
         "${context.read<SchoolController>().state['school']}";
-    request.fields['student_fname'] =
-        _formControllers[0].text.trim().split(" ").first;
-    request.fields['student_lname'] =
-        _formControllers[1].text.trim().split(" ").last;
+    request.fields['student_fname'] = _formControllers[0].text.trim();
+    request.fields['student_lname'] = _formControllers[1].text.trim();
     request.fields['username'] =
-        "${_formControllers[0].text.trim().split(" ").first}_256"; //_formControllers[2].text.trim();
+        "${_formControllers[0].text.trim().split(" ").first.trim()}_256"; //_formControllers[2].text.trim();
     request.fields['other_name'] = _formControllers[2].text.trim();
-    request.fields['student_class'] = _formControllers[5].text.trim();
+    request.fields['_class'] = _formControllers[5].text.trim();
+    request.fields['stream'] = _formControllers[6].text.trim();
+
     request.fields['student_gender'] = _formControllers[4].text.trim();
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
@@ -210,7 +220,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
     //  ============================== student key ============================
     var response = request.send();
     var res = await response;
-    debugPrint("Status code ${res.reasonPhrase}");
+    log("Status code ${res.reasonPhrase}");
     return response;
   }
 }

@@ -129,6 +129,7 @@ class _AddGuardianState extends State<AddGuardian> {
             builder: (context, students) {
               return CommonFormFields(
                 formTitle: "Add Guardian",
+                menuTitle: "Attach Students",
                 padding: padding,
                 formFields: _formFields,
                 lists: students.data?.results.map((e) => e.id).toList(),
@@ -176,10 +177,6 @@ class _AddGuardianState extends State<AddGuardian> {
   }
 
   Future<StreamedResponse> handleGuardian() async {
-    for (var i = 0; i < _formControllers.length; i++) {
-      log(_formControllers[i].text);
-    }
-    log("Students: ${context.read<MultiStudentsController>().state}");
     String uri = _formControllers[3].text.trim();
     var request = MultipartRequest(
       'POST',
@@ -189,7 +186,6 @@ class _AddGuardianState extends State<AddGuardian> {
       'Content-Type': 'multipart/form-data',
       'Accept': 'application/json',
     });
-    log("Done setting headers");
     request.fields['students'] =
         (context.read<MultiStudentsController>().state);
 
@@ -198,9 +194,9 @@ class _AddGuardianState extends State<AddGuardian> {
     request.fields['type'] = _formControllers[5].text.trim();
     request.fields['relationship'] = _formControllers[7].text.trim();
     request.fields['guardian_fname'] =
-        _formControllers[0].text.trim().split(" ").first;
+        _formControllers[0].text.trim().split(" ").first.trim();
     request.fields['guardian_lname'] =
-        _formControllers[0].text.trim().split(" ").last;
+        _formControllers[0].text.trim().split(" ").last.trim();
     request.fields['guardian_contact'] = _formControllers[2].text.trim();
     request.fields['guardian_email'] = _formControllers[1].text.trim();
     request.fields['guardian_gender'] = _formControllers[4].text.trim();
@@ -209,14 +205,18 @@ class _AddGuardianState extends State<AddGuardian> {
           "image",
           context.read<ImageUploadController>().state['image'],
           context.read<ImageUploadController>().state['size'],
-          filename: context.read<ImageUploadController>().state['name']));
+          filename: context
+              .read<ImageUploadController>()
+              .state['name']
+              .toString()
+              .trim()));
     } else {
       request.files.add(
         MultipartFile(
           'image',
           File(uri).readAsBytes().asStream(),
           File(uri).lengthSync(),
-          filename: uri.split("/").last,
+          filename: uri.split("/").last.trim(),
         ),
       );
     }

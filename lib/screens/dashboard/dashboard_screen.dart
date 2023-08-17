@@ -60,9 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           flex: 5,
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
-                            height: Responsive.isDesktop(context)
-                                ? MediaQuery.of(context).size.width / 2.2
-                                : MediaQuery.of(context).size.height / 1.2,
+                            height: MediaQuery.of(context).size.height / 1.18,
                             child: child,
                           ),
                         );
@@ -75,7 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 height:
-                                    MediaQuery.of(context).size.height / 1.2,
+                                    MediaQuery.of(context).size.height / 1.18,
                                 child: child,
                               ),
                             ),
@@ -83,7 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 child: SizedBox(
                                     width: MediaQuery.of(context).size.width,
                                     height: MediaQuery.of(context).size.height /
-                                        1.2,
+                                        1.16,
                                     child: child)),
                           );
                         },

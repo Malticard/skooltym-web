@@ -1,30 +1,41 @@
+import 'dart:developer';
+
 import '/exports/exports.dart';
 
-class FirstTimeUserController extends Cubit<bool>{
-  FirstTimeUserController() : super(true);
-  void setFirstTimeUser(bool checker,String role) {
-    if (role == 'Admin') {
+class FirstTimeUserController extends Cubit<bool> {
+  FirstTimeUserController() : super(_fuser);
+  static bool _fuser = true;
+  void setFirstTimeUser(bool checker, String role) {
+    if (role.trim() == 'Admin') {
       SharedPreferences.getInstance().then((value) {
-      value.setBool('firstTimeUser',checker );
-    });
+        value
+            .setBool('firstTimeUser', checker)
+            .then((value) => log("Done setting for admin"));
+
+        emit(checker);
+      });
     } else {
       SharedPreferences.getInstance().then((value) {
-      value.setBool('financeFirstTimeUser',checker );
-    });
+        value
+            .setBool('financeFirstTimeUser', checker)
+            .then((value) => log("Done setting for finance"));
+
+        emit(checker);
+      });
     }
-    
-    emit(checker);
   }
+
   // retrieve saved state
   void getFirstTimeUser(String role) {
-   if (role == 'Admin') {
-     SharedPreferences.getInstance().then((value) {
-       emit(value.getBool('firstTimeUser') ?? true);
-     });
-   } else {
+    if (role.trim() == 'Admin') {
       SharedPreferences.getInstance().then((value) {
-      emit(value.getBool('financeFirstTimeUser') ?? true);
-    });
-   }
+        log("first time user ${value.getBool('firstTimeUser')}");
+        emit(value.getBool('firstTimeUser') ?? true);
+      });
+    } else {
+      SharedPreferences.getInstance().then((value) {
+        emit(value.getBool('financeFirstTimeUser') ?? true);
+      });
+    }
   }
 }

@@ -52,7 +52,7 @@ class _StaffViewState extends State<StaffView> {
       }
       // Listen to the stream and update the UI
 
-      Timer.periodic(Duration(seconds: 1), (timer) async {
+      Timer.periodic(Duration(seconds: 2), (timer) async {
         // Title(title: ,)
         this.timer = timer;
         // Add a check to see if the widget is still mounted before updating the state

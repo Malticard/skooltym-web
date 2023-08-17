@@ -72,7 +72,7 @@ class _UpdateStreamState extends State<UpdateStream> {
                   // _stepText = [];
                   Map<String, dynamic> data = {
                     "school": context.read<SchoolController>().state['id'],
-                    "stream_name": _updateStreamController.text,
+                    "stream_name": _updateStreamController.text.trim(),
                   };
                   debugPrint("Saved data $data");
                   showProgress(context, msg: 'Updating stream in progress');

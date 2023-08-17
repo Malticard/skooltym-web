@@ -1,21 +1,19 @@
+// ignore_for_file: must_be_immutable
+
 import '/exports/exports.dart';
 
 class IntervalSlider extends StatefulWidget {
-  final void Function(dynamic)? onChange;
-  double? currentValue;
-  IntervalSlider({super.key, this.onChange, this.currentValue = 0.0});
+  const IntervalSlider({super.key});
 
   @override
   State<IntervalSlider> createState() => _IntervalSliderState();
 }
 
 class _IntervalSliderState extends State<IntervalSlider> {
- 
- bool switcher = true;
+  bool switcher = true;
+  final textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-  final textController = TextEditingController(text: context
-                          .read<IntervalController>().state.toString());
     return Scaffold(
       body: BlocBuilder<IntervalController, int>(
         builder: (context, state) {
@@ -35,7 +33,7 @@ class _IntervalSliderState extends State<IntervalSlider> {
                     min: 0,
                     max: 60,
                     value: state,
-                    stepSize: 5,
+                    stepSize: 1,
                     showTicks: true,
                     showLabels: true,
                     enableTooltip: true,
@@ -46,7 +44,7 @@ class _IntervalSliderState extends State<IntervalSlider> {
                           .computeInterval(v.toInt());
                     }),
               ),
-               const Space(space: 0.03),
+              const Space(space: 0.03),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -56,9 +54,10 @@ class _IntervalSliderState extends State<IntervalSlider> {
                     replacement: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.1,
                       child: TextField(
-                        keyboardType: TextInputType.number,
-                        maxLength: 2,
+                        keyboardType: TextInputType.text,
                         controller: textController,
+                        // maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                        maxLength: 2,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "Enter your dropoff allowance time here",
@@ -67,9 +66,8 @@ class _IntervalSliderState extends State<IntervalSlider> {
                                 .copyWith(fontSize: 15)),
                         // hintText: "Enter your pick up allowance time here",
                         onChanged: (p0) {
-                          context
-                              .read<IntervalController>()
-                              .computeInterval(int.parse(p0 == ""?"0":valueLimit(p0, "60")));
+                          context.read<IntervalController>().computeInterval(
+                              int.parse(p0 == "" ? "0" : valueLimit(p0, "60")));
                         },
                       ),
                     ),

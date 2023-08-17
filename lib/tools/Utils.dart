@@ -12,7 +12,11 @@ import '/exports/exports.dart';
 
 // login logic for the user
 void loginUser(BuildContext context, String email, String password) async {
-  // BlocProvider.of<FinanceFirstTimeController>(context).getFirstTime();
+  if (context.read<SchoolController>().state.isNotEmpty) {
+    BlocProvider.of<FirstTimeUserController>(context)
+        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+  }
+
   showProgress(context, msg: "Login in progress");
   Client()
       .post(Uri.parse(AppUrls.login),
@@ -30,12 +34,13 @@ void loginUser(BuildContext context, String email, String password) async {
       var data = jsonDecode(value.body);
       BlocProvider.of<FirstTimeUserController>(context)
           .getFirstTimeUser(data['role']);
-
+      log("Current session for first time is ${BlocProvider.of<FirstTimeUserController>(context).state}");
       if (BlocProvider.of<FirstTimeUserController>(context).state == true) {
         BlocProvider.of<TitleController>(context)
             .setTitle("Change Password", data['role']);
+        log("Changing title");
       } else {
-        log("${data['role']}");
+        log("Role ${data['role']}");
         BlocProvider.of<TitleController>(context)
             .setTitle("Dashboard", data['role']);
         BlocProvider.of<FinanceViewController>(context).showRecentWidget();
@@ -616,41 +621,34 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
   var picks = await fetchPickUps(schoolId);
   var pendingOvertimes = await fetchPendingOvertimeData(schoolId, limit: 100);
   var clearedOvertimes = await fetchClearedOvertimeData(schoolId, limit: 100);
-  // var clearedOvertimes = overtimes.results
-  //     .where((element) => element.status != "Pending")
-  //     .toList();
-  // var pendingOvertimes = overtimes.results
-  //     .where((element) => element.status == "Pending")
-  //     .toList();
-
   List<Map<String, dynamic>> dashboardData = [
     {
       "label": "DROP OFFS",
       "value": drops.totalDocuments,
       "icon": "assets/icons/004-playtime.svg",
+      "page": 7,
       'color': const Color.fromARGB(255, 106, 108, 235),
-      // "last_updated": "14:45"
     },
     {
       "label": "PICK UPS",
       "value": picks.totalDocuments,
       "icon": "assets/icons/009-student.svg",
+      "page": 8,
       'color': const Color.fromARGB(255, 181, 150, 253),
-      // "last_updated": "14:45"
     },
     {
       "label": "CLEARED OVERTIME",
       "value": clearedOvertimes.totalDocuments,
       "icon": "assets/icons/002-all.svg",
+      "page": 7,
       'color': const Color.fromARGB(255, 77, 154, 255),
-      // "last_updated": "14:45"
     },
     {
       "label": "PENDING OVERTIME",
       "value": pendingOvertimes.totalDocuments,
       "icon": "assets/icons/005-overtime.svg",
+      "page": 6,
       'color': const Color.fromARGB(255, 50, 66, 95),
-      // "last_updated": "14:45"
     },
   ];
   List<Map<String, dynamic>> financeData = [
@@ -658,16 +656,24 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
       "label": "CLEARED OVERTIME",
       "value": clearedOvertimes.totalDocuments,
       "icon": "assets/icons/005-overtime.svg",
-      'color': Color.fromARGB(255, 27, 86, 24),
-      "last_updated": "14:45"
+      'color': Color.fromARGB(255, 19, 112, 15),
+      "page": 2,
     },
     {
       "label": "PENDING OVERTIME",
       "value": pendingOvertimes.totalDocuments,
       "icon": "assets/icons/005-overtime.svg",
       'color': const Color.fromARGB(255, 50, 66, 95),
-      "last_updated": "14:45"
+      "page": 1,
     },
+    // {
+    //   "label": "PAYMENTS",
+    //   "value": pendingOvertimes.totalDocuments,
+    //   "icon": "assets/icons/005-overtime.svg",
+    //   'color': Color.fromARGB(255, 188, 180, 14),
+    //   "page": 2,
+    //   "last_updated": "14:45"
+    // }
   ];
   return role == 'Admin' ? dashboardData : financeData;
 }

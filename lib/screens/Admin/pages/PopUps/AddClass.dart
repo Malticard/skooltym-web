@@ -119,6 +119,7 @@ class _AddClassState extends State<AddClass> {
                         top: 10, bottom: 10, right: 10, left: 10),
                     data: controller.map((e) => e.id).toList(),
                     dropdownList: controller.map((e) => e.streamName).toList(),
+                    fieldHeaderTitle: "Streams",
                   );
                 },
               ),
@@ -132,7 +133,7 @@ class _AddClassState extends State<AddClass> {
                     Map<String, dynamic> data = {
                       "school":
                           context.read<SchoolController>().state['school'],
-                      "class_name": _classController.text,
+                      "class_name": _classController.text.trim(),
                       "class_streams": _selectedStreams
                     };
                     debugPrint("Saved data $data");

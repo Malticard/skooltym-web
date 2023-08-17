@@ -58,7 +58,7 @@ class _AddStreamState extends State<AddStream> {
                 // _stepText = [];
                 Map<String, dynamic> data = {
                   "school": context.read<SchoolController>().state['school'],
-                  "stream_name": _streamController.text,
+                  "stream_name": _streamController.text.trim(),
                 };
                 debugPrint("Saved data $data");
                 showProgress(context, msg: 'Adding stream in progress');

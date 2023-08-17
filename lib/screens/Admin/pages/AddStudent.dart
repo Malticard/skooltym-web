@@ -48,19 +48,18 @@ class _AddStudentState extends State<AddStudent> {
   List<String> getStreams() {
     return formControllers[5].text.isNotEmpty && mounted
         ? _dashDataController
-            .where((element) => element.className == formControllers[5].text)
+            .where((element) =>
+                element.className == formControllers[5].text.trim())
             .toList()
             .first
             .classStreams
-            .map((e) => e.streamName)
+            .map((e) => e.streamName.trim())
             .toList()
         : [];
   }
 
   @override
   Widget build(BuildContext context) {
-    pollData();
-
 // form data
 // error fields
     List<String> errorFields = List.generate(7, (i) => '');
@@ -163,11 +162,11 @@ class _AddStudentState extends State<AddStudent> {
     request.fields['school'] =
         "${context.read<SchoolController>().state['school']}";
     request.fields['student_fname'] =
-        formControllers[0].text.trim().split(" ").first;
+        formControllers[0].text.trim().split(" ").first.trim();
     request.fields['student_lname'] =
-        formControllers[1].text.trim().split(" ").last;
+        formControllers[1].text.trim().split(" ").last.trim();
     request.fields['username'] =
-        "${formControllers[0].text.trim().split(" ").first}_256"; //_formControllers[2].text.trim();
+        "${formControllers[0].text.trim().split(" ").first.trim()}_256"; //_formControllers[2].text.trim();
     request.fields['other_name'] = formControllers[2].text.trim();
     request.fields['_class'] = formControllers[5].text.trim();
     request.fields['stream'] = formControllers[6].text.trim();
@@ -179,7 +178,11 @@ class _AddStudentState extends State<AddStudent> {
           "image",
           context.read<ImageUploadController>().state['image'],
           context.read<ImageUploadController>().state['size'],
-          filename: context.read<ImageUploadController>().state['name']));
+          filename: context
+              .read<ImageUploadController>()
+              .state['name']
+              .toString()
+              .trim()));
     } else {
       request.files.add(MultipartFile(
           'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
@@ -191,7 +194,7 @@ class _AddStudentState extends State<AddStudent> {
     //  ============================== student key ============================
     var response = request.send();
     var res = await response;
-    debugPrint("Status code ${res.reasonPhrase}");
+    log("Status code ${res.reasonPhrase}");
     return response;
   }
 }

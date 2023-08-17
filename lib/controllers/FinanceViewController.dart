@@ -5,8 +5,9 @@ class FinanceViewController extends Cubit<Widget> {
   static Widget object = const ChangePassword();
   static List<Widget> pages = [
     const Dashboard(),
-    const ClearedOvertime(),
     const PendingOvertime(),
+    const ClearedOvertime(),
+    const PaymentReports(),
     const ChangePassword(),
   ];
   void pushWidget(int page) {
@@ -20,7 +21,7 @@ class FinanceViewController extends Cubit<Widget> {
   void showRecentWidget() {
     SharedPreferences.getInstance().then((value) {
       int? role = value.getInt('finance_page');
-      emit(pages[role ?? 3]);
+      emit(pages[role ?? 4]);
     });
   }
 }

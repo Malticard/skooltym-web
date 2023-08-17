@@ -34,6 +34,8 @@ class CustomDataTable extends StatefulWidget {
 }
 
 class _CustomDataTableState extends State<CustomDataTable> {
+  final _horizontalController = ScrollController();
+  final _verticalController = ScrollController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -43,6 +45,8 @@ class _CustomDataTableState extends State<CustomDataTable> {
       height: size.width / 1.4,
       child: PaginatedDataTable2(
         controller: widget.paginatorController,
+        horizontalScrollController: _horizontalController,
+        scrollController: _verticalController,
         onPageChanged: widget.onPageChanged,
         onRowsPerPageChanged: widget.onRowsPerPageChanged,
         header: widget.header,

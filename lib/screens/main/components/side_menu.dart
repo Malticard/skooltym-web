@@ -45,11 +45,11 @@ class _SideMenuState extends State<SideMenu> {
                 return Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(18.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Image.network(
                           "${AppUrls.liveImages}${school['school_badge']}",
-                          height: Responsive.isMobile(context) ? 60 : 80,
-                          width: Responsive.isMobile(context) ? 60 : 80),
+                          height: Responsive.isMobile(context) ? 40 : 60,
+                          width: Responsive.isMobile(context) ? 40 : 60),
                     ),
                     // const Space(), //
                     Text(
@@ -57,7 +57,7 @@ class _SideMenuState extends State<SideMenu> {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyles(context).getBoldStyle().copyWith(
                           color: Colors.white,
-                          fontSize: Responsive.isMobile(context) ? 17 : 19),
+                          fontSize: Responsive.isMobile(context) ? 13 : 16),
                     ),
                   ],
                 );

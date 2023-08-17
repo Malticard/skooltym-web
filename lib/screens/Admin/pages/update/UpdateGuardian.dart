@@ -122,7 +122,8 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
           },
           builder: (context, state) {
             return SizedBox(
-              width: Responsive.isDesktop(context) ? size.width : size.width,
+              width:
+                  Responsive.isDesktop(context) ? size.width / 3 : size.width,
               height: Responsive.isMobile(context)
                   ? size.height * 1.25
                   : size.width / 1.5,
@@ -132,6 +133,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
                     formTitle: "Update Guardian",
                     initialPic: widget.guardianModel.guardianProfilePic,
                     padding: padding,
+                    menuTitle: "Attach Students",
                     formFields: _formFields,
                     lists: students.map((e) => e.id).toList(),
                     dropdownLists: students.map((item) {
@@ -191,9 +193,9 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     request.fields['type'] = _formControllers[5].text.trim();
     request.fields['relationship'] = _formControllers[7].text.trim();
     request.fields['guardian_fname'] =
-        _formControllers[0].text.trim().split(" ").first;
+        _formControllers[0].text.trim().split(" ").first.trim();
     request.fields['guardian_lname'] =
-        _formControllers[0].text.trim().split(" ").last;
+        _formControllers[0].text.trim().split(" ").last.trim();
     request.fields['guardian_contact'] = _formControllers[2].text.trim();
     request.fields['guardian_email'] = _formControllers[1].text.trim();
     request.fields['guardian_gender'] = _formControllers[4].text.trim();
