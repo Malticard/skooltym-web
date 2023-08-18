@@ -107,22 +107,24 @@ class _StaffViewState extends State<StaffView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        if (staffData.isNotEmpty)
-                          Expanded(
-                            child: SearchField(
-                              onChanged: (value) {
-                                setState(() {
-                                  _query = value;
-                                });
-                              },
-                            ),
-                          ),
-                        if (!Responsive.isMobile(context))
-                          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
                         Text(
-                          "",
-                          style: Theme.of(context).textTheme.subtitle1,
+                          "Available Staff",
+                          style: TextStyles(context).getRegularStyle(),
                         ),
+                        Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                        Expanded(
+                          child: SearchField(
+                            onChanged: (value) {
+                              setState(() {
+                                _query = value;
+                              });
+                            },
+                          ),
+                        ),
+                        if (!Responsive.isMobile(context))
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                          ),
                         ElevatedButton.icon(
                           onPressed: () {
                             showDialog(

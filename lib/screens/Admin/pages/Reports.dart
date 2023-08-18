@@ -1,4 +1,6 @@
 // import 'package:flutter/src/animation/animation_controller.dart';
+import 'package:admin/tools/searchHelpers.dart';
+
 import '../../../models/OvertimeModel.dart';
 import '/exports/exports.dart';
 
@@ -12,6 +14,7 @@ class ClearedOvertime extends StatefulWidget {
 class _ClearedOvertimeState extends State<ClearedOvertime>
     with SingleTickerProviderStateMixin {
   int _currentPage = 1;
+  String? _query;
   Timer? timer;
   int rowsPerPage = 20;
   final PaginatorController _controller = PaginatorController();
@@ -35,11 +38,19 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
     Timer.periodic(Duration(seconds: 1), (timer) async {
       this.timer = timer;
       if (mounted) {
-        var overtimes = await fetchClearedOvertimeData(
+        if (_query != null) {
+          var _cleared = await searchClearedOvertime(
             context.read<SchoolController>().state['school'],
-            page: _currentPage,
-            limit: rowsPerPage);
-        _overtimeController.add(overtimes);
+            _query ?? '',
+          );
+          _overtimeController.add(_cleared);
+        } else {
+          var overtimes = await fetchClearedOvertimeData(
+              context.read<SchoolController>().state['school'],
+              page: _currentPage,
+              limit: rowsPerPage);
+          _overtimeController.add(overtimes);
+        }
       }
     });
   }
@@ -77,14 +88,32 @@ class _ClearedOvertimeState extends State<ClearedOvertime>
                 rowsPerPage = rows ?? 20;
               });
             },
-            header: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Text(
-                //   "Payments",
-                //   style: TextStyles(context).getTitleStyle(),
-                // ),
-              ],
+            header: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Available Cleared overtimes",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                  Spacer(
+                    flex: 3,
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      width: 120,
+                      child: SearchField(
+                        onChanged: (value) {
+                          setState(() {
+                            _query = value?.trim();
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             columns: [
               DataColumn(
@@ -169,6 +198,7 @@ class PendingOvertime extends StatefulWidget {
 
 class _PendingOvertimeState extends State<PendingOvertime>
     with SingleTickerProviderStateMixin {
+  String? _query;
   int _currentPage = 1;
   Timer? timer;
   int rowsPerPage = 20;
@@ -193,11 +223,19 @@ class _PendingOvertimeState extends State<PendingOvertime>
     Timer.periodic(Duration(seconds: 1), (timer) async {
       this.timer = timer;
       if (mounted) {
-        var overtimes = await fetchPendingOvertimeData(
+        if (_query != null) {
+          var _pending = await searchPendingOvertime(
             context.read<SchoolController>().state['school'],
-            page: _currentPage,
-            limit: rowsPerPage);
-        _overtimeController.add(overtimes);
+            _query ?? '',
+          );
+          _overtimeController.add(_pending);
+        } else {
+          var overtimes = await fetchPendingOvertimeData(
+              context.read<SchoolController>().state['school'],
+              page: _currentPage,
+              limit: rowsPerPage);
+          _overtimeController.add(overtimes);
+        }
       }
     });
   }
@@ -224,21 +262,38 @@ class _PendingOvertimeState extends State<PendingOvertime>
           var _overtimes = overtimeModel?.results ?? [];
           return CustomDataTable(
             paginatorController: _pendingPaginatorController,
-            header: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Text(
-                //   "Pending",
-                //   style: TextStyles(context).getTitleStyle(),
-                // ),
-              ],
+            header: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Available Pending overtimes",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                  Spacer(
+                    flex: Responsive.isMobile(context) ? 1 : 2,
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      width: 120,
+                      child: SearchField(
+                        onChanged: (value) {
+                          setState(() {
+                            _query = value?.trim();
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             columns: [
               DataColumn(
                 label: Text(
                   "Student's profile",
                   style: TextStyles(context).getRegularStyle(),
-                  // style: TextStyle(fontSize: 12),
                 ),
               ),
               DataColumn(

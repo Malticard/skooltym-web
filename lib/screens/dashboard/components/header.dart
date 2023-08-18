@@ -25,6 +25,8 @@ class _HeaderState extends State<Header> {
     BlocProvider.of<SchoolController>(context, listen: true).getSchoolData();
     BlocProvider.of<TitleController>(context, listen: true)
         .showTitle(context.read<SchoolController>().state['role']);
+    BlocProvider.of<FirstTimeUserController>(context)
+        .getFirstTimeUser(context.read<SchoolController>().state['role']);
     return BlocConsumer<SchoolController, Map<String, dynamic>>(
       listener: (context, state) {
         setState(() {
@@ -34,7 +36,8 @@ class _HeaderState extends State<Header> {
       builder: (context, state) {
         return Row(
           children: [
-            if (!Responsive.isDesktop(context))
+            if (!Responsive.isDesktop(context) &&
+                context.read<FirstTimeUserController>().state)
               IconButton(
                   icon: const Icon(Icons.menu),
                   onPressed: () {
@@ -82,6 +85,11 @@ class ProfileCard extends StatefulWidget {
 }
 
 class _ProfileCardState extends State<ProfileCard> {
+  void dispose() {
+    super.dispose();
+    context.read<MenuAppController>().disposeController();
+  }
+
   Map<String, dynamic> schoolData = {};
   @override
   Widget build(BuildContext context) {
@@ -137,6 +145,7 @@ class _ProfileCardState extends State<ProfileCard> {
                         leading: Icon(StaffPopUpOptions.options[index].icon),
                         title: Text(StaffPopUpOptions.options[index].title!),
                         onTap: () {
+                          // context.read<MenuAppController>().disposeController();
                           // StaffPopUpOptions.options[index].title == 'Logout'
                           Routes.logout(context);
                           // : context

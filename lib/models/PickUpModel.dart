@@ -181,26 +181,25 @@ class StudentName {
 }
 
 class Settings {
-    final String id;
-    final String pickUpEndTime;
-    final String pickUpAllowance;
+  final String id;
+  final String pickUpEndTime;
+  final String pickUpAllowance;
 
-    Settings({
-        required this.id,
-        required this.pickUpEndTime,
-        required this.pickUpAllowance,
-    });
+  Settings({
+    required this.id,
+    required this.pickUpEndTime,
+    required this.pickUpAllowance,
+  });
 
-    factory Settings.fromJson(Map<String, dynamic> json) => Settings(
+  factory Settings.fromJson(Map<String, dynamic> json) => Settings(
         id: json["_id"],
         pickUpEndTime: json["pick_up_end_time"],
         pickUpAllowance: json["pick_up_allowance"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "_id": id,
         "pick_up_end_time": pickUpEndTime,
         "pick_up_allowance": pickUpAllowance,
-    };
+      };
 }
-

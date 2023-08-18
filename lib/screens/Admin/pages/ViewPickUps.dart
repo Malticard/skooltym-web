@@ -91,15 +91,16 @@ class _ViewPickUpsState extends State<ViewPickUps> {
                 rowsPerPage = rows ?? 20;
               });
             },
-            header: Row(
-              children: [
-                Text(
-                  "Available PickUps",
-                  style: TextStyles(context).getTitleStyle(),
-                ),
-                if (!Responsive.isMobile(context))
-                  Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                if (pickUpData.isNotEmpty)
+            header: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Text(
+                    "Available PickUps",
+                    style: TextStyles(context).getRegularStyle(),
+                  ),
+                  if (!Responsive.isMobile(context))
+                    Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
                   Expanded(
                     child: SearchField(
                       onChanged: (value) {
@@ -109,7 +110,8 @@ class _ViewPickUpsState extends State<ViewPickUps> {
                       },
                     ),
                   ),
-              ],
+                ],
+              ),
             ),
             columns: [
               DataColumn2(

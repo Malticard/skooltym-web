@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/exports/exports.dart';
 import 'controllers/MenuAppController.dart';
+import 'controllers/utils/LoaderController.dart';
 
 Future<void> main() async {
   // Obtain shared preferences.
@@ -27,6 +28,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => MainController()),
         ChangeNotifierProvider(create: (context) => MenuAppController()),
         ChangeNotifierProvider(create: (context) => StreamsController()),
+        ChangeNotifierProvider(create: (context) => LoaderController()),
         BlocProvider(create: (context) => ThemeController()),
         BlocProvider(create: (context) => IntervalController()),
         BlocProvider(create: (context) => OvertimeRateController()),

@@ -125,7 +125,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
         "hint": "e.g North",
         "data": [
           "Select stream",
-          ..._streams!,
+          ..._streams,
         ],
         'icon': Icons.home_work_outlined
       }

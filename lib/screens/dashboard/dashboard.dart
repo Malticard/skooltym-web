@@ -1,3 +1,5 @@
+import 'package:admin/widgets/SkeletonLoader.dart';
+
 import '/exports/exports.dart';
 
 class Dashboard extends StatefulWidget {
@@ -54,7 +56,7 @@ class _DashboardState extends State<Dashboard> {
         SizedBox(
           height: Responsive.isMobile(context)
               ? MediaQuery.of(context).size.height * 0.45
-              : MediaQuery.of(context).size.height * 0.6,
+              : MediaQuery.of(context).size.height * 0.52,
           child: BlocBuilder<SchoolController, Map<String, dynamic>>(
             builder: (context, school) {
               return Column(
@@ -76,7 +78,7 @@ class _DashboardState extends State<Dashboard> {
                         builder: (context, snapshot) {
                           var dashClasses = snapshot.data ?? [];
                           return !snapshot.hasData
-                              ? Loader(text: "Classes data..")
+                              ? SkeletonLoader(boxes: 10)
                               : snapshot.data!.isEmpty
                                   ? NoDataWidget(
                                       text: "No classes available",

@@ -1,5 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:developer';
+
+import 'package:admin/controllers/utils/LoaderController.dart';
+
 import '/exports/exports.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,7 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     context.read<ThemeController>().getTheme();
-    // context.watch<OnlineCheckerController>().checkOnline();
     super.initState();
     // // get saved appTheme
   }
@@ -61,22 +64,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Expanded(
                         flex: 3,
-                        child: SizedBox(
-                          // width: MediaQuery.of(context).size.width * 0.6,
-                          // height: MediaQuery.of(context).size.width * 0.9,
-                          child: SvgPicture.asset(
-                            "assets/vectors/mother_child.svg",
-                            width: MediaQuery.of(context).size.width * 1.6,
-                            height: MediaQuery.of(context).size.width * 0.9,
-                          ),
+                        child: SvgPicture.asset(
+                          "assets/vectors/mother_child.svg",
+                          width: MediaQuery.of(context).size.width * 1.6,
+                          height: MediaQuery.of(context).size.width * 0.9,
                         ),
                       ),
                       Expanded(
                         flex: 4,
                         child: Container(
                           height: MediaQuery.of(context).size.width,
-                          // margin: EdgeInsets.only(
-                          //     top: MediaQuery.of(context).size.height * 0.13),
                           decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(50),
@@ -212,71 +209,118 @@ class _LoginScreenState extends State<LoginScreen> {
   // String currentValue = "Admin";
   final formKey = GlobalKey<FormState>();
   Widget _buildForm() {
-    return Form(
-      key: formKey,
-      child: SingleChildScrollView(
-        child: Flex(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          direction: Axis.vertical,
-          children: <Widget>[
-            Space(
-              space: Responsive.isDesktop(context) ? 0.035 : 0.07,
+    return Consumer<LoaderController>(
+      builder: (context, controller, child) {
+        return Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Flex(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              direction: Axis.vertical,
+              children: <Widget>[
+                Space(
+                  space: Responsive.isDesktop(context) ? 0.035 : 0.07,
+                ),
+                CommonTextField(
+                  readOnly: controller.isLoading ? true : false,
+                  fieldColor: Theme.of(context).cardColor,
+                  icon: Icons.email_outlined,
+                  controller: _emailController,
+                  errorText: _errorEmail,
+                  titleText: "Contact",
+                  padding: padding,
+                  enableSuffix: true,
+                  validate: (value) {
+                    if (value!.isEmpty) {
+                      _errorEmail = "Contact can't be empty";
+                      setState(() {});
+                    }
+                    return null;
+                  },
+                  hintText: "Provider your registered contact",
+                  keyboardType: TextInputType.number,
+                ),
+                const Space(space: 0.01),
+                CommonTextField(
+                  fieldColor: Theme.of(context).cardColor,
+                  icon: Icons.lock_outline,
+                  readOnly: controller.isLoading ? true : false,
+                  enableSuffix: true,
+                  validate: (value) {
+                    if (value!.isEmpty) {
+                      _errorPassword = "Password can't be empty";
+                      setState(() {});
+                    }
+                    return null;
+                  },
+                  suffixIcon: showPassword
+                      ? Icons.remove_red_eye_rounded
+                      : Icons.visibility_off,
+                  titleText:
+                      "Password", //AppLocalizations(context).of("password"),
+                  padding: padding,
+                  hintText: "************",
+                  isObscureText: !showPassword,
+                  errorText: _errorPassword,
+                  keyboardType: TextInputType.text,
+                  onTapSuffix: () {
+                    setState(() {
+                      showPassword = !showPassword;
+                    });
+                  },
+                  controller: _passwordController,
+                ),
+                _forgotYourPasswordUI(),
+                CommonButton(
+                  height: 55,
+                  padding: padding.copyWith(left: 30, right: 30),
+                  backgroundColor: controller.isLoading
+                      ? Theme.of(context).primaryColorLight
+                      : Theme.of(context).primaryColor,
+                  buttonTextWidget: controller.isLoading
+                      ? CircularProgressIndicator.adaptive()
+                      : Text(
+                          "Sign in",
+                          style: TextStyles(context).getBoldStyle().copyWith(
+                                color: Colors.white,
+                              ),
+                        ),
+                  onTap: controller.isLoading
+                      ? () {}
+                      : () {
+                          controller.setLoading = true;
+
+                          // if (context.watch<OnlineCheckerController>().state == true) {
+                          if (formKey.currentState!.validate()) {
+                            if (_emailController.text.trim().isEmpty) {
+                              controller.setLoading = false;
+                              _errorEmail = "Contact can't be empty";
+                              setState(() {});
+                            }
+                            if (_passwordController.text.trim().isEmpty) {
+                              controller.setLoading = false;
+                              _errorPassword = "Password can't be empty";
+                              setState(() {});
+                            }
+                            if (_emailController.text.trim().isNotEmpty &&
+                                _passwordController.text.trim().isNotEmpty) {
+                              _errorPassword = "";
+                              _errorEmail = "";
+                              setState(() {});
+                              loginUser(context, _emailController.text,
+                                  _passwordController.text);
+                            }
+                          }
+                        },
+                ),
+                Space(
+                  space: Responsive.isDesktop(context) ? 0.045 : 0.01,
+                ),
+              ],
             ),
-            CommonTextField(
-              fieldColor: Theme.of(context).cardColor,
-              icon: Icons.email_outlined,
-              controller: _emailController,
-              errorText: _errorEmail,
-              titleText: "Contact",
-              padding: padding,
-              enableSuffix: true,
-              hintText: "Provider your registered contact",
-              keyboardType: TextInputType.number,
-            ),
-            const Space(space: 0.01),
-            CommonTextField(
-              fieldColor: Theme.of(context).cardColor,
-              icon: Icons.lock_outline,
-              enableSuffix: true,
-              suffixIcon: showPassword
-                  ? Icons.remove_red_eye_rounded
-                  : Icons.visibility_off,
-              titleText: "Password", //AppLocalizations(context).of("password"),
-              padding: padding,
-              hintText: "************",
-              isObscureText: !showPassword,
-              errorText: _errorPassword,
-              keyboardType: TextInputType.text,
-              onTapSuffix: () {
-                setState(() {
-                  showPassword = !showPassword;
-                });
-              },
-              controller: _passwordController,
-            ),
-            _forgotYourPasswordUI(),
-            CommonButton(
-              height: 55,
-              padding: padding.copyWith(left: 30, right: 30),
-              buttonText: "Sign in", //AppLocalizations(context).of("login"),
-              onTap: () {
-                // if (context.watch<OnlineCheckerController>().state == true) {
-                if (formKey.currentState!.validate()) {
-                  loginUser(
-                      context, _emailController.text, _passwordController.text);
-                }
-                // } else {
-                //   showMessage(
-                //       context: context, msg: "Your offline..", type: 'warning');
-                // }
-              },
-            ),
-            Space(
-              space: Responsive.isDesktop(context) ? 0.045 : 0.01,
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

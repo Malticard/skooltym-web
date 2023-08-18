@@ -3,6 +3,7 @@ import 'package:admin/models/StudentModel.dart';
 
 import '../models/DropOffModels.dart';
 import '../models/Guardians.dart';
+import '../models/OvertimeModel.dart';
 
 // function to search for students
 Future<StudentModel> searchStudents(String schoolId, String query) async {
@@ -10,6 +11,7 @@ Future<StudentModel> searchStudents(String schoolId, String query) async {
       .get(Uri.parse(AppUrls.searchStudents + schoolId + "?query=" + query));
   return studentModelFromJson(response.body);
 }
+
 // function to search for staff
 Future<StaffModel> searchStaff(String schoolId, String query) async {
   Response response = await Client()
@@ -37,6 +39,7 @@ Future<StreamsModel> searchStreams(String schoolId, String query) async {
       .get(Uri.parse(AppUrls.searchStreams + schoolId + "?query=" + query));
   return streamsModelFromJson(response.body);
 }
+
 // function to search for pickups
 Future<PickUpModel> searchPickups(String schoolId, String query) async {
   Response response = await Client()
@@ -49,4 +52,27 @@ Future<DropOffModel> searchDropOffs(String schoolId, String query) async {
   Response response = await Client()
       .get(Uri.parse(AppUrls.searchDropOffs + schoolId + "?query=" + query));
   return dropOffModelFromJson(response.body);
+}
+
+// function to search for payments
+Future<PaymentModel> searchPayments(String schoolId, String query) async {
+  Response response = await Client()
+      .get(Uri.parse(AppUrls.searchPayments + schoolId + "?query=" + query));
+  return paymentModelFromJson(response.body);
+}
+
+// function to search for pending overtimes
+Future<OvertimeModel> searchPendingOvertime(
+    String schoolId, String query) async {
+  Response response = await Client().get(
+      Uri.parse(AppUrls.searchPendingOvertime + schoolId + "?query=" + query));
+  return overtimeModelFromJson(response.body);
+}
+
+// function to search for cleared overtimes
+Future<OvertimeModel> searchClearedOvertime(
+    String schoolId, String query) async {
+  Response response = await Client().get(
+      Uri.parse(AppUrls.searchClearedOvertime + schoolId + "?query=" + query));
+  return overtimeModelFromJson(response.body);
 }

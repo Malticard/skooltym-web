@@ -32,7 +32,11 @@ class _MainScreenState extends State<MainScreen> {
         .getFirstTimeUser(context.read<SchoolController>().state['role']);
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
+  void dispose() {
+    super.dispose();
+    context.read<MenuAppController>().disposeController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +84,7 @@ class _MainScreenState extends State<MainScreen> {
           Expanded(
             // It takes 5/6 part of the screen
             flex: 5,
-            child: DashboardScreen(
-              scaffoldKey: _scaffoldKey,
-            ),
+            child: DashboardScreen(),
           ),
         ],
       ),

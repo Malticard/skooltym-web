@@ -1,12 +1,12 @@
 // ignore_for_file: invalid_return_type_for_catch_error, unnecessary_null_comparison
 
-
 import '/exports/exports.dart';
 
 class UpdateStudentDash extends StatefulWidget {
   final ClassStudent studentModel;
   final String className;
-  const UpdateStudentDash({super.key, required this.studentModel, required this.className});
+  const UpdateStudentDash(
+      {super.key, required this.studentModel, required this.className});
 
   @override
   State<UpdateStudentDash> createState() => _UpdateStudentDashState();
@@ -14,8 +14,9 @@ class UpdateStudentDash extends StatefulWidget {
 
 class _UpdateStudentDashState extends State<UpdateStudentDash> {
   List<TextEditingController> _formControllers = <TextEditingController>[];
-  //  = <Map<String, dynamic>>[];
-
+  List<String> _streams = [];
+  List<DashboardModel> _dashDataController = [];
+  Timer? _timer;
   @override
   void initState() {
     super.initState();
@@ -24,11 +25,48 @@ class _UpdateStudentDashState extends State<UpdateStudentDash> {
       TextEditingController(text: widget.studentModel.studentLname),
       TextEditingController(text: widget.studentModel.otherName),
       TextEditingController(text: ""),
-      TextEditingController(text: ""),
       TextEditingController(text: widget.studentModel.studentGender),
-      TextEditingController(
-          text: widget.className),
+      TextEditingController(text: ""),
+      TextEditingController(text: ""),
     ];
+    pollData();
+    getStreams();
+  }
+
+  void pollData() {
+    fetchDashBoardData(context.read<SchoolController>().state['school'])
+        .then((dashData) {
+      if (mounted) {
+        setState(() {
+          _dashDataController = dashData;
+        });
+      }
+    });
+  }
+
+  void getStreams() {
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = timer;
+      if (_formControllers[5].text.isNotEmpty) {
+        if (mounted) {
+          setState(() {
+            _streams = _dashDataController
+                .where(
+                    (element) => element.className == _formControllers[5].text)
+                .first
+                .classStreams
+                .map((e) => e.streamName)
+                .toList();
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
   }
 
   // overall form padding
@@ -40,8 +78,7 @@ class _UpdateStudentDashState extends State<UpdateStudentDash> {
   @override
   Widget build(BuildContext context) {
     List<String> errorFields = List.generate(7, (i) => '');
-      Provider.of<ClassController>(context,listen: true).getClasses(context.read<SchoolController>().state['school']);
-  var streams = Provider.of<StreamsController>(context,listen: true);
+
 // form data
     List<Map<String, dynamic>> formFields = [
       {
@@ -77,9 +114,7 @@ class _UpdateStudentDashState extends State<UpdateStudentDash> {
         "hint": "e.g grade 2",
         "data": [
           "Select class",
-          ...Provider.of<ClassController>(context).classes
-              .map((e) => e.className)
-              .toList(),
+          ..._dashDataController.map((e) => e.className).toList(),
         ],
         'icon': Icons.home_work_outlined
       },
@@ -88,9 +123,7 @@ class _UpdateStudentDashState extends State<UpdateStudentDash> {
         "hint": "e.g North",
         "data": [
           "Select stream",
-          ...streams.streams
-              .map((e) => e.streamName)
-              .toList(),
+          ..._streams,
         ],
         'icon': Icons.home_work_outlined
       }
@@ -102,7 +135,8 @@ class _UpdateStudentDashState extends State<UpdateStudentDash> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               "Update Student Details",
-              style: TextStyles(context).getRegularStyle().copyWith(fontSize: 19),
+              style:
+                  TextStyles(context).getRegularStyle().copyWith(fontSize: 19),
             ),
           ),
           CommonFormFields(
@@ -126,8 +160,6 @@ class _UpdateStudentDashState extends State<UpdateStudentDash> {
                       for (var v in _formControllers) {
                         v.clear();
                       }
-                      // showSuccessDialog(
-                      //     _formControllers[0].text.trim(), context);
                     } else {
                       showMessage(
                         msg: "Failed to update student ${value.reasonPhrase}",
@@ -158,16 +190,16 @@ class _UpdateStudentDashState extends State<UpdateStudentDash> {
     request.fields['school'] =
         "${context.read<SchoolController>().state['school']}";
     request.fields['student_fname'] =
-        _formControllers[0].text.trim().split(" ").first;
+        _formControllers[0].text.trim().split(" ").first.trim();
     request.fields['student_lname'] =
         _formControllers[1].text.trim().split(" ").last;
     request.fields['username'] =
-        "${_formControllers[0].text.trim().split(" ").first}_256"; //_formControllers[2].text.trim();
+        "${_formControllers[0].text.trim().split(" ").first.trim()}_256"; //_formControllers[2].text.trim();
     request.fields['other_name'] = _formControllers[2].text.trim();
-    request.fields['student_class'] = _formControllers[5].text.trim();
+    request.fields['_class'] = _formControllers[5].text.trim();
     request.fields['student_gender'] = _formControllers[4].text.trim();
     //  ============================== student profile pic ============================
-    // request.fields['student_profile_pic'] = _formControllers[5].file.path;
+    request.fields['stream'] = _formControllers[5].text.trim();
     if (kIsWeb) {
       request.files.add(MultipartFile(
           "image",
@@ -181,10 +213,6 @@ class _UpdateStudentDashState extends State<UpdateStudentDash> {
             filename: uri.split("/").last));
       }
     }
-
-    // request.files.add(MultipartFile('image',
-    //     File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-    //     filename: uri.split("/").last));
     //  ============================== student key ============================
     request.fields['student_key[key]'] = "";
     //  ============================== student key ============================

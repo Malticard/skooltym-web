@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:admin/controllers/utils/LoaderController.dart';
 import 'package:admin/models/SettingModel.dart';
 import 'package:intl/intl.dart';
 import '../models/DropOffModels.dart';
@@ -16,8 +17,6 @@ void loginUser(BuildContext context, String email, String password) async {
     BlocProvider.of<FirstTimeUserController>(context)
         .getFirstTimeUser(context.read<SchoolController>().state['role']);
   }
-
-  showProgress(context, msg: "Login in progress");
   Client()
       .post(Uri.parse(AppUrls.login),
           headers: {
@@ -31,24 +30,23 @@ void loginUser(BuildContext context, String email, String password) async {
           }))
       .then((value) {
     if (value.statusCode == 200 || value.statusCode == 201) {
+      context.read<LoaderController>().setLoading = false;
       var data = jsonDecode(value.body);
+      //
       BlocProvider.of<FirstTimeUserController>(context)
           .getFirstTimeUser(data['role']);
+      //
       log("Current session for first time is ${BlocProvider.of<FirstTimeUserController>(context).state}");
       if (BlocProvider.of<FirstTimeUserController>(context).state == true) {
         BlocProvider.of<TitleController>(context)
             .setTitle("Change Password", data['role']);
         log("Changing title");
       } else {
-        log("Role ${data['role']}");
-        BlocProvider.of<TitleController>(context)
-            .setTitle("Dashboard", data['role']);
+        BlocProvider.of<TitleController>(context).showTitle(data['role']);
         BlocProvider.of<FinanceViewController>(context).showRecentWidget();
         BlocProvider.of<WidgetController>(context).showRecentWidget();
       }
       // for finance
-
-      Routes.popPage(context);
       if (data['role'] == 'Admin' || data['role'] == 'Finance') {
         BlocProvider.of<SchoolController>(context).setSchoolData(data);
         //
@@ -68,8 +66,8 @@ void loginUser(BuildContext context, String email, String password) async {
             context: context, msg: "Account not authorized", type: 'warning');
       }
     } else {
+      context.read<LoaderController>().setLoading = false;
       var data = jsonDecode(value.body);
-      Routes.popPage(context);
       showMessage(context: context, msg: "${data['message']}", type: 'danger');
     }
   });
@@ -588,9 +586,6 @@ Future<OvertimeModel> fetchClearedOvertimeData(String id,
   var response = await Client().get(
       Uri.parse(AppUrls.clearedOvertime + id + "?page=$page&limit=$limit"));
   return overtimeModelFromJson(response.body);
-  // .where((element) => element.status == status)
-  // .toList();
-  // return response;
 }
 
 // function handling scan intervals
@@ -619,21 +614,21 @@ Future<List<Map<String, dynamic>>> fetchDashboardMetaData(
   // context.read<PaymentController>().getPayments(context);
   var drops = await fetchDropOffs(schoolId);
   var picks = await fetchPickUps(schoolId);
-  var pendingOvertimes = await fetchPendingOvertimeData(schoolId, limit: 100);
-  var clearedOvertimes = await fetchClearedOvertimeData(schoolId, limit: 100);
+  var pendingOvertimes = await fetchPendingOvertimeData(schoolId, limit: 150);
+  var clearedOvertimes = await fetchClearedOvertimeData(schoolId, limit: 150);
   List<Map<String, dynamic>> dashboardData = [
     {
       "label": "DROP OFFS",
       "value": drops.totalDocuments,
       "icon": "assets/icons/004-playtime.svg",
-      "page": 7,
+      "page": 8,
       'color': const Color.fromARGB(255, 106, 108, 235),
     },
     {
       "label": "PICK UPS",
       "value": picks.totalDocuments,
       "icon": "assets/icons/009-student.svg",
-      "page": 8,
+      "page": 9,
       'color': const Color.fromARGB(255, 181, 150, 253),
     },
     {

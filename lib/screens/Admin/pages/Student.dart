@@ -118,25 +118,27 @@ class _ViewStudentsState extends State<ViewStudents> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        if (studentData.isNotEmpty)
-                          Expanded(
-                            child: SizedBox(
-                              width: 120,
-                              child: SearchField(
-                                onChanged: (value) {
-                                  setState(() {
-                                    _query = value?.trim();
-                                  });
-                                },
-                              ),
+                        Text(
+                          "Available Students",
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
+                        Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                        Expanded(
+                          child: SizedBox(
+                            width: 120,
+                            child: SearchField(
+                              onChanged: (value) {
+                                setState(() {
+                                  _query = value?.trim();
+                                });
+                              },
                             ),
                           ),
-                        if (!Responsive.isMobile(context))
-                          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                        Text(
-                          "",
-                          style: Theme.of(context).textTheme.subtitle1,
                         ),
+                        if (!Responsive.isMobile(context))
+                          Padding(
+                            padding: EdgeInsets.all(15),
+                          ),
                         ElevatedButton.icon(
                           onPressed: () {
                             showDialog(

@@ -1,4 +1,6 @@
 // import 'package:flutter/src/animation/animation_controller.dart';
+import 'package:admin/tools/searchHelpers.dart';
+
 import '/exports/exports.dart';
 
 class PaymentReports extends StatefulWidget {
@@ -12,6 +14,7 @@ class _PaymentReportsState extends State<PaymentReports>
     with SingleTickerProviderStateMixin {
   int _currentPage = 1;
   int rowsPerPage = 20;
+  String? _query;
   final PaginatorController _paginatorController = PaginatorController();
   // stream controller
   StreamController<PaymentModel> _paymentController =
@@ -34,11 +37,17 @@ class _PaymentReportsState extends State<PaymentReports>
     Timer.periodic(Duration(seconds: 1), (timer) async {
       this.timer = timer;
       if (mounted) {
-        var payments = await fetchPayments(
-            context.read<SchoolController>().state['school'],
-            page: _currentPage,
-            limit: rowsPerPage);
-        _paymentController.add(payments);
+        if (_query != null) {
+          var payments = await searchPayments(
+              context.read<SchoolController>().state['school'], _query!);
+          _paymentController.add(payments);
+        } else {
+          var payments = await fetchPayments(
+              context.read<SchoolController>().state['school'],
+              page: _currentPage,
+              limit: rowsPerPage);
+          _paymentController.add(payments);
+        }
       }
     });
   }
@@ -79,19 +88,21 @@ class _PaymentReportsState extends State<PaymentReports>
             header: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Payments",
-                  style: TextStyles(context).getTitleStyle(),
+                Expanded(
+                  child: SizedBox(
+                    width: 120,
+                    child: SearchField(
+                      onChanged: (value) {
+                        setState(() {
+                          _query = value?.trim();
+                        });
+                      },
+                    ),
+                  ),
                 ),
-                // ElevatedButton(
-                //   onPressed: () {
-
-                //   },
-                //   child: Text(
-                //     "Add payment",
-                //     style: TextStyles(context).getRegularStyle(),
-                //   ),
-                // )
+                Spacer(
+                  flex: 3,
+                )
               ],
             ),
             columns: [
@@ -108,6 +119,10 @@ class _PaymentReportsState extends State<PaymentReports>
                   // style: TextStyle(fontSize: 12),
                   style: TextStyles(context).getRegularStyle(),
                 ),
+              ),
+              DataColumn2(
+                label: Text("Guardian Name",
+                    style: TextStyles(context).getRegularStyle()),
               ),
               DataColumn(
                 label: Text(
@@ -163,82 +178,4 @@ class _PaymentReportsState extends State<PaymentReports>
       ),
     );
   }
-
-  // row data
-  // DataRow overtimeDataRow(PaymentModel paymentModel, int i) {
-  //   return DataRow(
-  //     cells: [
-  //       DataCell(
-  //         Row(
-  //           children: [
-  //             Image.network(
-  //               AppUrls.liveImages + paymentModel.student.studentProfilePic,
-  //               height: 33,
-  //               width: 33,
-  //             ),
-  //             Padding(
-  //               padding: const EdgeInsets.all(0),
-  //               child: Text(paymentModel.student.username,
-  //                   overflow: TextOverflow.ellipsis,
-  //                   style: const TextStyle(fontSize: 11)),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       DataCell(Text(
-  //           "${paymentModel.staff.staffFname} ${paymentModel.staff.staffLname}",
-  //           style: const TextStyle(fontSize: 11))),
-  //       DataCell(Text(paymentModel.dateOfPayment.split(".").first,
-  //           style: const TextStyle(fontSize: 11))),
-  //       DataCell(Text(paymentModel.paymentMethod,
-  //           style: const TextStyle(fontSize: 11))),
-  //       // DataCell(Text(
-  //       //     "${paymentModel.staff.staffFname} ${paymentModel.staff.staffLname}",
-  //       //     style: const TextStyle(fontSize: 11))),
-  //       DataCell(Text(paymentModel.balance.toString(),
-  //           style: const TextStyle(fontSize: 11))),
-  //       DataCell(Text(paymentModel.comment.toString(),
-  //           style: const TextStyle(fontSize: 11))),
-
-  //       // DataCell(Text(paymentModel.status)),
-  //       // if (context.read<SchoolController>().state['role'] == 'Finance')
-  //       // DataCell(
-  //       //   buildActionButtons(
-  //       //     context,
-  //       //     () {
-  //       //       showDialog(
-  //       //           context: context,
-  //       //           builder: (context) {
-  //       //             return Dialog(
-  //       //               child: SizedBox(
-  //       //                 width: MediaQuery.of(context).size.width / 2.4,
-  //       //                 height: MediaQuery.of(context).size.width / 4,
-  //       //                 child: ClearWindow(
-  //       //                   paymentModel: paymentModel,
-  //       //                   id: paymentModel.id,
-  //       //                   title: paymentModel.student.username,
-  //       //                 ),
-  //       //               ),
-  //       //             );
-  //       //           });
-  //       //     },
-  //       //     () {
-  //       //       showDialog(
-  //       //           context: context,
-  //       //           builder: (context) {
-  //       //             return SizedBox(
-  //       //               width: MediaQuery.of(context).size.width / 2.4,
-  //       //               height: MediaQuery.of(context).size.width / 4,
-  //       //               child: CommonDelete(
-  //       //                 url: AppUrls.deletePayment + paymentModel.id,
-  //       //                 title: paymentModel.student.username,
-  //       //               ),
-  //       //             );
-  //       //           });
-  //       //     },
-  //       //   ),
-  //       // ),
-  //     ],
-  //   );
-  // }
 }

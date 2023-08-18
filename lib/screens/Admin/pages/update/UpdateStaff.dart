@@ -163,9 +163,14 @@ class _UpdateStaffState extends State<UpdateStaff> {
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
     if (kIsWeb) {
-      request.files.add(MultipartFile(
-          "image", imageData['image'], imageData['size'],
-          filename: imageData['name'].toString().trim()));
+      request.files.add(
+        MultipartFile(
+          "image",
+          imageData['image'],
+          imageData['size'],
+          filename: imageData['name'].toString().trim(),
+        ),
+      );
     } else {
       if (uri.isNotEmpty) {
         request.files.add(MultipartFile(

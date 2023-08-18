@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class MenuAppController extends ChangeNotifier {
@@ -9,5 +11,10 @@ class MenuAppController extends ChangeNotifier {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
       _scaffoldKey.currentState!.openDrawer();
     }
+  }
+
+  void disposeController() {
+    log("Disposed MenuAppController");
+    _scaffoldKey.currentState!.dispose();
   }
 }

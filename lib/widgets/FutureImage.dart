@@ -11,19 +11,17 @@ class FutureImage extends StatelessWidget {
         builder: (context, snapshot) {
           return snapshot.hasData
               ? Container(
-                 width: 50,
-                    height: 50,
-                margin: const EdgeInsets.all(0),
+                  width: 45,
+                  height: 45,
+                  margin: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    image: DecorationImage(
-                      filterQuality: FilterQuality.high,
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        snapshot.data!,
-                      )
-                    )
-                  ),
+                      borderRadius: BorderRadius.circular(100),
+                      image: DecorationImage(
+                          filterQuality: FilterQuality.high,
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                            snapshot.data!,
+                          ))),
                 )
               : CircularProgressIndicator.adaptive();
         });

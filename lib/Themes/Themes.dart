@@ -7,31 +7,32 @@ class AppThemes {
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: creamColor,
     textTheme: GoogleFonts.aBeeZeeTextTheme(),
+    drawerTheme: DrawerThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0),
+      ),
+    ),
     colorScheme: ColorScheme.fromSeed(
       brightness: Brightness.light,
       seedColor: Color.fromARGB(204, 9, 87, 139),
     ),
     useMaterial3: true,
     canvasColor: snowColor,
-    // primarySwatch: Colors.blue,
     backgroundColor: const Color.fromARGB(204, 9, 87, 139),
-    // highlightColor: Colors.white,
-    // cardColor: Colors.grey[200],
   );
 //
   static final ThemeData darkTheme = ThemeData(
+    drawerTheme: DrawerThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0),
+      ),
+    ),
     textTheme: GoogleFonts.aBeeZeeTextTheme(),
     primaryColor: Color.fromARGB(204, 9, 87, 139),
     colorScheme: ColorScheme.fromSeed(
       seedColor: Color.fromARGB(204, 255, 255, 255),
       brightness: Brightness.dark,
     ),
-    // primaryTextTheme: TextTheme(
-    //   headline6: TextStyle(color: Colors.white),
-    //   displayMedium: TextStyle(color: Colors.white),
-    //   displaySmall: TextStyle(color: Colors.white),
-    //   displayLarge: TextStyle(color: Colors.white),
-    // ),
     useMaterial3: true,
     scaffoldBackgroundColor: bgColor,
     canvasColor: secondaryColor,

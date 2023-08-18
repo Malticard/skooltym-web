@@ -1,17 +1,24 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:admin/tools/searchHelpers.dart';
+
 import '../../../models/StudentModel.dart';
 import '/exports/exports.dart';
 
 class StudentsPopUps extends StatefulWidget {
-
-final int classId;
-final int id;
-final String streamId;
-final String className;
-final String streamName;
-  const StudentsPopUps({super.key, required this.id, required this.className, required this.streamName, required this.classId, required this.streamId,});
-
+  final int? classId;
+  final int? id;
+  final String? streamId;
+  final String? className;
+  final String? streamName;
+  const StudentsPopUps({
+    super.key,
+    this.id,
+    this.className,
+    this.streamName,
+    this.classId,
+    this.streamId,
+  });
 
   @override
   State<StudentsPopUps> createState() => _StudentsPopUpsState();
@@ -19,7 +26,7 @@ final String streamName;
 
 class _StudentsPopUpsState extends State<StudentsPopUps> {
   List<Student> studentData = [];
-String? _query;
+  String? _query;
 
   int _currentPage = 1;
   int rowsPerPage = 20;
@@ -44,7 +51,7 @@ String? _query;
 
 // Polling data in realtime
 
- void pollData() async {
+  void pollData() async {
     if (mounted) {
       var dashData = await fetchDashBoardData(
           context.read<SchoolController>().state['school']);
@@ -53,6 +60,10 @@ String? _query;
     // fetch data periodically
     timer = Timer.periodic(Duration(seconds: 3), (timer) async {
       if (mounted) {
+        if (_query!.isEmpty) {
+          searchStudents(
+              context.read<SchoolController>().state['school'], _query!);
+        }
         var dashData = await fetchDashBoardData(
             context.read<SchoolController>().state['school']);
         _dashDataController.add(dashData);
@@ -68,20 +79,22 @@ String? _query;
       _dashDataController.close();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return SizedBox(
-      height:Responsive.isMobile(context) ? size.width : size.width / 2.5,
+      height: Responsive.isMobile(context) ? size.width : size.width / 2.5,
       child: Stack(
         children: [
           StreamBuilder(
             stream: _dashDataController.stream,
             builder: (context, snapshot) {
               var dashboard = snapshot.data;
-              var studentData = dashboard?[widget.classId].classStudents ?? [];
-              return  CustomDataTable(
+              var studentData =
+                  dashboard?[widget.classId ?? 0].classStudents ?? [];
+              return CustomDataTable(
                 paginatorController: _controller,
                 onPageChanged: (page) {
                   setState(() {
@@ -99,18 +112,18 @@ String? _query;
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (studentData.isNotEmpty)
-                        SizedBox(
-                          width: 120,
-                          child: SearchField(
-                            onChanged: (value) {
-                             setState(() {
-                               _query = value?.trim();
-                             });
-                            },
-                          ),
-                        ),
-                      if (!Responsive.isMobile(context))
-                        Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                        // SizedBox(
+                        //   width: Responsive.isMobile(context) ? 120 : 200,
+                        //   child: SearchField(
+                        //     onChanged: (value) {
+                        //       setState(() {
+                        //         _query = value?.trim();
+                        //       });
+                        //     },
+                        //   ),
+                        // ),
+                        if (!Responsive.isMobile(context))
+                          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
                       Text(
                         "",
                         style: Theme.of(context).textTheme.subtitle1,
@@ -118,11 +131,16 @@ String? _query;
                     ],
                   ),
                 ),
-                empty:!snapshot.hasData ?Loader(text: "Students in ${widget.streamName}",): NoDataWidget(
-                  text: "No "
-                      "Students in ${dashboard?[widget.classId].classStreams[widget.id].streamName} "
-                      "yet...",
-                ),
+                empty: !snapshot.hasData
+                    ? Loader(
+                        text:
+                            "Students in ${widget.streamName == null ? widget.className : widget.streamName}",
+                      )
+                    : NoDataWidget(
+                        text: "No "
+                            "Students in ${(widget.id == null) ? dashboard![widget.classId ?? 0].className : dashboard?[widget.classId ?? 0].classStreams[widget.id ?? 0].streamName} "
+                            "yet...",
+                      ),
                 columns: List.generate(
                   staffs.length,
                   (index) => DataColumn(
@@ -132,20 +150,32 @@ String? _query;
                   ),
                 ),
                 source: StudentsDashboardDataSource(
-                  studentClass:widget.className,
-                  studentStream:widget.streamName,
-                    studentModel: studentData.where((element) => element.stream == widget.streamId).toList(),
+                    studentClass: widget.className ?? "",
+                    studentStream: widget.streamName ?? "",
+                    studentModel: widget.streamId == null
+                        ? studentData
+                        : studentData
+                            .where(
+                                (element) => element.stream == widget.streamId)
+                            .toList(),
                     context: context,
                     currentPage: _currentPage,
                     paginatorController: _controller,
-                    totalDocuments: studentData.where((element) => element.stream == widget.streamId).toList().length),
+                    totalDocuments: widget.streamId == null
+                        ? studentData.length
+                        : studentData
+                            .where(
+                                (element) => element.stream == widget.streamId)
+                            .toList()
+                            .length),
               );
             },
           ),
           Positioned(
             bottom: 20,
             left: 10,
-            child: Text("Available students in stream ${widget.streamName}"),
+            child: Text(
+                "Available students in ${widget.streamId == null ? widget.className : widget.streamName}"),
           ),
         ],
       ),

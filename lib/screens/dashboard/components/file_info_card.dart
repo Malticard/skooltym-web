@@ -25,39 +25,63 @@ class FileInfoCard extends StatelessWidget {
                   titleText: "Available Streams in ${info.className}",
                   topPadding: 3,
                 ),
-                Expanded(
-                  child: ListView.separated(
-                    itemBuilder: (context, index) => ListTile(
-                      onTap: () {
-                        Navigator.pop(context);
-                        showDialog(
-                          context: context,
-                          builder: (context) => Dialog(
-                            child: StudentsPopUps(
-                              id: index,
-                              streamId: info.classStreams[index].id,
-                              classId: classId,
-                              className: info.className,
-                              streamName: info.classStreams[index].streamName,
+                if (info.classStreams.length > 0)
+                  Expanded(
+                    child: ListView.separated(
+                      itemBuilder: (context, index) => ListTile(
+                        onTap: () {
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (context) => Dialog(
+                              child: StudentsPopUps(
+                                id: index,
+                                streamId: info.classStreams[index].id,
+                                classId: classId,
+                                className: info.className,
+                                streamName: info.classStreams[index].streamName,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      // leading:
-                      //     SvgPicture.asset("assets/vectors/groups.svg"),
-                      title: Text(
-                        info.classStreams[index].streamName,
-                        style: TextStyles(context).getRegularStyle(),
+                          );
+                        },
+                        // leading:
+                        //     SvgPicture.asset("assets/vectors/groups.svg"),
+                        title: Text(
+                          info.classStreams[index].streamName,
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
+                        subtitle: Text(
+                          "Tap to view",
+                          style: TextStyles(context).getDescriptionStyle(),
+                        ),
                       ),
-                      subtitle: Text(
-                        "Tap to view",
-                        style: TextStyles(context).getDescriptionStyle(),
-                      ),
+                      itemCount: info.classStreams.length,
+                      separatorBuilder: (ctx, ind) => const Divider(),
                     ),
-                    itemCount: info.classStreams.length,
-                    separatorBuilder: (ctx, ind) => const Divider(),
                   ),
-                )
+                if (info.classStreams.length == 0)
+                  // Center(
+                  //   child: Text("No streams available"),
+                  // ),
+                  CommonButton(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: defaultPadding, vertical: defaultPadding),
+                    buttonText: ("View students"),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => Dialog(
+                          child: StudentsPopUps(
+                            id: null,
+                            streamId: null,
+                            classId: classId,
+                            className: info.className,
+                            streamName: null,
+                          ),
+                        ),
+                      );
+                    },
+                  )
               ],
             ),
           ),
@@ -71,7 +95,9 @@ class FileInfoCard extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(15)),
         ),
         child: SizedBox(
-          height:Responsive.isMobile(context) ? MediaQuery.of(context).size.width / 4 : MediaQuery.of(context).size.width / 3.5,
+          height: Responsive.isMobile(context)
+              ? MediaQuery.of(context).size.width / 4
+              : MediaQuery.of(context).size.width / 3.5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,9 +115,9 @@ class FileInfoCard extends StatelessWidget {
                 children: [
                   Responsive(
                     desktop: Container(
-                      padding: const EdgeInsets.all(defaultPadding),
-                      height: 167,
-                      width: 167,
+                      padding: EdgeInsets.all(defaultPadding / 2),
+                      height: 140,
+                      width: 140,
                       decoration: BoxDecoration(
                         // color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -118,12 +144,11 @@ class FileInfoCard extends StatelessWidget {
                     ),
                   ),
                   Responsive(
-                    desktop: const SizedBox(
-                      width: 40,
-                      height: 40,
-                    ),
-                    mobile:SizedBox(width:2,height:2)
-                  ),
+                      desktop: const SizedBox(
+                        width: 40,
+                        height: 40,
+                      ),
+                      mobile: SizedBox(width: 2, height: 2)),
                 ],
               ),
               Row(
@@ -132,9 +157,11 @@ class FileInfoCard extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: '${info.classStreams.length}',
-                     style:Responsive.isMobile(context)
-                              ? TextStyles(context).getBoldStyle().copyWith(fontSize:13) : TextStyles(context).getBoldStyle(),
-                      
+                      style: Responsive.isMobile(context)
+                          ? TextStyles(context)
+                              .getBoldStyle()
+                              .copyWith(fontSize: 13)
+                          : TextStyles(context).getBoldStyle(),
                       children: [
                         TextSpan(
                           text: info.classStreams.length == 1
@@ -152,15 +179,17 @@ class FileInfoCard extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: "${info.classStudents.length}",
-                      style:Responsive.isMobile(context)
-                              ? TextStyles(context).getBoldStyle().copyWith(fontSize:13) : TextStyles(context).getBoldStyle(),
-                      
+                      style: Responsive.isMobile(context)
+                          ? TextStyles(context)
+                              .getBoldStyle()
+                              .copyWith(fontSize: 13)
+                          : TextStyles(context).getBoldStyle(),
                       children: [
                         TextSpan(
                           text: info.classStudents.length == 1
                               ? ' Student'
                               : ' Students',
-                           style: Responsive.isMobile(context)
+                          style: Responsive.isMobile(context)
                               ? TextStyles(context)
                                   .getRegularStyle()
                                   .copyWith(fontSize: 14)

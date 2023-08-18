@@ -63,24 +63,26 @@ class AppUrls {
   static String updateSettings = "${devURL}update/settings/";
   static String updateOvertime = "${devURL}update/overtime/";
   static String updatePayment = "${devURL}update/payments/";
-// 
-static String setPass = "${devURL}password/set-password/";
-static String forgotPassword = "${devURL}password/forgot-password";
-static String verifyOtp = "${devURL}password/get-otp/";
-static String setPassword = "${devURL}password/set-password/";
-static String results = "${devURL}results/scanned-results/";
+//
+  static String setPass = "${devURL}password/set-password/";
+  static String forgotPassword = "${devURL}password/forgot-password";
+  static String verifyOtp = "${devURL}password/get-otp/";
+  static String setPassword = "${devURL}password/set-password/";
+  static String results = "${devURL}results/scanned-results/";
 // dashboard
-static String dashboard = "${devURL}dashboard/data/";
+  static String dashboard = "${devURL}dashboard/data/";
 // searches
-static String searchStudents = "${devURL}search/search-students/";
-static String searchStaff = "${devURL}search/search-staff/";
-static String searchGuardians = "${devURL}search/search-guardians/";
-static String searchClass = "${devURL}search/search-classes/";
-static String searchStreams = "${devURL}search/search-streams/";
-static String searchPickUps = "${devURL}search/search-pickups/";
-static String searchDropOffs = "${devURL}search/search-dropoffs/";
+  static String searchStudents = "${devURL}search/search-students/";
+  static String searchStaff = "${devURL}search/search-staff/";
+  static String searchGuardians = "${devURL}search/search-guardians/";
+  static String searchClass = "${devURL}search/search-classes/";
+  static String searchStreams = "${devURL}search/search-streams/";
+  static String searchPickUps = "${devURL}search/search-pickups/";
+  static String searchDropOffs = "${devURL}search/search-dropoffs/";
+  static String searchPayments = "${devURL}search/search-payments/";
+  static String searchClearedOvertime = "${devURL}search/cleared-overtime/";
+  static String searchPendingOvertime = "${devURL}search/pending-overtime/";
 // overtimes
-static String pendingOvertime = "${devURL}overtime/pending/";
-static String clearedOvertime = "${devURL}overtime/cleared/";
+  static String pendingOvertime = "${devURL}overtime/pending/";
+  static String clearedOvertime = "${devURL}overtime/cleared/";
 }
-

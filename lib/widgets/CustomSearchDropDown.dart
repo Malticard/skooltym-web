@@ -328,7 +328,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
   Future<void> showDialogueBox(context) async {
     await showDialog(
         context: context,
-        barrierDismissible: true,
+        barrierDismissible: false,
         builder: (context) {
           return Padding(
             padding: widget.menuPadding ?? EdgeInsets.all(15),
@@ -447,29 +447,29 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(
-                style: TextButton.styleFrom(
-                    primary: widget.primaryColor ?? Colors.black,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                child: Text(
-                  'Close',
-                  style: widget.labelStyle != null
-                      ? widget.labelStyle!.copyWith(
-                          color: widget.primaryColor ?? Colors.blue,
-                        )
-                      : TextStyle(
-                          color: widget.primaryColor ?? Colors.blue,
-                        ),
-                ),
-                onPressed: () {
-                  if (widget.menuMode ?? false) {
-                    _menuController.reverse();
-                  } else {
-                    Navigator.pop(context);
-                  }
-                  setState(() {});
-                },
-              ),
+              // TextButton(
+              //   style: TextButton.styleFrom(
+              //       primary: widget.primaryColor ?? Colors.black,
+              //       tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+              //   child: Text(
+              //     'Close',
+              //     style: widget.labelStyle != null
+              //         ? widget.labelStyle!.copyWith(
+              //             color: widget.primaryColor ?? Colors.blue,
+              //           )
+              //         : TextStyle(
+              //             color: widget.primaryColor ?? Colors.blue,
+              //           ),
+              //   ),
+              //   onPressed: () {
+              //     if (widget.menuMode ?? false) {
+              //       _menuController.reverse();
+              //     } else {
+              //       Navigator.pop(context);
+              //     }
+              //     setState(() {});
+              //   },
+              // ),
               Visibility(
                 visible: (widget.multiSelect ?? false),
                 child: TextButton(

@@ -1,8 +1,7 @@
 import '/exports/exports.dart';
 
 class DashboardScreen extends StatefulWidget {
-  final GlobalKey<ScaffoldState>? scaffoldKey;
-  const DashboardScreen({super.key, this.scaffoldKey});
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -73,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 height:
-                                    MediaQuery.of(context).size.height / 1.18,
+                                    MediaQuery.of(context).size.height / 1.16,
                                 child: child,
                               ),
                             ),

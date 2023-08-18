@@ -99,25 +99,28 @@ class _ViewDropOffsState extends State<ViewDropOffs> {
               });
             },
             loaderText: "DropOff Data",
-            header: Row(
-              children: [
-                Text(
-                  "Available Drops Recorded",
-                  style: TextStyles(context).getTitleStyle(),
-                ),
-                if (!Responsive.isMobile(context))
-                  Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-                if (drop_offs.isNotEmpty)
-                  Expanded(
-                    child: SearchField(
-                      onChanged: (value) {
-                        setState(() {
-                          _query = value;
-                        });
-                      },
-                    ),
+            header: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Text(
+                    "Available Drops Recorded",
+                    style: TextStyles(context).getRegularStyle(),
                   ),
-              ],
+                  if (!Responsive.isMobile(context))
+                    Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                  if (!Responsive.isMobile(context))
+                    Expanded(
+                      child: SearchField(
+                        onChanged: (value) {
+                          setState(() {
+                            _query = value;
+                          });
+                        },
+                      ),
+                    ),
+                ],
+              ),
             ),
             columns: [
               DataColumn(

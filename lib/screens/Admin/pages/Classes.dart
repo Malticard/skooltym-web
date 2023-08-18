@@ -99,27 +99,38 @@ class _ClassesUIState extends State<ClassesUI> {
                       rowsPerPage = rows ?? 20;
                     });
                   },
-                  header: Row(
-                    children: [
-                      Expanded(
-                        child: SearchField(onChanged: (value) {
-                          setState(() {
-                            _query = value?.trim();
-                          });
-                        }),
-                      ),
-                      const Spacer(),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => const AddClass(),
-                          );
-                        },
-                        label: const Text("Add Class"),
-                        icon: const Icon(Icons.add),
-                      ),
-                    ],
+                  header: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Available Classes",
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
+                        Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                        Expanded(
+                          child: SearchField(onChanged: (value) {
+                            setState(() {
+                              _query = value?.trim();
+                            });
+                          }),
+                        ),
+                        if (!Responsive.isMobile(context))
+                          Padding(
+                            padding: EdgeInsets.all(15),
+                          ),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => const AddClass(),
+                            );
+                          },
+                          label: const Text("Add Class"),
+                          icon: const Icon(Icons.add),
+                        ),
+                      ],
+                    ),
                   ),
                   columns: [
                     DataColumn(

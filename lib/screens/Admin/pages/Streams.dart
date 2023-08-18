@@ -97,29 +97,39 @@ class _StreamsUIState extends State<StreamsUI> {
                         rowsPerPage = rows ?? 20;
                       });
                     },
-                    header: Row(
-                      children: [
-                        Expanded(
-                          child: SearchField(
-                            onChanged: (value) {
-                              setState(() {
-                                _query = value?.trim();
-                              });
-                            },
+                    header: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Available Streams",
+                            style: TextStyles(context).getRegularStyle(),
                           ),
-                        ),
-                        const Spacer(),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => const AddStream(),
-                            );
-                          },
-                          label: const Text("Add Stream"),
-                          icon: const Icon(Icons.add),
-                        ),
-                      ],
+                          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+                          Expanded(
+                            child: SearchField(
+                              onChanged: (value) {
+                                setState(() {
+                                  _query = value?.trim();
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(15),
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => const AddStream(),
+                              );
+                            },
+                            label: const Text("Add Stream"),
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
                     ),
                     columns: [
                       DataColumn(

@@ -563,13 +563,13 @@ class ReportsDataSource extends DataTableSource {
         ),
         DataCell(
           Text(
-            "${overtimeData.staff.staffFname} ${overtimeData.staff.staffLname}",
+            "${overtimeData.guardian.guardianFname} ${overtimeData.guardian.guardianFname}",
             style: TextStyles(context).getRegularStyle(),
           ),
         ),
         DataCell(
           Text(
-            "${overtimeData.guardian.guardianFname} ${overtimeData.guardian.guardianFname}",
+            "${overtimeData.staff.staffFname} ${overtimeData.staff.staffLname}",
             style: TextStyles(context).getRegularStyle(),
           ),
         ),
@@ -827,10 +827,19 @@ class PaymentDataSource extends DataTableSource {
             ),
           ),
         ),
+        // parent data
+        DataCell(
+          Text(
+            "${paymentData.guardian.guardianFname} ${paymentData.guardian.guardianLname}",
+            style: TextStyles(context).getRegularStyle(),
+          ),
+        ),
+        // staff data
         DataCell(Text(
           "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
           style: TextStyles(context).getRegularStyle(),
         )),
+        // date of payment
         DataCell(Text(
           formatDate(paymentData.dateOfPayment),
           style: TextStyles(context).getRegularStyle(),
@@ -839,9 +848,6 @@ class PaymentDataSource extends DataTableSource {
           paymentData.paymentMethod,
           style: TextStyles(context).getRegularStyle(),
         )),
-        // DataCell(Text(
-        //     "${paymentData.staff.staffFname} ${paymentData.staff.staffLname}",
-        //     style: const TextStyle(fontSize: 11))),
         DataCell(Text(
           formatNumber(paymentData.paidAmount),
           style: TextStyles(context).getRegularStyle(),

@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, library_private_types_in_public_api
 
+import 'dart:developer';
+
 import '/exports/exports.dart';
 
 class Loader extends StatefulWidget {
@@ -31,7 +33,7 @@ class _LoaderState extends State<Loader> with TickerProviderStateMixin {
       ..repeat();
 
 // tween animations
-    Tween<double> radiusTween = Tween(begin: 0, end: 200);
+    Tween<double> radiusTween = Tween(begin: 0.2, end: 0.7);
 // end of  tween animations
 
 // curves animation implementing pulse
@@ -60,19 +62,60 @@ class _LoaderState extends State<Loader> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SpinKitDualRing(color: Theme.of(context).primaryColor),
-        Padding(
-          padding: const EdgeInsets.all(28.0),
-          child: Text(
-            "Loading ${widget.text}..",
-            style: TextStyles(context).getRegularStyle(),
+    // log("${(100 - (animation!.value * 100)).clamp(0, 1)}");
+    return AnimatedBuilder(
+      builder: (context, child) {
+        return ListView.builder(
+          itemBuilder: (context, index) => Opacity(
+            opacity: animation!.value,
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 40,
+                backgroundColor: Theme.of(context).primaryColorLight,
+              ),
+              title: SizedBox(
+                child: Card(
+                  color: Theme.of(context).primaryColorLight,
+                  elevation: 0,
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                  ),
+                ),
+              ),
+              subtitle: SizedBox(
+                height: 15,
+                child: Card(color: Theme.of(context).primaryColorLight),
+              ),
+            ),
           ),
-        )
-      ],
+          itemCount: 10,
+        );
+      },
+      animation: animation!,
     );
+    /**
+     * Card(
+            color: Theme.of(context).primaryColorLight,
+            child: SizedBox(
+              height: 5,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: (animation!.value * 100).toInt(),
+                    child: Container(
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                  ),
+                  Expanded(
+                    flex: (100 - (animation!.value * 100)).toInt(),
+                    child: Container(
+                      color: Theme.of(context).primaryColorLight,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+     */
   }
 }

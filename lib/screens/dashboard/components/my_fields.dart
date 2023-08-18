@@ -1,5 +1,6 @@
 import 'package:admin/extensions/FormatString.dart';
 
+import '../../../widgets/SkeletonLoader.dart';
 import '/exports/exports.dart';
 
 class MyFiles extends StatelessWidget {
@@ -91,9 +92,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
         var cards = snapshot.data ?? [];
         return !snapshot.hasData
             ? Center(
-                child: Loader(
-                  text: "Dashboard data",
-                ),
+                child: SkeletonLoader(),
               )
             : GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),

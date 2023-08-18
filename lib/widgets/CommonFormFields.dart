@@ -4,6 +4,7 @@
 
 import 'dart:developer';
 
+import 'package:admin/extensions/FormatString.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '/exports/exports.dart';
@@ -45,7 +46,8 @@ class CommonFormFields extends StatefulWidget {
       this.onSelectedValue,
       this.initialPic,
       this.selectedData,
-      this.titlePadding = const EdgeInsets.all(20),  this.menuTitle = ""});
+      this.titlePadding = const EdgeInsets.all(20),
+      this.menuTitle = ""});
 
   @override
   State<CommonFormFields> createState() => _CommonFormFieldsState();
@@ -72,14 +74,14 @@ class _CommonFormFieldsState extends State<CommonFormFields>
           source:
               ImageSource.gallery); // pickImage(source: ImageSource.gallery);
       if (picker != null) {
-        print("Picker: => ${picker.path}");
+        print("Picker: => ${picker.mimeType}");
         var element = await picker.readAsBytes();
         setState(() {
           _imageBytes = element;
         });
         BlocProvider.of<ImageUploadController>(context).uploadImage({
           "image": picker.readAsBytes().asStream(),
-          "name": widget.formControllers[0].text,
+          "name": picker.name.trim().snakeCase,
           "size": picker.readAsBytes().asStream().length,
         });
       }
@@ -259,7 +261,8 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                           }
                                         },
                                     data: widget.lists ?? [],
-                                    dropdownList: widget.dropdownLists ?? [], fieldHeaderTitle: widget.menuTitle,
+                                    dropdownList: widget.dropdownLists ?? [],
+                                    fieldHeaderTitle: widget.menuTitle,
                                   ),
                                 )
                               :

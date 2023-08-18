@@ -29,7 +29,6 @@ class FirstTimeUserController extends Cubit<bool> {
   void getFirstTimeUser(String role) {
     if (role.trim() == 'Admin') {
       SharedPreferences.getInstance().then((value) {
-        log("first time user ${value.getBool('firstTimeUser')}");
         emit(value.getBool('firstTimeUser') ?? true);
       });
     } else {
