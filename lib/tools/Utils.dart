@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:admin/controllers/utils/LoaderController.dart';
 import 'package:admin/models/SettingModel.dart';
 import 'package:intl/intl.dart';
+import '../global/SessionManager.dart';
 import '../models/DropOffModels.dart';
 import '../models/Guardians.dart';
 import '../models/OvertimeModel.dart';
@@ -28,7 +29,7 @@ void loginUser(BuildContext context, String email, String password) async {
             "staff_contact": email,
             "staff_password": password,
           }))
-      .then((value) {
+      .then((value) async {
     if (value.statusCode == 200 || value.statusCode == 201) {
       context.read<LoaderController>().setLoading = false;
       var data = jsonDecode(value.body);
@@ -48,6 +49,7 @@ void loginUser(BuildContext context, String email, String password) async {
       }
       // for finance
       if (data['role'] == 'Admin' || data['role'] == 'Finance') {
+        await SessionManager().storeToken(data['_token']);
         BlocProvider.of<SchoolController>(context).setSchoolData(data);
         //
         Routes.namedRemovedUntilRoute(

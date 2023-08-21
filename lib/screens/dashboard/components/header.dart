@@ -151,7 +151,7 @@ class _ProfileCardState extends State<ProfileCard> {
                           // : context
                           //     .read<WidgetController>()
                           //     .pushWidget(const AdminProfile());
-                          Navigator.pop(context);
+                          // Navigator.pop(context);
                         },
                       )),
                     );

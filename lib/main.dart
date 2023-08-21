@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:admin/global/SessionManager.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/exports/exports.dart';
 import 'controllers/MenuAppController.dart';
@@ -11,6 +12,7 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer = const Observer();
   var prefs = await SharedPreferences.getInstance();
+  bool isExpired = await SessionManager().isTokenExpired();
   // prefs.clear().then((value) {
   //   log("Done cleaning");
   // });
@@ -61,7 +63,8 @@ Future<void> main() async {
                 title: "Skooltym  | $title",
                 theme: theme,
                 initialRoute: prefs.containsKey('schoolData') == true &&
-                        context.read<SchoolController>().state['role'] != null
+                        isExpired == false
+                    //context.read<SchoolController>().state['role'] != null
                     ? Routes.home
                     : Routes.login,
                 routes: routes(context),
