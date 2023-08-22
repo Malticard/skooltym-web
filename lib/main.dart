@@ -11,11 +11,9 @@ Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer = const Observer();
-  var prefs = await SharedPreferences.getInstance();
+
   bool isExpired = await SessionManager().isTokenExpired();
-  // prefs.clear().then((value) {
-  //   log("Done cleaning");
-  // });
+
   runApp(
     MultiBlocProvider(
       providers: [
@@ -62,11 +60,7 @@ Future<void> main() async {
               return MaterialApp(
                 title: "Skooltym  | $title",
                 theme: theme,
-                initialRoute: prefs.containsKey('schoolData') == true &&
-                        isExpired == false
-                    //context.read<SchoolController>().state['role'] != null
-                    ? Routes.home
-                    : Routes.login,
+                initialRoute: (isExpired == true) ? Routes.login : Routes.home,
                 routes: routes(context),
               );
             },

@@ -34,9 +34,9 @@ class _SystemSettingsState extends State<SystemSettings> {
 
   void settingsUpdate() async {
     if (mounted) {
-      SettingsModel settingsModel =
-          await fetchSettings(context.read<SchoolController>().state['school']);
-      _settingsController.add(settingsModel);
+      // SettingsModel settingsModel =
+      //     await fetchSettings(context.read<SchoolController>().state['school']);
+      // _settingsController.add(settingsModel);
     }
   }
 

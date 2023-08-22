@@ -32,18 +32,11 @@ class Routes {
   static void logout(BuildContext context) async {
     showProgress(context, msg: "Signing out");
     // clear all set data
-    SharedPreferences.getInstance().then((value) {
-      if (value.containsKey("schoolData")) {
-        value.remove("schoolData").then((value) async {
-          if (value == true) {
-            await SessionManager().clearToken();
-            showMessage(
-                context: context, type: 'info', msg: 'Signed out successfully');
-            namedRemovedUntilRoute(context, login);
-          }
-        });
-      }
-    });
+
+    await SessionManager().clearToken();
+    showMessage(
+        context: context, type: 'success', msg: 'Signed out successfully');
+    namedRemovedUntilRoute(context, login);
   }
 }
 

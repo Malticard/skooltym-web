@@ -51,6 +51,8 @@ void loginUser(BuildContext context, String email, String password) async {
       if (data['role'] == 'Admin' || data['role'] == 'Finance') {
         await SessionManager().storeToken(data['_token']);
         BlocProvider.of<SchoolController>(context).setSchoolData(data);
+        var token = await SessionManager().isTokenExpired();
+        log("Is token expired: $token");
         //
         Routes.namedRemovedUntilRoute(
           context,

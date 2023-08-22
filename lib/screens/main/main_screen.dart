@@ -1,3 +1,5 @@
+import 'package:admin/global/SessionManager.dart';
+
 import '../../controllers/MenuAppController.dart';
 import '/exports/exports.dart';
 import 'components/side_menu.dart';
@@ -19,6 +21,18 @@ class _MainScreenState extends State<MainScreen> {
     context.read<ThemeController>().getTheme();
     // retrieve session state
     super.initState();
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      SessionManager().isTokenExpired().then((value) async {
+        if (value == true) {
+          await SessionManager().clearToken();
+          timer.cancel();
+          // redirect to login
+          showMessage(
+              context: context, msg: "Session expired", type: 'warning');
+          Routes.namedRemovedUntilRoute(context, Routes.login);
+        }
+      });
+    });
   }
 
   @override

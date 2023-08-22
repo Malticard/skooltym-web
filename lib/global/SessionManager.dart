@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,12 +35,18 @@ class SessionManager {
     }
 
     final decodedToken = json.decode(
-        ascii.decode(base64.decode(base64.normalize(token.split('.')[1]))));
+      ascii.decode(
+        base64.decode(
+          base64.normalize(token.split('.')[1]),
+        ),
+      ),
+    );
 
     final expiry =
         DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
-
-    return DateTime.now().isAfter(expiry);
+    bool isExpired = DateTime.now().isAfter(expiry);
+    log("Session expired: $isExpired");
+    return isExpired;
   }
 
   // Clear JWT token
