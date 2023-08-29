@@ -108,8 +108,9 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
                   onClick: () {
                     String role =
                         context.read<SchoolController>().state['role'];
-                    context.read<TitleController>().setTitle(
-                        cards[index]['label'].toString().capitalize, role);
+                    context
+                        .read<TitleController>()
+                        .setTitle(cards[index]['label'].toString().capitalize);
                     // update side bar
                     context
                         .read<SideBarController>()

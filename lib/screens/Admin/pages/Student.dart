@@ -17,6 +17,7 @@ class _ViewStudentsState extends State<ViewStudents> {
     "Student's Photo",
     "Student Name",
     "Class",
+    "Status",
     "Gender",
     "Actions"
   ];
@@ -80,9 +81,7 @@ class _ViewStudentsState extends State<ViewStudents> {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<FirstTimeUserController>()
-        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+    context.read<FirstTimeUserController>().getFirstTimeUser();
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -141,7 +140,7 @@ class _ViewStudentsState extends State<ViewStudents> {
                           ),
                         ElevatedButton.icon(
                           onPressed: () {
-                            showDialog(
+                            showAdaptiveDialog(
                                 context: context,
                                 builder: (context) {
                                   return Dialog(
@@ -191,8 +190,7 @@ class _ViewStudentsState extends State<ViewStudents> {
                 TextButton(
                   onPressed: () {
                     context.read<WidgetController>().pushWidget(3);
-                    context.read<TitleController>().setTitle("Guardians",
-                        context.read<SchoolController>().state['role']);
+                    context.read<TitleController>().setTitle("Guardians");
                     context.read<SideBarController>().changeSelected(
                         3, context.read<SchoolController>().state['role']);
                   },

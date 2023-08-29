@@ -76,9 +76,7 @@ class _StaffViewState extends State<StaffView> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    context
-        .read<FirstTimeUserController>()
-        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+    context.read<FirstTimeUserController>().getFirstTimeUser();
     return Column(
       children: [
         Expanded(
@@ -173,8 +171,7 @@ class _StaffViewState extends State<StaffView> {
                 TextButton(
                   onPressed: () {
                     context.read<WidgetController>().pushWidget(1);
-                    context.read<TitleController>().setTitle("Students",
-                        context.read<SchoolController>().state['role']);
+                    context.read<TitleController>().setTitle("Students");
                     context.read<SideBarController>().changeSelected(
                         1, context.read<SchoolController>().state['role']);
                   },

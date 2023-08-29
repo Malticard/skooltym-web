@@ -71,9 +71,7 @@ class _ClassesUIState extends State<ClassesUI> {
   Widget build(BuildContext context) {
     // responsive dimensions
     Size size = MediaQuery.of(context).size;
-    context
-        .read<FirstTimeUserController>()
-        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+    context.read<FirstTimeUserController>().getFirstTimeUser();
     return Column(
       children: [
         Expanded(
@@ -121,7 +119,7 @@ class _ClassesUIState extends State<ClassesUI> {
                           ),
                         ElevatedButton.icon(
                           onPressed: () {
-                            showDialog(
+                            showAdaptiveDialog(
                               context: context,
                               builder: (context) => const AddClass(),
                             );
@@ -181,8 +179,7 @@ class _ClassesUIState extends State<ClassesUI> {
                 TextButton(
                   onPressed: () {
                     context.read<WidgetController>().pushWidget(2);
-                    context.read<TitleController>().setTitle("Staff",
-                        context.read<SchoolController>().state['role']);
+                    context.read<TitleController>().setTitle("Staff");
                     context.read<SideBarController>().changeSelected(
                         2, context.read<SchoolController>().state['role']);
                   },

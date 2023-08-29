@@ -30,6 +30,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
       TextEditingController(text: widget.studentModel.studentGender),
       TextEditingController(text: ""),
       TextEditingController(text: ""),
+      TextEditingController(text: "${widget.studentModel.isHalfDay}"),
     ];
     pollData();
     getStreams();
@@ -128,6 +129,12 @@ class _UpdateStudentState extends State<UpdateStudent> {
           ..._streams,
         ],
         'icon': Icons.home_work_outlined
+      },
+      {
+        "title": "PickUp time session *",
+        "switch": "0",
+        "password": false,
+        "icon": Icons.timelapse
       }
     ];
     return BlocConsumer<ImageUploadController, Map<String, dynamic>>(
@@ -139,6 +146,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
       builder: (context, state) {
         return SingleChildScrollView(
           child: CommonFormFields(
+            isHalfDay: widget.studentModel.isHalfDay,
             formTitle: "Update Student Details",
             initialPic: widget.studentModel.studentProfilePic,
             padding: _padding,
@@ -194,12 +202,14 @@ class _UpdateStudentState extends State<UpdateStudent> {
         "${_formControllers[0].text.trim().split(" ").first.trim()}_256"; //_formControllers[2].text.trim();
     request.fields['other_name'] = _formControllers[2].text.trim();
     request.fields['_class'] = _formControllers[5].text.trim();
+    request.fields['img'] = widget.studentModel.studentProfilePic;
     request.fields['stream'] = _formControllers[6].text.trim();
-
+    request.fields['isHalfDay'] =
+        "${json.decode(_formControllers[7].text.trim())}";
     request.fields['student_gender'] = _formControllers[4].text.trim();
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
-    if (kIsWeb) {
+    if (kIsWeb && imageData.isNotEmpty) {
       request.files.add(
         MultipartFile(
           "image",

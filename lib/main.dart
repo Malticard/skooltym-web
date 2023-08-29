@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:admin/global/SessionManager.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/exports/exports.dart';
@@ -48,13 +46,14 @@ Future<void> main() async {
         BlocProvider(create: (context) => PickUpTimeController()),
       ],
       child: BlocConsumer<ThemeController, ThemeData>(
-        listener: (context, theme) {},
+        listener: (context, theme) {
+          BlocProvider.of<SchoolController>(context, listen: false)
+              .getSchoolData();
+        },
         builder: (context, theme) {
-          BlocProvider.of<SchoolController>(context).getSchoolData();
-          BlocProvider.of<TitleController>(context).showTitle(
-              BlocProvider.of<SchoolController>(context, listen: true)
-                      .state['role'] ??
-                  "guest");
+          BlocProvider.of<SchoolController>(context, listen: true)
+              .getSchoolData();
+          BlocProvider.of<TitleController>(context).showTitle();
           return BlocBuilder<TitleController, String>(
             builder: (context, title) {
               return MaterialApp(

@@ -12,24 +12,48 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  Timer? _timer;
   @override
   void initState() {
-    context.read<SchoolController>().getSchoolData();
-    BlocProvider.of<FirstTimeUserController>(context)
-        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+    if (mounted) {
+      // retrieve session state
+      context.read<SchoolController>().getSchoolData();
+
+      BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
+    }
     // app theme state
     context.read<ThemeController>().getTheme();
     // retrieve session state
     super.initState();
     Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = timer;
       SessionManager().isTokenExpired().then((value) async {
         if (value == true) {
           await SessionManager().clearToken();
           timer.cancel();
           // redirect to login
-          showMessage(
-              context: context, msg: "Session expired", type: 'warning');
-          Routes.namedRemovedUntilRoute(context, Routes.login);
+          showAdaptiveDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) {
+                return AlertDialog.adaptive(
+                    title: Text('Session expired'),
+                    content: Text('Please login again'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Routes.namedRemovedUntilRoute(
+                                context, Routes.login);
+                            showMessage(
+                              context: context,
+                              msg: "Session expired",
+                              type: 'info',
+                            );
+                          },
+                          child: Text('Ok'))
+                    ]);
+              });
+          // Routes.namedRemovedUntilRoute(context, Routes.login);
         }
       });
     });
@@ -37,18 +61,23 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
-    context.read<ThemeController>().getTheme();
-    // retrieve session state
-    context.read<SchoolController>().getSchoolData();
+    if (mounted) {
+      context.read<ThemeController>().getTheme();
+      // retrieve session state
+      context.read<SchoolController>().getSchoolData();
 
-    BlocProvider.of<FirstTimeUserController>(context)
-        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+      BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
+    }
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
     super.dispose();
+    if (_timer!.isActive) {
+      _timer?.cancel();
+    }
+    _timer?.cancel();
     context.read<MenuAppController>().disposeController();
   }
 
@@ -57,9 +86,9 @@ class _MainScreenState extends State<MainScreen> {
     // app theme state
     context.read<ThemeController>().getTheme();
     // retrieve session state
-    BlocProvider.of<SchoolController>(context, listen: false).getSchoolData();
-    BlocProvider.of<FirstTimeUserController>(context)
-        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+    BlocProvider.of<SchoolController>(context, listen: true).getSchoolData();
+
+    BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
 
     return Scaffold(
       key: context.read<MenuAppController>().scaffoldKey,
@@ -80,8 +109,7 @@ class _MainScreenState extends State<MainScreen> {
                   BlocProvider.of<WidgetController>(context).showRecentWidget();
                   BlocProvider.of<FinanceViewController>(context)
                       .showRecentWidget();
-                  BlocProvider.of<TitleController>(context).showTitle(
-                      context.read<SchoolController>().state['role']);
+                  BlocProvider.of<TitleController>(context).showTitle();
                   BlocProvider.of<SideBarController>(context)
                       .showCurrentSelection(
                           context.read<SchoolController>().state['role']);

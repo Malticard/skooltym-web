@@ -16,13 +16,17 @@ class SchoolController extends Cubit<Map<String, dynamic>> {
   // method to get school data from shared preferences
   void getSchoolData() {
     SharedPreferences.getInstance().then((prefs) {
-      if (prefs.containsKey('schoolData')) {
-        emit(jsonDecode(prefs.getString('schoolData')!));
+      String? t = prefs.getString('schoolData');
+      if (prefs.containsKey('schoolData') && t != null) {
+        emit(jsonDecode(t));
       }
     });
   }
-  // 
-  logout(){
-    SharedPreferences.getInstance().then((value) => value.clear());
+
+  //
+  logout() {
+    SharedPreferences.getInstance().then(
+      (value) => value.remove("schoolData"),
+    );
   }
 }

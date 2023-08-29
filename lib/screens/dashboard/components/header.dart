@@ -16,17 +16,14 @@ class _HeaderState extends State<Header> {
   void initState() {
     super.initState();
     BlocProvider.of<SchoolController>(context).getSchoolData();
-    BlocProvider.of<TitleController>(context)
-        .showTitle(context.read<SchoolController>().state['role']);
+    BlocProvider.of<TitleController>(context).showTitle();
   }
 
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<SchoolController>(context, listen: true).getSchoolData();
-    BlocProvider.of<TitleController>(context, listen: true)
-        .showTitle(context.read<SchoolController>().state['role']);
-    BlocProvider.of<FirstTimeUserController>(context)
-        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+    BlocProvider.of<TitleController>(context, listen: true).showTitle();
+    BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
     return BlocConsumer<SchoolController, Map<String, dynamic>>(
       listener: (context, state) {
         setState(() {

@@ -79,9 +79,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    context
-        .read<FirstTimeUserController>()
-        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+    context.read<FirstTimeUserController>().getFirstTimeUser();
     return StreamBuilder(
         stream: _guardianController.stream,
         builder: (context, snapshot) {
@@ -126,7 +124,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                           const SizedBox(),
                           ElevatedButton.icon(
                             onPressed: () {
-                              showDialog(
+                              showAdaptiveDialog(
                                 context: context,
                                 builder: (context) {
                                   return AddGuardian();
@@ -176,16 +174,13 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                         onPressed: () {
                           log("User role : ${context.read<SchoolController>().state['role']}");
                           context.read<WidgetController>().pushWidget(0);
-                          context.read<TitleController>().setTitle("Dashboard",
-                              context.read<SchoolController>().state['role']);
+                          context.read<TitleController>().setTitle("Dashboard");
                           context.read<SideBarController>().changeSelected(0,
                               context.read<SchoolController>().state['role']);
                           BlocProvider.of<FirstTimeUserController>(context)
                               .setFirstTimeUser(
-                                  false,
-                                  context
-                                      .read<SchoolController>()
-                                      .state['role']);
+                            false,
+                          );
                         },
                         child: Text(
                           "Click here",

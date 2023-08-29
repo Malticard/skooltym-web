@@ -44,183 +44,178 @@ class _LoginScreenState extends State<LoginScreen> {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: TweenAnimationBuilder(
-            tween: Tween<double>(begin: 0, end: 1),
+            tween: Tween<double>(begin: 0.5, end: 1),
             curve: Curves.decelerate,
-            duration: const Duration(milliseconds: 1400),
+            duration: const Duration(milliseconds: 1600),
             builder: (context, value, child) {
-              return Transform.scale(
-                scale: value,
-                child: Opacity(
-                  opacity: value,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 45.0, left: 50),
-                        child: Text(
-                          "Login",
-                          style: TextStyles(context).getTitleStyle().copyWith(
-                                color: Colors.white,
-                                fontSize:
-                                    Responsive.isMobile(context) ? 30 : 40,
-                              ),
-                        ),
+              return Opacity(
+                opacity: value,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 45.0, left: 50),
+                      child: Text(
+                        "Login",
+                        style: TextStyles(context).getTitleStyle().copyWith(
+                              color: Colors.white,
+                              fontSize: Responsive.isMobile(context) ? 30 : 40,
+                            ),
                       ),
-                      Expanded(
-                        child: Responsive(
-                          mobile: Padding(
-                            padding: EdgeInsets.only(top: size.width * 0),
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: SvgPicture.asset(
-                                    "assets/vectors/mother_child.svg",
-                                    width:
-                                        MediaQuery.of(context).size.width * 1.6,
-                                    height:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                  ),
+                    ),
+                    Expanded(
+                      child: Responsive(
+                        mobile: Padding(
+                          padding: EdgeInsets.only(top: size.width * 0),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: SvgPicture.asset(
+                                  "assets/vectors/mother_child.svg",
+                                  width:
+                                      MediaQuery.of(context).size.width * 1.6,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.9,
                                 ),
-                                Expanded(
-                                  flex: 4,
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.width,
-                                    decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(50),
-                                          topRight: Radius.circular(50),
-                                        ),
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.black26
-                                            : Colors.white),
-                                    child: _buildForm(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          desktop: Padding(
-                            padding: EdgeInsets.only(
-                                top: size.width * 0.020,
-                                bottom: size.width * 0.03),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 60,
-                                          right: 60,
-                                        ),
-                                        child: SizedBox(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              2,
-                                          child: SvgPicture.asset(
-                                            "assets/vectors/mother_child.svg",
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                        right: size.width / 16,
-                                        left: size.width / 16,
-                                        bottom: size.width / 46,
-                                        top: size.width / 26),
-                                    height: size.height * 1.8,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(50),
-                                        topRight: Radius.circular(50),
-                                        bottomLeft: Radius.circular(50),
-                                        bottomRight: Radius.circular(50),
-                                      ),
-                                      color: Theme.of(context).canvasColor,
-                                    ),
-                                    child: _buildForm(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          tablet: Padding(
-                            padding: EdgeInsets.only(top: size.width * 0.070),
-                            child: GridView.count(
-                              crossAxisCount: 2,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    top: size.height * 0.03,
-                                    bottom: size.height * 0.093,
-                                    right: size.width / 17,
-                                    left: size.width / 17,
-                                  ),
-                                  height: size.height * 0.35,
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  height: MediaQuery.of(context).size.width,
                                   decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(50),
                                         topRight: Radius.circular(50),
-                                        bottomLeft: Radius.circular(50),
-                                        bottomRight: Radius.circular(50),
                                       ),
                                       color: Theme.of(context).brightness ==
                                               Brightness.dark
                                           ? Colors.black26
-                                          : Colors.white.withOpacity(1)),
+                                          : Colors.white),
                                   child: _buildForm(),
                                 ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.2,
-                                  child: SvgPicture.asset(
-                                    "assets/vectors/mother_child.svg",
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (!Responsive.isMobile(context))
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: size.width * 0.030,
-                            right: size.width * 0.030,
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                "assets/images/malticard.png",
-                                width: 80,
-                                height: 80,
-                              ),
-                              Text(
-                                "Powered by Malticard",
-                                style:
-                                    TextStyles(context).getBoldStyle().copyWith(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                        ),
                               ),
                             ],
                           ),
                         ),
-                    ],
-                  ),
+                        desktop: Padding(
+                          padding: EdgeInsets.only(
+                              top: size.width * 0.020,
+                              bottom: size.width * 0.03),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 60,
+                                        right: 60,
+                                      ),
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                2,
+                                        child: SvgPicture.asset(
+                                          "assets/vectors/mother_child.svg",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      right: size.width / 16,
+                                      left: size.width / 16,
+                                      bottom: size.width / 46,
+                                      top: size.width / 26),
+                                  height: size.height * 1.8,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(50),
+                                      topRight: Radius.circular(50),
+                                      bottomLeft: Radius.circular(50),
+                                      bottomRight: Radius.circular(50),
+                                    ),
+                                    color: Theme.of(context).canvasColor,
+                                  ),
+                                  child: _buildForm(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        tablet: Padding(
+                          padding: EdgeInsets.only(top: size.width * 0.070),
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                  top: size.height * 0.03,
+                                  bottom: size.height * 0.093,
+                                  right: size.width / 17,
+                                  left: size.width / 17,
+                                ),
+                                height: size.height * 0.35,
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(50),
+                                      topRight: Radius.circular(50),
+                                      bottomLeft: Radius.circular(50),
+                                      bottomRight: Radius.circular(50),
+                                    ),
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.black26
+                                        : Colors.white.withOpacity(1)),
+                                child: _buildForm(),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                child: SvgPicture.asset(
+                                  "assets/vectors/mother_child.svg",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (!Responsive.isMobile(context))
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: size.width * 0.030,
+                          right: size.width * 0.030,
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              "assets/images/malticard.png",
+                              width: 80,
+                              height: 80,
+                            ),
+                            Text(
+                              "Powered by Malticard",
+                              style:
+                                  TextStyles(context).getBoldStyle().copyWith(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                      ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
               );
             }),
@@ -357,7 +352,7 @@ class _LoginScreenState extends State<LoginScreen> {
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             onTap: () {
               BlocProvider.of<TitleController>(context)
-                  .setTitle("Verify Phone", "guest");
+                  .setTitle("Verify Phone");
               Routes.namedRoute(context, Routes.phoneVerify);
             },
             child: Padding(

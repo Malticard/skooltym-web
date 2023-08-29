@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:admin/controllers/utils/LoaderController.dart';
+
 import '/exports/exports.dart';
 
 ///  Created by bruno on 15/02/2023.
@@ -53,7 +55,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                     width: MediaQuery.of(context).size.width / 1.3,
                     height: MediaQuery.of(context).size.width * 0.5,
                     child: SvgPicture.asset(
-                      "assets/vectors/confirm_pass.svg",
+                      "assets/vectors/change_pass.svg",
                     ),
                   ),
                 ),
@@ -78,9 +80,9 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                         ),
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.43,
+                          height: MediaQuery.of(context).size.width / 2,
                           child: SvgPicture.asset(
-                            "assets/vectors/confirm_pass.svg",
+                            "assets/vectors/change_pass.svg",
                           ),
                         ),
                       ),
@@ -145,7 +147,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.3,
                   child: SvgPicture.asset(
-                    "assets/vectors/confirm_pass.svg",
+                    "assets/vectors/change_pass.svg",
                   ),
                 ),
               ],
@@ -157,109 +159,123 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   }
 
   Widget buildForm() {
-    return ListView(
-      children: <Widget>[
-        const CommonAppbarView(
-          titleText: "Set new password",
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-              top: 16.0, bottom: 10.0, left: 24, right: 24),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  "Ensure your new password is at least 6 characters long and different from your current password.",
-                  textAlign: TextAlign.start,
-                  style: TextStyles(context).getDescriptionStyle().copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).disabledColor,
-                      ),
+    return Consumer<LoaderController>(builder: (context, controller, child) {
+      return ListView(
+        children: <Widget>[
+          const CommonAppbarView(
+            titleText: "Set new password",
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 16.0, bottom: 10.0, left: 24, right: 24),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    "Ensure your new password is at least 6 characters long and different from your current password.",
+                    textAlign: TextAlign.start,
+                    style: TextStyles(context).getDescriptionStyle().copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).disabledColor,
+                        ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        CommonTextField(
-          enableSuffix: true,
-          suffixIcon:
-              !_pass ? Icons.remove_red_eye_rounded : Icons.visibility_off,
-          controller: _newController,
-          icon: Icons.lock_outline,
-          titleText: "New password",
-          padding: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
-          hintText: "************",
-          keyboardType: TextInputType.visiblePassword,
-          isObscureText: !_pass,
-          onTapSuffix: () {
-            setState(() {
-              _pass = !_pass;
-            });
-          },
-          errorText: _errorNewPassword,
-        ),
-        CommonTextField(
-          enableSuffix: true,
-          suffixIcon:
-              !_confirm ? Icons.remove_red_eye_rounded : Icons.visibility_off,
-          icon: Icons.lock_outline,
-          controller: _confirmController,
-          titleText: "Confirm Password",
-          //AppLocalizations(context).of("confirm_password"),
-          padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
-          hintText: "*************",
-          keyboardType: TextInputType.visiblePassword,
-          isObscureText: !_confirm,
-          onTapSuffix: () {
-            setState(() {
-              _confirm = !_confirm;
-            });
-          },
-          errorText: _errorConfirmPassword,
-        ),
-        CommonButton(
-          height: 50,
-          padding: const EdgeInsets.only(
-              top: 16.0, bottom: 10.0, left: 24, right: 24),
-          buttonTextWidget: Text(
-            "Save password",
-            style: TextStyles(context)
-                .getRegularStyle()
-                .copyWith(color: Colors.white),
-          ),
-          onTap: () {
-            if (_allValidation()) {
-              showProgress(context, msg: "Updating password");
-              Client().post(
-                  Uri.parse(AppUrls.setPassword +
-                      context.read<ForgotPasswordController>().state['id']),
-                  body: {
-                    "new_password": _newController.text.trim(),
-                    "confirm_password": _confirmController.text.trim(),
-                  }).then((value) {
-                final Map<String, dynamic> data = jsonDecode(value.body);
-
-                log("Change response => ${value.body}");
-                if (value.statusCode == 200 || value.statusCode == 201) {
-                  Navigator.pop(context);
-                  // log(data.toString());
-                  // if (data['status'] == 200) {
-                  _newController.clear();
-                  _confirmController.clear();
-                  showSuccessDialog("Password Updated", context, onPressed: () {
-                    Routes.namedRemovedUntilRoute(context, Routes.login);
-                  });
-                } else {
-                  showMessage(
-                      context: context, msg: data['error'], type: 'danger');
-                }
+          CommonTextField(
+            enableSuffix: true,
+            suffixIcon:
+                !_pass ? Icons.remove_red_eye_rounded : Icons.visibility_off,
+            controller: _newController,
+            readOnly: controller.isUpdatingPassword,
+            icon: Icons.lock_outline,
+            titleText: "New password",
+            padding: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
+            hintText: "************",
+            keyboardType: TextInputType.visiblePassword,
+            isObscureText: !_pass,
+            onTapSuffix: () {
+              setState(() {
+                _pass = !_pass;
               });
-            }
-          },
-        )
-      ],
-    );
+            },
+            errorText: _errorNewPassword,
+          ),
+          CommonTextField(
+            readOnly: controller.isUpdatingPassword,
+            enableSuffix: true,
+            suffixIcon:
+                !_confirm ? Icons.remove_red_eye_rounded : Icons.visibility_off,
+            icon: Icons.lock_outline,
+            controller: _confirmController,
+            titleText: ("Confirm Password"),
+            //AppLocalizations(context).of("confirm_password"),
+            padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+            hintText: "*************",
+            keyboardType: TextInputType.visiblePassword,
+            isObscureText: !_confirm,
+            onTapSuffix: () {
+              setState(() {
+                _confirm = !_confirm;
+              });
+            },
+            errorText: _errorConfirmPassword,
+          ),
+          CommonButton(
+            height: 50,
+            padding: const EdgeInsets.only(
+                top: 16.0, bottom: 10.0, left: 24, right: 24),
+            buttonTextWidget: controller.isUpdatingPassword
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : Text(
+                    "Save password",
+                    style: TextStyles(context)
+                        .getRegularStyle()
+                        .copyWith(color: Colors.white),
+                  ),
+            onTap: () {
+              controller.setIsUpdatingPassword = true;
+              if (_allValidation()) {
+                // showProgress(context, msg: "Updating password");
+                Client().post(
+                    Uri.parse(AppUrls.setPassword +
+                        context.read<ForgotPasswordController>().state['id']),
+                    body: {
+                      "new_password": _newController.text.trim(),
+                      "confirm_password": _confirmController.text.trim(),
+                    }).then((value) {
+                  final Map<String, dynamic> data = jsonDecode(value.body);
+
+                  log("Change response => ${value.body}");
+                  if (value.statusCode == 200 || value.statusCode == 201) {
+                    controller.setIsUpdatingPassword = false;
+                    Navigator.pop(context);
+
+                    _newController.clear();
+                    _confirmController.clear();
+                    showSuccessDialog("Password Updated", context,
+                        onPressed: () {
+                      Routes.namedRemovedUntilRoute(context, Routes.login);
+                    });
+                  } else {
+                    controller.setIsUpdatingPassword = false;
+                    showMessage(
+                        context: context, msg: data['error'], type: 'danger');
+                  }
+                });
+              } else {
+                controller.setIsUpdatingPassword = false;
+              }
+            },
+          )
+        ],
+      );
+    });
   }
 
   bool _allValidation() {

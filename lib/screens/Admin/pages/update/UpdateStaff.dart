@@ -157,25 +157,24 @@ class _UpdateStaffState extends State<UpdateStaff> {
         _formControllers[0].text.trim().split(" ")[1].trim();
     request.fields['staff_contact'] = _formControllers[2].text.trim();
     request.fields['staff_email'] = _formControllers[1].text.trim();
+    request.fields['img'] = widget.staff.staffProfilePic;
     // --------------------------- form files ---------------------------
     request.fields['staff_role'] =
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
-    //
-    if (kIsWeb) {
+
+    if (kIsWeb && imageData.isNotEmpty) {
       request.files.add(
-        MultipartFile(
-          "image",
-          imageData['image'],
-          imageData['size'],
-          filename: imageData['name'].toString().trim(),
-        ),
+        MultipartFile("image", imageData['image'], imageData['size'],
+            filename: imageData['name']),
       );
     } else {
       if (uri.isNotEmpty) {
-        request.files.add(MultipartFile(
-            'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-            filename: uri.split("/").last));
+        request.files.add(
+          MultipartFile('image', File(uri).readAsBytes().asStream(),
+              File(uri).lengthSync(),
+              filename: uri.split("/").last),
+        );
       }
     }
     request.fields['staff_password'] = "qwerty";

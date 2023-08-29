@@ -12,7 +12,7 @@ class FileInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapEffect(
-      onClick: () => showDialog(
+      onClick: () => showAdaptiveDialog(
         context: context,
         builder: (context) => Dialog(
           child: SizedBox(
@@ -31,7 +31,7 @@ class FileInfoCard extends StatelessWidget {
                       itemBuilder: (context, index) => ListTile(
                         onTap: () {
                           Navigator.pop(context);
-                          showDialog(
+                          showAdaptiveDialog(
                             context: context,
                             builder: (context) => Dialog(
                               child: StudentsPopUps(
@@ -68,7 +68,7 @@ class FileInfoCard extends StatelessWidget {
                         horizontal: defaultPadding, vertical: defaultPadding),
                     buttonText: ("View students"),
                     onTap: () {
-                      showDialog(
+                      showAdaptiveDialog(
                         context: context,
                         builder: (context) => Dialog(
                           child: StudentsPopUps(

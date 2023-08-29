@@ -45,7 +45,7 @@ class SessionManager {
     final expiry =
         DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
     bool isExpired = DateTime.now().isAfter(expiry);
-    log("Session expired: $isExpired");
+
     return isExpired;
   }
 

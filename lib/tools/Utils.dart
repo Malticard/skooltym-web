@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:admin/controllers/utils/LoaderController.dart';
 import 'package:admin/models/SettingModel.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 import '../global/SessionManager.dart';
 import '../models/DropOffModels.dart';
 import '../models/Guardians.dart';
@@ -15,8 +16,7 @@ import '/exports/exports.dart';
 // login logic for the user
 void loginUser(BuildContext context, String email, String password) async {
   if (context.read<SchoolController>().state.isNotEmpty) {
-    BlocProvider.of<FirstTimeUserController>(context)
-        .getFirstTimeUser(context.read<SchoolController>().state['role']);
+    BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
   }
   Client()
       .post(Uri.parse(AppUrls.login),
@@ -33,17 +33,15 @@ void loginUser(BuildContext context, String email, String password) async {
     if (value.statusCode == 200 || value.statusCode == 201) {
       context.read<LoaderController>().setLoading = false;
       var data = jsonDecode(value.body);
-      //
-      BlocProvider.of<FirstTimeUserController>(context)
-          .getFirstTimeUser(data['role']);
+      BlocProvider.of<SchoolController>(context).setSchoolData(data);
+      BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
       //
       log("Current session for first time is ${BlocProvider.of<FirstTimeUserController>(context).state}");
       if (BlocProvider.of<FirstTimeUserController>(context).state == true) {
-        BlocProvider.of<TitleController>(context)
-            .setTitle("Change Password", data['role']);
+        BlocProvider.of<TitleController>(context).setTitle("Change Password");
         log("Changing title");
       } else {
-        BlocProvider.of<TitleController>(context).showTitle(data['role']);
+        BlocProvider.of<TitleController>(context).showTitle();
         BlocProvider.of<FinanceViewController>(context).showRecentWidget();
         BlocProvider.of<WidgetController>(context).showRecentWidget();
       }
@@ -159,9 +157,9 @@ Future<StaffModel> fetchStaffs(BuildContext context,
 // show successDialog
 void showSuccessDialog(String name, BuildContext context,
     {VoidCallback? onPressed}) {
-  showDialog(
+  showAdaptiveDialog(
     context: context,
-    builder: (context) => AlertDialog(
+    builder: (context) => AlertDialog.adaptive(
       title: Text(
         "$name added successfully",
         textAlign: TextAlign.center,
@@ -610,6 +608,13 @@ Future<PaymentModel> fetchPayments(String schoolId,
       Uri.parse(AppUrls.getPayment + schoolId + "?page=$page&pageSize=$limit"));
   // if (response.statusCode == 200 || response.statusCode == 201) {
   return paymentModelFromJson(response.body);
+}
+
+/// function to rename uplaoded file to a unique name
+String renameFile(String fileName) {
+  var uuid = Uuid();
+  String fileExtension = fileName.split(".").last;
+  return uuid.v4() + ".$fileExtension";
 }
 
 // fetch dashboard meta data

@@ -14,7 +14,7 @@ class AddStudent extends StatefulWidget {
 class _AddStudentState extends State<AddStudent> {
   List<Map<String, dynamic>>? formFields;
   List<TextEditingController> formControllers =
-      List.generate(7, (index) => TextEditingController());
+      List.generate(8, (index) => TextEditingController());
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
@@ -62,7 +62,7 @@ class _AddStudentState extends State<AddStudent> {
   Widget build(BuildContext context) {
 // form data
 // error fields
-    List<String> errorFields = List.generate(7, (i) => '');
+    List<String> errorFields = List.generate(8, (i) => '');
     formFields = [
       {
         "title": "Student's Firstname *",
@@ -106,6 +106,12 @@ class _AddStudentState extends State<AddStudent> {
         "hint": "e.g North",
         "data": ["Select stream", ...getStreams()],
         'icon': Icons.home_work_outlined
+      },
+      {
+        "title": "PickUp session *",
+        "switch": "0",
+        "password": false,
+        "icon": Icons.timelapse
       }
     ];
 
@@ -171,10 +177,12 @@ class _AddStudentState extends State<AddStudent> {
     request.fields['_class'] = formControllers[5].text.trim();
     request.fields['stream'] = formControllers[6].text.trim();
     request.fields['student_gender'] = formControllers[4].text.trim();
+    request.fields['isHalfDay'] = (formControllers[7].text.trim());
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
-    if (kIsWeb) {
-      request.files.add(MultipartFile(
+    if (kIsWeb && context.read<ImageUploadController>().state.isNotEmpty) {
+      request.files.add(
+        MultipartFile(
           "image",
           context.read<ImageUploadController>().state['image'],
           context.read<ImageUploadController>().state['size'],
@@ -182,11 +190,15 @@ class _AddStudentState extends State<AddStudent> {
               .read<ImageUploadController>()
               .state['name']
               .toString()
-              .trim()));
+              .trim(),
+        ),
+      );
     } else {
-      request.files.add(MultipartFile(
-          'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-          filename: uri.split("/").last));
+      if (uri.isNotEmpty) {
+        request.files.add(MultipartFile(
+            'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
+            filename: uri.split("/").last));
+      }
     }
 
     //  ============================== student key ============================

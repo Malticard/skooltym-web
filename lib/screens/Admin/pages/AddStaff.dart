@@ -62,65 +62,76 @@ class _AddStaffState extends State<AddStaff> {
 // form key
   final formKey = GlobalKey<FormState>();
   // error fields
+  Map<String, dynamic> schoolData = {};
   List<String> errorFields = List.generate(formFields.length, (i) => '');
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Dialog(
-      child: SizedBox(
-        width: Responsive.isDesktop(context) ? size.width / 3 : size.width,
-        height:
-            Responsive.isMobile(context) ? size.height / 1.3 : size.width / 2.3,
-        child: Padding(
-          padding: padding,
-          child: CommonFormFields(
-            formTitle: "Add a new Staff member",
-            padding: padding,
-            formFields: formFields,
-            numberOfDropDowns: 2,
-            formControllers: _formControllers,
-            buttonText: "Submit Staff Details",
-            errorMsgs: errorFields,
-            onSubmit: () {
-              if (validateEmail(_formControllers[1].text, context) != false) {
-                showProgress(context, msg: "Adding new staff member...");
-                _handleFormUpload().then((value) {
-                  // debugPrint("Staff data -> ${value.reasonPhrase}");
-                  if (value.statusCode == 200 || value.statusCode == 201) {
-                    Routes.popPage(context);
-                    //  bottom msg
-                    showMessage(
-                      context: context,
-                      type: 'success',
-                      msg: "Added new staff successfully",
-                    );
-                    //  end of bottom msg
-                  } else {
-                    showMessage(
-                      context: context,
-                      type: 'danger',
-                      msg: "Error ${value.reasonPhrase}",
-                    );
-                    Routes.popPage(context);
-                    // showSuccessDialog(
-                    //     _formControllers[0].text.trim().split(" ")[1],
-                    //     context);
+      child: BlocConsumer<ImageUploadController, Map<String, dynamic>>(
+        listener: (context, state) {
+          setState(() {
+            schoolData = state;
+          });
+        },
+        builder: (context, state) {
+          return SizedBox(
+            width: Responsive.isDesktop(context) ? size.width / 3 : size.width,
+            height: Responsive.isMobile(context)
+                ? size.height / 1.3
+                : size.width / 2.3,
+            child: Padding(
+              padding: padding,
+              child: CommonFormFields(
+                formTitle: "Add a new Staff member",
+                padding: padding,
+                formFields: formFields,
+                numberOfDropDowns: 2,
+                formControllers: _formControllers,
+                buttonText: "Submit Staff Details",
+                errorMsgs: errorFields,
+                onSubmit: () {
+                  if (validateEmail(_formControllers[1].text, context) !=
+                      false) {
+                    showProgress(context, msg: "Adding new staff member...");
+                    _handleFormUpload().then((value) {
+                      // debugPrint("Staff data -> ${value.reasonPhrase}");
+                      if (value.statusCode == 200 || value.statusCode == 201) {
+                        Routes.popPage(context);
+                        //  bottom msg
+                        showMessage(
+                          context: context,
+                          type: 'success',
+                          msg: "Added new staff successfully",
+                        );
+                        //  end of bottom msg
+                      } else {
+                        showMessage(
+                          context: context,
+                          type: 'danger',
+                          msg: "Error ${value.reasonPhrase}",
+                        );
+                        Routes.popPage(context);
+                        // showSuccessDialog(
+                        //     _formControllers[0].text.trim().split(" ")[1],
+                        //     context);
+                      }
+                      // showSuccessDialog(
+                      //     _formControllers[0].text.trim().split(" ")[1], context);
+                    }).whenComplete(() {
+                      Routes.popPage(context);
+                    });
                   }
-                  // showSuccessDialog(
-                  //     _formControllers[0].text.trim().split(" ")[1], context);
-                }).whenComplete(() {
-                  Routes.popPage(context);
-                });
-              }
-            },
-          ),
-        ),
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
   Future<StreamedResponse> _handleFormUpload() async {
-    String uri = _formControllers[3].text.trim();
     // debugPrint("handling form upload with ${context.read<ImageUploadController>().state}");
     //
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStaff));
@@ -138,22 +149,21 @@ class _AddStaffState extends State<AddStaff> {
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
-    if (kIsWeb) {
-      request.files.add(MultipartFile(
-          "image",
-          context.read<ImageUploadController>().state['image'],
+    if (kIsWeb && schoolData.isNotEmpty) {
+      request.files.add(MultipartFile("image", schoolData['image'],
           context.read<ImageUploadController>().state['size'],
           filename: context.read<ImageUploadController>().state['name']));
-    } else {
+    } else if (_formControllers[3].text.trim().isNotEmpty) {
       request.files.add(
         MultipartFile(
           'image',
-          File(uri).readAsBytes().asStream(),
-          File(uri).lengthSync(),
-          filename: uri.split("/").last.trim(),
+          File(_formControllers[3].text.trim()).readAsBytes().asStream(),
+          File(_formControllers[3].text.trim()).lengthSync(),
+          filename: _formControllers[3].text.trim().split("/").last.trim(),
         ),
       );
-    }
+    } else {}
+
     //
     request.fields['staff_password'] = "qwerty";
     request.fields['staff_key[key]'] = "";

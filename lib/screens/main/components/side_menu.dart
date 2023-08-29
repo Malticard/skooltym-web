@@ -15,7 +15,7 @@ class _SideMenuState extends State<SideMenu> {
   var store;
   @override
   void initState() {
-    context.read<SchoolController>().getSchoolData();
+    BlocProvider.of<SchoolController>(context, listen: false).getSchoolData();
     BlocProvider.of<SideBarController>(context)
         .showCurrentSelection(context.read<SchoolController>().state['role']);
     super.initState();
@@ -23,7 +23,7 @@ class _SideMenuState extends State<SideMenu> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<SchoolController>().getSchoolData();
+    BlocProvider.of<SchoolController>(context, listen: true).getSchoolData();
     BlocProvider.of<SideBarController>(context)
         .showCurrentSelection(context.read<SchoolController>().state['role']);
     store = context.read<SchoolController>().state['role'] == 'Admin'
@@ -85,9 +85,9 @@ class _SideMenuState extends State<SideMenu> {
                             Responsive.isTablet(context)) {
                           Routes.popPage(context);
                         }
-                        context.read<TitleController>().setTitle(
-                            store[index]['title'],
-                            context.read<SchoolController>().state['role']);
+                        context
+                            .read<TitleController>()
+                            .setTitle(store[index]['title']);
                         if (context.read<SchoolController>().state['role'] ==
                             'Admin') {
                           // update rendered page

@@ -239,7 +239,7 @@ class _PhoneVerifyState extends State<PhoneVerify>
                     Routes.popPage(context);
                     context.read<ForgotPasswordController>().updateForgot(data);
                     BlocProvider.of<TitleController>(context)
-                        .setTitle("verify OTP", "guest");
+                        .setTitle("verify OTP");
                     showMessage(
                         context: context,
                         msg: "${_phoneVerificationController.text} verified",

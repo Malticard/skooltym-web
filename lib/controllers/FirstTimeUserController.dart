@@ -5,36 +5,40 @@ import '/exports/exports.dart';
 class FirstTimeUserController extends Cubit<bool> {
   FirstTimeUserController() : super(_fuser);
   static bool _fuser = true;
-  void setFirstTimeUser(bool checker, String role) {
-    if (role.trim() == 'Admin') {
-      SharedPreferences.getInstance().then((value) {
-        value
-            .setBool('firstTimeUser', checker)
-            .then((value) => log("Done setting for admin"));
+  void setFirstTimeUser(bool checker) {
+    SharedPreferences.getInstance().then((value) {
+      String? s = value.getString("schoolData");
+      if (s != null) {
+        String role = json.decode(s)['role'];
+        if (role == 'Admin') {
+          value
+              .setBool('firstTimeUser', checker)
+              .then((value) => log("Done setting for admin"));
 
-        emit(checker);
-      });
-    } else {
-      SharedPreferences.getInstance().then((value) {
-        value
-            .setBool('financeFirstTimeUser', checker)
-            .then((value) => log("Done setting for finance"));
+          emit(checker);
+        } else {
+          value
+              .setBool('financeFirstTimeUser', checker)
+              .then((value) => log("Done setting for finance"));
 
-        emit(checker);
-      });
-    }
+          emit(checker);
+        }
+      }
+    });
   }
 
   // retrieve saved state
-  void getFirstTimeUser(String role) {
-    if (role.trim() == 'Admin') {
-      SharedPreferences.getInstance().then((value) {
-        emit(value.getBool('firstTimeUser') ?? true);
-      });
-    } else {
-      SharedPreferences.getInstance().then((value) {
-        emit(value.getBool('financeFirstTimeUser') ?? true);
-      });
-    }
+  void getFirstTimeUser() {
+    SharedPreferences.getInstance().then((value) {
+      String? s = value.getString("schoolData");
+      if (s != null) {
+        String role = json.decode(s)['role'];
+        if (role == 'Admin') {
+          emit(value.getBool('firstTimeUser') ?? true);
+        } else {
+          emit(value.getBool('financeFirstTimeUser') ?? true);
+        }
+      }
+    });
   }
 }

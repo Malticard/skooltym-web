@@ -280,18 +280,17 @@ class _ChangePasswordState extends State<ChangePassword> {
               log("User role : ${context.read<SchoolController>().state['role']}");
               // for finance after changing the password are redirected to dashboard
               BlocProvider.of<FinanceViewController>(context).pushWidget(0);
-              BlocProvider.of<TitleController>(context).setTitle(
-                  "Dashboard", context.read<SchoolController>().state['role']);
+              BlocProvider.of<TitleController>(context).setTitle("Dashboard");
               BlocProvider.of<SideBarController>(context).changeSelected(
                   0, context.read<SchoolController>().state['role']);
               BlocProvider.of<FirstTimeUserController>(context)
                   .setFirstTimeUser(
-                      false, context.read<SchoolController>().state['role']);
+                false,
+              );
             } else {
               // for admins after changing the password are redirected to system settings
               context.read<WidgetController>().pushWidget(11);
-              context.read<TitleController>().setTitle("System Settings",
-                  context.read<SchoolController>().state['role']);
+              context.read<TitleController>().setTitle("System Settings");
               context.read<SideBarController>().changeSelected(
                   11, context.read<SchoolController>().state['role']);
             }

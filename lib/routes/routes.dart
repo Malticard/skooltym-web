@@ -9,6 +9,7 @@ class Routes {
   static const String forgotPassword = '/forgotPassword';
   static const String home = '/dashboard';
   static const String phoneVerify = '/phoneVerify';
+
   static void push(Widget widget, BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => widget, fullscreenDialog: true),
@@ -22,7 +23,7 @@ class Routes {
 
   static void namedRemovedUntilRoute(BuildContext context, String route) {
     debugPrint("moved $route");
-    Navigator.of(context).pushNamedAndRemoveUntil(route, (_) => true);
+    Navigator.of(context).pushReplacementNamed(route);
   }
 
   static void popPage(BuildContext context) {

@@ -202,17 +202,22 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
     request.fields['passcode'] = "";
     request.fields['deviceId'] = "";
     request.fields['guardian_key[key]'] = "";
+    request.fields['img'] = widget.guardianModel.guardianProfilePic;
 
     if (kIsWeb) {
-      request.files.add(
-        MultipartFile("image", imageData['image'], imageData['size'],
-            filename: imageData['name']),
-      );
+      if (imageData.isNotEmpty) {
+        request.files.add(
+          MultipartFile("image", imageData['image'], imageData['size'],
+              filename: imageData['name']),
+        );
+      }
     } else {
       if (uri.isNotEmpty) {
-        request.files.add(MultipartFile(
-            'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-            filename: uri.split("/").last));
+        request.files.add(
+          MultipartFile('image', File(uri).readAsBytes().asStream(),
+              File(uri).lengthSync(),
+              filename: uri.split("/").last),
+        );
       }
     }
     var response = request.send();

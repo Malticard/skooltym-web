@@ -112,6 +112,7 @@ class _AddGuardianState extends State<AddGuardian> {
     super.dispose();
   }
 
+  Map<String, dynamic> schoolData = {};
   @override
   Widget build(BuildContext context) {
     context.read<MultiStudentsController>().getMultiStudents();
@@ -122,33 +123,42 @@ class _AddGuardianState extends State<AddGuardian> {
         height: Responsive.isMobile(context)
             ? size.height * 1.25
             : size.width / 1.5,
-        child: Padding(
-          padding: padding,
-          child: StreamBuilder(
-            stream: _guardianStudentsController.stream,
-            builder: (context, students) {
-              return CommonFormFields(
-                formTitle: "Add Guardian",
-                menuTitle: "Attach Students",
-                padding: padding,
-                formFields: _formFields,
-                lists: students.data?.results.map((e) => e.id).toList(),
-                dropdownLists: students.data?.results.map((item) {
-                  return "${item.studentFname} ${item.studentLname}";
-                }).toList(),
-                onDropDownValue: (v) {
-                  if (v != null) {
-                    BlocProvider.of<MultiStudentsController>(context)
-                        .setMultiStudents((json.decode(v).join(",")));
-                  }
+        child: BlocConsumer<ImageUploadController, Map<String, dynamic>>(
+          listener: (context, state) {
+            setState(() {
+              schoolData = state;
+            });
+          },
+          builder: (context, state) {
+            return Padding(
+              padding: padding,
+              child: StreamBuilder(
+                stream: _guardianStudentsController.stream,
+                builder: (context, students) {
+                  return CommonFormFields(
+                    formTitle: "Add Guardian",
+                    menuTitle: "Attach Students",
+                    padding: padding,
+                    formFields: _formFields,
+                    lists: students.data?.results.map((e) => e.id).toList(),
+                    dropdownLists: students.data?.results.map((item) {
+                      return "${item.studentFname} ${item.studentLname}";
+                    }).toList(),
+                    onDropDownValue: (v) {
+                      if (v != null) {
+                        BlocProvider.of<MultiStudentsController>(context)
+                            .setMultiStudents((json.decode(v).join(",")));
+                      }
+                    },
+                    formControllers: _formControllers,
+                    buttonText: "Save Guardian Details",
+                    onSubmit: () => addGuardian(),
+                    errorMsgs: errorFields,
+                  );
                 },
-                formControllers: _formControllers,
-                buttonText: "Save Guardian Details",
-                onSubmit: () => addGuardian(),
-                errorMsgs: errorFields,
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -163,6 +173,9 @@ class _AddGuardianState extends State<AddGuardian> {
         log(event.reasonPhrase ?? "");
         log(event.statusCode.toString());
         if (event.statusCode == 200 || event.statusCode == 201) {
+          _formControllers.forEach((element) {
+            element.clear();
+          });
           showMessage(
             context: context,
             type: 'success',
@@ -200,25 +213,26 @@ class _AddGuardianState extends State<AddGuardian> {
     request.fields['guardian_contact'] = _formControllers[2].text.trim();
     request.fields['guardian_email'] = _formControllers[1].text.trim();
     request.fields['guardian_gender'] = _formControllers[4].text.trim();
-    if (kIsWeb) {
-      request.files.add(MultipartFile(
-          "image",
-          context.read<ImageUploadController>().state['image'],
-          context.read<ImageUploadController>().state['size'],
-          filename: context
-              .read<ImageUploadController>()
-              .state['name']
-              .toString()
-              .trim()));
-    } else {
+    if (kIsWeb && schoolData.isNotEmpty) {
       request.files.add(
         MultipartFile(
-          'image',
-          File(uri).readAsBytes().asStream(),
-          File(uri).lengthSync(),
-          filename: uri.split("/").last.trim(),
+          "image",
+          schoolData['image'],
+          schoolData['size'],
+          filename: schoolData['name'].toString().trim(),
         ),
       );
+    } else {
+      if (uri.isNotEmpty) {
+        request.files.add(
+          MultipartFile(
+            'image',
+            File(uri).readAsBytes().asStream(),
+            File(uri).lengthSync(),
+            filename: uri.split("/").last.trim(),
+          ),
+        );
+      }
     }
     request.fields['guardian_key[key]'] = "";
     var response = request.send();

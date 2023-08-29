@@ -120,7 +120,7 @@ class _StreamsUIState extends State<StreamsUI> {
                           ),
                           ElevatedButton.icon(
                             onPressed: () {
-                              showDialog(
+                              showAdaptiveDialog(
                                 context: context,
                                 builder: (context) => const AddStream(),
                               );
@@ -178,8 +178,7 @@ class _StreamsUIState extends State<StreamsUI> {
                 TextButton(
                   onPressed: () {
                     context.read<WidgetController>().pushWidget(4);
-                    context.read<TitleController>().setTitle("Classes",
-                        context.read<SchoolController>().state['role']);
+                    context.read<TitleController>().setTitle("Classes");
                     context.read<SideBarController>().changeSelected(
                         4, context.read<SchoolController>().state['role']);
                   },

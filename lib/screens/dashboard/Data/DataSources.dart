@@ -56,10 +56,18 @@ class StudentsDataSource extends DataTableSource {
             style: TextStyles(context).getRegularStyle(),
           ),
         ),
-        DataCell(Text(
-          studentData.resultClass.className,
-          style: TextStyles(context).getRegularStyle(),
-        )),
+        DataCell(
+          Text(
+            studentData.resultClass.className,
+            style: TextStyles(context).getRegularStyle(),
+          ),
+        ),
+        DataCell(
+          Text(
+            studentData.isHalfDay ? "Half Day" : "Full Day",
+            style: TextStyles(context).getRegularStyle(),
+          ),
+        ),
         DataCell(Text(
           studentData.studentGender,
           style: TextStyles(context).getRegularStyle(),
@@ -67,7 +75,7 @@ class StudentsDataSource extends DataTableSource {
         DataCell(
           buildActionButtons(context, () {
             Size size = MediaQuery.of(context).size;
-            showDialog(
+            showAdaptiveDialog(
                 context: context,
                 builder: (context) {
                   return Dialog(
@@ -83,7 +91,7 @@ class StudentsDataSource extends DataTableSource {
                   );
                 });
           }, () {
-            showDialog(
+            showAdaptiveDialog(
               context: context,
               builder: (context) {
                 return CommonDelete(
@@ -162,7 +170,7 @@ class StudentsDashboardDataSource extends DataTableSource {
         )),
         DataCell(
           buildActionButtons(context, () {
-            showDialog(
+            showAdaptiveDialog(
                 context: context,
                 builder: (context) {
                   return Dialog(
@@ -177,7 +185,7 @@ class StudentsDashboardDataSource extends DataTableSource {
                   );
                 });
           }, () {
-            showDialog(
+            showAdaptiveDialog(
               context: context,
               builder: (context) {
                 return CommonDelete(
@@ -240,7 +248,7 @@ class GuardianDataSource extends DataTableSource {
           ),
         )),
         DataCell(Text(
-          guardianData.guardianContact.toString(),
+          "0${guardianData.guardianContact}",
           style: TextStyles(context).getRegularStyle(),
         )),
         DataCell(Text(
@@ -250,14 +258,14 @@ class GuardianDataSource extends DataTableSource {
         DataCell(buildActionButtons(
           context,
           () {
-            showDialog(
+            showAdaptiveDialog(
                 context: context,
                 builder: (context) {
                   return UpdateGuardian(guardianModel: guardianData);
                 });
           },
           () {
-            showDialog(
+            showAdaptiveDialog(
                 context: context,
                 builder: (context) {
                   return CommonDelete(
@@ -319,7 +327,7 @@ class ClassDataSource extends DataTableSource {
         DataCell(
           buildActionButtons(
             context,
-            () => showDialog(
+            () => showAdaptiveDialog(
               context: context,
               builder: (context) => UpdateClass(
                 streams: classData.classStreams.map((e) => e.id).toList(),
@@ -327,7 +335,7 @@ class ClassDataSource extends DataTableSource {
                 id: classData.id,
               ),
             ),
-            () => showDialog(
+            () => showAdaptiveDialog(
               context: context,
               builder: (context) => CommonDelete(
                 title: classData.className,
@@ -390,7 +398,7 @@ class StreamDataSource extends DataTableSource {
         DataCell(buildActionButtons(
           context,
           // update a stream
-          () => showDialog(
+          () => showAdaptiveDialog(
               builder: (context) {
                 return UpdateStream(
                   stream: streamData.streamName,
@@ -399,7 +407,7 @@ class StreamDataSource extends DataTableSource {
               },
               context: context),
           // delete a stream
-          () => showDialog(
+          () => showAdaptiveDialog(
             context: context,
             builder: (context) => CommonDelete(
               title: streamData.streamName,
@@ -473,7 +481,7 @@ class StaffDataSource extends DataTableSource {
         )),
         DataCell(buildActionButtons(context, () {
           Size size = MediaQuery.of(context).size;
-          showDialog(
+          showAdaptiveDialog(
               context: context,
               builder: (context) {
                 return Dialog(
@@ -490,7 +498,7 @@ class StaffDataSource extends DataTableSource {
               });
         }, () {
           // delete functionality
-          showDialog(
+          showAdaptiveDialog(
               context: context,
               builder: (context) {
                 return CommonDelete(
@@ -563,7 +571,7 @@ class ReportsDataSource extends DataTableSource {
         ),
         DataCell(
           Text(
-            "${overtimeData.guardian.guardianFname} ${overtimeData.guardian.guardianFname}",
+            "${overtimeData.guardian.guardianFname} ${overtimeData.guardian.guardianLname}",
             style: TextStyles(context).getRegularStyle(),
           ),
         ),
@@ -590,7 +598,7 @@ class ReportsDataSource extends DataTableSource {
           DataCell(
             OutlinedButton(
               child: Text("Clear"),
-              onPressed: () => showDialog(
+              onPressed: () => showAdaptiveDialog(
                   context: context,
                   builder: (context) {
                     return AddPayment(

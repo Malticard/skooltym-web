@@ -1,3 +1,5 @@
+import 'package:admin/controllers/utils/LoaderController.dart';
+
 import '/exports/exports.dart';
 
 class AddPayment extends StatefulWidget {
@@ -43,93 +45,112 @@ class _AddPaymentState extends State<AddPayment> {
     BlocProvider.of<FetchStudentsController>(context)
         .getStudents(context.read<SchoolController>().state['school']);
     BlocProvider.of<GuardianController>(context).getGuardians(context);
-    return Dialog(
-      child: SizedBox(
-        width: Responsive.isDesktop(context)
-            ? MediaQuery.of(context).size.width / 3
-            : MediaQuery.of(context).size.width,
-        height: Responsive.isMobile(context)
-            ? MediaQuery.of(context).size.height / 1.3
-            : MediaQuery.of(context).size.width / 2.5,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Add Payment",
-                  style: TextStyles(context)
-                      .getRegularStyle()
-                      .copyWith(fontSize: 19),
+    return Consumer<LoaderController>(builder: (context, controller, child) {
+      return Dialog(
+        child: SizedBox(
+          width: Responsive.isDesktop(context)
+              ? MediaQuery.of(context).size.width / 3
+              : MediaQuery.of(context).size.width,
+          height: Responsive.isMobile(context)
+              ? MediaQuery.of(context).size.height / 1.3
+              : MediaQuery.of(context).size.width / 2.2,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Add Payment",
+                      style: TextStyles(context)
+                          .getRegularStyle()
+                          .copyWith(fontSize: 19),
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: defaultPadding),
+                CommonTextField(
+                  readOnly: controller.isAddingPayment,
+                  titleText: "Amount Owed :  UGX ${widget.amount}",
+                  hintText: "UGX ${widget.amount}",
+                  padding: padding,
+                  icon: Icons.attach_money,
+                  contentPadding: const EdgeInsets.only(top: 12),
+                  controller: _amountPaidController,
+                ),
+                // const SizedBox(height: defaultPadding),
+                DropDownWidget(
+                  displayText: selected ?? "Cash",
+                  elements: const ["Cash", "Comment"],
+                  titleText: "Payment Method",
+                  selectedValue: (value) {
+                    if (value!.isNotEmpty) {
+                      setState(() {
+                        selected = value;
+                        _paymentMethodController.text = value.trim();
+                      });
+                    }
+                  },
+                ),
+                CommonTextField(
+                  icon: Icons.comment,
+                  titleText: "Comment",
+                  padding: padding,
+                  readOnly: controller.isAddingPayment,
+                  contentPadding: const EdgeInsets.only(top: 12),
+                  hintText: "e.g school activities",
+                  controller: _commentController,
+                ),
+                CommonTextField(
+                  icon: Icons.person,
+                  titleText: "Student",
+                  readOnly: true,
+                  padding: padding,
+                  contentPadding: const EdgeInsets.only(top: 12),
+                  hintText: "e.g John Doe",
+                  controller: _studentController,
+                ),
+                CommonTextField(
+                  icon: Icons.person,
+                  titleText: "Guardian",
+                  readOnly: true,
+                  padding: padding,
+                  contentPadding: const EdgeInsets.only(top: 12),
+                  hintText: "e.g Guardian name",
+                  controller: _guardianController,
+                ),
+                CommonButton(
+                  buttonTextWidget: controller.isAddingPayment
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator.adaptive(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).primaryColor),
+                          ),
+                        )
+                      : Text(
+                          "Add Payment",
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
+                  onTap: controller.isAddingPayment
+                      ? null
+                      : () {
+                          handlePayment();
+                        },
+                  padding: padding,
+                )
+              ],
             ),
-            const SizedBox(height: defaultPadding),
-            CommonTextField(
-              titleText: "Amount Paid :  UGX ${widget.amount}",
-              hintText: "e.g 5000",
-              padding: padding,
-              icon: Icons.attach_money,
-              contentPadding: const EdgeInsets.only(top: 12),
-              controller: _amountPaidController,
-            ),
-            // const SizedBox(height: defaultPadding),
-            DropDownWidget(
-              displayText: selected ?? "Cash",
-              elements: const ["Cash", "Comment"],
-              titleText: "Payment Method",
-              selectedValue: (value) {
-                if (value!.isNotEmpty) {
-                  setState(() {
-                    selected = value;
-                    _paymentMethodController.text = value.trim();
-                  });
-                }
-              },
-            ),
-            CommonTextField(
-              icon: Icons.comment,
-              titleText: "Comment",
-              padding: padding,
-              contentPadding: const EdgeInsets.only(top: 12),
-              hintText: "e.g school activities",
-              controller: _commentController,
-            ),
-            CommonTextField(
-              icon: Icons.person,
-              titleText: "Student",
-              readOnly: true,
-              padding: padding,
-              contentPadding: const EdgeInsets.only(top: 12),
-              hintText: "e.g John Doe",
-              controller: _studentController,
-            ),
-            CommonTextField(
-              icon: Icons.person,
-              titleText: "Guardian",
-              readOnly: true,
-              padding: padding,
-              contentPadding: const EdgeInsets.only(top: 12),
-              hintText: "e.g Guardian name",
-              controller: _guardianController,
-            ),
-            CommonButton(
-              buttonText: "Add Payment",
-              onTap: () {
-                handlePayment();
-              },
-              padding: padding,
-            )
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   // function to handle the add payment
   handlePayment() {
-    showProgress(context, msg: "Recording new payment...");
+    // showProgress(context, msg: "Recording new payment...");
     Client().post(Uri.parse(AppUrls.addPayment), body: {
       "school": context.read<SchoolController>().state['school'],
       "guardian": widget.guardianId,
@@ -142,13 +163,12 @@ class _AddPaymentState extends State<AddPayment> {
       "payment_key[0]": "0"
     }).then((value) {
       if (value.statusCode == 200 || value.statusCode == 201) {
-        Routes.popPage(context);
+        // Routes.popPage(context);
         showMessage(
             context: context,
             msg: "Added new payment successfully",
             type: "success");
       } else {
-        Routes.popPage(context);
         showMessage(
             context: context,
             msg: "Added new payment successfully",

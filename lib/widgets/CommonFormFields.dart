@@ -3,14 +3,13 @@
 // import 'package:image_picker_for_web/image_picker_for_web.dart';
 
 import 'dart:developer';
-
-import 'package:admin/extensions/FormatString.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '/exports/exports.dart';
 
 class CommonFormFields extends StatefulWidget {
   final EdgeInsets padding;
+  final bool? isHalfDay;
   final String? initialPic;
   final List<Map<String, dynamic>> formFields;
   final List<String> errorMsgs;
@@ -47,7 +46,8 @@ class CommonFormFields extends StatefulWidget {
       this.initialPic,
       this.selectedData,
       this.titlePadding = const EdgeInsets.all(20),
-      this.menuTitle = ""});
+      this.menuTitle = "",
+      this.isHalfDay});
 
   @override
   State<CommonFormFields> createState() => _CommonFormFieldsState();
@@ -68,20 +68,19 @@ class _CommonFormFieldsState extends State<CommonFormFields>
 
   // var _cropController = CropController();
   var _imageBytes;
-  _handleImageUpload(int a) async {
+  void _handleImageUpload(int a) async {
     if (kIsWeb) {
       XFile? picker = await ImagePicker.platform.getImageFromSource(
           source:
               ImageSource.gallery); // pickImage(source: ImageSource.gallery);
       if (picker != null) {
-        print("Picker: => ${picker.mimeType}");
         var element = await picker.readAsBytes();
         setState(() {
           _imageBytes = element;
         });
         BlocProvider.of<ImageUploadController>(context).uploadImage({
           "image": picker.readAsBytes().asStream(),
-          "name": picker.name.trim().snakeCase,
+          "name": renameFile(picker.name.trim()),
           "size": picker.readAsBytes().asStream().length,
         });
       }
@@ -98,6 +97,30 @@ class _CommonFormFieldsState extends State<CommonFormFields>
         });
       });
     }
+  }
+
+  bool _timeSession = false;
+  Widget buildSwitchWidget(int x) {
+    return Container(
+      child: SwitchListTile.adaptive(
+        contentPadding: widget.padding,
+        secondary: Icon(widget.formFields[x - 1]['icon']),
+        title: Text(
+          widget.formFields[x - 1]['title'],
+        ),
+        subtitle: Text(widget.isHalfDay ?? _timeSession == true
+            ? "Half day student"
+            : "Full day student"),
+        value: _timeSession,
+        onChanged: (value) {
+          setState(() {
+            _timeSession = value;
+            widget.formControllers[x - 1].text = "${value}";
+          });
+          log("selected ${_timeSession}");
+        },
+      ),
+    );
   }
 
   Object drawImage(var url) {
@@ -249,10 +272,6 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                         (v) {
                                           log("Selected => $v");
                                           if (v != null) {
-                                            Provider.of<MainController>(context,
-                                                    listen: false)
-                                                .selectMultiStudent(
-                                                    json.decode(v));
                                             setState(() {
                                               // dropMsg![index - 1] = v;
                                               widget.formControllers[index - 1]
@@ -265,54 +284,62 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                     fieldHeaderTitle: widget.menuTitle,
                                   ),
                                 )
-                              :
-                              // other fields
-                              CommonTextField(
-                                  icon: widget.formFields[index - 1]['icon'],
-                                  enableSuffix: widget.formFields[index - 1]
-                                          ['enableSuffix'] ??
-                                      showPassword,
-                                  enableBorder: true,
-                                  suffixIcon: widget.formFields[index - 1]
-                                      ['suffix'],
-                                  fieldColor: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.white
-                                      : const Color.fromARGB(66, 75, 74, 74),
-                                  errorText: widget.errorMsgs[index - 1],
-                                  padding: widget.padding,
-                                  isObscureText: widget.formFields[index - 1]
-                                      ['password'],
-                                  controller: widget.formControllers[index - 1],
-                                  hintText: widget.formFields[index - 1]
-                                      ['hint'],
-                                  titleText: widget.formFields[index - 1]
-                                      ['title'],
-                                  onTapSuffix: () {
-                                    setState(() {
-                                      showPassword = !showPassword;
-                                      widget.formFields[index - 1]['password'] =
-                                          showPassword;
-                                    });
-                                  },
-                                  validate: (v) {
-                                    setState(() {
-                                      widget.errorMsgs[index - 1] = v!.isEmpty
-                                          ? "This field is required"
-                                          : "";
-                                    });
+                              : widget.formFields[index - 1]['switch'] != null
+                                  ? buildSwitchWidget(index)
+                                  :
+                                  // other fields
+                                  CommonTextField(
+                                      icon: widget.formFields[index - 1]
+                                          ['icon'],
+                                      enableSuffix: widget.formFields[index - 1]
+                                              ['enableSuffix'] ??
+                                          showPassword,
+                                      enableBorder: true,
+                                      suffixIcon: widget.formFields[index - 1]
+                                          ['suffix'],
+                                      fieldColor:
+                                          Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Colors.white
+                                              : const Color.fromARGB(
+                                                  66, 75, 74, 74),
+                                      errorText: widget.errorMsgs[index - 1],
+                                      padding: widget.padding,
+                                      isObscureText: widget
+                                          .formFields[index - 1]['password'],
+                                      controller:
+                                          widget.formControllers[index - 1],
+                                      hintText: widget.formFields[index - 1]
+                                          ['hint'],
+                                      titleText: widget.formFields[index - 1]
+                                          ['title'],
+                                      onTapSuffix: () {
+                                        setState(() {
+                                          showPassword = !showPassword;
+                                          widget.formFields[index - 1]
+                                              ['password'] = showPassword;
+                                        });
+                                      },
+                                      validate: (v) {
+                                        setState(() {
+                                          widget.errorMsgs[index - 1] =
+                                              v!.isEmpty
+                                                  ? "This field is required"
+                                                  : "";
+                                        });
 
-                                    return null;
-                                  },
-                                )
+                                        return null;
+                                      },
+                                    )
           : widget.submit ??
               CommonButton(
                 buttonText: widget.buttonText,
-                onTap: () {
-                  if (formKey.currentState!.validate() == true) {
-                    widget.onSubmit!();
-                  }
-                },
+                onTap: widget.onSubmit!,
+                //  () {
+                //   if (formKey.currentState!.validate() == true) {
+                //     widget.onSubmit!();
+                //   }
+                // },
                 padding: widget.padding,
                 height: 55,
               ),

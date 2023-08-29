@@ -9,13 +9,20 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   Map<String, dynamic> school = {};
+  @override
+  void initState() {
+    super.initState();
+
+    BlocProvider.of<SchoolController>(context).getSchoolData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    context.read<SchoolController>().getSchoolData();
+    Size size = MediaQuery.of(context).size;
+    BlocProvider.of<SchoolController>(context).getSchoolData();
     BlocProvider.of<FinanceViewController>(context).showRecentWidget();
     BlocProvider.of<WidgetController>(context).showRecentWidget();
-    Size size = MediaQuery.of(context).size;
+
     return Container(
       margin: EdgeInsets.all(0),
       // height: size.height /3,
