@@ -186,9 +186,9 @@ void showSuccessDialog(String name, BuildContext context,
 
 // show content dialog
 void showContentDialog(String name, BuildContext context) {
-  showDialog(
+  showAdaptiveDialog(
     context: context,
-    builder: (context) => AlertDialog(
+    builder: (context) => AlertDialog.adaptive(
       content: Text(
         name,
         overflow: TextOverflow.visible,
@@ -421,7 +421,7 @@ void showMessage(
 
 /// show progress widget
 void showProgress(BuildContext context, {String? msg = 'Task'}) {
-  showDialog(
+  showAdaptiveDialog(
     barrierDismissible: true,
     context: context,
     builder: (context) => Dialog(
