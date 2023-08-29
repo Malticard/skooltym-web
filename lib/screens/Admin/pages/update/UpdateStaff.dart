@@ -162,11 +162,15 @@ class _UpdateStaffState extends State<UpdateStaff> {
     request.fields['staff_role'] =
         await assignRole(_formControllers[5].text.trim());
     request.fields['staff_gender'] = _formControllers[4].text.trim();
-
-    if (kIsWeb && imageData.isNotEmpty) {
+    var imgData = context.read<ImageUploadController>().state;
+    if (kIsWeb && imgData.isNotEmpty) {
       request.files.add(
-        MultipartFile("image", imageData['image'], imageData['size'],
-            filename: imageData['name']),
+        MultipartFile(
+          "image",
+          imgData['image'],
+          imgData['size'],
+          filename: imgData['name'],
+        ),
       );
     } else {
       if (uri.isNotEmpty) {

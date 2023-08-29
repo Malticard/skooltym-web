@@ -58,17 +58,17 @@ class _StudentsPopUpsState extends State<StudentsPopUps> {
       _dashDataController.add(dashData);
     }
     // fetch data periodically
-    timer = Timer.periodic(Duration(seconds: 3), (timer) async {
-      if (mounted) {
-        if (_query!.isEmpty) {
-          searchStudents(
-              context.read<SchoolController>().state['school'], _query!);
-        }
-        var dashData = await fetchDashBoardData(
-            context.read<SchoolController>().state['school']);
-        _dashDataController.add(dashData);
-      }
-    });
+    // Timer.periodic(Duration(seconds: 1), (timer) async {
+    //   timer = timer;
+    //   if (mounted) {
+    if (_query!.isEmpty) {
+      searchStudents(context.read<SchoolController>().state['school'], _query!);
+    }
+    //     var dashData = await fetchDashBoardData(
+    //         context.read<SchoolController>().state['school']);
+    //     _dashDataController.add(dashData);
+    //   }
+    // });
   }
 
   @override

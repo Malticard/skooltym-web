@@ -209,13 +209,15 @@ class _UpdateStudentState extends State<UpdateStudent> {
     request.fields['student_gender'] = _formControllers[4].text.trim();
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
-    if (kIsWeb && imageData.isNotEmpty) {
+    var imgData = context.read<ImageUploadController>().state;
+    log(imgData.toString());
+    if (kIsWeb && imgData.isNotEmpty) {
       request.files.add(
         MultipartFile(
           "image",
-          imageData['image'],
-          imageData['size'],
-          filename: imageData['name'],
+          imgData['image'],
+          imgData['size'],
+          filename: imgData['name'],
         ),
       );
     } else {

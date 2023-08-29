@@ -78,10 +78,11 @@ class _CommonFormFieldsState extends State<CommonFormFields>
         setState(() {
           _imageBytes = element;
         });
+
         BlocProvider.of<ImageUploadController>(context).uploadImage({
           "image": picker.readAsBytes().asStream(),
           "name": renameFile(picker.name.trim()),
-          "size": picker.readAsBytes().asStream().length,
+          "size": element.length,
         });
       }
     } else {
@@ -100,7 +101,10 @@ class _CommonFormFieldsState extends State<CommonFormFields>
   }
 
   bool _timeSession = false;
+
   Widget buildSwitchWidget(int x) {
+    bool? oldValue;
+
     return Container(
       child: SwitchListTile.adaptive(
         contentPadding: widget.padding,
@@ -108,16 +112,20 @@ class _CommonFormFieldsState extends State<CommonFormFields>
         title: Text(
           widget.formFields[x - 1]['title'],
         ),
-        subtitle: Text(widget.isHalfDay ?? _timeSession == true
+        subtitle: Text(widget.isHalfDay == _timeSession
             ? "Half day student"
             : "Full day student"),
         value: _timeSession,
         onChanged: (value) {
           setState(() {
-            _timeSession = value;
+            _timeSession = !_timeSession;
             widget.formControllers[x - 1].text = "${value}";
           });
-          log("selected ${_timeSession}");
+          showMessage(
+            context: context,
+            msg:
+                "Changed to ${_timeSession ? 'Half day student' : 'Full day student'}",
+          );
         },
       ),
     );
