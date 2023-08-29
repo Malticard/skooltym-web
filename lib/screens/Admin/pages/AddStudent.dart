@@ -58,6 +58,7 @@ class _AddStudentState extends State<AddStudent> {
         : [];
   }
 
+  Map<String, dynamic> studentData = {};
   @override
   Widget build(BuildContext context) {
 // form data
@@ -115,45 +116,54 @@ class _AddStudentState extends State<AddStudent> {
       }
     ];
 
-    return SingleChildScrollView(
-      child: CommonFormFields(
-        formTitle: "Add Student",
-        padding: _padding,
-        formFields: formFields ?? [],
-        formControllers: formControllers,
-        buttonText: "Save Student Details",
-        onSubmit: () {
-          if (true) {
-            showProgress(context, msg: "Adding new student...");
-            _handleStudentRegistration().then(
-              (value) {
-                log("Response => ${value}");
-                if (value.statusCode == 200) {
+    return BlocConsumer<ImageUploadController, Map<String, dynamic>>(
+      listener: (context, state) {
+        setState(() {
+          studentData = state;
+        });
+      },
+      builder: (context, state) {
+        return SingleChildScrollView(
+          child: CommonFormFields(
+            formTitle: "Add Student",
+            padding: _padding,
+            formFields: formFields ?? [],
+            formControllers: formControllers,
+            buttonText: "Save Student Details",
+            onSubmit: () {
+              if (true) {
+                showProgress(context, msg: "Adding new student...");
+                _handleStudentRegistration().then(
+                  (value) {
+                    log("Response => ${value}");
+                    if (value.statusCode == 200) {
+                      Routes.popPage(context);
+                      showMessage(
+                        context: context,
+                        type: 'success',
+                        msg: "Added new student successfully",
+                      );
+                      for (var v in formControllers) {
+                        v.clear();
+                      }
+                    } else {
+                      showMessage(
+                        msg: "Failed to add student ${value.reasonPhrase}",
+                        context: context,
+                        type: "danger",
+                      );
+                    }
+                  },
+                ).whenComplete(() {
                   Routes.popPage(context);
-                  showMessage(
-                    context: context,
-                    type: 'success',
-                    msg: "Added new student successfully",
-                  );
-                  for (var v in formControllers) {
-                    v.clear();
-                  }
-                } else {
-                  showMessage(
-                    msg: "Failed to add student ${value.reasonPhrase}",
-                    context: context,
-                    type: "danger",
-                  );
-                }
-              },
-            ).whenComplete(() {
-              Routes.popPage(context);
-            });
-          }
-        },
-        errorMsgs: errorFields,
-        lists: [],
-      ),
+                });
+              }
+            },
+            errorMsgs: errorFields,
+            lists: [],
+          ),
+        );
+      },
     );
   }
 
@@ -180,17 +190,13 @@ class _AddStudentState extends State<AddStudent> {
     request.fields['isHalfDay'] = (formControllers[7].text.trim());
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
-    if (kIsWeb && context.read<ImageUploadController>().state.isNotEmpty) {
+    if (kIsWeb && studentData.isNotEmpty) {
       request.files.add(
         MultipartFile(
           "image",
-          context.read<ImageUploadController>().state['image'],
-          context.read<ImageUploadController>().state['size'],
-          filename: context
-              .read<ImageUploadController>()
-              .state['name']
-              .toString()
-              .trim(),
+          studentData['image'],
+          studentData['size'],
+          filename: studentData['name'].toString().trim(),
         ),
       );
     } else {
