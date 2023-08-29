@@ -49,6 +49,7 @@ class _AddStaffState extends State<AddStaff> {
         "Admin",
         "Teacher",
         "Finance",
+        "Approver",
       ]
     },
   ];
