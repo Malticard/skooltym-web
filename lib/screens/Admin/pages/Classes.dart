@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:admin/tools/searchHelpers.dart';
+import '/tools/searchHelpers.dart';
 
 import '/exports/exports.dart';
 

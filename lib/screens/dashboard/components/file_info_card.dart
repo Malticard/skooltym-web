@@ -32,6 +32,7 @@ class FileInfoCard extends StatelessWidget {
                         onTap: () {
                           Navigator.pop(context);
                           showAdaptiveDialog(
+                            barrierDismissible: true,
                             context: context,
                             builder: (context) => Dialog(
                               child: StudentsPopUps(

@@ -146,7 +146,7 @@ class _SystemSettingsState extends State<SystemSettings> {
                             builder: (context, state) {
                               return SettingCard(
                                 icon: (SettingIcons.pickupIcon),
-                                titleText: "Pick Ups",
+                                titleText: "Full Day PickUps",
                                 subText:
                                     "Set the start and end time for students pickups",
                                 trailText: state,
@@ -337,7 +337,9 @@ class _SystemSettingsState extends State<SystemSettings> {
                 context.read<WidgetController>().pushWidget(5);
                 context.read<TitleController>().setTitle("Streams");
                 context.read<SideBarController>().changeSelected(
-                    5, context.read<SchoolController>().state['role']);
+                      5,
+                      context.read<SchoolController>().state['role'],
+                    );
               }
             },
           );
@@ -407,42 +409,44 @@ class _SystemSettingsState extends State<SystemSettings> {
 // pickups
   void showPickUpOptions() {
     showAdaptiveDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => SettingsPopUp(
-            headerTitle: "Setting Pick Up Time",
-            onPressStartTime: () {
-              showTimePicker(
-                      helpText: "PickUp start time",
-                      context: context,
-                      initialTime: TimeOfDay.now())
-                  .then(
-                (value) => setState(() {
-                  pick_up_time_start =
-                      '${value!.hour}:${value.minute < 10 ? '0${value.minute}' : value.minute}:00';
-                }),
-              );
-            },
-            onPressEndTime: () {
-              showTimePicker(
-                helpText: "PickUp end time",
-                context: context,
-                initialTime: TimeOfDay.now(),
-              ).then(
-                (value) => setState(() {
-                  pick_up_time_end =
-                      "${value!.hour}:${value.minute < 10 ? '0${value.minute}' : value.minute}:00";
-                }),
-              );
-            },
-            cardTitle1: "Tap to set start time",
-            cardTitle2: "Tap to set end time",
-            onConfirm: () {
-              Routes.popPage(context);
-              context
-                  .read<PickUpTimeController>()
-                  .setPickUpTime("$pick_up_time_start - $pick_up_time_end");
-            }));
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => SettingsPopUp(
+        headerTitle: "Setting Full Day PickUp Time",
+        onPressStartTime: () {
+          showTimePicker(
+                  helpText: "Full Day PickUp start time",
+                  context: context,
+                  initialTime: TimeOfDay.now())
+              .then(
+            (value) => setState(() {
+              pick_up_time_start =
+                  '${value!.hour}:${value.minute < 10 ? '0${value.minute}' : value.minute}:00';
+            }),
+          );
+        },
+        onPressEndTime: () {
+          showTimePicker(
+            helpText: "Full Day PickUp end time",
+            context: context,
+            initialTime: TimeOfDay.now(),
+          ).then(
+            (value) => setState(() {
+              pick_up_time_end =
+                  "${value!.hour}:${value.minute < 10 ? '0${value.minute}' : value.minute}:00";
+            }),
+          );
+        },
+        cardTitle1: "Tap to set start time",
+        cardTitle2: "Tap to set end time",
+        onConfirm: () {
+          Routes.popPage(context);
+          context
+              .read<PickUpTimeController>()
+              .setPickUpTime("$pick_up_time_start - $pick_up_time_end");
+        },
+      ),
+    );
   }
 
 // setting overtime

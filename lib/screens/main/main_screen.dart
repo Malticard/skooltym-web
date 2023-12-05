@@ -26,7 +26,9 @@ class _MainScreenState extends State<MainScreen> {
     // retrieve session state
     super.initState();
     Timer.periodic(Duration(seconds: 1), (timer) {
-      _timer = timer;
+      setState(() {
+        _timer = timer;
+      });
       SessionManager().isTokenExpired().then((value) async {
         if (value == true) {
           await SessionManager().clearToken();
@@ -57,6 +59,11 @@ class _MainScreenState extends State<MainScreen> {
         }
       });
     });
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

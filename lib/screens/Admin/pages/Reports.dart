@@ -220,7 +220,7 @@ class _PendingOvertimeState extends State<PendingOvertime>
         limit: rowsPerPage);
     _overtimeController.add(pendingOvertimes);
     // listen to the stream
-    Timer.periodic(Duration(seconds: 1), (timer) async {
+    Timer.periodic(Duration(seconds: 2), (timer) async {
       this.timer = timer;
       if (mounted) {
         if (_query != null) {

@@ -34,7 +34,8 @@ class Routes {
     showProgress(context, msg: "Signing out");
     // clear all set data
 
-    await SessionManager().clearToken();
+    await SharedPreferences.getInstance()
+        .then((value) => value.remove("schoolData").then((value) => null));
     showMessage(
         context: context, type: 'success', msg: 'Signed out successfully');
     namedRemovedUntilRoute(context, login);
