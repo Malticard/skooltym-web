@@ -66,9 +66,11 @@ class CommonTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(24),
               side: enableBorder
                   ? BorderSide(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white12
-                          : Colors.black12,
+                      color: (errorText != null && errorText!.isNotEmpty)
+                          ? Colors.red
+                          : Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white12
+                              : Colors.black12,
                     )
                   : BorderSide.none,
             ),

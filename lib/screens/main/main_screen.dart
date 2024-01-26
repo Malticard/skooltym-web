@@ -59,6 +59,7 @@ class _MainScreenState extends State<MainScreen> {
         }
       });
     });
+  
   }
 
   @override
@@ -85,7 +86,7 @@ class _MainScreenState extends State<MainScreen> {
       _timer?.cancel();
     }
     _timer?.cancel();
-    context.read<MenuAppController>().disposeController();
+    // context.read<MenuAppController>().disposeController();
   }
 
   @override

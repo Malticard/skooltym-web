@@ -14,7 +14,7 @@ class AddStudent extends StatefulWidget {
 class _AddStudentState extends State<AddStudent> {
   List<Map<String, dynamic>>? formFields;
   List<TextEditingController> formControllers =
-      List.generate(8, (index) => TextEditingController());
+      List.generate(9, (index) => TextEditingController());
   // overall form padding
   final EdgeInsets _padding =
       const EdgeInsets.only(left: 24, top: 5, right: 24, bottom: 5);
@@ -63,7 +63,7 @@ class _AddStudentState extends State<AddStudent> {
   Widget build(BuildContext context) {
 // form data
 // error fields
-    List<String> errorFields = List.generate(8, (i) => '');
+    List<String> errorFields = List.generate(9, (i) => '');
     formFields = [
       {
         "title": "Student's Firstname *",
@@ -113,9 +113,14 @@ class _AddStudentState extends State<AddStudent> {
         "switch": "0",
         "password": false,
         "icon": Icons.timelapse
+      },
+      {
+        "title": "Van Student *",
+        "van": "0",
+        "password": false,
+        "icon": Icons.car_repair_outlined,
       }
     ];
-
     return BlocConsumer<ImageUploadController, Map<String, dynamic>>(
       listener: (context, state) {
         setState(() {
@@ -171,12 +176,16 @@ class _AddStudentState extends State<AddStudent> {
     String uri = formControllers[3].text;
 
     var request = MultipartRequest('POST', Uri.parse(AppUrls.addStudent));
-    log("${request.headers}");
+    // log("${request.headers}");
     //  ============================== student details ============================
     request.fields['guardians'] =
         ""; //json.encode(context.watch()<MainController>().multiselect);
     request.fields['school'] =
         "${context.read<SchoolController>().state['school']}";
+    request.fields['name'] =
+        "${context.read<SchoolController>().state['schoolName']}"
+            .toLowerCase()
+            .replaceFirst(" ", "-");
     request.fields['student_fname'] =
         formControllers[0].text.trim().split(" ").first.trim();
     request.fields['student_lname'] =
@@ -188,6 +197,7 @@ class _AddStudentState extends State<AddStudent> {
     request.fields['stream'] = formControllers[6].text.trim();
     request.fields['student_gender'] = formControllers[4].text.trim();
     request.fields['isHalfDay'] = (formControllers[7].text.trim());
+    request.fields['isVanStudent'] = (formControllers[8].text.trim());
     //  ============================== student profile pic ============================
     // request.fields['student_profile_pic'] = _formControllers[5].file.path;
     if (kIsWeb && studentData.isNotEmpty) {
@@ -203,7 +213,7 @@ class _AddStudentState extends State<AddStudent> {
       if (uri.isNotEmpty) {
         request.files.add(MultipartFile(
             'image', File(uri).readAsBytes().asStream(), File(uri).lengthSync(),
-            filename: uri.split("/").last));
+            filename: renameFile(uri.split("/").last)));
       }
     }
 

@@ -39,7 +39,7 @@ void loginUser(BuildContext context, String email, String password) async {
       log("Current session for first time is ${BlocProvider.of<FirstTimeUserController>(context).state}");
       if (BlocProvider.of<FirstTimeUserController>(context).state == true) {
         BlocProvider.of<TitleController>(context).setTitle("Change Password");
-        log("Changing title");
+        // log("Changing title");
       } else {
         BlocProvider.of<TitleController>(context).showTitle();
         BlocProvider.of<FinanceViewController>(context).showRecentWidget();
@@ -49,8 +49,8 @@ void loginUser(BuildContext context, String email, String password) async {
       if (data['role'] == 'Admin' || data['role'] == 'Finance') {
         await SessionManager().storeToken(data['_token']);
         BlocProvider.of<SchoolController>(context).setSchoolData(data);
-        var token = await SessionManager().isTokenExpired();
-        log("Is token expired: $token");
+        // var token = await SessionManager().isTokenExpired();
+        // log("Is token expired: $token");
         //
         Routes.namedRemovedUntilRoute(
           context,
@@ -77,10 +77,14 @@ void loginUser(BuildContext context, String email, String password) async {
 
 // global functions
 Future<String> assignRole(String role) async {
-  var response = await Client().get(Uri.parse(AppUrls.roles));
-  final roles = rolesFromJson(response.body);
-  var result = roles.firstWhere((element) => element.roleType == role);
-  return result.id;
+  try {
+    var response = await Client().get(Uri.parse(AppUrls.roles));
+    final roles = rolesFromJson(response.body);
+    var result = roles.firstWhere((element) => element.roleType == role);
+    return result.id;
+  } on ClientException catch (e, _) {
+    return Future.error("Lost connection to server");
+  }
 }
 
 Future<String?> fetchAndDisplayImage(String imageURL) async {
@@ -88,7 +92,7 @@ Future<String?> fetchAndDisplayImage(String imageURL) async {
   //   Duration(seconds: 2),
   // );
   // // await Client().get(Uri.parse(AppUrls.liveImages + imageURL));
-  return AppUrls.liveImages + imageURL;
+  return imageURL;
 }
 
 String formatNumber(var number) {
@@ -123,9 +127,13 @@ String greetUser() {
 // return students
 Future<StudentModel> fetchStudents(String id,
     {int page = 1, int limit = 20}) async {
-  var res = await Client()
-      .get(Uri.parse(AppUrls.students + id + "?page=$page&pageSize=$limit"));
-  return studentModelFromJson(res.body);
+  try {
+    var res = await Client()
+        .get(Uri.parse(AppUrls.students + id + "?page=$page&pageSize=$limit"));
+    return studentModelFromJson(res.body);
+  } on ClientException catch (e, _) {
+    return Future.error("Lost connection to server");
+  }
 }
 
 // fetching guardians
@@ -400,10 +408,13 @@ void showMessage(
     double opacity = 1,
     int duration = 5,
     Animation<double>? animation}) {
+  int num = msg!.length;
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      behavior: float ? SnackBarBehavior.floating : SnackBarBehavior.fixed,
-      content: Text(msg ?? ''),
+      behavior: SnackBarBehavior.floating,
+      dismissDirection: DismissDirection.vertical,
+      showCloseIcon: true,
+      content: Text(msg),
       backgroundColor: type == 'info'
           ? Colors.lightBlue
           : type == 'warning'
@@ -415,8 +426,24 @@ void showMessage(
                           .withOpacity(opacity)
                       : Colors.grey[600]!.withOpacity(opacity),
       duration: Duration(seconds: duration),
+      // animation:Tween<double>(begin:0,end:1).animate(AnimationController(duration: )),
+      margin: EdgeInsets.only(
+          right: 20, bottom: _bottom(context, num), left: _left(context, num)),
     ),
   );
+}
+
+double _left(BuildContext context, int num) {
+  double width = MediaQuery.of(context).size.width;
+  double factor = 1440 / width;
+  double leftMargin =
+      width * (1 - (factor * (0.1 + ((num - 1) * (num < 32 ? 0.01 : 0.0076)))));
+  return leftMargin > 0 ? leftMargin : 20;
+}
+
+double _bottom(BuildContext context, int num) {
+  double height = MediaQuery.of(context).size.height;
+  return height * 0.88;
 }
 
 /// show progress widget

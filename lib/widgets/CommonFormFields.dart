@@ -101,10 +101,9 @@ class _CommonFormFieldsState extends State<CommonFormFields>
   }
 
   bool _timeSession = false;
+  bool _vanSession = false;
 
   Widget buildSwitchWidget(int x) {
-    bool? oldValue;
-
     return Container(
       child: SwitchListTile.adaptive(
         contentPadding: widget.padding,
@@ -128,6 +127,32 @@ class _CommonFormFieldsState extends State<CommonFormFields>
           );
         },
       ),
+    );
+  }
+  // build two radio options for yes or no
+
+  Widget buildRadioWidget(int x) {
+    return SwitchListTile.adaptive(
+      contentPadding: widget.padding,
+      secondary: Icon(widget.formFields[x - 1]['icon']),
+      title: Text(
+        widget.formFields[x - 1]['title'],
+      ),
+      subtitle: Text(widget.isHalfDay == _vanSession
+          ? "Van student"
+          : "Not a van student"),
+      value: _vanSession,
+      onChanged: (value) {
+        setState(() {
+          _vanSession = !_vanSession;
+          widget.formControllers[x - 1].text = "${value}";
+        });
+        showMessage(
+          context: context,
+          msg:
+              "Changed to ${_vanSession ? 'Van student' : 'Not a van student'}",
+        );
+      },
     );
   }
 
@@ -294,51 +319,56 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                 )
                               : widget.formFields[index - 1]['switch'] != null
                                   ? buildSwitchWidget(index)
-                                  :
-                                  // other fields
-                                  CommonTextField(
-                                      icon: widget.formFields[index - 1]
-                                          ['icon'],
-                                      enableSuffix: widget.formFields[index - 1]
-                                              ['enableSuffix'] ??
-                                          showPassword,
-                                      enableBorder: true,
-                                      suffixIcon: widget.formFields[index - 1]
-                                          ['suffix'],
-                                      fieldColor:
-                                          Theme.of(context).brightness ==
-                                                  Brightness.light
-                                              ? Colors.white
-                                              : const Color.fromARGB(
-                                                  66, 75, 74, 74),
-                                      errorText: widget.errorMsgs[index - 1],
-                                      padding: widget.padding,
-                                      isObscureText: widget
-                                          .formFields[index - 1]['password'],
-                                      controller:
-                                          widget.formControllers[index - 1],
-                                      hintText: widget.formFields[index - 1]
-                                          ['hint'],
-                                      titleText: widget.formFields[index - 1]
-                                          ['title'],
-                                      onTapSuffix: () {
-                                        setState(() {
-                                          showPassword = !showPassword;
-                                          widget.formFields[index - 1]
-                                              ['password'] = showPassword;
-                                        });
-                                      },
-                                      validate: (v) {
-                                        setState(() {
-                                          widget.errorMsgs[index - 1] =
-                                              v!.isEmpty
-                                                  ? "This field is required"
-                                                  : "";
-                                        });
+                                  : widget.formFields[index - 1]['van'] != null
+                                      ? buildRadioWidget(index)
+                                      :
+                                      // other fields
+                                      CommonTextField(
+                                          icon: widget.formFields[index - 1]
+                                              ['icon'],
+                                          enableSuffix:
+                                              widget.formFields[index - 1]
+                                                      ['enableSuffix'] ??
+                                                  showPassword,
+                                          enableBorder: true,
+                                          suffixIcon: widget
+                                              .formFields[index - 1]['suffix'],
+                                          fieldColor:
+                                              Theme.of(context).brightness ==
+                                                      Brightness.light
+                                                  ? Colors.white
+                                                  : const Color.fromARGB(
+                                                      66, 75, 74, 74),
+                                          errorText:
+                                              widget.errorMsgs[index - 1],
+                                          padding: widget.padding,
+                                          isObscureText:
+                                              widget.formFields[index - 1]
+                                                  ['password'],
+                                          controller:
+                                              widget.formControllers[index - 1],
+                                          hintText: widget.formFields[index - 1]
+                                              ['hint'],
+                                          titleText: widget
+                                              .formFields[index - 1]['title'],
+                                          onTapSuffix: () {
+                                            setState(() {
+                                              showPassword = !showPassword;
+                                              widget.formFields[index - 1]
+                                                  ['password'] = showPassword;
+                                            });
+                                          },
+                                          validate: (v) {
+                                            setState(() {
+                                              widget.errorMsgs[index - 1] =
+                                                  v!.isEmpty
+                                                      ? "This field is required"
+                                                      : "";
+                                            });
 
-                                        return null;
-                                      },
-                                    )
+                                            return null;
+                                          },
+                                        )
           : widget.submit ??
               CommonButton(
                 buttonText: widget.buttonText,

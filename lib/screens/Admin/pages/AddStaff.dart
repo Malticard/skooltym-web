@@ -139,6 +139,10 @@ class _AddStaffState extends State<AddStaff> {
     // =============================== form fields =======================
     request.fields['staff_school'] =
         "${context.read<SchoolController>().state['school']}";
+    request.fields['name'] =
+        "${context.read<SchoolController>().state['schoolName']}"
+            .toLowerCase()
+            .replaceFirst(" ", "-");
     request.fields['staff_fname'] =
         _formControllers[0].text.trim().split(" ")[0];
     request.fields['staff_lname'] =
@@ -160,7 +164,8 @@ class _AddStaffState extends State<AddStaff> {
           'image',
           File(_formControllers[3].text.trim()).readAsBytes().asStream(),
           File(_formControllers[3].text.trim()).lengthSync(),
-          filename: _formControllers[3].text.trim().split("/").last.trim(),
+          filename: renameFile(
+              _formControllers[3].text.trim().split("/").last.trim()),
         ),
       );
     } else {}

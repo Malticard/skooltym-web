@@ -204,7 +204,10 @@ class _AddGuardianState extends State<AddGuardian> {
         (context.read<MultiStudentsController>().state);
 
     request.fields['school'] = context.read<SchoolController>().state['school'];
-
+    request.fields['name'] =
+        "${context.read<SchoolController>().state['schoolName']}"
+            .toLowerCase()
+            .replaceFirst(" ", "-");
     request.fields['type'] = _formControllers[5].text.trim();
     request.fields['relationship'] = _formControllers[7].text.trim();
     request.fields['guardian_fname'] =
@@ -230,7 +233,7 @@ class _AddGuardianState extends State<AddGuardian> {
             'image',
             File(uri).readAsBytes().asStream(),
             File(uri).lengthSync(),
-            filename: uri.split("/").last.trim(),
+            filename: renameFile(uri.split("/").last.trim()),
           ),
         );
       }

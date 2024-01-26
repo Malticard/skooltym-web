@@ -36,189 +36,274 @@ class _LoginScreenState extends State<LoginScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? Theme.of(context).scaffoldBackgroundColor
-          : const Color.fromARGB(204, 9, 87, 139),
-      body: RemoveFocuse(
-        onClick: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: TweenAnimationBuilder(
-            tween: Tween<double>(begin: 0.5, end: 1),
-            curve: Curves.decelerate,
-            duration: const Duration(milliseconds: 1600),
-            builder: (context, value, child) {
-              return Opacity(
-                opacity: value,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 45.0, left: 50),
-                      child: Text(
-                        "Login",
-                        style: TextStyles(context).getTitleStyle().copyWith(
-                              color: Colors.white,
-                              fontSize: Responsive.isMobile(context) ? 30 : 40,
-                            ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Responsive(
-                        mobile: Padding(
-                          padding: EdgeInsets.only(top: size.width * 0),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: SvgPicture.asset(
-                                  "assets/vectors/mother_child.svg",
-                                  width:
-                                      MediaQuery.of(context).size.width * 1.6,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  height: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(50),
-                                        topRight: Radius.circular(50),
-                                      ),
-                                      color: Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.black26
-                                          : Colors.white),
-                                  child: _buildForm(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        desktop: Padding(
-                          padding: EdgeInsets.only(
-                              top: size.width * 0.020,
-                              bottom: size.width * 0.03),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 60,
-                                        right: 60,
-                                      ),
-                                      child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                2,
-                                        child: SvgPicture.asset(
-                                          "assets/vectors/mother_child.svg",
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      right: size.width / 16,
-                                      left: size.width / 16,
-                                      bottom: size.width / 46,
-                                      top: size.width / 26),
-                                  height: size.height * 1.8,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(50),
-                                      topRight: Radius.circular(50),
-                                      bottomLeft: Radius.circular(50),
-                                      bottomRight: Radius.circular(50),
-                                    ),
-                                    color: Theme.of(context).canvasColor,
-                                  ),
-                                  child: _buildForm(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        tablet: Padding(
-                          padding: EdgeInsets.only(top: size.width * 0.070),
-                          child: GridView.count(
-                            crossAxisCount: 2,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(
-                                  top: size.height * 0.03,
-                                  bottom: size.height * 0.093,
-                                  right: size.width / 17,
-                                  left: size.width / 17,
-                                ),
-                                height: size.height * 0.35,
-                                decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(50),
-                                      topRight: Radius.circular(50),
-                                      bottomLeft: Radius.circular(50),
-                                      bottomRight: Radius.circular(50),
-                                    ),
-                                    color: Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.black26
-                                        : Colors.white.withOpacity(1)),
-                                child: _buildForm(),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2,
-                                child: SvgPicture.asset(
-                                  "assets/vectors/mother_child.svg",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (!Responsive.isMobile(context))
+      // backgroundColor: Theme.of(context).brightness == Brightness.dark
+      //     ? Theme.of(context).scaffoldBackgroundColor
+      //     : Color.fromARGB(204, 169, 9, 142),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            //#9049E4 to #DD74A4 (Left to right)
+            colors: [Color(0xFF9049E4), Color(0xFFDD74A4)],
+            stops: const [0.0, 1.0],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+        ),
+        child: RemoveFocuse(
+          onClick: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0.5, end: 1),
+              curve: Curves.decelerate,
+              duration: const Duration(milliseconds: 1600),
+              builder: (context, value, child) {
+                return Opacity(
+                  opacity: value,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                       Padding(
                         padding: EdgeInsets.only(
-                          left: size.width * 0.030,
-                          right: size.width * 0.030,
+                          top: 40,
+                          right: size.width / 20,
+                          left: size.width / 10,
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.asset(
-                              "assets/images/malticard.png",
-                              width: 80,
-                              height: 80,
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                              child: Image.asset(
+                                "assets/images/Login-3.png",
+                                width: MediaQuery.of(context).size.width / 6,
+                              ),
                             ),
-                            Text(
-                              "Powered by Malticard",
-                              style:
-                                  TextStyles(context).getBoldStyle().copyWith(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                      ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              // children: [
+                              //   InkWell(
+                              //     onHover: (x) {
+                              //       print(x);
+                              //     },
+                              //     child: Container(
+                              //       padding: const EdgeInsets.all(8.0),
+                              //       decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(10),
+                              //         color: Colors.white,
+                              //       ),
+                              //       child: Text(
+                              //         "Home",
+                              //         style: TextStyles(context)
+                              //             .getBoldStyle()
+                              //             .copyWith(
+                              //                 // color: Colors.white,
+                              //                 // fontSize: Responsive.isMobile(context) ? 30 : 40,
+                              //                 ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              //   Container(
+                              //     padding: const EdgeInsets.all(10),
+                              //     child: Text(
+                              //       "About Us",
+                              //       style: TextStyles(context)
+                              //           .getRegularStyle()
+                              //           .copyWith(
+                              //             color: Colors.white,
+                              //             // fontSize: Responsive.isMobile(context) ? 30 : 40,
+                              //           ),
+                              //     ),
+                              //   ),
+                              //   Container(
+                              //     padding: const EdgeInsets.all(10),
+                              //     child: Text(
+                              //       "Pricing",
+                              //       style: TextStyles(context)
+                              //           .getRegularStyle()
+                              //           .copyWith(
+                              //             color: Colors.white,
+                              //             // fontSize: Responsive.isMobile(context) ? 30 : 40,
+                              //           ),
+                              //     ),
+                              //   ),
+                              //   Container(
+                              //     padding: const EdgeInsets.all(10),
+                              //     child: Text(
+                              //       "Contact",
+                              //       style: TextStyles(context)
+                              //           .getRegularStyle()
+                              //           .copyWith(
+                              //             color: Colors.white,
+                              //             // fontSize: Responsive.isMobile(context) ? 30 : 40,
+                              //           ),
+                              //     ),
+                              //   ),
+                              // ],
                             ),
                           ],
                         ),
                       ),
-                  ],
-                ),
-              );
-            }),
+                      Expanded(
+                        child: Responsive(
+                          mobile: Padding(
+                            padding: EdgeInsets.only(top: size.width * 0),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Image.asset(
+                                    "assets/images/Login-1.png",
+                                    width:
+                                        MediaQuery.of(context).size.width * 1.6,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(50),
+                                          topRight: Radius.circular(50),
+                                        ),
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.black26
+                                            : Colors.white),
+                                    child: _buildForm(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          desktop: Padding(
+                            padding: EdgeInsets.only(
+                                top: size.width * 0.020,
+                                bottom: size.width * 0.03),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 60,
+                                          right: 60,
+                                        ),
+                                        child: SizedBox(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              1.42,
+                                          child: Image.asset(
+                                            "assets/images/Login-1.png",
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                        right: size.width / 10,
+                                        left: size.width / 10,
+                                        bottom: size.width / 46,
+                                        top: size.width / 26),
+                                    height: size.height * 1.8,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(50),
+                                        topRight: Radius.circular(50),
+                                        bottomLeft: Radius.circular(50),
+                                        bottomRight: Radius.circular(50),
+                                      ),
+                                      color: Theme.of(context).canvasColor,
+                                    ),
+                                    child: _buildForm(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          tablet: Padding(
+                            padding: EdgeInsets.only(top: size.width * 0.070),
+                            child: GridView.count(
+                              crossAxisCount: 2,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    top: size.height * 0.03,
+                                    bottom: size.height * 0.093,
+                                    right: size.width / 17,
+                                    left: size.width / 17,
+                                  ),
+                                  height: size.height * 0.35,
+                                  decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(50),
+                                        topRight: Radius.circular(50),
+                                        bottomLeft: Radius.circular(50),
+                                        bottomRight: Radius.circular(50),
+                                      ),
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.black26
+                                          : Colors.white.withOpacity(1)),
+                                  child: _buildForm(),
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                  child: Image.asset(
+                                    "assets/images/Login-1.png",
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (!Responsive.isMobile(context))
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: size.width * 0.030,
+                            right: size.width * 0.030,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(),
+                              Text(
+                                "Powered by ",
+                                style:
+                                    TextStyles(context).getBoldStyle().copyWith(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                        ),
+                              ),
+                              Image.asset(
+                                "assets/images/Login-2.png",
+                                width: 180,
+                                height: 70,
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              }),
+        ),
       ),
     );
   }
@@ -237,6 +322,12 @@ class _LoginScreenState extends State<LoginScreen> {
               children: <Widget>[
                 Space(
                   space: Responsive.isDesktop(context) ? 0.035 : 0.07,
+                ),
+                Center(
+                  child: Text(
+                    "Login",
+                    style: TextStyles(context).getTitleStyle().apply(color:Theme.of(context).colorScheme.primary,),
+                  ),
                 ),
                 CommonTextField(
                   readOnly: controller.isLoading ? true : false,

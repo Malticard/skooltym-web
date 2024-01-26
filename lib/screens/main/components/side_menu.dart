@@ -47,9 +47,18 @@ class _SideMenuState extends State<SideMenu> {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Image.network(
-                          "${AppUrls.liveImages}${school['school_badge']}",
-                          height: Responsive.isMobile(context) ? 40 : 60,
-                          width: Responsive.isMobile(context) ? 40 : 60),
+                        // "https://skooltym-resources.s3.af-south-1.amazonaws.com/default.png",
+                        school['school_badge'],
+                        height: Responsive.isMobile(context) ? 40 : 60,
+                        width: Responsive.isMobile(context) ? 40 : 60,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(
+                          Icons.school,
+                          color: Colors.white,
+                          size: 50,
+                        ),
+                      ),
                     ),
                     // const Space(), //
                     Text(
