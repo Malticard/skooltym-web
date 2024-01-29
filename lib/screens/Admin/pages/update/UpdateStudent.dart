@@ -196,6 +196,10 @@ class _UpdateStudentState extends State<UpdateStudent> {
     //  ============================== student details ============================
     request.fields['school'] =
         "${context.read<SchoolController>().state['school']}";
+    request.fields['name'] =
+        "${context.read<SchoolController>().state['schoolName']}"
+            .toLowerCase()
+            .replaceFirst(" ", "-");
     request.fields['student_fname'] = _formControllers[0].text.trim();
     request.fields['student_lname'] = _formControllers[1].text.trim();
     request.fields['username'] =

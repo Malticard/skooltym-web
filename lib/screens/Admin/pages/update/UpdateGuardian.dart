@@ -196,6 +196,10 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
       request.fields['students'] = "";
     }
 
+ request.fields['name'] =
+        "${context.read<SchoolController>().state['schoolName']}"
+            .toLowerCase()
+            .replaceFirst(" ", "-");
     request.fields['school'] = context.read<SchoolController>().state['school'];
     request.fields['type'] = _formControllers[5].text.trim();
     request.fields['relationship'] = _formControllers[7].text.trim();

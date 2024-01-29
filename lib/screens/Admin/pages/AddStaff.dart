@@ -155,9 +155,14 @@ class _AddStaffState extends State<AddStaff> {
     request.fields['staff_gender'] = _formControllers[4].text.trim();
     //
     if (kIsWeb && schoolData.isNotEmpty) {
-      request.files.add(MultipartFile(
-          "image", schoolData['image'], schoolData['size'],
-          filename: schoolData['name']));
+      request.files.add(
+        MultipartFile(
+          "image",
+          schoolData['image'],
+          schoolData['size'],
+          filename: schoolData['name'],
+        ),
+      );
     } else if (_formControllers[3].text.trim().isNotEmpty) {
       request.files.add(
         MultipartFile(

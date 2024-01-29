@@ -152,6 +152,10 @@ class _UpdateStaffState extends State<UpdateStaff> {
     // =============================== form fields =======================
     request.fields['staff_school'] =
         "${context.read<SchoolController>().state['school']}";
+    request.fields['name'] =
+        "${context.read<SchoolController>().state['schoolName']}"
+            .toLowerCase()
+            .replaceFirst(" ", "-");
     request.fields['staff_fname'] =
         _formControllers[0].text.trim().split(" ")[0].trim();
     request.fields['staff_lname'] =
