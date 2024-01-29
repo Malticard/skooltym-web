@@ -4,10 +4,11 @@ import '/exports/exports.dart';
 import 'controllers/MenuAppController.dart';
 import 'controllers/utils/LoaderController.dart';
 import 'package:url_strategy/url_strategy.dart';
+
 Future<void> main() async {
   // Obtain shared preferences.
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-   setPathUrlStrategy();
+  //  setPathUrlStrategy();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer = const Observer();
 

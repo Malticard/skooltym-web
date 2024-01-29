@@ -111,9 +111,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
         title: Text(
           widget.formFields[x - 1]['title'],
         ),
-        subtitle: Text(widget.isHalfDay == _timeSession
-            ? "Half day student"
-            : "Full day student"),
+        subtitle: Text(_timeSession ? "Half day student" : "Full day student"),
         value: _timeSession,
         onChanged: (value) {
           setState(() {
@@ -138,9 +136,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
       title: Text(
         widget.formFields[x - 1]['title'],
       ),
-      subtitle: Text(widget.isHalfDay == _vanSession
-          ? "Van student"
-          : "Not a van student"),
+      subtitle: Text(_vanSession ? "Van student" : "Not a van student"),
       value: _vanSession,
       onChanged: (value) {
         setState(() {
