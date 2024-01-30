@@ -71,7 +71,7 @@ class DropOff {
         id: json["_id"],
         schoolName: json["school_name"],
         studentName: StudentName.fromJson(json["student_name"]),
-        dropOffTime: DateTime.now(), //DateTime.parse(json["drop_off_time"]),
+        dropOffTime: DateTime.parse(json["drop_off_time"]),
         droppedBy: DroppedBy.fromJson(json["dropped_by"]),
         authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
         comments: json["comments"],
