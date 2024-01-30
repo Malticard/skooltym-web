@@ -113,15 +113,15 @@ class _ProfileCardState extends State<ProfileCard> {
             ),
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: FutureBuilder(
-                    future: fetchAndDisplayImage(
-                        schoolData['profile_pic'] ?? "profile.png"),
-                    builder: (context, payload) => payload.hasData
-                        ? Image.network(payload.data!, fit: BoxFit.cover)
-                        : CircularProgressIndicator.adaptive(),
-                  ),
+                FutureBuilder(
+                  future: fetchAndDisplayImage(schoolData['profile_pic'] ??
+                      "https://skooltym-resources.s3.af-south-1.amazonaws.com/default.png"),
+                  builder: (context, payload) => payload.hasData
+                      ? CircleAvatar(
+                          radius: 25,
+                          backgroundImage: NetworkImage(payload.data!),
+                        )
+                      : CircularProgressIndicator.adaptive(),
                 ),
                 if (!Responsive.isMobile(context))
                   Padding(
@@ -142,13 +142,7 @@ class _ProfileCardState extends State<ProfileCard> {
                         leading: Icon(StaffPopUpOptions.options[index].icon),
                         title: Text(StaffPopUpOptions.options[index].title!),
                         onTap: () {
-                          // context.read<MenuAppController>().disposeController();
-                          // StaffPopUpOptions.options[index].title == 'Logout'
                           Routes.logout(context);
-                          // : context
-                          //     .read<WidgetController>()
-                          //     .pushWidget(const AdminProfile());
-                          // Navigator.pop(context);
                         },
                       )),
                     );

@@ -7,7 +7,7 @@ class StaffService {
     BuildContext? context = navigatorKey.currentContext;
     try {
       Client()
-          .post(
+          .patch(
               Uri.parse(
                 AppUrls.updateStaffFirstTime +
                     context?.read<SchoolController>().state['id'],
