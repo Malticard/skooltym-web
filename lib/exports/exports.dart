@@ -114,7 +114,9 @@ export '/models/ResultsModel.dart';
 export '/models/DashboardModel.dart';
 export '/models/StreamModel.dart';
 
-// themes
+// services
+export '/services/guardian_service.dart';
+export '/services/staff_service.dart';
 
 // constants
 export '/constants/app_urls.dart';

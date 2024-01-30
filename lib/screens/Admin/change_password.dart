@@ -287,6 +287,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                   .setFirstTimeUser(
                 false,
               );
+              // update staff
+              StaffService.updateStaff({
+                "is_first_time_user": "false",
+              });
             } else {
               // for admins after changing the password are redirected to system settings
               context.read<WidgetController>().pushWidget(11);

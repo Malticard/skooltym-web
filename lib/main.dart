@@ -3,8 +3,9 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/exports/exports.dart';
 import 'controllers/MenuAppController.dart';
 import 'controllers/utils/LoaderController.dart';
-import 'package:url_strategy/url_strategy.dart';
 
+// import 'package:url_strategy/url_strategy.dart';
+var navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   // Obtain shared preferences.
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -61,6 +62,7 @@ Future<void> main() async {
               return MaterialApp(
                 title: "Skooltym  | $title",
                 theme: theme,
+                navigatorKey: navigatorKey,
                 initialRoute: (isExpired == true) ? Routes.login : Routes.home,
                 routes: routes(context),
               );

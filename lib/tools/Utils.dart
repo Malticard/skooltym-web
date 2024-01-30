@@ -37,10 +37,20 @@ void loginUser(BuildContext context, String email, String password) async {
       BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
       //
       log("Current session for first time is ${BlocProvider.of<FirstTimeUserController>(context).state}");
-      if (BlocProvider.of<FirstTimeUserController>(context).state == true) {
+      if (data['isNewUser'] == true) {
         BlocProvider.of<TitleController>(context).setTitle("Change Password");
         // log("Changing title");
       } else {
+        // update user data
+        context.read<WidgetController>().pushWidget(0);
+        context.read<TitleController>().setTitle("Dashboard");
+        context
+            .read<SideBarController>()
+            .changeSelected(0, context.read<SchoolController>().state['role']);
+        BlocProvider.of<FirstTimeUserController>(context).setFirstTimeUser(
+          false,
+        );
+//
         BlocProvider.of<TitleController>(context).showTitle();
         BlocProvider.of<FinanceViewController>(context).showRecentWidget();
         BlocProvider.of<WidgetController>(context).showRecentWidget();
@@ -58,12 +68,16 @@ void loginUser(BuildContext context, String email, String password) async {
               ? Routes.home
               : Routes.login,
         );
+        context.read<LoaderController>().setLoading = false;
+
         showMessage(
           context: context,
           msg: "Logged in  successfully..",
           type: 'success',
         );
       } else {
+        context.read<LoaderController>().setLoading = false;
+
         showMessage(
             context: context, msg: "Account not authorized", type: 'warning');
       }

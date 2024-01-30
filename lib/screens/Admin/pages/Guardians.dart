@@ -172,7 +172,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                       const Text("Continue to dashboard"),
                       TextButton(
                         onPressed: () {
-                          log("User role : ${context.read<SchoolController>().state['role']}");
+                          // log("User role : ${context.read<SchoolController>().state['role']}");
                           context.read<WidgetController>().pushWidget(0);
                           context.read<TitleController>().setTitle("Dashboard");
                           context.read<SideBarController>().changeSelected(0,
@@ -181,6 +181,10 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                               .setFirstTimeUser(
                             false,
                           );
+                          // update staff
+                          StaffService.updateStaff({
+                            "is_first_time_user": "false",
+                          });
                         },
                         child: Text(
                           "Click here",

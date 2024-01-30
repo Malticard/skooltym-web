@@ -1,8 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'dart:developer';
+// import 'dart:developer';
 
-import 'package:admin/controllers/utils/LoaderController.dart';
+import '/controllers/utils/LoaderController.dart';
 
 import '/exports/exports.dart';
 
@@ -326,7 +326,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: Text(
                     "Login",
-                    style: TextStyles(context).getTitleStyle().apply(color:Theme.of(context).colorScheme.primary,),
+                    style: TextStyles(context).getTitleStyle().apply(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                   ),
                 ),
                 CommonTextField(

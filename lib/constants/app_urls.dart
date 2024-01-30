@@ -1,5 +1,6 @@
 class AppUrls {
-  static String devURL = "http://13.127.169.59:5050/";
+  static String devURL =
+      "http://127.0.0.1:5050/"; //"http://13.127.169.59:5050/";
   //"https://skooltym-backend-production.up.railway.app/";  http://13.127.169.59:5050/get/students/
   static String imageUrl = "assets/images/";
   static String iconUrl = "assets/icons/";
@@ -63,6 +64,7 @@ class AppUrls {
   static String updateSettings = "${devURL}update/settings/";
   static String updateOvertime = "${devURL}update/overtime/";
   static String updatePayment = "${devURL}update/payments/";
+  static String updateStaffFirstTime = "${devURL}update/staff-first-time/";
 //
   static String setPass = "${devURL}password/set-password/";
   static String forgotPassword = "${devURL}password/forgot-password";
