@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names, invalid_return_type_for_catch_error, argument_type_not_assignable_to_error_handler
 import 'package:admin/screens/Admin/widgets/HalfPickUpAllowance.dart';
 import 'package:admin/screens/Admin/widgets/SettingsPopUp.dart';
+import 'package:admin/services/settings_service.dart';
 
 import '../../../controllers/utils/LoaderController.dart';
 import '/exports/exports.dart';
@@ -28,6 +29,36 @@ class _SystemSettingsState extends State<SystemSettings> {
       const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5);
   // important methods
   String currencyCode = "Ush UGX";
+  // function to load initial data
+  void loadInitialData() async {
+    var settingService = await SettingsService.fetchCurrentSettings();
+    BlocProvider.of<DropOffTimeController>(context).setDropOffTime(
+        settingService.dropOffStartTime +
+            " - " +
+            settingService.dropOffEndTime);
+    BlocProvider.of<PickUpAllowanceTimeController>(context)
+        .setPickUpAllowanceTime(int.parse(settingService.pickUpAllowance));
+    BlocProvider.of<DropOffAllowanceController>(context)
+        .setDropOffAllowanceTime(int.parse(settingService.dropOffAllowance));
+
+    BlocProvider.of<IntervalController>(context)
+        .computeInterval(int.parse(settingService.overtimeInterval));
+
+    BlocProvider.of<AllowOvertimeController>(context)
+        .allowOvertime(settingService.allowOvertime);
+    BlocProvider.of<PickUpTimeController>(context).setPickUpTime(
+        settingService.pickUpStartTime + " - " + settingService.pickUpEndTime);
+    BlocProvider.of<OvertimeRateController>(context)
+        .setOvertimeRate(settingService.overtimeRate);
+  }
+
+  // load data when page is loaded
+  @override
+  void initState() {
+    super.initState();
+    loadInitialData();
+  }
+
 // settings data
   @override
   Widget build(BuildContext context) {
