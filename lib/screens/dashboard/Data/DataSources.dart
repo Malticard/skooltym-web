@@ -260,6 +260,7 @@ class GuardianDataSource extends DataTableSource {
           () {
             showAdaptiveDialog(
                 context: context,
+                barrierDismissible: true,
                 builder: (context) {
                   return UpdateGuardian(guardianModel: guardianData);
                 });
@@ -267,6 +268,7 @@ class GuardianDataSource extends DataTableSource {
           () {
             showAdaptiveDialog(
                 context: context,
+                barrierDismissible: true,
                 builder: (context) {
                   return CommonDelete(
                     title:

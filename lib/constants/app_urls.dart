@@ -85,4 +85,6 @@ class AppUrls {
 // overtimes
   static String pendingOvertime = "${devURL}overtime/pending/";
   static String clearedOvertime = "${devURL}overtime/cleared/";
+
+  static String studentsNotPaginated = "${devURL}get/not-paginated-students/";
 }

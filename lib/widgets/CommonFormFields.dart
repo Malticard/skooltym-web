@@ -286,7 +286,8 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                           :
                           // dropdown menu
                           (widget.formFields[index - 1]['menu'] != null)
-                              ? SingleChildScrollView(
+                              ?
+                               SingleChildScrollView(
                                   child: CommonMenuWidget(
                                     fieldColor: Theme.of(context).brightness ==
                                             Brightness.light
@@ -313,6 +314,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                     fieldHeaderTitle: widget.menuTitle,
                                   ),
                                 )
+                              
                               : widget.formFields[index - 1]['switch'] != null
                                   ? buildSwitchWidget(index)
                                   : widget.formFields[index - 1]['van'] != null

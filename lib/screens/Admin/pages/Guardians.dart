@@ -126,6 +126,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                             onPressed: () {
                               showAdaptiveDialog(
                                 context: context,
+                                barrierDismissible: true,
                                 builder: (context) {
                                   return AddGuardian();
                                 },

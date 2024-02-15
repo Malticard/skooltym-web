@@ -1,6 +1,7 @@
 import 'package:admin/global/SessionManager.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '/exports/exports.dart';
+import 'controllers/ClockInClockOutController.dart';
 import 'controllers/MenuAppController.dart';
 import 'controllers/utils/LoaderController.dart';
 
@@ -47,6 +48,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => FinanceTitleController()),
         BlocProvider(create: (context) => DropOffTimeController()),
         BlocProvider(create: (context) => PickUpTimeController()),
+        BlocProvider(create: (context) => ClockInClockOutController()),
       ],
       child: BlocConsumer<ThemeController, ThemeData>(
         listener: (context, theme) {

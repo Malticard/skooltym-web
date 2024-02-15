@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import '../../../../models/Guardians.dart';
 import '../../../../models/StudentModel.dart';
+import '../../../../models/students_not_paginated_model.dart';
 import '/exports/exports.dart';
 
 class UpdateGuardian extends StatefulWidget {
@@ -129,7 +130,8 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
               height: Responsive.isMobile(context)
                   ? size.height * 1.25
                   : size.width / 1.5,
-              child: BlocBuilder<FetchStudentsController, List<Student>>(
+              child: BlocBuilder<FetchStudentsController,
+                  List<StudentsNotPaginatedModel>>(
                 builder: (context, students) {
                   return CommonFormFields(
                     formTitle: "Update Guardian",
@@ -196,7 +198,7 @@ class _UpdateGuardianState extends State<UpdateGuardian> {
       request.fields['students'] = "";
     }
 
- request.fields['name'] =
+    request.fields['name'] =
         "${context.read<SchoolController>().state['schoolName']}"
             .toLowerCase()
             .replaceFirst(" ", "-");

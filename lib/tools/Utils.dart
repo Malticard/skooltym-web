@@ -11,6 +11,7 @@ import '../models/DropOffModels.dart';
 import '../models/Guardians.dart';
 import '../models/OvertimeModel.dart';
 import '../models/StudentModel.dart';
+import '../models/students_not_paginated_model.dart';
 import '/exports/exports.dart';
 
 // login logic for the user
@@ -138,12 +139,26 @@ String greetUser() {
   return greet;
 }
 
-// return students
-Future<StudentModel> fetchStudents(String id,
+// return not paginated students
+Future<List<StudentsNotPaginatedModel>> fetchStudents(String id,
     {int page = 1, int limit = 20}) async {
   try {
-    var res = await Client()
-        .get(Uri.parse(AppUrls.students + id + "?page=$page&pageSize=$limit"));
+    var res = await Client().get(Uri.parse(AppUrls.studentsNotPaginated + id));
+    if (res.statusCode == 200) {
+      return studentsNotPaginatedModelFromJson(res.body);
+    } else {
+      return Future.error(jsonDecode(res.body)['message']);
+    }
+  } on ClientException catch (e, _) {
+    return Future.error("Lost connection to server");
+  }
+}
+
+// return students
+Future<StudentModel> fetchPaginatedStudents(String id,
+    {int page = 1, int limit = 20}) async {
+  try {
+    var res = await Client().get(Uri.parse(AppUrls.students + id));
     return studentModelFromJson(res.body);
   } on ClientException catch (e, _) {
     return Future.error("Lost connection to server");
@@ -574,7 +589,7 @@ List<String> months = <String>[
 Future<int> computeStudentsTotal(String id) async {
   int students = 0;
   var response = await fetchStudents(id);
-  students = response.results.length;
+  students = response.length;
   return students;
 }
 

@@ -8,7 +8,7 @@ class MainController with ChangeNotifier {
   String _pick_up_end_time_half_day = "";
   // getters
   double get halfDayPickUpAllowance {
-    _getHalfDayPickUpAllowance();
+    //
     return _halfDayPickUpAllowance;
   }
 
@@ -25,9 +25,9 @@ class MainController with ChangeNotifier {
 
 // setters
   set setHalfDayPickUpAllowance(double pickUpAllowance) {
-    SharedPreferences.getInstance().then((value) {
-      value.setDouble('halfDayPickUpAllowance', pickUpAllowance);
-    });
+    // SharedPreferences.getInstance().then((value) {
+    //   value.setDouble('halfDayPickUpAllowance', pickUpAllowance);
+    // });
     _halfDayPickUpAllowance = pickUpAllowance;
     notifyListeners();
   }
@@ -52,11 +52,11 @@ class MainController with ChangeNotifier {
 
 // retrieve saved values
   void _getHalfDayPickUpAllowance() {
-    SharedPreferences.getInstance().then((value) {
-      _halfDayPickUpAllowance =
-          value.getDouble('halfDayPickUpAllowance') ?? 0.0;
-      notifyListeners();
-    });
+    // SharedPreferences.getInstance().then((value) {
+    //   _halfDayPickUpAllowance =
+    //       value.getDouble('halfDayPickUpAllowance') ?? 0.0;
+    //   notifyListeners();
+    // });
   }
 
   //

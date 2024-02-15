@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import '../../../models/StudentModel.dart';
+import '../../../models/students_not_paginated_model.dart';
 import '/exports/exports.dart';
 
 class AddGuardian extends StatefulWidget {
@@ -75,8 +76,9 @@ class _AddGuardianState extends State<AddGuardian> {
 // form key
   final formKey = GlobalKey<FormState>();
   Timer? _timer;
-  StreamController<StudentModel> _guardianStudentsController =
-      StreamController<StudentModel>();
+  StreamController<List<StudentsNotPaginatedModel>>
+      _guardianStudentsController =
+      StreamController<List<StudentsNotPaginatedModel>>();
   @override
   void initState() {
     super.initState();
@@ -141,8 +143,8 @@ class _AddGuardianState extends State<AddGuardian> {
                     menuTitle: "Attach Students",
                     padding: padding,
                     formFields: _formFields,
-                    lists: students.data?.results.map((e) => e.id).toList(),
-                    dropdownLists: students.data?.results.map((item) {
+                    lists: students.data?.map((e) => e.id).toList(),
+                    dropdownLists: students.data?.map((item) {
                       return "${item.studentFname} ${item.studentLname}";
                     }).toList(),
                     onDropDownValue: (v) {

@@ -52,7 +52,7 @@ class _ViewStudentsState extends State<ViewStudents> {
 
       // Add a check to see if the widget is still mounted before updating the state
       if (mounted) {
-        var students = await fetchStudents(
+        var students = await fetchPaginatedStudents(
             context.read<SchoolController>().state['school'],
             page: _currentPage,
             limit: rowsPerPage);
@@ -68,7 +68,7 @@ class _ViewStudentsState extends State<ViewStudents> {
             var students = await searchStudents(school, _query ?? "");
             _studentController.add(students);
           } else {
-            var students = await fetchStudents(school,
+            var students = await fetchPaginatedStudents(school,
                 page: _currentPage, limit: rowsPerPage);
             _studentController.add(students);
           }

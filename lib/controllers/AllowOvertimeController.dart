@@ -5,15 +5,16 @@ class AllowOvertimeController extends Cubit<bool> {
   static bool allow = false;
 
   void allowOvertime(bool overtime) {
-    SharedPreferences.getInstance().then((value) {
-      value.setBool("allow_overtime", overtime);
-    });
+    // SharedPreferences.getInstance().then((value) {
+    //   value.setBool("allow_overtime", overtime);
+    // });
     emit(overtime);
   }
 
   void getAllowOvertime() {
-    SharedPreferences.getInstance().then((value) {
-      emit(value.getBool("allow_overtime") ?? false);
-    });
+    // SharedPreferences.getInstance().then((value) {
+    //   emit(value.getBool("allow_overtime") ?? false);
+    // });
+    emit(state);
   }
 }

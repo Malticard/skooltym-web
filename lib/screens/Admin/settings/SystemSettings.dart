@@ -1,8 +1,9 @@
 // ignore_for_file: file_names, non_constant_identifier_names, invalid_return_type_for_catch_error, argument_type_not_assignable_to_error_handler
-import 'package:admin/screens/Admin/widgets/HalfPickUpAllowance.dart';
-import 'package:admin/screens/Admin/widgets/SettingsPopUp.dart';
-import 'package:admin/services/settings_service.dart';
+import '/screens/Admin/widgets/HalfPickUpAllowance.dart';
+import '/screens/Admin/widgets/SettingsPopUp.dart';
+import '/services/settings_service.dart';
 
+import '../../../controllers/ClockInClockOutController.dart';
 import '../../../controllers/utils/LoaderController.dart';
 import '/exports/exports.dart';
 
@@ -14,7 +15,7 @@ class SystemSettings extends StatefulWidget {
 }
 
 class _SystemSettingsState extends State<SystemSettings> {
-  String drop_off_time_start = "9:00";
+  String drop_off_time_start = "";
   String drop_off_time_end = "";
 
   /// half day
@@ -32,10 +33,25 @@ class _SystemSettingsState extends State<SystemSettings> {
   // function to load initial data
   void loadInitialData() async {
     var settingService = await SettingsService.fetchCurrentSettings();
+
+    // apply the settings
+    BlocProvider.of<ClockInClockOutController>(context)
+        .allow_clock_in_clock_out(settingService.clockInClockOut);
     BlocProvider.of<DropOffTimeController>(context).setDropOffTime(
         settingService.dropOffStartTime +
             " - " +
             settingService.dropOffEndTime);
+    // apply settings for half day
+    // allowance
+    Provider.of<MainController>(context, listen: false)
+            .setHalfDayPickUpAllowance =
+        double.parse(settingService.halfDayPickUpAllowance);
+    // time
+    Provider.of<MainController>(context, listen: false)
+        .setPickUpStartTimeHalfDay = settingService.halfDayPickUpStartTime;
+    Provider.of<MainController>(context, listen: false)
+        .setPickUpEndTimeHalfDay = settingService.halfDayPickUpEndTime;
+        // end of half day setttings
     BlocProvider.of<PickUpAllowanceTimeController>(context)
         .setPickUpAllowanceTime(int.parse(settingService.pickUpAllowance));
     BlocProvider.of<DropOffAllowanceController>(context)
@@ -62,16 +78,26 @@ class _SystemSettingsState extends State<SystemSettings> {
 // settings data
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<SchoolController>(context).getSchoolData();
-    BlocProvider.of<FirstTimeUserController>(context).getFirstTimeUser();
-    BlocProvider.of<PickUpAllowanceTimeController>(context)
+    BlocProvider.of<SchoolController>(context, listen: true).getSchoolData();
+    BlocProvider.of<FirstTimeUserController>(context, listen: true)
+        .getFirstTimeUser();
+    BlocProvider.of<PickUpAllowanceTimeController>(context, listen: true)
         .getComputedPickUpTime();
-    BlocProvider.of<DropOffAllowanceController>(context).getDropOffAllowance();
-    BlocProvider.of<IntervalController>(context).getComputedInterval();
-    BlocProvider.of<DropOffTimeController>(context).getDropOffTime();
-    BlocProvider.of<AllowOvertimeController>(context).getAllowOvertime();
-    BlocProvider.of<PickUpTimeController>(context).getPickUpTime();
-    BlocProvider.of<OvertimeRateController>(context).getOvertimeRate();
+    BlocProvider.of<DropOffAllowanceController>(context, listen: true)
+        .getDropOffAllowance();
+    BlocProvider.of<IntervalController>(context, listen: true)
+        .getComputedInterval();
+    BlocProvider.of<DropOffTimeController>(context, listen: true)
+        .getDropOffTime();
+    BlocProvider.of<AllowOvertimeController>(context, listen: true)
+        .getAllowOvertime();
+    BlocProvider.of<PickUpTimeController>(context, listen: true)
+        .getPickUpTime();
+    BlocProvider.of<OvertimeRateController>(context, listen: true)
+        .getOvertimeRate();
+    BlocProvider.of<ClockInClockOutController>(context, listen: true)
+        .get_allow_clock_in_clock_out();
+    //
     return Consumer<LoaderController>(builder: (context, controller, child) {
       return Padding(
         padding: EdgeInsets.only(
@@ -205,85 +231,114 @@ class _SystemSettingsState extends State<SystemSettings> {
                             },
                           ),
                         ),
-                        // check if overtime is allowed
-                        BlocBuilder<AllowOvertimeController, bool>(
+                        BlocBuilder<ClockInClockOutController, bool>(
                           builder: (context, allow) {
                             return SettingCard(
                               icon: (SettingIcons.overtimeRateIcon),
-                              titleText: "Overtime",
+                              titleText: "Clock In/ Clock Out",
                               subText: (allow) == true
-                                  ? "Overtime enabled"
-                                  : "Overtime disabled",
+                                  ? "Clock In/ Clock Out enabled"
+                                  : "Clock In/ Clock Out disabled",
                               trailWidget: Switch.adaptive(
                                   value: allow,
                                   onChanged: controller.isSavingSetting
                                       ? (X) {}
                                       : (b) {
                                           context
-                                              .read<AllowOvertimeController>()
-                                              .allowOvertime(b);
+                                              .read<ClockInClockOutController>()
+                                              .allow_clock_in_clock_out(b);
                                         }),
                             );
                           },
                         ),
-                        //rendering overtime settings if enabled.
-                        ...[
-                          //  overtime currency
-                          if ((context.watch<AllowOvertimeController>().state ==
-                              true))
-                            TapEffect(
-                              onClick: controller.isSavingSetting
-                                  ? () {}
-                                  : () => setOvertimeCurrency(),
-                              child: SettingCard(
-                                icon: (SettingIcons.overtimeCurrencyIcon),
-                                titleText: "Overtime currency",
-                                subText:
-                                    "Set the currency in which overtime is paid",
-                                trailText: currencyCode,
+                        // check if overtime is allowed
+                        if (context.watch<ClockInClockOutController>().state ==
+                            false) ...[
+                          BlocBuilder<AllowOvertimeController, bool>(
+                            builder: (context, allow) {
+                              return SettingCard(
+                                icon: (SettingIcons.overtimeRateIcon),
+                                titleText: "Overtime",
+                                subText: (allow) == true
+                                    ? "Overtime enabled"
+                                    : "Overtime disabled",
+                                trailWidget: Switch.adaptive(
+                                    value: allow,
+                                    onChanged: controller.isSavingSetting
+                                        ? (X) {}
+                                        : (b) {
+                                            context
+                                                .read<AllowOvertimeController>()
+                                                .allowOvertime(b);
+                                          }),
+                              );
+                            },
+                          ),
+                          //rendering overtime settings if enabled.
+                          ...[
+                            //  overtime currency
+                            if ((context
+                                    .watch<AllowOvertimeController>()
+                                    .state ==
+                                true))
+                              TapEffect(
+                                onClick: controller.isSavingSetting
+                                    ? () {}
+                                    : () => setOvertimeCurrency(),
+                                child: SettingCard(
+                                  icon: (SettingIcons.overtimeCurrencyIcon),
+                                  titleText: "Overtime currency",
+                                  subText:
+                                      "Set the currency in which overtime is paid",
+                                  trailText: currencyCode,
+                                ),
                               ),
-                            ),
-                          if ((context.watch<AllowOvertimeController>().state ==
-                              true))
-                            // set overtime interval
-                            TapEffect(
-                              onClick: controller.isSavingSetting
-                                  ? () {}
-                                  : () => setOvertimeInterval(),
-                              child: BlocBuilder<IntervalController, int>(
-                                builder: (context, state) {
-                                  return SettingCard(
-                                    icon: (SettingIcons.overtimeIntervalIcon),
-                                    titleText: "Overtime interval",
-                                    subText:
-                                        "Set the amount of time after which overtime will be charged eg. every after 20mins",
-                                    trailText: state.floor() == 1
-                                        ? "${state.floor()} (min)"
-                                        : "${state.floor()} (mins)",
-                                  );
-                                },
+                            if ((context
+                                    .watch<AllowOvertimeController>()
+                                    .state ==
+                                true))
+                              // set overtime interval
+                              TapEffect(
+                                onClick: controller.isSavingSetting
+                                    ? () {}
+                                    : () => setOvertimeInterval(),
+                                child: BlocBuilder<IntervalController, int>(
+                                  builder: (context, state) {
+                                    return SettingCard(
+                                      icon: (SettingIcons.overtimeIntervalIcon),
+                                      titleText: "Overtime interval",
+                                      subText:
+                                          "Set the amount of time after which overtime will be charged eg. every after 20mins",
+                                      trailText: state.floor() == 1
+                                          ? "${state.floor()} (min)"
+                                          : "${state.floor()} (mins)",
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          if ((context.watch<AllowOvertimeController>().state ==
-                              true))
-                            // set overtime rate
-                            TapEffect(
-                              onClick: controller.isSavingSetting
-                                  ? () {}
-                                  : () => setOvertimeRate(),
-                              child: BlocBuilder<OvertimeRateController, int>(
-                                builder: (context, state) {
-                                  return SettingCard(
-                                    icon: (SettingIcons.overtimeRateIcon),
-                                    titleText: "Overtime rate",
-                                    subText:
-                                        "Set the amount of money to charge every after the set overtime interval eg. 20000 every after 20mins ",
-                                    trailText:
-                                        "${currencyCode.split(" ").last} ${state.floor()}",
-                                  );
-                                },
+                            if ((context
+                                    .watch<AllowOvertimeController>()
+                                    .state ==
+                                true))
+                              // set overtime rate
+                              TapEffect(
+                                onClick: controller.isSavingSetting
+                                    ? () {}
+                                    : () => setOvertimeRate(),
+                                child: BlocBuilder<OvertimeRateController, int>(
+                                  builder: (context, state) {
+                                    return SettingCard(
+                                      icon: (SettingIcons.overtimeRateIcon),
+                                      titleText: "Overtime rate",
+                                      subText:
+                                          "Set the amount of money to charge every after the set overtime interval eg. 20000 every after 20mins ",
+                                      trailText:
+                                          "${currencyCode.split(" ").last} ${state.floor()}",
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
+                          ],
                         ],
                         //  set overtime interval
                         CommonButton(
@@ -340,6 +395,8 @@ class _SystemSettingsState extends State<SystemSettings> {
           "${context.read<DropOffAllowanceController>().state}",
       "pick_up_allowance":
           "${context.read<PickUpAllowanceTimeController>().state}",
+      "clock_in_clock_out":
+          "${context.read<ClockInClockOutController>().state}",
       "allow_overtime": "${context.read<AllowOvertimeController>().state}",
       "overtime_rate": "${context.read<OvertimeRateController>().state}",
       "overtime_rate_currency": currencyCode,
