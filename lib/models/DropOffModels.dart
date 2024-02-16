@@ -72,7 +72,7 @@ class DropOff {
         schoolName: json["school_name"],
         studentName: StudentName.fromJson(json["student_name"]),
         dropOffTime: DateTime.parse(json["drop_off_time"]),
-        droppedBy: DroppedBy.fromJson(json["dropped_by"]),
+        droppedBy: DroppedBy.fromJson(json["dropped_by"] ?? {}),
         authorizedBy: AuthorizedBy.fromJson(json["authorized_by"]),
         comments: json["comments"],
         dropoffKey: List<DropoffKey>.from(
@@ -149,8 +149,8 @@ class DroppedBy {
   });
 
   factory DroppedBy.fromJson(Map<String, dynamic> json) => DroppedBy(
-        guardianFname: json["guardian_fname"],
-        guardianLname: json["guardian_lname"],
+        guardianFname: json["guardian_fname"] ?? "",
+        guardianLname: json["guardian_lname"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
