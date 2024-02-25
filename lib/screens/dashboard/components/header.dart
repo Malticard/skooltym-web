@@ -33,8 +33,7 @@ class _HeaderState extends State<Header> {
       builder: (context, state) {
         return Row(
           children: [
-            if (!Responsive.isDesktop(context) &&
-                context.read<FirstTimeUserController>().state)
+            if (!Responsive.isDesktop(context))
               IconButton(
                   icon: const Icon(Icons.menu),
                   onPressed: () {
@@ -157,9 +156,11 @@ class _ProfileCardState extends State<ProfileCard> {
 
 class SearchField extends StatefulWidget {
   final ValueChanged<String?>? onChanged;
+  final TextEditingController? controller;
   const SearchField({
     Key? key,
     this.onChanged,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -169,7 +170,8 @@ class SearchField extends StatefulWidget {
 class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      controller: widget.controller,
       onChanged: widget.onChanged,
       decoration: InputDecoration(
         hintText: "Search",

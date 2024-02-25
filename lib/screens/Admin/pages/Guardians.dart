@@ -46,6 +46,8 @@ class _ViewGuardiansState extends State<ViewGuardians> {
     super.dispose();
   }
 
+  final TextEditingController _searchController = TextEditingController();
+
   void _fetchRealTimeData() async {
     try {
       // Add a check to see if the widget is still mounted before updating the state
@@ -55,14 +57,24 @@ class _ViewGuardiansState extends State<ViewGuardians> {
         _guardianController.add(guardians);
       }
       // Listen to the stream and update the UI
-
+      if (_query != null) {
+        var guardians = await searchGuardians(
+            context.read<SchoolController>().state['school'],
+            _searchController.text);
+        _guardianController.add(guardians);
+      } else {
+        var guardians = await fetchGuardians(context,
+            page: _currentPage, limit: rowsPerPage);
+        _guardianController.add(guardians);
+      }
       Timer.periodic(Duration(seconds: 1), (timer) async {
         this.timer = timer;
         // Add a check to see if the widget is still mounted before updating the state
         if (mounted) {
           if (_query != null) {
             var guardians = await searchGuardians(
-                context.read<SchoolController>().state['school'], _query ?? "");
+                context.read<SchoolController>().state['school'],
+                _searchController.text);
             _guardianController.add(guardians);
           } else {
             var guardians = await fetchGuardians(context,
@@ -71,6 +83,7 @@ class _ViewGuardiansState extends State<ViewGuardians> {
           }
         }
       });
+      print(_searchController.text);
     } on Exception catch (e) {
       print(e);
     }
@@ -109,16 +122,18 @@ class _ViewGuardiansState extends State<ViewGuardians> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (guardianData.isNotEmpty)
-                            Expanded(
-                              child: SearchField(
-                                onChanged: (value) {
-                                  setState(() {
-                                    _query = value?.trim();
-                                  });
-                                },
-                              ),
+                          // if (guardianData.isNotEmpty)
+                          Expanded(
+                            child: SearchField(
+                              controller: _searchController,
+                              onChanged: (value) {
+                                setState(() {
+                                  _query = value?.trim();
+                                  print(value);
+                                });
+                              },
                             ),
+                          ),
                           if (!Responsive.isMobile(context))
                             Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
                           const SizedBox(),

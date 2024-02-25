@@ -183,9 +183,9 @@ class _CommonFormFieldsState extends State<CommonFormFields>
           // code for uploading profile picture  using file picker
           OutlinedButton(
             style: OutlinedButton.styleFrom(
-              primary: Theme.of(context).brightness == Brightness.light
-                  ? Colors.blueAccent[900]
-                  : Colors.white,
+              // primary: Theme.of(context).brightness == Brightness.light
+              //     ? Colors.blueAccent[900]
+              //     : Colors.white,
               backgroundColor: Theme.of(context).brightness == Brightness.light
                   ? Colors.white
                   : const Color.fromARGB(66, 75, 74, 74),
@@ -286,8 +286,7 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                           :
                           // dropdown menu
                           (widget.formFields[index - 1]['menu'] != null)
-                              ?
-                               SingleChildScrollView(
+                              ? SingleChildScrollView(
                                   child: CommonMenuWidget(
                                     fieldColor: Theme.of(context).brightness ==
                                             Brightness.light
@@ -314,7 +313,6 @@ class _CommonFormFieldsState extends State<CommonFormFields>
                                     fieldHeaderTitle: widget.menuTitle,
                                   ),
                                 )
-                              
                               : widget.formFields[index - 1]['switch'] != null
                                   ? buildSwitchWidget(index)
                                   : widget.formFields[index - 1]['van'] != null

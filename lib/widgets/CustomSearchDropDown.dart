@@ -163,7 +163,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
               child: TextButton(
                 style: TextButton.styleFrom(
                     backgroundColor: widget.backgroundColor,
-                    primary: widget.primaryColor ?? Colors.black,
+                    // primary: widget.primaryColor ?? Colors.black,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                 child: Padding(
                   padding: widget.padding ?? EdgeInsets.all(5.0),
@@ -260,7 +260,8 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
                               onSelectLabel != null),
                           child: TextButton(
                             style: TextButton.styleFrom(
-                                primary: widget.primaryColor ?? Colors.black),
+                                // primary: widget.primaryColor ?? Colors.black
+                                ),
                             child: Icon(
                               Icons.clear,
                             ),
@@ -390,7 +391,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
                 children: [
                   TextButton(
                     style: TextButton.styleFrom(
-                        primary: widget.primaryColor ?? Colors.black,
+                        // primary: widget.primaryColor ?? Colors.black,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                     child: Text(
                       'Select All',
@@ -412,7 +413,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
-                        primary: widget.primaryColor ?? Colors.black,
+                        // primary: widget.primaryColor ?? Colors.black,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                     child: Text(
                       'Clear All',
@@ -474,7 +475,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
                 visible: (widget.multiSelect ?? false),
                 child: TextButton(
                   style: TextButton.styleFrom(
-                      primary: widget.primaryColor ?? Colors.black,
+                      // primary: widget.primaryColor ?? Colors.black,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                   child: Text(
                     'Done',
@@ -577,7 +578,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
             itemBuilder: (BuildContext context, int index) {
               return TextButton(
                 style: TextButton.styleFrom(
-                    primary: widget.primaryColor ?? Colors.black,
+                    // primary: widget.primaryColor ?? Colors.black,
                     padding: EdgeInsets.all(8),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                 child: Padding(
