@@ -158,7 +158,8 @@ Future<List<StudentsNotPaginatedModel>> fetchStudents(String id,
 Future<StudentModel> fetchPaginatedStudents(String id,
     {int page = 1, int limit = 20}) async {
   try {
-    var res = await Client().get(Uri.parse(AppUrls.students + id));
+    var res = await Client()
+        .get(Uri.parse(AppUrls.students + id + "?page=$page&pageSize=$limit"));
     return studentModelFromJson(res.body);
   } on ClientException catch (e, _) {
     return Future.error("Lost connection to server");

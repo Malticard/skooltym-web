@@ -52,7 +52,7 @@ class _DashboardState extends State<Dashboard> {
     return Column(
       children: [
         const MyFiles(),
-        const SizedBox(height: defaultPadding),
+        const SizedBox(height: defaultPadding / 2),
         SizedBox(
           height: Responsive.isMobile(context)
               ? MediaQuery.of(context).size.height * 0.45
@@ -93,7 +93,7 @@ class _DashboardState extends State<Dashboard> {
                                                 ? 2
                                                 : 4,
                                         crossAxisSpacing: defaultPadding,
-                                        mainAxisSpacing: 20,
+                                        mainAxisSpacing: 13,
                                         childAspectRatio: 1,
                                       ),
                                       itemBuilder: (context, index) =>
@@ -110,6 +110,8 @@ class _DashboardState extends State<Dashboard> {
             },
           ),
         ),
+        const SizedBox(height: defaultPadding),
+        const SizedBox(height: defaultPadding / 2),
       ],
     );
   }
